@@ -1,18 +1,12 @@
 # Welcome to Futsalah 👋
 
-> SSAFY 3기 2학기 1반 12팀 -  `I do Arduino`  의 프로젝트 저장소
+> SSAFY 3기 2학기 1반 12팀 - `I do Arduino` 의 프로젝트 저장소
 
 <br>
 
 ## Overview
 
-*오늘 풋살한판 풋살르자!*
-
-
-
-
-
-
+_오늘 풋살한판 풋살르자!_
 
 <br>
 
@@ -36,9 +30,7 @@
 
 ### SCM
 
-- Git 
-
-
+- Git
 
 <br>
 <br>
@@ -65,5 +57,8 @@
 
 - [x] : 기능 세분화
 
-  <br>
+<br>
 
+### 7/22 (수)
+
+- [x] : DB 설계
