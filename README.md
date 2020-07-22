@@ -1,4 +1,4 @@
-# Welcome to Footsalah 👋
+# Welcome to Futsalah 👋
 
 > SSAFY 3기 2학기 1반 12팀 -  `I do Arduino`  의 프로젝트 저장소
 
@@ -20,7 +20,7 @@
 
 ## Tech Stack
 
-<br>
+![](./images/techstack.png)
 
 ### Backend
 
