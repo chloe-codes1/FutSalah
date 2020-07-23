@@ -14,7 +14,7 @@ _오늘 풋살한판 풋살르자!_
 
 ## Tech Stack
 
-![](./images/techstack.png)
+![](./images/techstack.PNG)
 
 ### Backend
 
