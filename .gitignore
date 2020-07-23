@@ -11,6 +11,7 @@ logs
 
 node_modules
 bower_components
+DO_NOT_COMMIT
 
 *.sublime*
 
