@@ -3,6 +3,8 @@ import React from "react";
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
 // core components
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
@@ -151,7 +153,7 @@ export default function ProfilePage(props) {
                 <Button>정보 변경</Button>
               </GridItem>
               <GridItem xs={12} sm={12} md={8} className={classes.withdrawal}>
-                <a href="">탈퇴하기</a>
+                <Link>탈퇴하기</Link>
               </GridItem>
             </GridContainer>
           </div>
