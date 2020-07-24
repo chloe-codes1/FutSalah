@@ -3,6 +3,9 @@ import React from "react";
 import classNames from "classnames";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -54,6 +57,7 @@ export default function Header(props) {
     }
   };
   const { color, rightLinks, leftLinks, brand, fixed, absolute } = props;
+  console.log(fixed);
   const appBarClasses = classNames({
     [classes.appBar]: true,
     [classes[color]]: color,
@@ -61,9 +65,11 @@ export default function Header(props) {
     [classes.fixed]: fixed,
   });
   const brandComponent = (
-    <Button className={classes.title}>
-      <strong>{brand}</strong>
-    </Button>
+    <Link to={"/"} className={classes.link}>
+      <Button className={classes.title}>
+        <strong>{brand}</strong>
+      </Button>
+    </Link>
   );
   return (
     <AppBar className={appBarClasses}>

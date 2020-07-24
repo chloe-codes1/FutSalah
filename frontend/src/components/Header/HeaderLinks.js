@@ -182,24 +182,41 @@ export default function HeaderLinks(props) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Button color="transparent" target="_blank" className={classes.navLink}>
-          기능 2
-        </Button>
+        <Link to={"/profile"} className={classes.link}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
+            회원정보
+          </Button>
+        </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <LoginButton
-          color="primary"
-          className={classes.navLink}
-          onClick={signinClickOpen}
+        <Button
+          href="#pablo"
+          className={classes.ButtonNavLink}
+          onClick={(e) => e.preventDefault()}
+          color="danger"
         >
-          로그인
-        </LoginButton>
-        <LoginDialog
-          open={signinOpen}
-          onClose={signinClickClose}
-          addInfo={addInfo}
-        />
-        <AddInfoDialog open={addInfoOpen} onClose={addInfoClose} />
+          Login
+        </Button>
+        <Button
+          href="#pablo"
+          className={classes.ButtonNavLink}
+          onClick={(e) => e.preventDefault()}
+          color="info"
+        >
+          register
+        </Button>
+        <Button
+          href="#pablo"
+          className={classes.ButtonNavLink}
+          onClick={(e) => e.preventDefault()}
+          color="warning"
+        >
+          Logout
+        </Button>
       </ListItem>
     </List>
   );
