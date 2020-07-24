@@ -16,7 +16,7 @@ public class UserController {
 	
 	@PostMapping("/user")
 	public UserDTO createUser(@RequestBody UserDTO user) {
-//		UserDTO loggedUser =  
-//		return 
+		UserDTO loggedUser =  
+		return 
 	}
 }

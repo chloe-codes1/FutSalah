@@ -1,6 +1,8 @@
 package ido.arduino.dto;
 
-import javax.print.attribute.standard.DateTimeAtCreation;
+import java.util.Date;
+
+import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,12 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Alias("UserDTO")
 public class UserDTO {
 	private Integer userID;
 	private String name;
 	private String email;
-	private DateTimeAtCreation createdAt;
-	private	Integer age;
+	private Date createdAt;
+	private Integer age;
 	private String position;
 	private Integer height;
 	private Integer weight;

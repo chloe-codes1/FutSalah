@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.mapper.UserDTO">
+	<!-- 회원 가입 -->
+	<insert id="insert" parameterType="UserDTO">
+		INSERT INTO user (name, email, createdAt, socialID, profileURL)
+		VALUES(#{name}, #{email}, #{createdAt}, #{socialID}, #{profileURL})
+	</insert>
+	
+	<!-- 회원 정보 수정 -->
+	<update id="update" parameterType="UserDTO">
+		
+	</update>
+
+
+
+</mapper>
