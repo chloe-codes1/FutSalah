@@ -24,35 +24,17 @@ export default function CustomInput(props) {
     error,
     white,
     inputRootCustomClasses,
-<<<<<<< HEAD
-    success
-=======
     success,
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   } = props;
 
   const labelClasses = classNames({
     [" " + classes.labelRootError]: error,
-<<<<<<< HEAD
-    [" " + classes.labelRootSuccess]: success && !error
-=======
     [" " + classes.labelRootSuccess]: success && !error,
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   });
   const underlineClasses = classNames({
     [classes.underlineError]: error,
     [classes.underlineSuccess]: success && !error,
     [classes.underline]: true,
-<<<<<<< HEAD
-    [classes.whiteUnderline]: white
-  });
-  const marginTop = classNames({
-    [inputRootCustomClasses]: inputRootCustomClasses !== undefined
-  });
-  const inputClasses = classNames({
-    [classes.input]: true,
-    [classes.whiteInput]: white
-=======
     [classes.whiteUnderline]: white,
   });
   const marginTop = classNames({
@@ -61,7 +43,6 @@ export default function CustomInput(props) {
   const inputClasses = classNames({
     [classes.input]: true,
     [classes.whiteInput]: white,
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   });
   var formControlClasses;
   if (formControlProps !== undefined) {
@@ -88,11 +69,7 @@ export default function CustomInput(props) {
           input: inputClasses,
           root: marginTop,
           disabled: classes.disabled,
-<<<<<<< HEAD
-          underline: underlineClasses
-=======
           underline: underlineClasses,
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
         }}
         id={id}
         {...inputProps}
@@ -110,9 +87,5 @@ CustomInput.propTypes = {
   inputRootCustomClasses: PropTypes.string,
   error: PropTypes.bool,
   success: PropTypes.bool,
-<<<<<<< HEAD
-  white: PropTypes.bool
-=======
   white: PropTypes.bool,
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
 };

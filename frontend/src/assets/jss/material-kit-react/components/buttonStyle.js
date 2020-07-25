@@ -5,11 +5,7 @@ import {
   infoColor,
   successColor,
   warningColor,
-<<<<<<< HEAD
-  dangerColor
-=======
   dangerColor,
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
 } from "assets/jss/material-kit-react.js";
 
 const buttonStyle = {
@@ -42,11 +38,7 @@ const buttonStyle = {
       color: "#FFFFFF",
       backgroundColor: grayColor,
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2)"
-=======
         "0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2)",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
     },
     "& .fab,& .fas,& .far,& .fal,& .material-icons": {
       position: "relative",
@@ -54,11 +46,7 @@ const buttonStyle = {
       top: "0",
       fontSize: "1.1rem",
       marginRight: "4px",
-<<<<<<< HEAD
-      verticalAlign: "middle"
-=======
       verticalAlign: "middle",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
     },
     "& svg": {
       position: "relative",
@@ -67,11 +55,7 @@ const buttonStyle = {
       width: "18px",
       height: "18px",
       marginRight: "4px",
-<<<<<<< HEAD
-      verticalAlign: "middle"
-=======
       verticalAlign: "middle",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
     },
     "&$justIcon": {
       "& .fab,& .fas,& .far,& .fal,& .material-icons": {
@@ -83,21 +67,12 @@ const buttonStyle = {
         top: "0px",
         height: "100%",
         lineHeight: "41px",
-<<<<<<< HEAD
-        fontSize: "20px"
-      }
-    }
-  },
-  fullWidth: {
-    width: "100%"
-=======
         fontSize: "20px",
       },
     },
   },
   fullWidth: {
     width: "100%",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   primary: {
     backgroundColor: primaryColor,
@@ -106,13 +81,8 @@ const buttonStyle = {
     "&:hover,&:focus": {
       backgroundColor: primaryColor,
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(156, 39, 176, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(156, 39, 176, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   info: {
     backgroundColor: infoColor,
@@ -121,13 +91,8 @@ const buttonStyle = {
     "&:hover,&:focus": {
       backgroundColor: infoColor,
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(0, 188, 212, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 188, 212, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(0, 188, 212, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 188, 212, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   success: {
     backgroundColor: successColor,
@@ -136,13 +101,8 @@ const buttonStyle = {
     "&:hover,&:focus": {
       backgroundColor: successColor,
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(76, 175, 80, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(76, 175, 80, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(76, 175, 80, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(76, 175, 80, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   warning: {
     backgroundColor: warningColor,
@@ -151,13 +111,8 @@ const buttonStyle = {
     "&:hover,&:focus": {
       backgroundColor: warningColor,
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(255, 152, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 152, 0, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(255, 152, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 152, 0, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   danger: {
     backgroundColor: dangerColor,
@@ -166,13 +121,8 @@ const buttonStyle = {
     "&:hover,&:focus": {
       backgroundColor: dangerColor,
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(244, 67, 54, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(244, 67, 54, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   rose: {
     backgroundColor: roseColor,
@@ -181,24 +131,14 @@ const buttonStyle = {
     "&:hover,&:focus": {
       backgroundColor: roseColor,
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(233, 30, 99, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(233, 30, 99, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(233, 30, 99, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(233, 30, 99, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   white: {
     "&,&:focus,&:hover,&:visited": {
       backgroundColor: "#FFFFFF",
-<<<<<<< HEAD
-      color: grayColor
-    }
-=======
       color: grayColor,
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   twitter: {
     backgroundColor: "#55acee",
@@ -209,13 +149,8 @@ const buttonStyle = {
       backgroundColor: "#55acee",
       color: "#fff",
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(85, 172, 238, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 172, 238, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(85, 172, 238, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(85, 172, 238, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   facebook: {
     backgroundColor: "#3b5998",
@@ -226,13 +161,8 @@ const buttonStyle = {
       backgroundColor: "#3b5998",
       color: "#fff",
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(59, 89, 152, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(59, 89, 152, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(59, 89, 152, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(59, 89, 152, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   google: {
     backgroundColor: "#dd4b39",
@@ -243,13 +173,8 @@ const buttonStyle = {
       backgroundColor: "#dd4b39",
       color: "#fff",
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(221, 75, 57, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(221, 75, 57, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(221, 75, 57, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(221, 75, 57, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   github: {
     backgroundColor: "#333333",
@@ -260,72 +185,13 @@ const buttonStyle = {
       backgroundColor: "#333333",
       color: "#fff",
       boxShadow:
-<<<<<<< HEAD
-        "0 14px 26px -12px rgba(51, 51, 51, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(51, 51, 51, 0.2)"
-    }
-=======
         "0 14px 26px -12px rgba(51, 51, 51, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(51, 51, 51, 0.2)",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   simple: {
     "&,&:focus,&:hover,&:visited": {
       color: "#FFFFFF",
       background: "transparent",
-<<<<<<< HEAD
-      boxShadow: "none"
-    },
-    "&$primary": {
-      "&,&:focus,&:hover,&:visited": {
-        color: primaryColor
-      }
-    },
-    "&$info": {
-      "&,&:focus,&:hover,&:visited": {
-        color: infoColor
-      }
-    },
-    "&$success": {
-      "&,&:focus,&:hover,&:visited": {
-        color: successColor
-      }
-    },
-    "&$warning": {
-      "&,&:focus,&:hover,&:visited": {
-        color: warningColor
-      }
-    },
-    "&$rose": {
-      "&,&:focus,&:hover,&:visited": {
-        color: roseColor
-      }
-    },
-    "&$danger": {
-      "&,&:focus,&:hover,&:visited": {
-        color: dangerColor
-      }
-    },
-    "&$twitter": {
-      "&,&:focus,&:hover,&:visited": {
-        color: "#55acee"
-      }
-    },
-    "&$facebook": {
-      "&,&:focus,&:hover,&:visited": {
-        color: "#3b5998"
-      }
-    },
-    "&$google": {
-      "&,&:focus,&:hover,&:visited": {
-        color: "#dd4b39"
-      }
-    },
-    "&$github": {
-      "&,&:focus,&:hover,&:visited": {
-        color: "#333333"
-      }
-    }
-=======
       boxShadow: "none",
     },
     "&$primary": {
@@ -378,51 +244,28 @@ const buttonStyle = {
         color: "#333333",
       },
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   transparent: {
     "&,&:focus,&:hover,&:visited": {
       color: "inherit",
       background: "transparent",
-<<<<<<< HEAD
-      boxShadow: "none"
-    }
-  },
-  disabled: {
-    opacity: "0.65",
-    pointerEvents: "none"
-=======
       boxShadow: "none",
     },
   },
   disabled: {
     opacity: "0.65",
     pointerEvents: "none",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   lg: {
     padding: "1.125rem 2.25rem",
     fontSize: "0.875rem",
     lineHeight: "1.333333",
-<<<<<<< HEAD
-    borderRadius: "0.2rem"
-=======
     borderRadius: "0.2rem",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   sm: {
     padding: "0.40625rem 1.25rem",
     fontSize: "0.6875rem",
     lineHeight: "1.5",
-<<<<<<< HEAD
-    borderRadius: "0.2rem"
-  },
-  round: {
-    borderRadius: "30px"
-  },
-  block: {
-    width: "100% !important"
-=======
     borderRadius: "0.2rem",
   },
   round: {
@@ -430,19 +273,13 @@ const buttonStyle = {
   },
   block: {
     width: "100% !important",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   link: {
     "&,&:hover,&:focus": {
       backgroundColor: "transparent",
       color: "#999999",
-<<<<<<< HEAD
-      boxShadow: "none"
-    }
-=======
       boxShadow: "none",
     },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
   },
   justIcon: {
     paddingLeft: "12px",
@@ -452,11 +289,7 @@ const buttonStyle = {
     minWidth: "41px",
     width: "41px",
     "& .fab,& .fas,& .far,& .fal,& svg,& .material-icons": {
-<<<<<<< HEAD
-      marginRight: "0px"
-=======
       marginRight: "0px",
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
     },
     "&$lg": {
       height: "57px",
@@ -465,21 +298,12 @@ const buttonStyle = {
       lineHeight: "56px",
       "& .fab,& .fas,& .far,& .fal,& .material-icons": {
         fontSize: "32px",
-<<<<<<< HEAD
-        lineHeight: "56px"
-      },
-      "& svg": {
-        width: "32px",
-        height: "32px"
-      }
-=======
         lineHeight: "56px",
       },
       "& svg": {
         width: "32px",
         height: "32px",
       },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
     },
     "&$sm": {
       height: "30px",
@@ -487,16 +311,6 @@ const buttonStyle = {
       width: "30px",
       "& .fab,& .fas,& .far,& .fal,& .material-icons": {
         fontSize: "17px",
-<<<<<<< HEAD
-        lineHeight: "29px"
-      },
-      "& svg": {
-        width: "17px",
-        height: "17px"
-      }
-    }
-  }
-=======
         lineHeight: "29px",
       },
       "& svg": {
@@ -505,7 +319,6 @@ const buttonStyle = {
       },
     },
   },
->>>>>>> d667e454b1feeb5182297efd9845966b57287427
 };
 
 export default buttonStyle;
