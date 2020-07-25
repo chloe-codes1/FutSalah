@@ -25,12 +25,12 @@ export default function Components(props) {
   return (
     <div>
       <Header
-        brand="FutSala"
+        brand="FutSalah"
         rightLinks={<HeaderLinks />}
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 400,
+          height: 200,
           color: "white",
         }}
         {...rest}
@@ -40,7 +40,7 @@ export default function Components(props) {
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}>FutSala</h1>
+                <h1 className={classes.title}>FutSalah</h1>
                 <h3 className={classes.subtitle}>동네축구지만 프로축구처럼</h3>
               </div>
             </GridItem>
