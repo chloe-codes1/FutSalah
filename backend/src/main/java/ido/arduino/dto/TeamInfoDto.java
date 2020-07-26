@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamDTO {
-	
-	
+public class TeamInfoDto {
+
 	private int teamID;
 	private int wins;
 	private int defeats;
@@ -20,5 +19,17 @@ public class TeamDTO {
 	private int mileage;
 	private int guCode;
 	private String profileURL;
+	private String name;
+
+	
+	
+	//팀이름 중복검사 
+	public int compareTo(TeamInfoDto o) {
+
+		if (o != null && o.name != null && name != null) {
+			return name.compareTo(o.name);
+		}
+		return 0;
+	}
 
 }

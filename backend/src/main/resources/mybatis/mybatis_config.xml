@@ -9,8 +9,7 @@
 	</settings>
 	<typeAliases>
 		<!-- 사용할 DTO들을 예약어로 등록 -->
-		<typeAlias type="ido.arduino.dto.TeamDTO" alias="TeamInfo"/>
-
+		<typeAlias type="ido.arduino.dto.TeamInfoDto" alias="teaminfo"/>
 		
 	</typeAliases>
 

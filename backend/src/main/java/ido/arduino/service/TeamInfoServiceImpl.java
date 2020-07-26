@@ -1,45 +1,45 @@
-package ido.arduino.repo;
+package ido.arduino.service;
 
 import java.util.List;
 
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import ido.arduino.dto.TeamInfoDto;
+import ido.arduino.repo.TeamInfoRepo;
 
 
-@Repository
-public class TeamInfoRepoImpl implements TeamInfoRepo{
+@Service
+public class TeamInfoServiceImpl implements TeamInfoService {
 
-	private static String ns = "ido.arduino.mapper.TeamInfoDto.";
-	
 	
 	@Autowired
-	SqlSessionTemplate template ;
+	TeamInfoRepo tRepo;
 	
 	@Override
 	public int insert(TeamInfoDto info) {
 		// TODO Auto-generated method stub
-		return template.insert(ns+"insert", info);
+		return tRepo.insert(info);
 	}
 
 	@Override
 	public int update(TeamInfoDto info) {
 		// TODO Auto-generated method stub
-		return template.update(ns+"update", info);
+		return tRepo.update(info);
 	}
 
 	@Override
 	public int delete(String teamID) {
 		// TODO Auto-generated method stub
-		return template.delete(ns+"delete", teamID);
+		return tRepo.delete(teamID);
 	}
 
 	@Override
 	public List<TeamInfoDto> selectAll() {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"selectAll");
+		return null;
 	}
+
 	
+
 }
