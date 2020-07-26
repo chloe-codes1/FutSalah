@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ido.arduino.mapper.TeamDTIO">
+
+	<!-- 팀 추가 -->
+	<insert id="insert" parameterType="teaminfo">
+		insert into userinfo (user_id,user_pw,user_name, address, phone) 
+     	values (#{userid},#{userPw},#{userName},#{address},#{phone})
+	</insert>
+
+	<!-- 팀 수정 -->
+	<update id="update" parameterType="teaminfo" >
+		 update teaminfo 
+		 set user_pw=#{userPw}, user_name=#{userName}, address=#{address} 
+      	 ,phone=#{phone}
+     	 where user_id=#{userid}
+	</update>
+	
+	<!--  회원 삭제  -->
+	<delete id="delete" parameterType="string">
+		delete from userinfo where user_id=#{userid}
+	</delete>
+	
+	<!-- 로그인 회원 조회 -->
+	<select id="login" parameterType="string" resultType="userinfo">
+		select user_id as userid,
+		user_pw as userPw,
+		user_name as userName,
+		address,
+		phone 
+		from userinfo where user_id=#{userid} and user_pw=#{userPw}
+	</select>
+	
+	<select id="pw" parameterType="userinfo" resultType="string">
+		select user_pw as userPw from userinfo where user_id=#{userid} and user_name=#{userName}
+	</select>
+
+
+</mapper>
