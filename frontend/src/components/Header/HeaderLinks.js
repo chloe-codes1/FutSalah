@@ -101,10 +101,10 @@ export default function HeaderLinks(props) {
   };
 
   const initUser = useCallback((getId, getEmail, getName, getImageURL) => {
-    console.log(getId);
-    console.log(getEmail);
-    console.log(getName);
-    console.log(getImageURL);
+    // console.log(getId);
+    // console.log(getEmail);
+    // console.log(getName);
+    // console.log(getImageURL);
     dispatch({
       type: "INIT_USER",
       getId,
@@ -135,7 +135,7 @@ export default function HeaderLinks(props) {
         console.log("fail");
       });
   }, [user]);
-  console.log(user);
+  //console.log(user);
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
