@@ -11,24 +11,28 @@ import { GoogleLogin } from "react-google-login";
 import KakaoLogin from "react-kakao-login";
 
 function LoginDialog(props) {
-  const { open, onClose, addInfo } = props;
+  const { open, onClose, addInfo, initUser } = props;
 
   const handleClose = () => {
     onClose();
   };
 
   // 추가작업 예정 : 처음 로그인시 AddInfoDialog를 생성 기존회원일 경우 생성하지 않고 로그인 완료. 현재는 구분x
-  // 구글 로그인 일때 작업
+  // 구글 로그인
   const responseGoogle = (res) => {
     console.log(res);
     console.log(res.profileObj);
-    console.log(res.googleId);
-    console.log(res.profileObj.name);
+    initUser(
+      res.profileObj.googleId,
+      res.profileObj.email,
+      res.profileObj.name,
+      res.profileObj.imageUrl
+    );
     onClose();
     addInfo();
   };
 
-  // 카카오 로그인 일때 작업
+  // 카카오 로그인
   const responseKaKao = (res) => {
     console.log(res);
     console.log(res.profile);
