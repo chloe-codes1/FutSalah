@@ -9,7 +9,6 @@ public interface TeamInfoRepo {
 	int insert(TeamInfoDto info);
 	int update(TeamInfoDto info);	
 	int delete(String teamID);
-	
-	public List<TeamInfoDto> selectAll();
+public List<TeamInfoDto> selectAll();
 
 }

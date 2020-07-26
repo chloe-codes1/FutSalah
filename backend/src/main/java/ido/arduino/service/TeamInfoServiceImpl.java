@@ -27,7 +27,6 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		// TODO Auto-generated method stub
 		return tRepo.update(info);
 	}
-
 	@Override
 	public int delete(String teamID) {
 		// TODO Auto-generated method stub

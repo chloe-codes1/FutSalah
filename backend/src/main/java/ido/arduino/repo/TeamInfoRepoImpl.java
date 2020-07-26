@@ -13,8 +13,7 @@ import ido.arduino.dto.TeamInfoDto;
 public class TeamInfoRepoImpl implements TeamInfoRepo{
 
 	private static String ns = "ido.arduino.mapper.TeamInfoDto.";
-	
-	
+
 	@Autowired
 	SqlSessionTemplate template ;
 	

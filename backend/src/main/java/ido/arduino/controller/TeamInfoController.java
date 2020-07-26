@@ -36,7 +36,7 @@ public class TeamInfoController {
 
 	
 
-	 @ApiOperation(value = "모든 질문게시판 정보를 반환한다.", response = List.class)
+	 @ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
 	@GetMapping("/team")
 		public ResponseEntity<List<TeamInfoDto>> selectAll() throws Exception {
 			logger.debug("selectAll - 호출");
@@ -59,6 +59,7 @@ public class TeamInfoController {
 
 	// 사용자 정보 수정
 
+	@ApiOperation(value = "팀 정보 수정.", response = String.class)
 	@PutMapping("/team/{teamID}")
 	public ResponseEntity<Map<String, Object>> update(@RequestBody TeamInfoDto teamInfo) {
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -73,6 +74,7 @@ public class TeamInfoController {
 
 	// 사용자 정보 삭제
 
+	@ApiOperation(value = "팀 정보 삭제.", response = String.class)
 	@DeleteMapping("/team/{teamID}")
 	public ResponseEntity<Map<String, Object>> delete(@PathVariable String teamID) {
 		ResponseEntity<Map<String, Object>> entity = null;

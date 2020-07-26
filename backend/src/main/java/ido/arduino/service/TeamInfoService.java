@@ -13,6 +13,4 @@ public interface TeamInfoService {
 	int delete(String teamID);
 
 	List<TeamInfoDto> selectAll();
-
-
 }

@@ -22,8 +22,7 @@ public class TeamInfoDto {
 	private String name;
 
 	
-	
-	//팀이름 중복검사 
+	//팀이름 중복
 	public int compareTo(TeamInfoDto o) {
 
 		if (o != null && o.name != null && name != null) {
