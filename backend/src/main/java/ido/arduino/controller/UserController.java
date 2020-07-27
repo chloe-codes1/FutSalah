@@ -47,7 +47,7 @@ public class UserController {
 		if (updateResult == 1) {
 			System.out.println("successfully updated!");
 		} else {
-			System.out.println("user update failed...ㅠ_ㅠ");
+			System.out.println("user update failed..ㅠ_ㅠ");
 		}
 	}
 
