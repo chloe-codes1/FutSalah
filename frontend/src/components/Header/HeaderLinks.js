@@ -25,9 +25,26 @@ export default function HeaderLinks(props) {
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
-        <Button color="transparent" target="_blank" className={classes.navLink}>
-          기능 1
-        </Button>
+        <Link to={"/searchteam"} className={classes.link}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
+            팀 찾기
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <Link to={"/"} className={classes.link}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
+            나의 팀
+          </Button>
+        </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
         <Link to={"/profile"} className={classes.link}>
