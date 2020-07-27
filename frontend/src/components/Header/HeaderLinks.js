@@ -1,28 +1,23 @@
+// @material-ui/icons
+import { Apps, CloudDownload } from "@material-ui/icons";
 /*eslint-disable*/
-import React, { useReducer, useState, Component, useCallback } from "react";
+import React, { Component, useCallback, useReducer, useState } from "react";
+
+import AddInfoDialog from "../Dialog/AddInfoDialog";
+// core components
+import Button from "components/CustomButtons/Button.js";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
-
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-
-// @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
-
-// core components
-import Button from "components/CustomButtons/Button.js";
-
-import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
-
 // dialog components
 import LoginDialog from "../Dialog/LoginDialog";
-import AddInfoDialog from "../Dialog/AddInfoDialog";
-
 import axios from "axios";
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 const useStyles = makeStyles(styles);
 
@@ -124,14 +119,20 @@ export default function HeaderLinks(props) {
 
   const onRegister = useCallback(() => {
     axios({
-      method: "post",
-      url: "locallhost:9999/api/login",
+      method: "POST",
+      url: "http://localhost:9999/api/login",
       data: user,
+      headers: {
+      },
     })
       .then(() => {
+        
+
+
         console.log("success");
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log('error', e)
         console.log("fail");
       });
   }, [user]);

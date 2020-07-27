@@ -12,12 +12,21 @@
 	
 	<!-- 회원 정보 수정 -->
 	<update id="update" parameterType="UserDTO">
-		
+		UPDATE user SET name = #{name}, age = #{age}, position = #{position}, height = #{height}, weight = #{weight}
+		WHERE userID = #{userID}
 	</update>
 	
+	<!-- 회원 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM user WHERE userID = #{userID}
+	</delete>
+	
+	<!-- socialID로 User 찾기 -->
 	<select id="findBySocialID" parameterType="string" resultType="UserDTO">
 		SELECT*FROM user WHERE socialID=#{socialID}
 	</select>
+	
+	
 
 
 </mapper>
