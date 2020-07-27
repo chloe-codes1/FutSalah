@@ -1,9 +1,13 @@
 package ido.arduino.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +18,7 @@ import ido.arduino.service.UserService;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000") // TODO: 배포 시 바꿔야 함
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600) // TODO: 배포 시 바꿔야 함
 public class UserController {
 
 	@Autowired
@@ -35,7 +39,7 @@ public class UserController {
 		if (newlySignedUp == 1) {
 			System.out.println("successfully created!");
 		} else {
-			System.out.println("signup failed...ㅠ_ㅠ");
+			System.out.println("signup failed...");
 		}
 		return user;
 	}
@@ -47,7 +51,7 @@ public class UserController {
 		if (updateResult == 1) {
 			System.out.println("successfully updated!");
 		} else {
-			System.out.println("user update failed..ㅠ_ㅠ");
+			System.out.println("user update failed..");
 		}
 	}
 
@@ -58,7 +62,17 @@ public class UserController {
 		if (deleteResult == 1) {
 			System.out.println("successfully deleted!");
 		} else {
-			System.out.println("user delete failed...ㅠ_ㅠ");
+			System.out.println("user delete failed...");
 		}
 	}
+	
+	@GetMapping("/user/{name}")
+	public List<UserDTO> searchByName(@PathVariable String name){
+		System.out.println("name??"+ name);
+		List<UserDTO> list = userService.searchUsersByName(name);
+		System.out.println("user list? " + list);
+		return list;
+	}
+	//TODO: User 가입한 Team 목록 
+	
 }

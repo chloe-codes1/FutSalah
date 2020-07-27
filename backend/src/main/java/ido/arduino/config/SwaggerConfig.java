@@ -17,14 +17,14 @@ public class SwaggerConfig {
 	  private ApiInfo apiInfo() {
 
 	        return new ApiInfoBuilder()
-	                .title("Demo")
-	                .description("API EXAMPLE")
+	                .title("FutSalah")
+	                .description("APIs")
 	                .build();
 	    }
 	    @Bean
 	    public Docket commonApi() {
 	        return new Docket(DocumentationType.SWAGGER_2)
-	                .groupName("example")
+	                .groupName("backend")
 	                .apiInfo(this.apiInfo())
 	                .select()
 	                .apis(RequestHandlerSelectors

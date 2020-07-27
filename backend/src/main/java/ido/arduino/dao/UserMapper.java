@@ -1,5 +1,7 @@
 package ido.arduino.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import ido.arduino.dto.UserDTO;
@@ -10,4 +12,5 @@ public interface UserMapper {
 	int update(UserDTO user);
 	int delete(int userID);
 	UserDTO findBySocialID(String socialID);
+	List<UserDTO> searchUsersByName(String name);
 }
