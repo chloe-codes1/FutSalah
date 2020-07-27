@@ -10,6 +10,8 @@ import Button from "@material-ui/core/Button";
 import { GoogleLogin } from "react-google-login";
 import KakaoLogin from "react-kakao-login";
 
+import axios from "axios";
+
 function LoginDialog(props) {
   const { open, onClose, addInfo, initUser } = props;
 
@@ -28,6 +30,20 @@ function LoginDialog(props) {
       res.profileObj.name,
       res.profileObj.imageUrl
     );
+    axios({
+      method: "post",
+      url: "localhost:9999/api/login",
+      data: {
+        socialID: res.profileObj.googleId,
+      },
+    })
+      .then((res) => {
+        addInfo();
+      })
+      .catch((res) => {
+        console.log("ERROR");
+        onClose();
+      });
     onClose();
     addInfo();
   };
