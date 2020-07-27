@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.dao.UserMapper">
+	<!-- 회원 가입 -->
+	<insert id="insert" parameterType="UserDTO">
+		INSERT INTO user (name, email, createdAt, socialID, profileURL)
+		VALUES(#{name}, #{email}, #{createdAt}, #{socialID}, #{profileURL})
+	</insert>
+	
+	<!-- 회원 정보 수정 -->
+	<update id="update" parameterType="UserDTO">
+		UPDATE user SET name = #{name}, age = #{age}, position = #{position}, height = #{height}, weight = #{weight}
+		WHERE userID = #{userID}
+	</update>
+	
+	<!-- 회원 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM user WHERE userID = #{userID}
+	</delete>
+	
+	<!-- socialID로 User 찾기 -->
+	<select id="findBySocialID" parameterType="string" resultType="UserDTO">
+		SELECT*FROM user WHERE socialID=#{socialID}
+	</select>
+	
+	
+
+
+</mapper>
