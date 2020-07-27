@@ -21,22 +21,23 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/login")
+	public UserDTO findUser(@RequestBody String socialID) {
+		System.out.println("socialID?????" + socialID);
+		UserDTO loggedUser = userService.findBySocialID(socialID);
+		System.out.println("current user?" + loggedUser);
+		return loggedUser;
+	}
+
+	@PostMapping("/user")
 	public UserDTO createUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user);
-		UserDTO loggedUser = userService.findBySocialID(user.getSocialID());
-		if (loggedUser == null) {
-			System.out.println("Incomming user!! welcome!!");
-			int newlySignedUp = userService.insert(user);
-			if (newlySignedUp == 1) {
-				System.out.println("successfully created!");
-				loggedUser = user;
-			} else {
-				System.out.println("signup failed...ㅠ_ㅠ");
-			}
+		int newlySignedUp = userService.insert(user);
+		if (newlySignedUp == 1) {
+			System.out.println("successfully created!");
 		} else {
-			System.out.println("Existing user...hi there...");
+			System.out.println("signup failed...ㅠ_ㅠ");
 		}
-		return loggedUser;
+		return user;
 	}
 
 	@PutMapping("/user")
@@ -49,6 +50,7 @@ public class UserController {
 			System.out.println("user update failed...ㅠ_ㅠ");
 		}
 	}
+
 	@DeleteMapping("/user")
 	public void deleteUser(@RequestBody int userID) {
 		System.out.println("userID????" + userID);
