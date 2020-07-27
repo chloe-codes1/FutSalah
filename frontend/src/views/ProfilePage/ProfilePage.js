@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -23,6 +23,8 @@ import profile from "assets/img/faces/christian.jpg";
 
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
+import UserContext from "../../contexts/UserContext";
+
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage(props) {
@@ -34,6 +36,26 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
 
+  const user = useContext(UserContext);
+
+  const position = user.position;
+
+  const setPosition = () => {
+    switch (user.position) {
+      case "ALL":
+        break;
+      case "PIVO":
+        break;
+      case "ALA":
+        break;
+      case "FIXO":
+        break;
+      case "GOLEIRO":
+        break;
+    }
+  };
+
+  console.log(user);
   return (
     <div>
       <Header
@@ -55,11 +77,18 @@ export default function ProfilePage(props) {
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
-                    <img src={profile} alt="..." className={imageClasses} />
+                    {user.profileURL === "" ? (
+                      <img src={profile} alt="..." className={imageClasses} />
+                    ) : (
+                      <img
+                        src={user.profileURL}
+                        alt="..."
+                        className={imageClasses}
+                      />
+                    )}
                   </div>
                   <div className={classes.name}>
-                    {/* 유저 이름 넣기 */}
-                    <h3 className={classes.title}>유저 이름</h3>
+                    <h3 className={classes.title}>{user.name}</h3>
                   </div>
                 </div>
               </GridItem>
@@ -72,6 +101,9 @@ export default function ProfilePage(props) {
                   formControlProps={{
                     fullWidth: true,
                   }}
+                  inputProps={{
+                    value: user.email,
+                  }}
                 />
 
                 <GridContainer>
@@ -80,7 +112,11 @@ export default function ProfilePage(props) {
                   </GridItem>
 
                   <GridItem>
-                    <Datetime dateFormat="YYYY" timeFormat={false} />
+                    <Datetime
+                      dateFormat="YYYY"
+                      timeFormat={false}
+                      defaultValue={user.age}
+                    />
                   </GridItem>
                 </GridContainer>
 
@@ -89,7 +125,11 @@ export default function ProfilePage(props) {
                     <h3 className={classes.buttonTitle}>포지션</h3>
                   </GridItem>
                   <GridItem>
-                    <Button className={classes.buttonList} color="danger">
+                    <Button
+                      autoFocus={user.position === "ALL" ? true : false}
+                      className={classes.buttonList}
+                      color="danger"
+                    >
                       ALL
                     </Button>
                     <Tooltip
@@ -98,7 +138,11 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="rose">
+                      <Button
+                        autoFocus={user.position === "PIVO" ? true : false}
+                        className={classes.buttonList}
+                        color="rose"
+                      >
                         PIVO
                       </Button>
                     </Tooltip>
@@ -108,7 +152,11 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="warning">
+                      <Button
+                        autoFocus={user.position === "ALA" ? true : false}
+                        className={classes.buttonList}
+                        color="warning"
+                      >
                         ALA
                       </Button>
                     </Tooltip>
@@ -118,7 +166,11 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="success">
+                      <Button
+                        autoFocus={user.position === "FIXO" ? true : false}
+                        className={classes.buttonList}
+                        color="success"
+                      >
                         FIXO
                       </Button>
                     </Tooltip>
@@ -128,7 +180,11 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="info">
+                      <Button
+                        autoFocus={user.position === "GOLEIRO" ? true : false}
+                        className={classes.buttonList}
+                        color="info"
+                      >
                         GOLEIRO
                       </Button>
                     </Tooltip>
@@ -140,12 +196,18 @@ export default function ProfilePage(props) {
                   formControlProps={{
                     fullWidth: true,
                   }}
+                  inputProps={{
+                    value: user.height,
+                  }}
                 />
                 <CustomInput
                   id="weight"
                   labelText="몸무게"
                   formControlProps={{
                     fullWidth: true,
+                  }}
+                  inputProps={{
+                    value: user.weight,
                   }}
                 />
               </GridItem>
