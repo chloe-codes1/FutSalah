@@ -5,7 +5,7 @@ import imagesStyles from "assets/jss/material-kit-react/imagesStyles.js";
 const SearchTeamPageStyle = {
   container: {
     zIndex: "2",
-    top: "85px",
+    top: "180px",
     position: "relative",
     color: "#FFFFFF",
     // backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -24,7 +24,7 @@ const SearchTeamPageStyle = {
   },
   background: {
     minHeight: "100vh",
-    height: "auto",
+    height: "150vh",
     display: "inherit",
     position: "relative",
     margin: "0",

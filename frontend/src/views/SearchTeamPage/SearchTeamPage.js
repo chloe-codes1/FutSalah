@@ -241,34 +241,37 @@ export default function SearchTeamPage(props) {
               </GridItem>
             </GridContainer>
           </GridList>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Paginations
-              pages={[
-                { text: "PREV" },
-                { text: 1 },
-                { text: 2 },
-                { text: 3 },
-                { text: 4 },
-                { text: 5 },
-                { text: 6 },
-                { text: 7 },
-                { text: 8 },
-                { text: 9 },
-                { text: 10 },
-                { text: "NEXT" },
-              ]}
-              color="info"
-            />
-          </div>
         </div>
-        <Footer />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: "2",
+            position: "relative",
+            margin: "30vh auto",
+          }}
+        >
+          <Paginations
+            pages={[
+              { text: "<" },
+              { text: 1 },
+              { text: 2 },
+              { text: 3 },
+              { text: 4 },
+              { text: 5 },
+              { text: 6 },
+              { text: 7 },
+              { text: 8 },
+              { text: 9 },
+              { text: 10 },
+              { text: ">" },
+            ]}
+            color="info"
+          />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }
