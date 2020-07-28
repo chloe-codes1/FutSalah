@@ -34,16 +34,13 @@ public class TeamInfoController {
 	@Autowired
 	TeamInfoService tService;
 
-	
-
-	 @ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
+	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
 	@GetMapping("/team")
-		public ResponseEntity<List<TeamInfoDto>> selectAll() throws Exception {
-			logger.debug("selectAll - 호출");
-			return new ResponseEntity<List<TeamInfoDto>>(tService.selectAll(), HttpStatus.OK);
-		}
-	
-	
+	public ResponseEntity<List<TeamInfoDto>> selectAll() throws Exception {
+		logger.debug("selectAll - 호출");
+		return new ResponseEntity<List<TeamInfoDto>>(tService.selectAll(), HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "새로운 팀 정보 등록.", response = String.class)
 	@PostMapping("/team")
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody TeamInfoDto teamInfo) {
@@ -102,4 +99,5 @@ public class TeamInfoController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	//TODO: Team 검색
 }

@@ -14,7 +14,7 @@
 	</typeAliases>
 	<mappers>
 		<!-- 사용할 mapper 등록 -->
-	<!-- 	<mapper resource="mybatis/mapper/TeamInfoMapper.xml" /> -->
+		<mapper resource="mybatis/mapper/TeamInfoMapper.xml" />
 		<mapper resource="mybatis/mapper/UserMapper.xml"/>
 	</mappers>
 </configuration>

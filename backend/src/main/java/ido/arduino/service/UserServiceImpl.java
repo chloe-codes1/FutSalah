@@ -1,5 +1,7 @@
 package ido.arduino.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int delete(int userID) {
 		return userMapper.delete(userID);
+	}
+
+	@Override
+	public List<UserDTO> searchUsersByName(String name) {
+		return userMapper.searchUsersByName(name);
 	}
 
 }
