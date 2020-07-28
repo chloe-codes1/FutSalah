@@ -22,7 +22,7 @@ import ido.arduino.service.UserService;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600) // TODO: 배포 시 바꿔야 함
+@CrossOrigin(origins = "*", maxAge = 3600) // TODO: 배포 시 바꿔야 함
 public class UserController {
 
 	@Autowired

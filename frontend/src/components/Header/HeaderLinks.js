@@ -1,13 +1,10 @@
 // @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
 /*eslint-disable*/
 import React, { Component, useCallback, useReducer, useState } from "react";
 
 import AddInfoDialog from "../Dialog/AddInfoDialog";
 // core components
 import Button from "components/CustomButtons/Button.js";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
@@ -122,17 +119,13 @@ export default function HeaderLinks(props) {
       method: "POST",
       url: "http://localhost:9999/api/login",
       data: user,
-      headers: {
-      },
+      headers: {},
     })
       .then(() => {
-        
-
-
         console.log("success");
       })
       .catch((e) => {
-        console.log('error', e)
+        console.log("error", e);
         console.log("fail");
       });
   }, [user]);

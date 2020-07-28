@@ -1,63 +1,35 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from "react";
 // nodejs library that concatenates classes
-import classNames from 'classnames';
+import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 // react components for routing our app without refresh
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 // core components
-import Header from 'components/Header/Header.js';
-import Footer from 'components/Footer/Footer.js';
-import Button from 'components/CustomButtons/Button.js';
-import Tooltip from '@material-ui/core/Tooltip';
-import CustomInput from 'components/CustomInput/CustomInput.js';
-import GridContainer from 'components/Grid/GridContainer.js';
-import GridItem from 'components/Grid/GridItem.js';
-import HeaderLinks from 'components/Header/HeaderLinks.js';
-import Parallax from 'components/Parallax/Parallax.js';
+import Header from "components/Header/Header.js";
+import Footer from "components/Footer/Footer.js";
+import Button from "components/CustomButtons/Button.js";
+import Tooltip from "@material-ui/core/Tooltip";
+import CustomInput from "components/CustomInput/CustomInput.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+import Parallax from "components/Parallax/Parallax.js";
 
-import Datetime from 'react-datetime';
+import Datetime from "react-datetime";
 
-import axios from 'axios';
+import axios from "axios";
 
 // validation
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 // 사용자의 프로필 사진이 없을 때 대신 사진
-import profile from 'assets/img/faces/christian.jpg';
+import profile from "assets/img/faces/christian.jpg";
 
-import styles from 'assets/jss/material-kit-react/views/profilePage.js';
-
-import UserContext from '../../contexts/UserContext';
+import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
-
-const { user } = state;
-const {
-  socialID,
-  name,
-  email,
-  age,
-  position,
-  height,
-  weight,
-  profileURL,
-} = state.user;
-
-useEffect(() => {
-  axios({
-    method: 'post',
-    url: 'locallhost:9999/api/login',
-    data: user,
-  })
-    .then(() => {
-      console.log('success');
-    })
-    .catch(() => {
-      console.log('fail');
-    });
-}, [user]);
 
 export default function ProfilePage(props) {
   const classes = useStyles();
@@ -79,6 +51,37 @@ export default function ProfilePage(props) {
   //   profileURL: '',
   // };
 
+  const user = {
+    socialID: "",
+    name: "",
+    email: "",
+    age: 0,
+    position: "",
+    height: 0,
+    weight: 0,
+    profileURL: "",
+  };
+
+  const getUserInfo = async () =>
+    await axios({
+      method: "POST",
+      url: "http://localhost:9999/api/login",
+      data: user,
+    })
+      .then((res) => {
+        console.log("success");
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log("error e", e);
+      });
+
+  useEffect(() => {
+    const socialID = "118208171974925555970";
+    user.socialID = socialID;
+    getUserInfo();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       email: user.email,
@@ -90,8 +93,8 @@ export default function ProfilePage(props) {
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .required('Please enter your email.')
-        .email('이메일이 아닙니다'),
+        .required("Please enter your email.")
+        .email("이메일이 아닙니다"),
       position: Yup.string(),
       age: Yup.date(),
       weight: Yup.number().moreThan(1).lessThan(200),
@@ -117,18 +120,18 @@ export default function ProfilePage(props) {
 
     try {
       const res = await axios({
-        method: 'PUT',
-        url: 'https://locallhost:9999/api/user' + user.name,
+        method: "PUT",
+        url: "https://locallhost:9999/api/user" + user.name,
       })
         .then(() => {
           console.log(user);
-          console.log('success');
+          console.log("success");
         })
         .catch(() => {
-          console.log('fail');
+          console.log("fail");
         });
     } catch (e) {
-      console.log('error e', e);
+      console.log("error e", e);
     }
     return;
   };
@@ -149,11 +152,11 @@ export default function ProfilePage(props) {
         fixed
         changeColorOnScroll={{
           height: 200,
-          color: 'white',
+          color: "white",
         }}
         {...rest}
       />
-      <Parallax small filter image={require('assets/img/bg1.jpg')} />
+      <Parallax small filter image={require("assets/img/bg1.jpg")} />
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
@@ -161,7 +164,7 @@ export default function ProfilePage(props) {
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
-                    {user.profileURL === '' ? (
+                    {user.profileURL === "" ? (
                       <img src={profile} alt="..." className={imageClasses} />
                     ) : (
                       <img
@@ -203,7 +206,7 @@ export default function ProfilePage(props) {
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
-                      defaultValue={user.age + ''}
+                      defaultValue={user.age + ""}
                       onChange={formik.handleChange}
                       value={formik.values.age}
                     />
@@ -217,12 +220,12 @@ export default function ProfilePage(props) {
                   <GridItem>
                     <Button
                       className={
-                        pos === 'all'
+                        pos === "all"
                           ? classes.selectButton
                           : classes.buttonList
                       }
                       color="danger"
-                      onClick={() => setPos('all')}
+                      onClick={() => setPos("all")}
                     >
                       ALL
                     </Button>
@@ -234,7 +237,7 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === 'pivo'
+                          pos === "pivo"
                             ? classes.selectButton
                             : classes.buttonList
                         }
@@ -251,12 +254,12 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === 'ala'
+                          pos === "ala"
                             ? classes.selectButton
                             : classes.buttonList
                         }
                         color="warning"
-                        onClick={() => setPos('ala')}
+                        onClick={() => setPos("ala")}
                       >
                         ALA
                       </Button>
@@ -269,12 +272,12 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === 'fixo'
+                          pos === "fixo"
                             ? classes.selectButton
                             : classes.buttonList
                         }
                         color="success"
-                        onClick={() => setPos('fixo')}
+                        onClick={() => setPos("fixo")}
                       >
                         FIXO
                       </Button>
@@ -287,12 +290,12 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === 'goleiro'
+                          pos === "goleiro"
                             ? classes.selectButton
                             : classes.buttonList
                         }
                         color="info"
-                        onClick={() => setPos('goleiro')}
+                        onClick={() => setPos("goleiro")}
                       >
                         GOLEIRO
                       </Button>
