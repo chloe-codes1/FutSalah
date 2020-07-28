@@ -33,7 +33,31 @@ import UserContext from '../../contexts/UserContext';
 
 const useStyles = makeStyles(styles);
 
-useEffect(() => {}, []);
+const { user } = state;
+const {
+  socialID,
+  name,
+  email,
+  age,
+  position,
+  height,
+  weight,
+  profileURL,
+} = state.user;
+
+useEffect(() => {
+  axios({
+    method: 'post',
+    url: 'locallhost:9999/api/login',
+    data: user,
+  })
+    .then(() => {
+      console.log('success');
+    })
+    .catch(() => {
+      console.log('fail');
+    });
+}, [user]);
 
 export default function ProfilePage(props) {
   const classes = useStyles();
@@ -44,16 +68,16 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
 
-  const user = {
-    userID: 1,
-    name: '김싸피',
-    email: 'abc@ssafy.com',
-    position: 'all',
-    age: 1995,
-    weight: 100,
-    height: 200,
-    profileURL: '',
-  };
+  // const user = {
+  //   userID: 1,
+  //   name: '김싸피',
+  //   email: 'abc@ssafy.com',
+  //   position: 'all',
+  //   age: 1995,
+  //   weight: 100,
+  //   height: 200,
+  //   profileURL: '',
+  // };
 
   const formik = useFormik({
     initialValues: {
