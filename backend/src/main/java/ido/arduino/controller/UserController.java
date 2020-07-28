@@ -1,6 +1,7 @@
 package ido.arduino.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ido.arduino.dto.UserDTO;
 import ido.arduino.service.UserService;
@@ -25,7 +27,8 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/login")
-	public UserDTO findUser(@RequestBody String socialID) {
+	public @ResponseBody UserDTO findUser(@RequestBody Map<String, String> data) {
+		String socialID = data.get("socialID");
 		System.out.println("socialID?????" + socialID);
 		UserDTO loggedUser = userService.findBySocialID(socialID);
 		System.out.println("current user?" + loggedUser);
@@ -33,7 +36,7 @@ public class UserController {
 	}
 
 	@PostMapping("/user")
-	public UserDTO createUser(@RequestBody UserDTO user) {
+	public @ResponseBody UserDTO createUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user);
 		int newlySignedUp = userService.insert(user);
 		if (newlySignedUp == 1) {
@@ -67,7 +70,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/user/{name}")
-	public List<UserDTO> searchByName(@PathVariable String name){
+	public @ResponseBody List<UserDTO> searchByName(@PathVariable String name){
 		System.out.println("name??"+ name);
 		List<UserDTO> list = userService.searchUsersByName(name);
 		System.out.println("user list? " + list);
