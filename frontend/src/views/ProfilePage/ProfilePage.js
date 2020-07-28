@@ -1,33 +1,39 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from 'react';
 // nodejs library that concatenates classes
-import classNames from "classnames";
+import classNames from 'classnames';
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 // core components
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import Button from "components/CustomButtons/Button.js";
-import Tooltip from "@material-ui/core/Tooltip";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Parallax from "components/Parallax/Parallax.js";
+import Header from 'components/Header/Header.js';
+import Footer from 'components/Footer/Footer.js';
+import Button from 'components/CustomButtons/Button.js';
+import Tooltip from '@material-ui/core/Tooltip';
+import CustomInput from 'components/CustomInput/CustomInput.js';
+import GridContainer from 'components/Grid/GridContainer.js';
+import GridItem from 'components/Grid/GridItem.js';
+import HeaderLinks from 'components/Header/HeaderLinks.js';
+import Parallax from 'components/Parallax/Parallax.js';
 
-import Datetime from "react-datetime";
+import Datetime from 'react-datetime';
 
-import axios from "axios";
+import axios from 'axios';
+
+// validation
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
 // 사용자의 프로필 사진이 없을 때 대신 사진
-import profile from "assets/img/faces/christian.jpg";
+import profile from 'assets/img/faces/christian.jpg';
 
-import styles from "assets/jss/material-kit-react/views/profilePage.js";
+import styles from 'assets/jss/material-kit-react/views/profilePage.js';
 
-import UserContext from "../../contexts/UserContext";
+import UserContext from '../../contexts/UserContext';
 
 const useStyles = makeStyles(styles);
+
+useEffect(() => {}, []);
 
 export default function ProfilePage(props) {
   const classes = useStyles();
@@ -38,30 +44,70 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
 
-  const { userName } = useContext(UserContext);
-  const [user, setUser] = useState({
-    name: "김싸피",
-    email: "abc@ssafy.com",
-    position: "all",
-    age: 1900,
+  const user = {
+    userID: 1,
+    name: '김싸피',
+    email: 'abc@ssafy.com',
+    position: 'all',
+    age: 1995,
     weight: 100,
     height: 200,
-    profileURL: "",
+    profileURL: '',
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      email: user.email,
+      position: user.position,
+      age: user.age,
+      weight: user.weight,
+      height: user.height,
+      profileURL: user.profileURL,
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required('Please enter your email.')
+        .email('이메일이 아닙니다'),
+      position: Yup.string(),
+      age: Yup.date(),
+      weight: Yup.number().moreThan(1).lessThan(200),
+      height: Yup.number().moreThan(100).lessThan(300),
+      profileURL: Yup.string().url(),
+    }),
+    onSubmit: () => {},
   });
 
-  useEffect(() => {
-    // axios({
-    //   method: "get",
-    //   url: "https://locallhost:9999/api/user" + loginUser.name,
-    // })
-    //   .then(() => {
-    //     console.log(user);
-    //     console.log("success");
-    //   })
-    //   .catch(() => {
-    //     console.log("fail");
-    //   });
-  }, []);
+  const onSubmit = async (e) => {
+    formik.submitForm();
+    if (
+      !formik.isValid ||
+      !formik.values.email ||
+      !formik.values.position ||
+      !formik.values.age ||
+      !formik.values.weight ||
+      !formik.values.height ||
+      !formik.values.profileURL
+    ) {
+      return;
+    }
+
+    try {
+      const res = await axios({
+        method: 'PUT',
+        url: 'https://locallhost:9999/api/user' + user.name,
+      })
+        .then(() => {
+          console.log(user);
+          console.log('success');
+        })
+        .catch(() => {
+          console.log('fail');
+        });
+    } catch (e) {
+      console.log('error e', e);
+    }
+    return;
+  };
 
   const [pos, setPos] = useState(0);
 
@@ -79,11 +125,11 @@ export default function ProfilePage(props) {
         fixed
         changeColorOnScroll={{
           height: 200,
-          color: "white",
+          color: 'white',
         }}
         {...rest}
       />
-      <Parallax small filter image={require("assets/img/bg1.jpg")} />
+      <Parallax small filter image={require('assets/img/bg1.jpg')} />
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>
@@ -91,7 +137,7 @@ export default function ProfilePage(props) {
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
-                    {user.profileURL === "" ? (
+                    {user.profileURL === '' ? (
                       <img src={profile} alt="..." className={imageClasses} />
                     ) : (
                       <img
@@ -116,17 +162,13 @@ export default function ProfilePage(props) {
                     fullWidth: true,
                   }}
                   inputProps={{
-                    value: user.email,
-                    onChange: (event) =>
-                      setUser((preState) => {
-                        console.log(event.target.value);
-                        return {
-                          ...preState,
-                          email: event.target.value,
-                        };
-                      }),
+                    value: formik.values.email,
+                    onChange: formik.handleChange,
                   }}
                 />
+                {formik.touched.email && formik.errors.email && (
+                  <div className="invalid-feedback">{formik.errors.email}</div>
+                )}
 
                 <GridContainer>
                   <GridItem>
@@ -137,10 +179,9 @@ export default function ProfilePage(props) {
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
-                      defaultValue={user.age + ""}
-                      // onChange={(event) => {
-                      //   // updateAge(event._d.getYear() + 1900);
-                      // }}
+                      defaultValue={user.age + ''}
+                      onChange={formik.handleChange}
+                      value={formik.values.age}
                     />
                   </GridItem>
                 </GridContainer>
@@ -152,12 +193,12 @@ export default function ProfilePage(props) {
                   <GridItem>
                     <Button
                       className={
-                        pos === "all"
+                        pos === 'all'
                           ? classes.selectButton
                           : classes.buttonList
                       }
                       color="danger"
-                      onClick={() => setPos("all")}
+                      onClick={() => setPos('all')}
                     >
                       ALL
                     </Button>
@@ -169,12 +210,11 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === "pivo"
+                          pos === 'pivo'
                             ? classes.selectButton
                             : classes.buttonList
                         }
                         color="rose"
-                        onClick={() => setPos("pivo")}
                       >
                         PIVO
                       </Button>
@@ -187,12 +227,12 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === "ala"
+                          pos === 'ala'
                             ? classes.selectButton
                             : classes.buttonList
                         }
                         color="warning"
-                        onClick={() => setPos("ala")}
+                        onClick={() => setPos('ala')}
                       >
                         ALA
                       </Button>
@@ -205,12 +245,12 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === "fixo"
+                          pos === 'fixo'
                             ? classes.selectButton
                             : classes.buttonList
                         }
                         color="success"
-                        onClick={() => setPos("fixo")}
+                        onClick={() => setPos('fixo')}
                       >
                         FIXO
                       </Button>
@@ -223,12 +263,12 @@ export default function ProfilePage(props) {
                     >
                       <Button
                         className={
-                          pos === "goleiro"
+                          pos === 'goleiro'
                             ? classes.selectButton
                             : classes.buttonList
                         }
                         color="info"
-                        onClick={() => setPos("goleiro")}
+                        onClick={() => setPos('goleiro')}
                       >
                         GOLEIRO
                       </Button>
@@ -242,9 +282,8 @@ export default function ProfilePage(props) {
                     fullWidth: true,
                   }}
                   inputProps={{
-                    value: user.height,
-                    // onChange: (event) =>
-                    // updateHeight(parseInt(event.target.value, 10)),
+                    onChange: formik.handleChange,
+                    value: formik.values.height,
                   }}
                 />
                 <CustomInput
@@ -255,8 +294,8 @@ export default function ProfilePage(props) {
                   }}
                   inputProps={{
                     value: user.weight,
-                    // onChange: (event) =>
-                    // updateWeight(parseInt(event.target.value, 10)),
+                    onChange: formik.handleChange,
+                    value: formik.values.weight,
                   }}
                 />
               </GridItem>
