@@ -1,5 +1,7 @@
 package ido.arduino.controller;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +33,10 @@ public class UserController {
 		String socialID = data.get("socialID");
 		System.out.println("socialID?????" + socialID);
 		UserDTO loggedUser = userService.findBySocialID(socialID);
+		Calendar cal = Calendar.getInstance();
+		if (loggedUser != null && loggedUser.getAge() != null) {
+			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
+		}	
 		System.out.println("current user?" + loggedUser);
 		return loggedUser;
 	}
@@ -68,14 +74,14 @@ public class UserController {
 			System.out.println("user delete failed...");
 		}
 	}
-	
+
 	@GetMapping("/user/{name}")
-	public @ResponseBody List<UserDTO> searchByName(@PathVariable String name){
-		System.out.println("name??"+ name);
+	public @ResponseBody List<UserDTO> searchByName(@PathVariable String name) {
+		System.out.println("name??" + name);
 		List<UserDTO> list = userService.searchUsersByName(name);
 		System.out.println("user list? " + list);
 		return list;
 	}
-	//TODO: User 가입한 Team 목록 
-	
+	// TODO: User 가입한 Team 목록
+
 }
