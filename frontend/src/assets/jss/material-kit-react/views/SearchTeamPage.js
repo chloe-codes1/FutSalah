@@ -24,7 +24,7 @@ const SearchTeamPageStyle = {
   },
   background: {
     minHeight: "100vh",
-    height: "150vh",
+    height: "auto",
     display: "inherit",
     position: "relative",
     margin: "0",
@@ -54,11 +54,9 @@ const SearchTeamPageStyle = {
     },
   },
   cardHeader: {
-    width: "auto",
+    width: "50%",
     textAlign: "center",
-    marginLeft: "20px",
-    marginRight: "20px",
-    marginTop: "-40px",
+    margin: "0 auto",
     padding: "20px 0",
     marginBottom: "15px",
   },
@@ -72,9 +70,11 @@ const SearchTeamPageStyle = {
     height: "50%",
   },
   img: {
-    width: "50%",
-    borderTopLeftRadius: "calc(.25rem - 1px)",
-    borderTopRightRadius: "calc(.25rem - 1px)",
+    width: "120px",
+    height: "auto",
+    overflow: "hidden",
+    // borderTopLeftRadius: "calc(.25rem - 1px)",
+    // borderTopRightRadius: "calc(.25rem - 1px)",
   },
   ...imagesStyles,
 };
