@@ -32,30 +32,50 @@ function LoginDialog(props) {
     );
     axios({
       method: "post",
-      url: "localhost:9999/api/login",
+      url: "http://localhost:9999/api/login",
       data: {
         socialID: res.profileObj.googleId,
       },
     })
-      .then((res) => {
-        addInfo();
+      .then((e) => {
+        if (e.data.socialID === res.profileObj.googleId) {
+          console.log("already registered!!");
+          onClose();
+        } else {
+          console.log("not registered");
+          onClose();
+          addInfo();
+        }
       })
-      .catch((res) => {
+      .catch(() => {
         console.log("ERROR");
         onClose();
       });
-    onClose();
-    addInfo();
   };
 
   // 카카오 로그인
   const responseKaKao = (res) => {
-    // console.log(res);
-    // console.log(res.profile);
-    // console.log(res.profile.id);
-    // console.log(res.profile.properties.nickname);
-    onClose();
-    addInfo();
+    console.log(res);
+    console.log(res.profile);
+    console.log(res.profile.id);
+    console.log(res.profile.properties.nickname);
+    initUser(res.profile.id, "", res.profile.properties.nickname, "");
+    axios({
+      method: "post",
+      url: "http://localhost:9999/api/login",
+      data: {
+        socialID: res.profile.id,
+      },
+    }).then((e) => {
+      if (e.data.socialID === res.profile.id) {
+        console.log("already registered!!");
+        onClose();
+      } else {
+        console.log("not registered");
+        onClose();
+        addInfo();
+      }
+    });
   };
 
   const responseFail = (res) => {

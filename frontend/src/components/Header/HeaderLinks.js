@@ -125,14 +125,16 @@ export default function HeaderLinks(props) {
   const onRegister = useCallback(() => {
     axios({
       method: "post",
-      url: "locallhost:9999/api/login",
+      url: "http://localhost:9999/api/user",
       data: user,
     })
       .then(() => {
         console.log("success");
+        addInfoClose();
       })
       .catch(() => {
         console.log("fail");
+        addInfoClose();
       });
   }, [user]);
   //console.log(user);
