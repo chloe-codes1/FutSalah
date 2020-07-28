@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -18,7 +18,9 @@ import Parallax from "components/Parallax/Parallax.js";
 
 import Datetime from "react-datetime";
 
-// 사용자의 프로필 사진 가져오기
+import axios from "axios";
+
+// 사용자의 프로필 사진이 없을 때 대신 사진
 import profile from "assets/img/faces/christian.jpg";
 
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
@@ -36,23 +38,35 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
 
-  const user = useContext(UserContext);
+  const { userName } = useContext(UserContext);
+  const [user, setUser] = useState({
+    name: "김싸피",
+    email: "abc@ssafy.com",
+    position: "all",
+    age: 1900,
+    weight: 100,
+    height: 200,
+    profileURL: "",
+  });
 
-  const position = user.position;
+  useEffect(() => {
+    // axios({
+    //   method: "get",
+    //   url: "https://locallhost:9999/api/user" + loginUser.name,
+    // })
+    //   .then(() => {
+    //     console.log(user);
+    //     console.log("success");
+    //   })
+    //   .catch(() => {
+    //     console.log("fail");
+    //   });
+  }, []);
 
-  const setPosition = () => {
-    switch (user.position) {
-      case "ALL":
-        break;
-      case "PIVO":
-        break;
-      case "ALA":
-        break;
-      case "FIXO":
-        break;
-      case "GOLEIRO":
-        break;
-    }
+  const [pos, setPos] = useState(0);
+
+  const setPosition = (pos) => {
+    setPos(pos);
   };
 
   console.log(user);
@@ -103,6 +117,14 @@ export default function ProfilePage(props) {
                   }}
                   inputProps={{
                     value: user.email,
+                    onChange: (event) =>
+                      setUser((preState) => {
+                        console.log(event.target.value);
+                        return {
+                          ...preState,
+                          email: event.target.value,
+                        };
+                      }),
                   }}
                 />
 
@@ -115,7 +137,10 @@ export default function ProfilePage(props) {
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
-                      defaultValue={user.age}
+                      defaultValue={user.age + ""}
+                      // onChange={(event) => {
+                      //   // updateAge(event._d.getYear() + 1900);
+                      // }}
                     />
                   </GridItem>
                 </GridContainer>
@@ -126,9 +151,13 @@ export default function ProfilePage(props) {
                   </GridItem>
                   <GridItem>
                     <Button
-                      autoFocus={user.position === "ALL" ? true : false}
-                      className={classes.buttonList}
+                      className={
+                        pos === "all"
+                          ? classes.selectButton
+                          : classes.buttonList
+                      }
                       color="danger"
+                      onClick={() => setPos("all")}
                     >
                       ALL
                     </Button>
@@ -139,9 +168,13 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        autoFocus={user.position === "PIVO" ? true : false}
-                        className={classes.buttonList}
+                        className={
+                          pos === "pivo"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
                         color="rose"
+                        onClick={() => setPos("pivo")}
                       >
                         PIVO
                       </Button>
@@ -153,9 +186,13 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        autoFocus={user.position === "ALA" ? true : false}
-                        className={classes.buttonList}
+                        className={
+                          pos === "ala"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
                         color="warning"
+                        onClick={() => setPos("ala")}
                       >
                         ALA
                       </Button>
@@ -167,9 +204,13 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        autoFocus={user.position === "FIXO" ? true : false}
-                        className={classes.buttonList}
+                        className={
+                          pos === "fixo"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
                         color="success"
+                        onClick={() => setPos("fixo")}
                       >
                         FIXO
                       </Button>
@@ -181,9 +222,13 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        autoFocus={user.position === "GOLEIRO" ? true : false}
-                        className={classes.buttonList}
+                        className={
+                          pos === "goleiro"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
                         color="info"
+                        onClick={() => setPos("goleiro")}
                       >
                         GOLEIRO
                       </Button>
@@ -198,6 +243,8 @@ export default function ProfilePage(props) {
                   }}
                   inputProps={{
                     value: user.height,
+                    // onChange: (event) =>
+                    // updateHeight(parseInt(event.target.value, 10)),
                   }}
                 />
                 <CustomInput
@@ -208,6 +255,8 @@ export default function ProfilePage(props) {
                   }}
                   inputProps={{
                     value: user.weight,
+                    // onChange: (event) =>
+                    // updateWeight(parseInt(event.target.value, 10)),
                   }}
                 />
               </GridItem>

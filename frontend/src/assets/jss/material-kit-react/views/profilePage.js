@@ -80,6 +80,10 @@ const profilePageStyle = {
       opacity: 1,
     },
   },
+  selectButton: {
+    margin: "0 2%",
+    opacity: 1,
+  },
   withdrawal: {
     margin: "20px auto 50px auto",
     textAlign: "right",
