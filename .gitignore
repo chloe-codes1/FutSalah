@@ -31,5 +31,9 @@ sketch
 # Ignore all local history of files
 .history
 .metadata
+.vscode
+
+
+*.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/react,visualstudiocode
