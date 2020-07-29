@@ -1,35 +1,43 @@
-import React, { useContext, useState, useEffect } from "react";
+// validation
+import * as Yup from "yup";
+
+import React, { useEffect, useState } from "react";
+
+import Button from "components/CustomButtons/Button.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
+import Datetime from "react-datetime";
+import Footer from "components/Footer/Footer.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+// core components
+import Header from "components/Header/Header.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
+import Parallax from "components/Parallax/Parallax.js";
+import Tooltip from "@material-ui/core/Tooltip";
+import axios from "axios";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// react components for routing our app without refresh
-import { Link } from "react-router-dom";
-// core components
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import Button from "components/CustomButtons/Button.js";
-import Tooltip from "@material-ui/core/Tooltip";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Parallax from "components/Parallax/Parallax.js";
-
-import Datetime from "react-datetime";
-
-import axios from "axios";
-
-// validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
-
 // 사용자의 프로필 사진이 없을 때 대신 사진
 import profile from "assets/img/faces/christian.jpg";
-
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
+import { useFormik } from "formik";
 
 const useStyles = makeStyles(styles);
+
+const initialValues = {
+  socialID: "",
+  name: "",
+  email: '',
+  age: 0,
+  position: "",
+  height: 0,
+  weight: 0,
+  profileURL: "",
+};
 
 export default function ProfilePage(props) {
   const classes = useStyles();
@@ -40,18 +48,8 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
 
-  // const user = {
-  //   userID: 1,
-  //   name: '김싸피',
-  //   email: 'abc@ssafy.com',
-  //   position: 'all',
-  //   age: 1995,
-  //   weight: 100,
-  //   height: 200,
-  //   profileURL: '',
-  // };
-
-  const user = {
+  // const [user, setUser] = useState(initialValues);
+  const [user, setUser] = useState({
     socialID: "",
     name: "",
     email: "",
@@ -60,7 +58,27 @@ export default function ProfilePage(props) {
     height: 0,
     weight: 0,
     profileURL: "",
-  };
+  });
+  const [isLoadded, setIsLoadded] = useState(false);
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("이메일을 입력해주세요.")
+        .email("올바른 이메일 형식이 아닙니다"),
+      position: Yup.string(),
+      age: Yup.date(),
+      weight: Yup.number()
+        .moreThan(1, "입력하신 몸무게를 다시 확인해주세요.")
+        .lessThan(200, "입력하신 몸무게를 다시 확인해주세요."),
+      height: Yup.number()
+        .moreThan(100, "입력하신 키를 다시 확인해주세요.")
+        .lessThan(300, "입력하신 키를 다시 확인해주세요."),
+      profileURL: Yup.string().url(),
+    }),
+    onSubmit: () => {},
+  });
 
   const getUserInfo = async () =>
     await axios({
@@ -69,43 +87,44 @@ export default function ProfilePage(props) {
       data: user,
     })
       .then((res) => {
-        console.log("success");
-        console.log(res);
+        console.log("get user info succeed!");
+        console.log("res??", res.data);
+        const userUpdate = {
+          ...user,
+          email: res.data.email,
+          position: res.data.position,
+          age: res.data.age,
+          weight: res.data.weight,
+          height: res.data.height,
+          profileURL: res.data.profileURL,
+        };
+        formik.setValues(userUpdate);
+        setUser(userUpdate);
+        setIsLoadded(true);
       })
       .catch((e) => {
         console.log("error e", e);
       });
 
-  useEffect(() => {
+  useEffect( () => {
     const socialID = "118208171974925555970";
     user.socialID = socialID;
     getUserInfo();
   }, []);
 
-  const formik = useFormik({
-    initialValues: {
-      email: user.email,
-      position: user.position,
-      age: user.age,
-      weight: user.weight,
-      height: user.height,
-      profileURL: user.profileURL,
-    },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .required("Please enter your email.")
-        .email("이메일이 아닙니다"),
-      position: Yup.string(),
-      age: Yup.date(),
-      weight: Yup.number().moreThan(1).lessThan(200),
-      height: Yup.number().moreThan(100).lessThan(300),
-      profileURL: Yup.string().url(),
-    }),
-    onSubmit: () => {},
-  });
+  
+
+
+  if(isLoadded){
+    console.log('formik initialValues->', JSON.stringify(formik.initialValues, null, 2));
+    console.log('formik values->', JSON.stringify(formik.values, null, 2));
+    console.log('user->', JSON.stringify(user, null, 2));
+  }
+
 
   const onSubmit = async (e) => {
     formik.submitForm();
+    console.log("formik.values??", formik.values);
     if (
       !formik.isValid ||
       !formik.values.email ||
@@ -115,17 +134,26 @@ export default function ProfilePage(props) {
       !formik.values.height ||
       !formik.values.profileURL
     ) {
+      console.log("Caught in validation filter...");
       return;
     }
+    const updatedUser = {
+      email: formik.values.email,
+      position: formik.values.position,
+      age: formik.values.age,
+      weight: formik.values.weight,
+      height: formik.values.height,
+      profileURL: formik.values.profileURL,
+    };
 
     try {
-      const res = await axios({
+      await axios({
         method: "PUT",
-        url: "https://locallhost:9999/api/user" + user.name,
+        url: "http://localhost:9999/api/user",
+        data: updatedUser,
       })
-        .then(() => {
-          console.log(user);
-          console.log("success");
+        .then((res) => {
+          console.log("success!", res);
         })
         .catch(() => {
           console.log("fail");
@@ -133,7 +161,7 @@ export default function ProfilePage(props) {
     } catch (e) {
       console.log("error e", e);
     }
-    return;
+    formik.resetForm();
   };
 
   const [pos, setPos] = useState(0);
@@ -142,7 +170,6 @@ export default function ProfilePage(props) {
     setPos(pos);
   };
 
-  console.log(user);
   return (
     <div>
       <Header
@@ -180,7 +207,7 @@ export default function ProfilePage(props) {
                 </div>
               </GridItem>
             </GridContainer>
-            <GridContainer justify="center">
+            <GridContainer justify="center" className="form-group">
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
                 <CustomInput
                   id="email"
@@ -189,31 +216,41 @@ export default function ProfilePage(props) {
                     fullWidth: true,
                   }}
                   inputProps={{
+                    // value: (formik.values.email? formik.values.email: user.email),
                     value: formik.values.email,
                     onChange: formik.handleChange,
                   }}
+                  className={`form-control ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.email && formik.errors.email && (
                   <div className="invalid-feedback">{formik.errors.email}</div>
                 )}
 
-                <GridContainer>
+                <GridContainer
+                  onChange={formik.handleChange}
+                  // value={formik.values.age? formik.values.age: user.age}
+                  value={formik.values.age}
+                >
                   <GridItem>
                     <h3 className={classes.buttonTitle}>출생연도</h3>
                   </GridItem>
 
                   <GridItem>
-                    <Datetime
-                      dateFormat="YYYY"
-                      timeFormat={false}
-                      defaultValue={user.age + ""}
-                      onChange={formik.handleChange}
-                      value={formik.values.age}
-                    />
+                    <Datetime dateFormat="YYYY" timeFormat={false} />
                   </GridItem>
                 </GridContainer>
-
-                <GridContainer>
+                {formik.touched.age && formik.errors.age && (
+                  <div className="invalid-feedback">{formik.errors.age}</div>
+                )}
+                <GridContainer
+                  onChange={formik.handleChange}
+                  // value={formik.values.position? formik.values.position: user.position}>
+                  value={formik.values.position}
+                >
                   <GridItem>
                     <h3 className={classes.buttonTitle}>포지션</h3>
                   </GridItem>
@@ -302,6 +339,11 @@ export default function ProfilePage(props) {
                     </Tooltip>
                   </GridItem>
                 </GridContainer>
+                {formik.touched.position && formik.errors.position && (
+                  <div className="invalid-feedback">
+                    {formik.errors.position}
+                  </div>
+                )}
                 <CustomInput
                   id="height"
                   labelText="키"
@@ -310,9 +352,15 @@ export default function ProfilePage(props) {
                   }}
                   inputProps={{
                     onChange: formik.handleChange,
+                    // value: formik.values.height
+                    //   ? formik.values.height
+                    //   : user.height,
                     value: formik.values.height,
                   }}
                 />
+                {formik.touched.height && formik.errors.height && (
+                  <div className="invalid-feedback">{formik.errors.height}</div>
+                )}
                 <CustomInput
                   id="weight"
                   labelText="몸무게"
@@ -320,14 +368,17 @@ export default function ProfilePage(props) {
                     fullWidth: true,
                   }}
                   inputProps={{
-                    value: user.weight,
                     onChange: formik.handleChange,
+                    // value: (formik.values.weight? formik.values.weight: user.weight)  ,
                     value: formik.values.weight,
                   }}
                 />
+                {formik.touched.weight && formik.errors.weight && (
+                  <div className="invalid-feedback">{formik.errors.weight}</div>
+                )}
               </GridItem>
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
-                <Button>정보 변경</Button>
+                <Button onClick={onSubmit}>정보 변경</Button>
               </GridItem>
               <GridItem xs={12} sm={12} md={8} className={classes.withdrawal}>
                 <Link>탈퇴하기</Link>
