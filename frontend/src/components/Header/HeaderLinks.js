@@ -1,23 +1,28 @@
 // @material-ui/icons
 import { Apps, CloudDownload } from "@material-ui/icons";
-/*eslint-disable*/
-import React, { Component, useCallback, useReducer, useState } from "react";
 
-import AddInfoDialog from "../Dialog/AddInfoDialog";
-// core components
-import Button from "components/CustomButtons/Button.js";
+/*eslint-disable*/
+import React, { useReducer, useState, useContext, useCallback } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-// dialog components
-import LoginDialog from "../Dialog/LoginDialog";
-import axios from "axios";
-// @material-ui/core components
+
+// core components
+import Button from "components/CustomButtons/Button.js";
+
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
+
+// dialog components
+import LoginDialog from "../Dialog/LoginDialog";
+import AddInfoDialog from "../Dialog/AddInfoDialog";
+
+import axios from "axios";
+import UserContext from "../../contexts/UserContext";
+import { ListItemText, Avatar } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 
@@ -66,21 +71,12 @@ function reducer(state, action) {
 }
 
 export default function HeaderLinks(props) {
+  const { userinfo, userDispatch } = useContext(UserContext);
   const classes = useStyles();
   const [loginOpen, setLoginOpen] = useState(false);
   const [addInfoOpen, setAddInfoOpen] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { user } = state;
-  const {
-    socialID,
-    name,
-    email,
-    age,
-    position,
-    height,
-    weight,
-    profileURL,
-  } = state.user;
 
   const loginClickOpen = () => {
     setLoginOpen(true);
@@ -116,27 +112,36 @@ export default function HeaderLinks(props) {
       value,
     });
   }, []);
-
+  const loggedUser = useCallback((id, name, provider) => {
+    window.sessionStorage.setItem("id", id);
+    window.sessionStorage.setItem("name", name);
+    window.sessionStorage.setItem("provider", provider);
+    userDispatch({
+      type: "LOGIN_USER",
+      id,
+      name,
+      provider,
+    });
+  }, []);
   const onRegister = useCallback(() => {
     axios({
-      method: "POST",
-      url: "http://localhost:9999/api/login",
+      method: "post",
+      url: "http://localhost:9999/api/user",
       data: user,
-      headers: {
-      },
+      headers: {},
     })
       .then(() => {
-        
-
-
         console.log("success");
+        loggedUser(user.socialID, user.name, "social");
+        addInfoClose();
       })
       .catch((e) => {
-        console.log('error', e)
+        console.log("error", e);
         console.log("fail");
+        addInfoClose();
       });
   }, [user]);
-  //console.log(user);
+
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
@@ -145,46 +150,86 @@ export default function HeaderLinks(props) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Link to={"/profile"} className={classes.link}>
-          <Button
-            color="transparent"
-            target="_blank"
-            className={classes.navLink}
-          >
-            회원정보
-          </Button>
+        <Link to={"/"} className={classes.link}>
+          {userinfo.logged && (
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+            >
+              나의 팀
+            </Button>
+          )}
         </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Button
-          href="#pablo"
-          className={classes.ButtonNavLink}
-          onClick={loginClickOpen}
-          color="danger"
-        >
-          Login
-        </Button>
-        <Button
-          href="#pablo"
-          className={classes.ButtonNavLink}
-          onClick={(e) => e.preventDefault()}
-          color="info"
-        >
-          register
-        </Button>
-        <Button
-          href="#pablo"
-          className={classes.ButtonNavLink}
-          onClick={(e) => e.preventDefault()}
-          color="warning"
-        >
-          Logout
-        </Button>
+        <Link to={"/profile"} className={classes.link}>
+          {userinfo.logged && (
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+            >
+              회원정보
+            </Button>
+          )}
+        </Link>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        {userinfo.logged && (
+          <IconButton>
+            <Avatar src="assets/img/faces/marc.jpg" className={classes.small} />
+          </IconButton>
+        )}
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        {userinfo.logged && (
+          <ListItemText className={classes.listItemText}>
+            {userinfo.name}님 환영합니다!
+          </ListItemText>
+        )}
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        {!userinfo.logged && (
+          <Button
+            href="#pablo"
+            className={classes.ButtonNavLink}
+            onClick={loginClickOpen}
+            color="danger"
+          >
+            Login
+          </Button>
+        )}
+        {/* {!userinfo.logged && (
+          <Button
+            href="#pablo"
+            className={classes.ButtonNavLink}
+            onClick={(e) => e.preventDefault()}
+            color="info"
+          >
+            register
+          </Button>
+        )} */}
+        {userinfo.logged && (
+          <Button
+            href="#pablo"
+            className={classes.ButtonNavLink}
+            onClick={() =>
+              userDispatch({
+                type: "LOGOUT_USER",
+              })
+            }
+            color="warning"
+          >
+            Logout
+          </Button>
+        )}
         <LoginDialog
           open={loginOpen}
           onClose={loginClickClose}
           addInfo={addInfo}
           initUser={initUser}
+          loggedUser={loggedUser}
         />
         <AddInfoDialog
           open={addInfoOpen}
