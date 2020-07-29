@@ -1,10 +1,5 @@
 import { createContext } from "react";
 
-const UserContext = createContext({
-  socialID: "",
-  name: "",
-  logged: false,
-  // profileURL: "",
-});
+const UserContext = createContext();
 
 export default UserContext;

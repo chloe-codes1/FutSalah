@@ -75,8 +75,8 @@ const profilePageStyle = {
   },
   buttonList: {
     margin: "0 2%",
-    opacity: 0.3,
-    "&:hover, &:focus": {
+    opacity: 0.5,
+    "&:hover": {
       opacity: 1,
     },
   },

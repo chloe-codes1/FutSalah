@@ -13,6 +13,9 @@ import Profile from "views/ProfilePage/ProfilePage.js";
 
 var hist = createBrowserHistory();
 
+//export const UserDispatch = createContext();
+//const [state, dispatch] = useReducer(reducer, initialState);
+
 ReactDOM.render(
   <UserProvider>
     <Router history={hist}>

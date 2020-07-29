@@ -188,18 +188,11 @@ export default function ProfilePage(props) {
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
-                    {user.profileURL === "" ? (
-                      <img src={profile} alt="..." className={imageClasses} />
-                    ) : (
-                      <img
-                        src={user.profileURL}
-                        alt="..."
-                        className={imageClasses}
-                      />
-                    )}
+                    <img src={profile} alt="..." className={imageClasses} />
                   </div>
                   <div className={classes.name}>
-                    <h3 className={classes.title}>{user.name}</h3>
+                    {/* 유저 이름 넣기 */}
+                    <h3 className={classes.title}>유저 이름</h3>
                   </div>
                 </div>
               </GridItem>
