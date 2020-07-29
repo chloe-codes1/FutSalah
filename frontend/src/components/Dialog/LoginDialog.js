@@ -17,11 +17,7 @@ function LoginDialog(props) {
     onClose();
   };
 
-  // 추가작업 예정 : 처음 로그인시 AddInfoDialog를 생성 기존회원일 경우 생성하지 않고 로그인 완료. 현재는 구분x
-  // 구글 로그인
   const responseGoogle = (res) => {
-    // console.log(res);
-    // console.log(res.profileObj);
     initUser(
       res.profileObj.googleId,
       res.profileObj.email,

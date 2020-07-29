@@ -1,5 +1,6 @@
 // @material-ui/icons
 import { Apps, CloudDownload } from "@material-ui/icons";
+
 /*eslint-disable*/
 import React, { useReducer, useState, useContext, useCallback } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -8,9 +9,6 @@ import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-
-// @material-ui/icons
-import { Apps, CloudDownload, Label } from "@material-ui/icons";
 
 // core components
 import Button from "components/CustomButtons/Button.js";
@@ -127,19 +125,15 @@ export default function HeaderLinks(props) {
       method: "post",
       url: "http://localhost:9999/api/user",
       data: user,
-      headers: {
-      },
+      headers: {},
     })
       .then(() => {
-        
-
-
         console.log("success");
         loggedUser(user.socialID, user.name, "social");
         addInfoClose();
       })
       .catch((e) => {
-        console.log('error', e)
+        console.log("error", e);
         console.log("fail");
         addInfoClose();
       });
