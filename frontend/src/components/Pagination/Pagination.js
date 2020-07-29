@@ -56,8 +56,8 @@ Pagination.defaultProps = {
 Pagination.propTypes = {
   pages: PropTypes.arrayOf(
     PropTypes.shape({
-      active: PropTypes.bool,
-      disabled: PropTypes.bool,
+      // active: PropTypes.bool,
+      // disabled: PropTypes.bool,
       text: PropTypes.oneOfType([
         PropTypes.number,
         PropTypes.oneOf(["PREV", "NEXT", "..."]),

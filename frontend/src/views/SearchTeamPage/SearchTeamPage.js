@@ -32,6 +32,7 @@ export default function SearchTeamPage(props) {
   // 테스트 데이터
   const team = [
     {
+      id: 1,
       name: "asdagasrhshfaasfhgshdsfhshafshdfsasfassdfdsffdasfaf",
       img: "",
       win: 1,
@@ -39,6 +40,7 @@ export default function SearchTeamPage(props) {
       draw: 0,
     },
     {
+      id: 2,
       name: "b",
       img: "",
       win: 0,
@@ -46,6 +48,7 @@ export default function SearchTeamPage(props) {
       draw: 0,
     },
     {
+      id: 3,
       name: "c",
       img: "",
       win: 0,
@@ -53,14 +56,19 @@ export default function SearchTeamPage(props) {
       draw: 1,
     },
     {
+      id: 4,
       name: "d",
       img: "",
       win: 2,
       lose: 0,
       draw: 1,
     },
-    {},
-    {},
+    {
+      id: 5,
+    },
+    {
+      id: 6,
+    },
   ];
 
   const [pageNum, setPageNum] = useState(1);
@@ -83,7 +91,7 @@ export default function SearchTeamPage(props) {
   const totalPage = 17;
 
   const makePagination = (pageRow) => {
-    const page = [{ text: "<", onClick: prePage }];
+    const page = [{ text: "PREV", onClick: prePage }];
     for (let i = 1; i < 11; i++) {
       if (pageRow * 10 + i <= totalPage) {
         page.push({
@@ -94,7 +102,7 @@ export default function SearchTeamPage(props) {
         });
       }
     }
-    page.push({ text: ">", onClick: nextPage });
+    page.push({ text: "NEXT", onClick: nextPage });
     return page;
   };
 
@@ -182,15 +190,20 @@ export default function SearchTeamPage(props) {
               검색
             </Button>
           </div>
-          <GridList spacing={15} cellHeight={"100%"} cols={3}>
+          <GridList spacing={15} cellHeight="auto" cols={3}>
             {teamList.map((t) =>
               t.name === undefined ? (
                 <GridContainer
+                  key={t.id}
                   justify="center"
                   style={{ margin: "0 auto" }}
                 ></GridContainer>
               ) : (
-                <GridContainer justify="center" style={{ margin: "0 auto" }}>
+                <GridContainer
+                  key={t.id}
+                  justify="center"
+                  style={{ margin: "0 auto" }}
+                >
                   <GridItem>
                     <Card>
                       <CardHeader className={classes.cardHeader}>
