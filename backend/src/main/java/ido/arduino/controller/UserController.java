@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ido.arduino.dto.UserDTO;
@@ -53,8 +54,6 @@ public class UserController {
 	}
 
 	@PutMapping("/user")
-//	@PostMapping("/user/update")
-//	public void updateUser(@PathVariable Integer userID, @RequestBody UserDTO user) {
 		public int updateUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user );
 		int updateResult = userService.update(user);
@@ -67,7 +66,8 @@ public class UserController {
 	}
 
 	@DeleteMapping("/user")
-	public void deleteUser(@RequestBody int userID) {
+	public void deleteUser(@RequestParam("userID") int userID) {
+//		int userID = Integer.parseInt(data.get("userID"));
 		System.out.println("userID????" + userID);
 		int deleteResult = userService.delete(userID);
 		if (deleteResult == 1) {
