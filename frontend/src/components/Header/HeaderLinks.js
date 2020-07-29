@@ -1,12 +1,11 @@
+// @material-ui/icons
+import { Apps, CloudDownload } from "@material-ui/icons";
 /*eslint-disable*/
 import React, { useReducer, useState, useContext, useCallback } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
-
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 
@@ -20,8 +19,6 @@ import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js
 
 // dialog components
 import LoginDialog from "../Dialog/LoginDialog";
-import AddInfoDialog from "../Dialog/AddInfoDialog";
-
 import axios from "axios";
 import UserContext from "../../contexts/UserContext";
 import { ListItemText, Avatar } from "@material-ui/core";
@@ -130,13 +127,19 @@ export default function HeaderLinks(props) {
       method: "post",
       url: "http://localhost:9999/api/user",
       data: user,
+      headers: {
+      },
     })
       .then(() => {
+        
+
+
         console.log("success");
         loggedUser(user.socialID, user.name, "social");
         addInfoClose();
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log('error', e)
         console.log("fail");
         addInfoClose();
       });
