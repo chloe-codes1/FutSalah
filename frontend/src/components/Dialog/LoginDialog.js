@@ -13,7 +13,7 @@ import KakaoLogin from "react-kakao-login";
 import axios from "axios";
 
 function LoginDialog(props) {
-  const { open, onClose, addInfo, initUser } = props;
+  const { open, onClose, addInfo, initUser, loggedUser } = props;
 
   const handleClose = () => {
     onClose();
@@ -40,6 +40,8 @@ function LoginDialog(props) {
       .then((e) => {
         if (e.data.socialID === res.profileObj.googleId) {
           console.log("already registered!!");
+          // context 값 변경
+          loggedUser(res.profileObj.googleId, res.profileObj.name, "google");
           onClose();
         } else {
           console.log("not registered");
@@ -69,6 +71,8 @@ function LoginDialog(props) {
     }).then((e) => {
       if (e.data.socialID === res.profile.id) {
         console.log("already registered!!");
+        // context 값 변경
+        loggedUser(res.profile.id, res.profile.properties.nickname, "kakao");
         onClose();
       } else {
         console.log("not registered");
