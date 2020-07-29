@@ -74,7 +74,6 @@ function reducer(state, action) {
 
 export default function HeaderLinks(props) {
   const { userinfo, userDispatch } = useContext(UserContext);
-  console.log(userinfo);
   const classes = useStyles();
   const [loginOpen, setLoginOpen] = useState(false);
   const [addInfoOpen, setAddInfoOpen] = useState(false);
@@ -116,7 +115,6 @@ export default function HeaderLinks(props) {
     });
   }, []);
   const loggedUser = useCallback((id, name, provider) => {
-    console.log("hello");
     window.sessionStorage.setItem("id", id);
     window.sessionStorage.setItem("name", name);
     window.sessionStorage.setItem("provider", provider);
@@ -135,6 +133,7 @@ export default function HeaderLinks(props) {
     })
       .then(() => {
         console.log("success");
+        loggedUser(user.socialID, user.name, "social");
         addInfoClose();
       })
       .catch(() => {
@@ -178,7 +177,9 @@ export default function HeaderLinks(props) {
       </ListItem>
       <ListItem className={classes.listItem}>
         {userinfo.logged && (
-          <Avatar src="assets/img/faces/marc.jpg" className={classes.avatar} />
+          <IconButton>
+            <Avatar src="assets/img/faces/marc.jpg" className={classes.small} />
+          </IconButton>
         )}
       </ListItem>
       <ListItem className={classes.listItem}>
@@ -199,7 +200,7 @@ export default function HeaderLinks(props) {
             Login
           </Button>
         )}
-        {!userinfo.logged && (
+        {/* {!userinfo.logged && (
           <Button
             href="#pablo"
             className={classes.ButtonNavLink}
@@ -208,7 +209,7 @@ export default function HeaderLinks(props) {
           >
             register
           </Button>
-        )}
+        )} */}
         {userinfo.logged && (
           <Button
             href="#pablo"

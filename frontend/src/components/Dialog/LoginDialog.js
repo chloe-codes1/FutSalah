@@ -57,10 +57,10 @@ function LoginDialog(props) {
 
   // 카카오 로그인
   const responseKaKao = (res) => {
-    console.log(res);
-    console.log(res.profile);
-    console.log(res.profile.id);
-    console.log(res.profile.properties.nickname);
+    // console.log(res);
+    // console.log(res.profile);
+    // console.log(res.profile.id);
+    // console.log(res.profile.properties.nickname);
     initUser(res.profile.id, "", res.profile.properties.nickname, "");
     axios({
       method: "post",
@@ -90,18 +90,6 @@ function LoginDialog(props) {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>로그인</DialogTitle>
       <List>
-        <ListItem>
-          <TextField label="ID" variant="outlined" />
-        </ListItem>
-        <ListItem>
-          <TextField label="password" variant="outlined" type="password" />
-        </ListItem>
-        <ListItem>
-          <Button variant="contained" color="primary">
-            로그인
-          </Button>
-        </ListItem>
-        <Divider />
         <ListItem>
           <GoogleLogin
             clientId="1034731139485-01ur10u2o05evfrb3gv2k4k1fs0uckff.apps.googleusercontent.com"
