@@ -48,7 +48,6 @@ export default function ProfilePage(props) {
     classes.imgFluid
   );
 
-  // const [user, setUser] = useState(initialValues);
   const [user, setUser] = useState({
     socialID: "",
     name: "",
@@ -67,8 +66,8 @@ export default function ProfilePage(props) {
       email: Yup.string()
         .required("이메일을 입력해주세요.")
         .email("올바른 이메일 형식이 아닙니다"),
-      position: Yup.string(),
-      age: Yup.date(),
+      position: Yup.string().nullable().notRequired(),
+      age: Yup.date().nullable().notRequired(),
       weight: Yup.number()
         .moreThan(1, "입력하신 몸무게를 다시 확인해주세요.")
         .lessThan(200, "입력하신 몸무게를 다시 확인해주세요."),
@@ -112,8 +111,6 @@ export default function ProfilePage(props) {
     getUserInfo();
   }, []);
 
-  
-
 
   if(isLoadded){
     console.log('formik initialValues->', JSON.stringify(formik.initialValues, null, 2));
@@ -128,11 +125,11 @@ export default function ProfilePage(props) {
     if (
       !formik.isValid ||
       !formik.values.email ||
-      !formik.values.position ||
-      !formik.values.age ||
+      // !formik.values.position ||
+      // !formik.values.age ||
       !formik.values.weight ||
-      !formik.values.height ||
-      !formik.values.profileURL
+      !formik.values.height 
+      // !formik.values.profileURL
     ) {
       console.log("Caught in validation filter...");
       return;
@@ -216,7 +213,6 @@ export default function ProfilePage(props) {
                     fullWidth: true,
                   }}
                   inputProps={{
-                    // value: (formik.values.email? formik.values.email: user.email),
                     value: formik.values.email,
                     onChange: formik.handleChange,
                   }}
@@ -232,7 +228,6 @@ export default function ProfilePage(props) {
 
                 <GridContainer
                   onChange={formik.handleChange}
-                  // value={formik.values.age? formik.values.age: user.age}
                   value={formik.values.age}
                 >
                   <GridItem>
@@ -248,7 +243,6 @@ export default function ProfilePage(props) {
                 )}
                 <GridContainer
                   onChange={formik.handleChange}
-                  // value={formik.values.position? formik.values.position: user.position}>
                   value={formik.values.position}
                 >
                   <GridItem>
@@ -352,9 +346,6 @@ export default function ProfilePage(props) {
                   }}
                   inputProps={{
                     onChange: formik.handleChange,
-                    // value: formik.values.height
-                    //   ? formik.values.height
-                    //   : user.height,
                     value: formik.values.height,
                   }}
                 />
@@ -369,7 +360,6 @@ export default function ProfilePage(props) {
                   }}
                   inputProps={{
                     onChange: formik.handleChange,
-                    // value: (formik.values.weight? formik.values.weight: user.weight)  ,
                     value: formik.values.weight,
                   }}
                 />
