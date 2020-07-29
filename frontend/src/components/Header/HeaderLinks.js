@@ -13,10 +13,13 @@ import ListItem from "@material-ui/core/ListItem";
 // core components
 import Button from "components/CustomButtons/Button.js";
 
+import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 // dialog components
 import LoginDialog from "../Dialog/LoginDialog";
+import AddInfoDialog from "../Dialog/AddInfoDialog";
+
 import axios from "axios";
 import UserContext from "../../contexts/UserContext";
 import { ListItemText, Avatar } from "@material-ui/core";
