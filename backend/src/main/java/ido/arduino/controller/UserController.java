@@ -21,7 +21,6 @@ import ido.arduino.service.UserService;
 
 @Controller
 @RequestMapping("/api")
-@CrossOrigin(origins = "*", maxAge = 3600) // TODO: 배포 시 바꿔야 함
 public class UserController {
 
 	@Autowired
@@ -52,15 +51,16 @@ public class UserController {
 		return user;
 	}
 
-	@PutMapping("/user")
-	public void updateUser(@RequestBody UserDTO user) {
-		System.out.println("user??????????" + user);
+	@PutMapping("/user/{userID}")
+	public int updateUser(@PathVariable Integer userID, @RequestBody UserDTO user) {
+		System.out.println("user??????????" + user + userID);
 		int updateResult = userService.update(user);
 		if (updateResult == 1) {
 			System.out.println("successfully updated!");
 		} else {
 			System.out.println("user update failed..");
 		}
+		return updateResult;
 	}
 
 	@DeleteMapping("/user")

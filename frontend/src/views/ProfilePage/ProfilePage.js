@@ -1,7 +1,7 @@
 // validation
 import * as Yup from "yup";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
@@ -15,7 +15,10 @@ import HeaderLinks from "components/Header/HeaderLinks.js";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
+import { Router } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
+// context to use logged in user info
+import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 // nodejs library that concatenates classes
 import classNames from "classnames";
@@ -25,22 +28,25 @@ import { makeStyles } from "@material-ui/core/styles";
 import profile from "assets/img/faces/christian.jpg";
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 import { useFormik } from "formik";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
 const initialValues = {
+  userID: 0,
   socialID: "",
   name: "",
-  email: '',
+  email: "",
   age: 0,
   position: "",
-  height: 0,
-  weight: 0,
+  height: null,
+  weight: null,
   profileURL: "",
 };
 
 export default function ProfilePage(props) {
   const classes = useStyles();
+  const history = useHistory();
   const { ...rest } = props;
   const imageClasses = classNames(
     classes.imgRaised,
@@ -49,6 +55,7 @@ export default function ProfilePage(props) {
   );
 
   const [user, setUser] = useState({
+    userID: 0,
     socialID: "",
     name: "",
     email: "",
@@ -59,7 +66,7 @@ export default function ProfilePage(props) {
     profileURL: "",
   });
   const [isLoadded, setIsLoadded] = useState(false);
-
+  const { userinfo, userDispatch } = useContext(UserContext);
   const formik = useFormik({
     initialValues,
     validationSchema: Yup.object({
@@ -90,6 +97,7 @@ export default function ProfilePage(props) {
         console.log("res??", res.data);
         const userUpdate = {
           ...user,
+          userID: res.data.userID,
           email: res.data.email,
           position: res.data.position,
           age: res.data.age,
@@ -105,19 +113,20 @@ export default function ProfilePage(props) {
         console.log("error e", e);
       });
 
-  useEffect( () => {
-    const socialID = "118208171974925555970";
+  useEffect(() => {
+    const socialID = userinfo.socialID;
     user.socialID = socialID;
     getUserInfo();
   }, []);
 
-
-  if(isLoadded){
-    console.log('formik initialValues->', JSON.stringify(formik.initialValues, null, 2));
-    console.log('formik values->', JSON.stringify(formik.values, null, 2));
-    console.log('user->', JSON.stringify(user, null, 2));
+  if (isLoadded) {
+    console.log(
+      "formik initialValues->",
+      JSON.stringify(formik.initialValues, null, 2)
+    );
+    console.log("formik values->", JSON.stringify(formik.values, null, 2));
+    console.log("user->", JSON.stringify(user, null, 2));
   }
-
 
   const onSubmit = async (e) => {
     formik.submitForm();
@@ -128,13 +137,14 @@ export default function ProfilePage(props) {
       // !formik.values.position ||
       // !formik.values.age ||
       !formik.values.weight ||
-      !formik.values.height 
+      !formik.values.height
       // !formik.values.profileURL
     ) {
       console.log("Caught in validation filter...");
       return;
     }
     const updatedUser = {
+      userID: user.userID,
       email: formik.values.email,
       position: formik.values.position,
       age: formik.values.age,
@@ -143,21 +153,17 @@ export default function ProfilePage(props) {
       profileURL: formik.values.profileURL,
     };
 
-    try {
-      await axios({
-        method: "PUT",
-        url: "http://localhost:9999/api/user",
-        data: updatedUser,
-      })
-        .then((res) => {
-          console.log("success!", res);
-        })
-        .catch(() => {
-          console.log("fail");
-        });
-    } catch (e) {
-      console.log("error e", e);
-    }
+     await axios({
+      method: "PUT",
+      url: `http://localhost:9999/api/user/${updatedUser.userID}`,
+      data: updatedUser,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+    })
+      .then((res) => res.data)
+      .catch((err) => console.error("Wasn't able to update property.", err));
     formik.resetForm();
   };
 
@@ -191,8 +197,7 @@ export default function ProfilePage(props) {
                     <img src={profile} alt="..." className={imageClasses} />
                   </div>
                   <div className={classes.name}>
-                    {/* 유저 이름 넣기 */}
-                    <h3 className={classes.title}>유저 이름</h3>
+                    <h3 className={classes.title}>{user.name}</h3>
                   </div>
                 </div>
               </GridItem>
