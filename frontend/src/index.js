@@ -8,12 +8,14 @@ import "assets/scss/material-kit-react.scss?v=1.9.0";
 // pages for this product
 import Components from "views/Components/Components.js";
 import Profile from "views/ProfilePage/ProfilePage.js";
+import TeamInfo from "views/TeamInfoPage/TeamInfoPage.js";
 
 var hist = createBrowserHistory();
 
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
+      <Route path="/teamInfo" component={TeamInfo} />
       <Route path="/profile" component={Profile} />
       <Route path="/" component={Components} />
     </Switch>
