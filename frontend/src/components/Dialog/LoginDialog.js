@@ -1,17 +1,17 @@
 import React from "react";
 
-import { Dialog, DialogTitle, Divider, TextField } from "@material-ui/core";
+import { Dialog, DialogTitle } from "@material-ui/core";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 
-import Button from "@material-ui/core/Button";
-
 import { GoogleLogin } from "react-google-login";
 import KakaoLogin from "react-kakao-login";
 
+import axios from "axios";
+
 function LoginDialog(props) {
-  const { open, onClose, addInfo, initUser } = props;
+  const { open, onClose, addInfo, initUser, loggedUser } = props;
 
   const handleClose = () => {
     onClose();
@@ -28,8 +28,29 @@ function LoginDialog(props) {
       res.profileObj.name,
       res.profileObj.imageUrl
     );
-    onClose();
-    addInfo();
+    axios({
+      method: "post",
+      url: "http://localhost:9999/api/login",
+      data: {
+        socialID: res.profileObj.googleId,
+      },
+    })
+      .then((e) => {
+        if (e.data.socialID === res.profileObj.googleId) {
+          console.log("already registered!!");
+          // context 값 변경
+          loggedUser(res.profileObj.googleId, res.profileObj.name, "google");
+          onClose();
+        } else {
+          console.log("not registered");
+          onClose();
+          addInfo();
+        }
+      })
+      .catch(() => {
+        console.log("ERROR");
+        onClose();
+      });
   };
 
   // 카카오 로그인
@@ -38,8 +59,25 @@ function LoginDialog(props) {
     // console.log(res.profile);
     // console.log(res.profile.id);
     // console.log(res.profile.properties.nickname);
-    onClose();
-    addInfo();
+    initUser(res.profile.id, "", res.profile.properties.nickname, "");
+    axios({
+      method: "post",
+      url: "http://localhost:9999/api/login",
+      data: {
+        socialID: res.profile.id,
+      },
+    }).then((e) => {
+      if (e.data.socialID === res.profile.id) {
+        console.log("already registered!!");
+        // context 값 변경
+        loggedUser(res.profile.id, res.profile.properties.nickname, "kakao");
+        onClose();
+      } else {
+        console.log("not registered");
+        onClose();
+        addInfo();
+      }
+    });
   };
 
   const responseFail = (res) => {
@@ -50,18 +88,6 @@ function LoginDialog(props) {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>로그인</DialogTitle>
       <List>
-        <ListItem>
-          <TextField label="ID" variant="outlined" />
-        </ListItem>
-        <ListItem>
-          <TextField label="password" variant="outlined" type="password" />
-        </ListItem>
-        <ListItem>
-          <Button variant="contained" color="primary">
-            로그인
-          </Button>
-        </ListItem>
-        <Divider />
         <ListItem>
           <GoogleLogin
             clientId="1034731139485-01ur10u2o05evfrb3gv2k4k1fs0uckff.apps.googleusercontent.com"
