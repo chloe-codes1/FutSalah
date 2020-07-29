@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CORSFilter implements Filter {
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		System.out.println("Filtering on...........................................................");
+		System.out.println("CORS Filtering on...........................................................");
 		HttpServletResponse response = (HttpServletResponse) res;
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");

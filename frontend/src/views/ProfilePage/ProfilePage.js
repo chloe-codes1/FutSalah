@@ -15,7 +15,6 @@ import HeaderLinks from "components/Header/HeaderLinks.js";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
-import { Router } from "@material-ui/icons";
 import Tooltip from "@material-ui/core/Tooltip";
 // context to use logged in user info
 import UserContext from "../../contexts/UserContext";
@@ -61,11 +60,13 @@ export default function ProfilePage(props) {
     email: "",
     age: 0,
     position: "",
-    height: 0,
-    weight: 0,
+    height: null,
+    weight: null,
     profileURL: "",
   });
   const [isLoadded, setIsLoadded] = useState(false);
+  const [pos, setPos] = useState("");
+  const [age, setAge] = useState(0);
   const { userinfo, userDispatch } = useContext(UserContext);
   const formik = useFormik({
     initialValues,
@@ -73,15 +74,19 @@ export default function ProfilePage(props) {
       email: Yup.string()
         .required("이메일을 입력해주세요.")
         .email("올바른 이메일 형식이 아닙니다"),
-      position: Yup.string().nullable().notRequired(),
-      age: Yup.date().nullable().notRequired(),
       weight: Yup.number()
         .moreThan(1, "입력하신 몸무게를 다시 확인해주세요.")
-        .lessThan(200, "입력하신 몸무게를 다시 확인해주세요."),
+        .lessThan(200, "입력하신 몸무게를 다시 확인해주세요.")
+        .positive()
+        .nullable(true)
+        .notRequired(),
       height: Yup.number()
         .moreThan(100, "입력하신 키를 다시 확인해주세요.")
-        .lessThan(300, "입력하신 키를 다시 확인해주세요."),
-      profileURL: Yup.string().url(),
+        .lessThan(300, "입력하신 키를 다시 확인해주세요.")
+        .positive()
+        .nullable(true)
+        .notRequired(),
+      profileURL: Yup.string().url().notRequired(),
     }),
     onSubmit: () => {},
   });
@@ -98,6 +103,7 @@ export default function ProfilePage(props) {
         const userUpdate = {
           ...user,
           userID: res.data.userID,
+          name: res.data.name,
           email: res.data.email,
           position: res.data.position,
           age: res.data.age,
@@ -107,6 +113,7 @@ export default function ProfilePage(props) {
         };
         formik.setValues(userUpdate);
         setUser(userUpdate);
+        setPos(res.data.position)
         setIsLoadded(true);
       })
       .catch((e) => {
@@ -120,58 +127,49 @@ export default function ProfilePage(props) {
   }, []);
 
   if (isLoadded) {
-    console.log(
-      "formik initialValues->",
-      JSON.stringify(formik.initialValues, null, 2)
-    );
+    // console.log(
+    //   "formik initialValues->",
+    //   JSON.stringify(formik.initialValues, null, 2)
+    // );
     console.log("formik values->", JSON.stringify(formik.values, null, 2));
-    console.log("user->", JSON.stringify(user, null, 2));
+    // console.log("user->", JSON.stringify(user, null, 2));
   }
 
-  const onSubmit = async (e) => {
+  const onSubmit = () => {
     formik.submitForm();
     console.log("formik.values??", formik.values);
-    if (
-      !formik.isValid ||
-      !formik.values.email ||
-      // !formik.values.position ||
-      // !formik.values.age ||
-      !formik.values.weight ||
-      !formik.values.height
-      // !formik.values.profileURL
-    ) {
+    if (!formik.isValid || !formik.values.email) {
       console.log("Caught in validation filter...");
       return;
     }
     const updatedUser = {
       userID: user.userID,
       email: formik.values.email,
-      position: formik.values.position,
-      age: formik.values.age,
+      position: pos,
+      age: Number(age._d?.getFullYear()),
       weight: formik.values.weight,
       height: formik.values.height,
       profileURL: formik.values.profileURL,
     };
+    console.log("updatedUser", updatedUser);
 
-     await axios({
+    axios({
       method: "PUT",
-      url: `http://localhost:9999/api/user/${updatedUser.userID}`,
+      url: "http://localhost:9999/api/user",
       data: updatedUser,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json;charset=UTF-8",
-      },
+      headers: {},
+      validateStatus: false,
     })
-      .then((res) => res.data)
-      .catch((err) => console.error("Wasn't able to update property.", err));
-    formik.resetForm();
+      .then(() => {
+        console.log("update succeed");
+        history.push("/");
+        alert("회원 정보가 수정되었습니다! ^0^");
+        formik.resetForm();
+      })
+      .catch((err) => console.error("Wasn't able to update property...", err));
   };
-
-  const [pos, setPos] = useState(0);
-
-  const setPosition = (pos) => {
-    setPos(pos);
-  };
+  console.log("age..", age._d?.getFullYear());
+  console.log("pos..", pos);
 
   return (
     <div>
@@ -224,27 +222,24 @@ export default function ProfilePage(props) {
                   <div className="invalid-feedback">{formik.errors.email}</div>
                 )}
 
-                <GridContainer
-                  onChange={formik.handleChange}
-                  value={formik.values.age}
-                >
+                <GridContainer>
                   <GridItem>
                     <h3 className={classes.buttonTitle}>출생연도</h3>
                   </GridItem>
 
                   <GridItem>
-                    <Datetime dateFormat="YYYY" timeFormat={false} />
+                    <Datetime
+                      dateFormat="YYYY"
+                      timeFormat={false}
+                      value={age ? age : formik.values.age}
+                      onChange={(value) => setAge(value)}
+                    />
                   </GridItem>
                 </GridContainer>
-                {formik.touched.age && formik.errors.age && (
-                  <div className="invalid-feedback">{formik.errors.age}</div>
-                )}
-                <GridContainer
-                  onChange={formik.handleChange}
-                  value={formik.values.position}
-                >
-                  <GridItem>
-                    <h3 className={classes.buttonTitle}>포지션</h3>
+                <GridContainer>
+                  <GridItem className={classes.marginBottom}>
+                    <h3 className={classes.buttonTitle }>포지션</h3>
+                    {pos}
                   </GridItem>
                   <GridItem>
                     <Button
@@ -271,6 +266,7 @@ export default function ProfilePage(props) {
                             : classes.buttonList
                         }
                         color="rose"
+                        onClick={() => setPos("pivo")}
                       >
                         PIVO
                       </Button>
@@ -336,6 +332,7 @@ export default function ProfilePage(props) {
                     {formik.errors.position}
                   </div>
                 )}
+             
                 <CustomInput
                   id="height"
                   labelText="키"
@@ -343,13 +340,18 @@ export default function ProfilePage(props) {
                     fullWidth: true,
                   }}
                   inputProps={{
-                    onChange: formik.handleChange,
                     value: formik.values.height,
+                    onChange: formik.handleChange,
                   }}
+                  className={`form-control ${
+                    formik.touched.height && formik.errors.height
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
-                {formik.touched.height && formik.errors.height && (
-                  <div className="invalid-feedback">{formik.errors.height}</div>
-                )}
+              {formik.touched.height && formik.errors.height && (
+                <div className="invalid-feedback">{formik.errors.height}</div>
+              )}
                 <CustomInput
                   id="weight"
                   labelText="몸무게"
@@ -360,11 +362,17 @@ export default function ProfilePage(props) {
                     onChange: formik.handleChange,
                     value: formik.values.weight,
                   }}
+                  className={`form-control ${
+                    formik.touched.weight && formik.errors.weight
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
-                {formik.touched.weight && formik.errors.weight && (
+                  {formik.touched.weight && formik.errors.weight && (
                   <div className="invalid-feedback">{formik.errors.weight}</div>
                 )}
-              </GridItem>
+                </GridItem>
+              
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
                 <Button onClick={onSubmit}>정보 변경</Button>
               </GridItem>
