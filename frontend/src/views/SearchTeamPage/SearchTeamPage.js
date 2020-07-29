@@ -14,6 +14,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Paginations from "components/Pagination/Pagination.js";
+import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 
 import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
 import bgImage from "assets/img/searchTeam-bg.jpg";
@@ -63,6 +64,8 @@ export default function SearchTeamPage(props) {
   ];
 
   const [pageNum, setPageNum] = useState(1);
+  const [region, setRegion] = useState("전체");
+  const [searchWord, setSearchWord] = useState("");
   const [teamList, setTeamList] = useState(team);
 
   useEffect(() => {
@@ -75,7 +78,6 @@ export default function SearchTeamPage(props) {
     //   .catch(() => {
     //     console.log("악 실패");
     //   });
-    console.log(teamImage);
   });
 
   const totalPage = 17;
@@ -123,10 +125,63 @@ export default function SearchTeamPage(props) {
         style={{
           backgroundImage: "url(" + bgImage + ")",
           backgroundSize: "cover",
-          backgroundPosition: "top center",
+          backgroundPosition: "center center",
         }}
       >
         <div className={classes.container}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              position: "relative",
+              zIndex: "2",
+            }}
+          >
+            <CustomDropdown
+              buttonText={region}
+              dropdownHeader="지역 목록"
+              buttonProps={{
+                className: classes.navLink,
+                color: "transparent",
+              }}
+              dropdownList={[
+                "전체",
+                "서울",
+                "경기",
+                "인천",
+                "강원",
+                "충청",
+                "전라",
+                "경상",
+                "제주",
+              ]}
+              setValue={(value) => {
+                setRegion(value);
+              }}
+            ></CustomDropdown>
+            <input
+              type="text"
+              style={{ lineHeight: "30px" }}
+              value={searchWord}
+              onChange={(e) => {
+                setSearchWord(e.target.value);
+              }}
+            />
+            <Button
+              color="info"
+              size="sm"
+              style={{ marginLeft: "10px" }}
+              onClick={() => {
+                // 검색
+                // axios 통신 (검색어와 지역명 보내기)
+                console.log(
+                  "region: " + region + "\nsearchWord: " + searchWord
+                );
+              }}
+            >
+              검색
+            </Button>
+          </div>
           <GridList spacing={15} cellHeight={"100%"} cols={3}>
             {teamList.map((t) =>
               t.name === undefined ? (
@@ -205,7 +260,7 @@ export default function SearchTeamPage(props) {
             alignItems: "center",
             zIndex: "2",
             position: "relative",
-            margin: "25vh auto",
+            margin: "20vh auto",
           }}
         >
           <Paginations

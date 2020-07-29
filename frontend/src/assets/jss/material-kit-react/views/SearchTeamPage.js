@@ -5,7 +5,7 @@ import imagesStyles from "assets/jss/material-kit-react/imagesStyles.js";
 const SearchTeamPageStyle = {
   container: {
     zIndex: "2",
-    top: "180px",
+    top: "120px",
     position: "relative",
     color: "#FFFFFF",
     // backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -23,18 +23,14 @@ const SearchTeamPageStyle = {
       "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
   },
   background: {
-    minHeight: "100vh",
+    minHeight: "170vh",
     height: "auto",
     display: "inherit",
     position: "relative",
     margin: "0",
     padding: "0",
     border: "0",
-    alignItems: "center",
     "&:before": {
-      background: "rgba(0, 0, 0, 0.7)",
-    },
-    "&:before,&:after": {
       position: "absolute",
       zIndex: "1",
       width: "100%",
@@ -43,6 +39,7 @@ const SearchTeamPageStyle = {
       left: "0",
       top: "0",
       content: '""',
+      background: "rgba(0, 0, 0, 0.7)",
     },
     "& footer li a,& footer li a:hover,& footer li a:active": {
       color: "#FFFFFF",
@@ -73,8 +70,6 @@ const SearchTeamPageStyle = {
     width: "120px",
     height: "auto",
     overflow: "hidden",
-    // borderTopLeftRadius: "calc(.25rem - 1px)",
-    // borderTopRightRadius: "calc(.25rem - 1px)",
   },
   ...imagesStyles,
 };
