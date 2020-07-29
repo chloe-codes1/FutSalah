@@ -1,38 +1,227 @@
-import React from "react";
+// validation
+import * as Yup from "yup";
+
+import React, { useContext, useEffect, useState } from "react";
+
+import Backdrop from "@material-ui/core/Backdrop";
+import Button from "components/CustomButtons/Button.js";
+import CustomInput from "components/CustomInput/CustomInput.js";
+import Datetime from "react-datetime";
+import Fade from "@material-ui/core/Fade";
+import Footer from "components/Footer/Footer.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+// core components
+import Header from "components/Header/Header.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
+import Modal from "@material-ui/core/Modal";
+import Parallax from "components/Parallax/Parallax.js";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+// context to use logged in user info
+import UserContext from "../../contexts/UserContext";
+import axios from "axios";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// react components for routing our app without refresh
-import { Link } from "react-router-dom";
-// core components
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import Button from "components/CustomButtons/Button.js";
-import Tooltip from "@material-ui/core/Tooltip";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Parallax from "components/Parallax/Parallax.js";
-
-import Datetime from "react-datetime";
-
-// 사용자의 프로필 사진 가져오기
+// 사용자의 프로필 사진이 없을 때 대신 사진
 import profile from "assets/img/faces/christian.jpg";
-
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
+import { useFormik } from "formik";
+import { useHistory } from "react-router-dom";
+
+const modalStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    borderRadius: "10px",
+  },
+}));
 
 const useStyles = makeStyles(styles);
 
+const initialValues = {
+  userID: 0,
+  socialID: "",
+  name: "",
+  email: "",
+  age: 0,
+  position: "",
+  height: null,
+  weight: null,
+  profileURL: "",
+};
+
 export default function ProfilePage(props) {
   const classes = useStyles();
+  const modal = modalStyles();
+  const history = useHistory();
   const { ...rest } = props;
   const imageClasses = classNames(
     classes.imgRaised,
     classes.imgRoundedCircle,
     classes.imgFluid
   );
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [user, setUser] = useState({
+    userID: 0,
+    socialID: "",
+    name: "",
+    email: "",
+    age: 0,
+    position: "",
+    height: null,
+    weight: null,
+    profileURL: "",
+  });
+  const [isLoadded, setIsLoadded] = useState(false);
+  const [pos, setPos] = useState("");
+  const [age, setAge] = useState(0);
+  const [open, setOpen] = React.useState(false);
+  const { userinfo, userDispatch } = useContext(UserContext);
+  const formik = useFormik({
+    initialValues,
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("이메일을 입력해주세요.")
+        .email("올바른 이메일 형식이 아닙니다"),
+      weight: Yup.number()
+        .moreThan(1, "입력하신 몸무게를 다시 확인해주세요.")
+        .lessThan(200, "입력하신 몸무게를 다시 확인해주세요.")
+        .positive()
+        .nullable(true)
+        .notRequired(),
+      height: Yup.number()
+        .moreThan(100, "입력하신 키를 다시 확인해주세요.")
+        .lessThan(300, "입력하신 키를 다시 확인해주세요.")
+        .positive()
+        .nullable(true)
+        .notRequired(),
+      profileURL: Yup.string().url().notRequired(),
+    }),
+    onSubmit: () => {},
+  });
+
+  const getUserInfo = async () =>
+    await axios({
+      method: "POST",
+      url: "http://localhost:9999/api/login",
+      data: user,
+    })
+      .then((res) => {
+        console.log("get user info succeed!");
+        console.log("res??", res.data);
+        const userUpdate = {
+          ...user,
+          userID: res.data.userID,
+          name: res.data.name,
+          email: res.data.email,
+          position: res.data.position,
+          age: res.data.age,
+          weight: res.data.weight,
+          height: res.data.height,
+          profileURL: res.data.profileURL,
+        };
+        formik.setValues(userUpdate);
+        setUser(userUpdate);
+        setPos(res.data.position);
+        setIsLoadded(true);
+      })
+      .catch((e) => {
+        console.log("error e", e);
+      });
+
+  useEffect(() => {
+    const socialID = userinfo.socialID;
+    user.socialID = socialID;
+    getUserInfo();
+  }, []);
+
+  if (isLoadded) {
+    // console.log(
+    //   "formik initialValues->",
+    //   JSON.stringify(formik.initialValues, null, 2)
+    // );
+    console.log("formik values->", JSON.stringify(formik.values, null, 2));
+    // console.log("user->", JSON.stringify(user, null, 2));
+  }
+
+  const onSubmit = () => {
+    formik.submitForm();
+    console.log("formik.values??", formik.values);
+    if (!formik.isValid || !formik.values.email) {
+      console.log("Caught in validation filter...");
+      return;
+    }
+    const updatedUser = {
+      userID: user.userID,
+      email: formik.values.email,
+      position: pos,
+      age: Number(age._d?.getFullYear()),
+      weight: formik.values.weight,
+      height: formik.values.height,
+      profileURL: formik.values.profileURL,
+    };
+    console.log("updatedUser", updatedUser);
+
+    axios({
+      method: "PUT",
+      url: "http://localhost:9999/api/user",
+      data: updatedUser,
+      headers: {},
+      validateStatus: false,
+    })
+      .then(() => {
+        console.log("update succeed");
+        history.push("/");
+        alert("회원 정보가 수정되었습니다! ^0^");
+        formik.resetForm();
+      })
+      .catch((err) => console.error("Wasn't able to update property...", err));
+  };
+
+    const deleteUser = () => {
+      let params = new FormData();
+      params.append("userID", user.userID)
+      console.log('params', params)
+      axios({
+        method: "DELETE",
+        url: "http://localhost:9999/api/user",
+        data: params,
+        validateStatus: false,
+      })
+        .then(() => {
+          console.log("user delete succeed");
+          userDispatch({
+            type: "LOGOUT_USER",
+          })
+          history.push("/");
+          alert("그동안 FutSalah를 이용해 주셔서 감사합니다.");
+          formik.resetForm();
+        })
+        .catch((err) => console.error("Wasn't able to delete user...", err));
+    };
+  
+
+  console.log("age..", age._d?.getFullYear());
+  console.log("pos..", pos);
 
   return (
     <div>
@@ -58,13 +247,12 @@ export default function ProfilePage(props) {
                     <img src={profile} alt="..." className={imageClasses} />
                   </div>
                   <div className={classes.name}>
-                    {/* 유저 이름 넣기 */}
-                    <h3 className={classes.title}>유저 이름</h3>
+                    <h3 className={classes.title}>{userinfo.name}</h3>
                   </div>
                 </div>
               </GridItem>
             </GridContainer>
-            <GridContainer justify="center">
+            <GridContainer justify="center" className="form-group">
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
                 <CustomInput
                   id="email"
@@ -72,7 +260,19 @@ export default function ProfilePage(props) {
                   formControlProps={{
                     fullWidth: true,
                   }}
+                  inputProps={{
+                    value: formik.values.email,
+                    onChange: formik.handleChange,
+                  }}
+                  className={`form-control ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
+                {formik.touched.email && formik.errors.email && (
+                  <div className="invalid-feedback">{formik.errors.email}</div>
+                )}
 
                 <GridContainer>
                   <GridItem>
@@ -80,16 +280,29 @@ export default function ProfilePage(props) {
                   </GridItem>
 
                   <GridItem>
-                    <Datetime dateFormat="YYYY" timeFormat={false} />
+                    <Datetime
+                      dateFormat="YYYY"
+                      timeFormat={false}
+                      value={age ? age : formik.values.age}
+                      onChange={(value) => setAge(value)}
+                    />
                   </GridItem>
                 </GridContainer>
-
                 <GridContainer>
-                  <GridItem>
+                  <GridItem className={classes.marginBottom}>
                     <h3 className={classes.buttonTitle}>포지션</h3>
+                    {pos}
                   </GridItem>
                   <GridItem>
-                    <Button className={classes.buttonList} color="danger">
+                    <Button
+                      className={
+                        pos === "all"
+                          ? classes.selectButton
+                          : classes.buttonList
+                      }
+                      color="danger"
+                      onClick={() => setPos("all")}
+                    >
                       ALL
                     </Button>
                     <Tooltip
@@ -98,7 +311,15 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="rose">
+                      <Button
+                        className={
+                          pos === "pivo"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
+                        color="rose"
+                        onClick={() => setPos("pivo")}
+                      >
                         PIVO
                       </Button>
                     </Tooltip>
@@ -108,7 +329,15 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="warning">
+                      <Button
+                        className={
+                          pos === "ala"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
+                        color="warning"
+                        onClick={() => setPos("ala")}
+                      >
                         ALA
                       </Button>
                     </Tooltip>
@@ -118,7 +347,15 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="success">
+                      <Button
+                        className={
+                          pos === "fixo"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
+                        color="success"
+                        onClick={() => setPos("fixo")}
+                      >
                         FIXO
                       </Button>
                     </Tooltip>
@@ -128,34 +365,116 @@ export default function ProfilePage(props) {
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
                     >
-                      <Button className={classes.buttonList} color="info">
+                      <Button
+                        className={
+                          pos === "goleiro"
+                            ? classes.selectButton
+                            : classes.buttonList
+                        }
+                        color="info"
+                        onClick={() => setPos("goleiro")}
+                      >
                         GOLEIRO
                       </Button>
                     </Tooltip>
                   </GridItem>
                 </GridContainer>
+                {formik.touched.position && formik.errors.position && (
+                  <div className="invalid-feedback">
+                    {formik.errors.position}
+                  </div>
+                )}
+
                 <CustomInput
                   id="height"
                   labelText="키"
                   formControlProps={{
                     fullWidth: true,
                   }}
+                  inputProps={{
+                    value: formik.values.height,
+                    onChange: formik.handleChange,
+                  }}
+                  className={`form-control ${
+                    formik.touched.height && formik.errors.height
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
+                {formik.touched.height && formik.errors.height && (
+                  <div className="invalid-feedback">{formik.errors.height}</div>
+                )}
                 <CustomInput
                   id="weight"
                   labelText="몸무게"
                   formControlProps={{
                     fullWidth: true,
                   }}
+                  inputProps={{
+                    onChange: formik.handleChange,
+                    value: formik.values.weight,
+                  }}
+                  className={`form-control ${
+                    formik.touched.weight && formik.errors.weight
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
+                {formik.touched.weight && formik.errors.weight && (
+                  <div className="invalid-feedback">{formik.errors.weight}</div>
+                )}
               </GridItem>
+
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
-                <Button>정보 변경</Button>
+                <Button onClick={onSubmit}>정보 변경</Button>
               </GridItem>
               <GridItem xs={12} sm={12} md={8} className={classes.withdrawal}>
-                <Link>탈퇴하기</Link>
+                <Button onClick={handleOpen} color="danger">
+                  탈퇴하기
+                </Button>
               </GridItem>
             </GridContainer>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              className={modal.modal}
+              open={open}
+              onClose={handleClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+                timeout: 500,
+              }}
+            >
+              <Fade in={open}>
+                <div className={modal.paper} align="center">
+                  <Typography variant="h5" id="transition-modal-title" style={{ marginTop: "10px", marginBottom: "15px"}}>
+                    정말 떠나실건가요? ㅠ_ㅠ
+                  </Typography>
+                  <Typography id="transition-modal-description" align="center" style={{fontSize: "0.8rem"}}>
+                    스마트한 풋살 경기를 위한 최고의 플랫폼이 될 수 있도록
+                    <br />
+                    저희 FutSalah는 지속적으로 노력중입니다. <br />
+                    불편한점은 support@futsalah.com으로 알려주시면 <br />
+                    개선하고, 반영하겠습니다. <br />
+                    <br />
+                    FutSalah를 더 이상 사용하고 싶지 않다면, <br />
+                    아래 '탈퇴하기'를 클릭해주세요. <br />
+                    <br />
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    onClick={deleteUser}
+                  >
+                    탈퇴하기
+                  </Button>
+                  <Button onClick={handleClose} >
+                    계속 사용할래요!
+                  </Button>
+                </div>
+              </Fade>
+            </Modal>
           </div>
         </div>
       </div>

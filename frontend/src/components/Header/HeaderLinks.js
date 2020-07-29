@@ -1,28 +1,24 @@
 // @material-ui/icons
 import { Apps, CloudDownload } from "@material-ui/icons";
-
+import { Avatar, ListItemText } from "@material-ui/core";
 /*eslint-disable*/
-import React, { useReducer, useState, useContext, useCallback } from "react";
+import React, { useCallback, useContext, useReducer, useState } from "react";
+
+import AddInfoDialog from "../Dialog/AddInfoDialog";
+// core components
+import Button from "components/CustomButtons/Button.js";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-
-// core components
-import Button from "components/CustomButtons/Button.js";
-
-import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
-
 // dialog components
 import LoginDialog from "../Dialog/LoginDialog";
-import AddInfoDialog from "../Dialog/AddInfoDialog";
-
-import axios from "axios";
 import UserContext from "../../contexts/UserContext";
-import { ListItemText, Avatar } from "@material-ui/core";
+import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 const useStyles = makeStyles(styles);
 

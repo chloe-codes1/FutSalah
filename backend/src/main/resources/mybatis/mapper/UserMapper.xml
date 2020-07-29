@@ -6,8 +6,8 @@
 <mapper namespace="ido.arduino.dao.UserMapper">
 	<!-- 회원 가입 -->
 	<insert id="insert" parameterType="UserDTO">
-		INSERT INTO user (name, email, createdAt, socialID, profileURL)
-		VALUES(#{name}, #{email}, #{createdAt}, #{socialID}, #{profileURL})
+		INSERT INTO user (name, email, createdAt, socialID, profileURL,age, position, height, weight)
+		VALUES(#{name}, #{email}, #{createdAt}, #{socialID}, #{profileURL}, #{age}, #{position}, #{height}, #{weight})
 	</insert>
 	
 	<!-- 회원 정보 수정 -->
