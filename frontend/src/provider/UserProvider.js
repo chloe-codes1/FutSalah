@@ -27,6 +27,7 @@ const reducer = (state, action) => {
       window.sessionStorage.removeItem("id");
       window.sessionStorage.removeItem("name");
       window.sessionStorage.removeItem("provider");
+      window.location.href = "/";
       return {
         ...initialState,
       };

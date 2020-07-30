@@ -52,11 +52,20 @@ function reducer(state, action) {
         },
       };
     case "CHANGE_INPUT":
+      console.log(action.name + " " + action.value);
       return {
         ...state,
         user: {
           ...state.user,
           [action.name]: action.value,
+        },
+      };
+    case "CHANGE_AGE":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          age: action.getAge,
         },
       };
     case "CREATE_USER":
@@ -124,19 +133,31 @@ export default function HeaderLinks(props) {
       method: "post",
       url: "http://localhost:9999/api/user",
       data: user,
-      headers: {},
     })
       .then(() => {
         console.log("success");
+        alert("정보 저장이 완료되었습니다!");
         loggedUser(user.socialID, user.name, "social");
         addInfoClose();
       })
       .catch((e) => {
         console.log("error", e);
+        alert("잠시 후 다시 시도해주세요!");
         console.log("fail");
         addInfoClose();
       });
   }, [user]);
+
+  const changeAge = useCallback((getAge) => {
+    console.log(getAge);
+    const name = "age";
+    const value = String(getAge);
+    dispatch({
+      type: "CHANGE_INPUT",
+      name,
+      value,
+    });
+  }, []);
 
   return (
     <List className={classes.list}>
@@ -233,6 +254,7 @@ export default function HeaderLinks(props) {
           userInfo={user}
           onChange={onChange}
           onRegister={onRegister}
+          changeAge={changeAge}
         />
       </ListItem>
     </List>
