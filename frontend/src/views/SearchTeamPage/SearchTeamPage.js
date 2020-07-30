@@ -29,66 +29,27 @@ export default function SearchTeamPage(props) {
   const classes = useStyles();
   const { ...rest } = props;
 
-  // 테스트 데이터
-  const team = [
-    {
-      id: 1,
-      name: "asdagasrhshfaasfhgshdsfhshafshdfsasfassdfdsffdasfaf",
-      img: "",
-      win: 1,
-      lose: 0,
-      draw: 0,
-    },
-    {
-      id: 2,
-      name: "b",
-      img: "",
-      win: 0,
-      lose: 1,
-      draw: 0,
-    },
-    {
-      id: 3,
-      name: "c",
-      img: "",
-      win: 0,
-      lose: 0,
-      draw: 1,
-    },
-    {
-      id: 4,
-      name: "d",
-      img: "",
-      win: 2,
-      lose: 0,
-      draw: 1,
-    },
-    {
-      id: 5,
-    },
-    {
-      id: 6,
-    },
-  ];
-
   const [pageNum, setPageNum] = useState(1);
   const [region, setRegion] = useState("전체");
   const [searchWord, setSearchWord] = useState("");
-  const [teamList, setTeamList] = useState(team);
+  const [teamList, setTeamList] = useState([]);
 
   useEffect(() => {
-    // axios
-    //   .get("https://localhost:9999/")
-    //   .then((response) => {
-    //     console.log(response);
-    //     setTeamList(response);
-    //   })
-    //   .catch(() => {
-    //     console.log("악 실패");
-    //   });
-  });
+    // 전체 데이터 받아오기
+    // 나중에 페이징되는 데이터 받기로 변경하기
+    axios
+      .get("http://localhost:9999/api/team")
+      .then((response) => {
+        console.log(response.data);
+        setTeamList(response.data);
+      })
+      .catch(() => {
+        console.log("악 실패");
+      });
+  }, []);
 
-  const totalPage = 17;
+  // 전체 페이지 수 1로 고정
+  const totalPage = 1;
 
   const makePagination = (pageRow) => {
     const page = [{ text: "PREV", onClick: prePage }];
@@ -251,7 +212,7 @@ export default function SearchTeamPage(props) {
                           <strong>{t.name}</strong>
                         </h3>
                         <h4>
-                          {t.win}승 {t.lose}패 {t.draw}무
+                          {t.wins}승 {t.defeats}패 {t.draws}무
                         </h4>
                       </CardBody>
                       <CardFooter className={classes.cardFooter}>

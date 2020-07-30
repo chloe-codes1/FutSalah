@@ -6,7 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import ido.arduino.dto.LocationDto;
+import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
+import ido.arduino.dto.TeamInfoSimpleDto;
 
 @Repository
 public class TeamInfoRepoImpl implements TeamInfoRepo {
@@ -35,9 +38,21 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	}
 
 	@Override
-	public List<TeamInfoDto> selectAll() {
+	public List<TeamInfoSimpleDto> selectAll() {
 		// TODO Auto-generated method stub
 		return template.selectList(ns + "selectAll");
+	}
+
+	@Override
+	public List<MyTeamDto> selectAllmyteam() {
+		// TODO Auto-generated method stub
+		return template.selectList(ns+"selectAllmyteam");
+	}
+
+	@Override
+	public List<LocationDto> selectSido() throws Exception {
+		// TODO Auto-generated method stub
+		return template.selectList(ns+"selectsido");
 	}
 
 }
