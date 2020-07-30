@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ido.arduino.dto.MyTeamDto;
+import ido.arduino.dto.TeamInfoDto;
+import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.service.TeamInfoService;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.service.TeamInfoService;
 import io.swagger.annotations.Api;
@@ -25,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api")
-@Api(value = "SSAFY")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class TeamInfoController {
 	private static final Logger logger = LoggerFactory.getLogger(TeamInfoController.class);
 	private static final String SUCCESS = "success";
@@ -36,11 +41,34 @@ public class TeamInfoController {
 
 	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
 	@GetMapping("/team")
-	public ResponseEntity<List<TeamInfoDto>> selectAll() throws Exception {
+	public ResponseEntity<List<TeamInfoSimpleDto>> selectAll() throws Exception {
 		logger.debug("selectAll - 호출");
-		return new ResponseEntity<List<TeamInfoDto>>(tService.selectAll(), HttpStatus.OK);
+		System.out.println("CaaaORS Filtering on...........................................................");
+
+		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
 
+	// de
+	// 나의 팀 목록에서 확인하기
+	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
+	@PostMapping("/team/my")
+	public ResponseEntity<List<MyTeamDto>> selectAllmyteam() throws Exception {
+		logger.debug("selectAllmyteam - 호출");
+		System.out.println("check.............................");
+		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(), HttpStatus.OK);
+	}
+
+	// 나의 팀 목록에서 지우기 -> 팀나가기
+	// @ApiOperation(value = "내가 속한 팀을삭제한다 ", response = List.class)
+	// @PostMapping("/team/my")
+	// public ResponseEntity<List<MyTeamDto>> selectAllmyteam () throws Exception {
+	// logger.debug("selectAllmyteam - 호출");
+	// System.out.println("check.............................");
+	// return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(),
+	// HttpStatus.OK);
+	// }
+
+	// 팀 생성하기
 	@ApiOperation(value = "새로운 팀 정보 등록.", response = String.class)
 	@PostMapping("/team")
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody TeamInfoDto teamInfo) {
@@ -54,8 +82,7 @@ public class TeamInfoController {
 		return entity;
 	}
 
-	// 사용자 정보 수정
-
+	// 팀정보 수정하기
 	@ApiOperation(value = "팀 정보 수정.", response = String.class)
 	@PutMapping("/team/{teamID}")
 	public ResponseEntity<Map<String, Object>> update(@RequestBody TeamInfoDto teamInfo) {
@@ -69,8 +96,7 @@ public class TeamInfoController {
 		return entity;
 	}
 
-	// 사용자 정보 삭제
-
+	// 팀 정보 삭제
 	@ApiOperation(value = "팀 정보 삭제.", response = String.class)
 	@DeleteMapping("/team/{teamID}")
 	public ResponseEntity<Map<String, Object>> delete(@PathVariable String teamID) {
@@ -99,5 +125,5 @@ public class TeamInfoController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	//TODO: Team 검색
+	// TODO: Team 검색
 }
