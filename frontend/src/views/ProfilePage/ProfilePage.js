@@ -285,7 +285,7 @@ export default function ProfilePage(props) {
 
                 <GridContainer>
                   <GridItem>
-                    <h3 className={classes.buttonTitle}>출생연도</h3>
+                    <h3 className={classes.buttonTitle}>출생연도  - {age} 살</h3>
                   </GridItem>
 
                   <GridItem>

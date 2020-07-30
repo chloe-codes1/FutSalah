@@ -12,5 +12,6 @@ public interface UserMapper {
 	int update(UserDTO user);
 	int delete(int userID);
 	UserDTO findBySocialID(String socialID);
+	UserDTO findByUserID(int userID);
 	List<UserDTO> searchUsersByName(String name);
 }

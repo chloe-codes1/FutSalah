@@ -50,10 +50,8 @@ public class UserController {
 	}
 
 	@GetMapping("/login/{userID}")
-	public @ResponseBody UserDTO findUser(@RequestBody Map<String, String> data) {
-		String socialID = data.get("socialID");
-		System.out.println("socialID?????" + socialID);
-		UserDTO loggedUser = userService.findBySocialID(socialID);
+	public @ResponseBody UserDTO findUserByID(@PathVariable int userID) {
+		UserDTO loggedUser = userService.findByUserID(userID);
 		Calendar cal = Calendar.getInstance();
 		if (loggedUser != null && loggedUser.getAge() != null) {
 			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
