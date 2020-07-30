@@ -147,7 +147,7 @@ export default function HeaderLinks(props) {
             target="_blank"
             className={classes.navLink}
           >
-            기능 1
+            팀정보(데모)
           </Button>
         </Link>
       </ListItem>
