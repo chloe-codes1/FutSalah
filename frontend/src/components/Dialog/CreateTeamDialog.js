@@ -76,7 +76,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
     });
   }, []);
 
-  const createTeam = () => {
+  const createTeam = useCallback(() => {
     axios({
       method: "post",
       url: "http://localhost:9999/api/team",
@@ -93,7 +93,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
         alert("팀 생성 실패-잠시후 다시 시도해주세요");
         onClose();
       });
-  };
+  });
 
   return (
     <Dialog fullWidth open={open} onClose={onClose}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // react components for routing our app without refresh
@@ -32,24 +32,35 @@ import {
 } from "@material-ui/core";
 
 import CreateTeamDialog from "../../components/Dialog/CreateTeamDialog.js";
+import UserContext from "../../contexts/UserContext.js";
 
 const useStyles = makeStyles(styles);
 
 function MyTeamPage(props) {
+  const { userinfo } = useContext(UserContext);
+
+  //console.log(socialID);
   const [myTeam, setMyTeam] = useState([]);
   useEffect(() => {
+    const { socialID } = userinfo;
     axios({
       method: "get",
       url: "http://localhost:9999/api/team",
+      // data: {
+      //   socialID: socialID,
+      // },
     }).then((res) => {
-      console.log("success");
-      //console.log(res);
-      setMyTeam(res.data);
+      console.log(res);
+      console.log(res.data.length);
+      if (res.data.length > 0) {
+        //setExistTeam(true);
+        setMyTeam(res.data);
+      }
     });
   }, []);
   const classes = useStyles();
   const [createTeam, setCreateTeam] = useState(false);
-  const socialID = "115986181695146980233";
+  const [existTeam, setExistTeam] = useState(false);
   const createTeamClick = () => {
     setCreateTeam(true);
   };
@@ -61,11 +72,20 @@ function MyTeamPage(props) {
     axios({
       method: "get",
       url: "http://localhost:9999/api/team",
-    }).then((res) => {
-      console.log("success");
-      //console.log(res);
-      setMyTeam(res.data);
-    });
+      // data: {
+      //   socialID: socialID,
+      // }
+    })
+      .then((res) => {
+        console.log("my team list call success");
+        if (res.data.length > 0) {
+          setExistTeam(true);
+          setMyTeam(res.data);
+        }
+      })
+      .catch(() => {
+        console.log("my team list call fail");
+      });
   });
 
   return (
@@ -73,7 +93,7 @@ function MyTeamPage(props) {
       <CreateTeamDialog
         open={createTeam}
         onClose={createTeamClose}
-        idData={socialID}
+        idData={userinfo.socialID}
         refreshTeam={refreshTeam}
       />
       ;
@@ -115,24 +135,37 @@ function MyTeamPage(props) {
           <Divider />
           <div>
             <List>
-              {myTeam.map((team, index) => {
-                return (
-                  <>
-                    <ListItem key={index} button>
-                      <ListItemAvatar>
-                        <Avatar>logo</Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary={team.name} />
-                      <ListItemText primary={team.description} />
-                      <ListItemSecondaryAction>
-                        <Button>팀 상세</Button>
-                        <Button>팀 나가기</Button>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider />
-                  </>
-                );
-              })}
+              {!existTeam && (
+                <Grid container justify="center">
+                  <Grid item>
+                    <h5>소속팀이 존재하지 않습니다.</h5>
+                  </Grid>
+                </Grid>
+              )}
+              {existTeam &&
+                myTeam.map((team, index) => {
+                  return (
+                    <>
+                      <ListItem key={index} button>
+                        <ListItemAvatar>
+                          <Avatar>logo</Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={team.name} />
+                        <ListItemText primary={team.description} />
+                        <ListItemSecondaryAction>
+                          <Link
+                            to={"/teaminfo/{team.teamID}"}
+                            className={classes.link}
+                          >
+                            <Button>팀 상세</Button>
+                          </Link>
+                          <Button>팀 나가기</Button>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                      <Divider />
+                    </>
+                  );
+                })}
             </List>
           </div>
         </div>
