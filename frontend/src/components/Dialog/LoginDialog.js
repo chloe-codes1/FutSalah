@@ -63,7 +63,8 @@ function LoginDialog(props) {
         socialID: res.profile.id,
       },
     }).then((e) => {
-      if (e.data.socialID === res.profile.id) {
+      console.log(e.data);
+      if (e.data.socialID === String(res.profile.id)) {
         console.log("already registered!!");
         // context 값 변경
         loggedUser(res.profile.id, res.profile.properties.nickname, "kakao");
