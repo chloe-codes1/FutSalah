@@ -78,7 +78,7 @@ function AddInfoDialog(props) {
           >
             저장
           </Button>
-          <Button color="primary" onClick={handleClose}>
+          <Button color="primary" onClick={onRegister}>
             건너뛰기
           </Button>
         </ListItem>
