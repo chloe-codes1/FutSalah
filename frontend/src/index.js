@@ -18,12 +18,14 @@ var hist = createBrowserHistory();
 //const [state, dispatch] = useReducer(reducer, initialState);
 
 ReactDOM.render(
-  <Router history={hist}>
-    <Switch>
-      <Route path="/teamInfo" component={TeamInfo} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/" component={Components} />
-    </Switch>
-  </Router>,
+  <UserProvider>
+    <Router history={hist}>
+      <Switch>
+        <Route path="/teamInfo/:id" component={TeamInfo} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/" component={Components} />
+      </Switch>
+    </Router>
+  </UserProvider>,
   document.getElementById("root")
 );

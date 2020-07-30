@@ -6,7 +6,7 @@ const teamInfoStyle = {
   container: {
     ...container,
     paddingTop: 100,
-    color: "black",
+    color: "white",
     zIndex: 2,
   },
   list: {
@@ -63,8 +63,7 @@ const teamInfoStyle = {
     display: "none",
   },
   record: {
-    position: "absolute",
-    margin: "25% 20%",
+    marginTop: "50px",
   },
   hiddenRecord: {
     display: "none",
