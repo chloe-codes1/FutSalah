@@ -38,25 +38,28 @@ const useStyles = makeStyles(styles);
 
 function MyTeamPage(props) {
   const { userinfo } = useContext(UserContext);
-
+  const { socialID } = userinfo;
   //console.log(socialID);
   const [myTeam, setMyTeam] = useState([]);
   useEffect(() => {
-    const { socialID } = userinfo;
     axios({
-      method: "get",
-      url: "http://localhost:9999/api/team",
-      // data: {
-      //   socialID: socialID,
-      // },
-    }).then((res) => {
-      console.log(res);
-      console.log(res.data.length);
-      if (res.data.length > 0) {
-        //setExistTeam(true);
-        setMyTeam(res.data);
-      }
-    });
+      method: "post",
+      url: "http://localhost:9999/api/team/my",
+      data: {
+        socialID: socialID,
+      },
+    })
+      .then((res) => {
+        console.log("my team list call success");
+        console.log(res);
+        if (res.data.length > 0) {
+          setExistTeam(true);
+          setMyTeam(res.data);
+        }
+      })
+      .catch(() => {
+        console.log("my team list call fail");
+      });
   }, []);
   const classes = useStyles();
   const [createTeam, setCreateTeam] = useState(false);
@@ -70,11 +73,11 @@ function MyTeamPage(props) {
 
   const refreshTeam = useCallback(() => {
     axios({
-      method: "get",
-      url: "http://localhost:9999/api/team",
-      // data: {
-      //   socialID: socialID,
-      // }
+      method: "post",
+      url: "http://localhost:9999/api/team/my",
+      data: {
+        socialID: socialID,
+      },
     })
       .then((res) => {
         console.log("my team list call success");
