@@ -1,9 +1,9 @@
-import React from "react";
+import Grid from "@material-ui/core/Grid";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
+import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
 
 const styles = {
   grid: {
@@ -12,7 +12,8 @@ const styles = {
     minHeight: "1px",
     paddingRight: "15px",
     paddingLeft: "15px",
-    flexBasis: "auto"
+    flexBasis: "auto",
+    marginBottom: "15px",
   }
 };
 

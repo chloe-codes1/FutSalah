@@ -1,7 +1,6 @@
 package ido.arduino.controller;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ido.arduino.dto.UserDTO;
@@ -54,18 +54,20 @@ public class UserController {
 	}
 
 	@PutMapping("/user")
-	public void updateUser(@RequestBody UserDTO user) {
-		System.out.println("user??????????" + user);
+		public int updateUser(@RequestBody UserDTO user) {
+		System.out.println("user??????????" + user );
 		int updateResult = userService.update(user);
 		if (updateResult == 1) {
 			System.out.println("successfully updated!");
 		} else {
 			System.out.println("user update failed..");
 		}
+		return updateResult;
 	}
 
 	@DeleteMapping("/user")
-	public void deleteUser(@RequestBody int userID) {
+	public void deleteUser(@RequestParam("userID") int userID) {
+//		int userID = Integer.parseInt(data.get("userID"));
 		System.out.println("userID????" + userID);
 		int deleteResult = userService.delete(userID);
 		if (deleteResult == 1) {
