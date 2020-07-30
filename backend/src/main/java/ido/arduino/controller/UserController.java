@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +17,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import ido.arduino.dto.UserDTO;
+import ido.arduino.service.S3Service;
 import ido.arduino.service.UserService;
 
 @Controller
@@ -28,6 +33,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private S3Service s3Service;
+	
 	@PostMapping("/login")
 	public @ResponseBody UserDTO findUser(@RequestBody Map<String, String> data) {
 		String socialID = data.get("socialID");
@@ -67,7 +75,6 @@ public class UserController {
 
 	@DeleteMapping("/user")
 	public void deleteUser(@RequestParam("userID") int userID) {
-//		int userID = Integer.parseInt(data.get("userID"));
 		System.out.println("userID????" + userID);
 		int deleteResult = userService.delete(userID);
 		if (deleteResult == 1) {
@@ -84,6 +91,14 @@ public class UserController {
 		System.out.println("user list? " + list);
 		return list;
 	}
+	
+	  @PostMapping("/user/upload")
+	    public ResponseEntity<String> uploadFile(@RequestPart(value= "file") final MultipartFile multipartFile) {
+	        s3Service.uploadFile(multipartFile);
+	        final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
+	        return new ResponseEntity<>(response, HttpStatus.OK);
+	    }
+	
 	// TODO: User 가입한 Team 목록
 
 }
