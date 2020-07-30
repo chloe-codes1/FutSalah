@@ -34,7 +34,8 @@ const headerLinksStyle = (theme) => ({
     },
   },
   listItemText: {
-    padding: "0 !important",
+    padding: "10px 0 10px 0",
+    margin: "0 5px 0 3px",
   },
   ButtonNavLink: {
     width: "20px",
@@ -126,6 +127,17 @@ const headerLinksStyle = (theme) => ({
       display: "block",
       padding: "10px 20px",
     },
+  },
+  avatar: {
+    margin: "0 5px 0 5px",
+  },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
   },
   ...tooltip,
   marginRight5: {

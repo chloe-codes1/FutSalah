@@ -11,6 +11,7 @@ logs
 
 node_modules
 bower_components
+DO_NOT_COMMIT
 
 *.sublime*
 
@@ -29,5 +30,8 @@ sketch
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+.metadata
+.vscode
+
 
 # End of https://www.toptal.com/developers/gitignore/api/react,visualstudiocode
