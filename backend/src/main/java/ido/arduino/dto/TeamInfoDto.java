@@ -22,7 +22,6 @@ public class TeamInfoDto {
 	private String profileURL;
 	private String name;
 
-	
 	/*
 	 * //팀이름 중복 public int compareTo(TeamInfoDto o) {
 	 * 

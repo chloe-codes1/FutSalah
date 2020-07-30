@@ -46,13 +46,13 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	@Override
 	public List<MyTeamDto> selectAllmyteam() {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"selectAllmyteam");
+		return template.selectList(ns + "selectAllmyteam");
 	}
 
 	@Override
 	public List<LocationDto> selectSido() throws Exception {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"selectsido");
+		return template.selectList(ns + "selectsido");
 	}
 
 }
