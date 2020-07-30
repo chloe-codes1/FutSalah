@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
+import { Link } from "react-router-dom";
 // core components
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
@@ -216,9 +217,11 @@ export default function SearchTeamPage(props) {
                         </h4>
                       </CardBody>
                       <CardFooter className={classes.cardFooter}>
-                        <Button color="success" size="lg">
-                          팀 정보
-                        </Button>
+                        <Link to={"/teaminfo/1"}>
+                          <Button color="success" size="lg">
+                            팀 정보
+                          </Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   </GridItem>
