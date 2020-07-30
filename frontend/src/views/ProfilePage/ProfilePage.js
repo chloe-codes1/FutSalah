@@ -151,7 +151,7 @@ export default function ProfilePage(props) {
         formik.setValues(userUpdate);
         setUser(userUpdate);
         setPos(res.data.position);
-        setAge(res.data.age);
+        // setAge(res.data.age);
         setIsLoadded(true);
       })
       .catch((e) => {
@@ -184,7 +184,7 @@ export default function ProfilePage(props) {
       userID: user.userID,
       email: formik.values.email,
       position: pos,
-      age: Number(age._d?.getFullYear()),
+      age: Number(age?._d?.getFullYear()),
       weight: formik.values.weight,
       height: formik.values.height,
       profileURL: formik.values.profileURL,

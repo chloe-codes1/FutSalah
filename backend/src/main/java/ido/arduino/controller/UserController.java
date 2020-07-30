@@ -49,6 +49,22 @@ public class UserController {
 		return loggedUser;
 	}
 
+	@GetMapping("/login/{userID}")
+	public @ResponseBody UserDTO findUser(@RequestBody Map<String, String> data) {
+		String socialID = data.get("socialID");
+		System.out.println("socialID?????" + socialID);
+		UserDTO loggedUser = userService.findBySocialID(socialID);
+		Calendar cal = Calendar.getInstance();
+		if (loggedUser != null && loggedUser.getAge() != null) {
+			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
+		}	
+		System.out.println("current user?" + loggedUser);
+		return loggedUser;
+	}
+	
+
+
+
 	@PostMapping("/user")
 	public @ResponseBody UserDTO createUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user);
@@ -62,7 +78,7 @@ public class UserController {
 	}
 
 	@PutMapping("/user")
-		public int updateUser(@RequestBody UserDTO user) {
+		public @ResponseBody int updateUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user );
 		int updateResult = userService.update(user);
 		if (updateResult == 1) {
