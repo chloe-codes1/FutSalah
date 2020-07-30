@@ -14,24 +14,29 @@ const useStyles = makeStyles(styles);
 
 export default function Pagination(props) {
   const classes = useStyles();
-  const { pages, color } = props;
+  const { pages, color, selected } = props;
   return (
     <ul className={classes.pagination}>
       {pages.map((prop, key) => {
         const paginationLink = classNames({
           [classes.paginationLink]: true,
           [classes[color]]: prop.active,
-          [classes.disabled]: prop.disabled
+          [classes.disabled]: prop.disabled,
         });
         return (
           <li className={classes.paginationItem} key={key}>
             {prop.onClick !== undefined ? (
-              <Button onClick={prop.onClick} className={paginationLink}>
+              <Button
+                onClick={prop.onClick}
+                className={
+                  selected === prop.text ? classes.selectPage : paginationLink
+                }
+              >
                 {prop.text}
               </Button>
             ) : (
               <Button
-                onClick={() => alert("you've clicked " + prop.text)}
+                onClick={() => alert("페이징이 안됨!!")}
                 className={paginationLink}
               >
                 {prop.text}
@@ -45,20 +50,20 @@ export default function Pagination(props) {
 }
 
 Pagination.defaultProps = {
-  color: "primary"
+  color: "primary",
 };
 
 Pagination.propTypes = {
   pages: PropTypes.arrayOf(
     PropTypes.shape({
-      active: PropTypes.bool,
-      disabled: PropTypes.bool,
+      // active: PropTypes.bool,
+      // disabled: PropTypes.bool,
       text: PropTypes.oneOfType([
         PropTypes.number,
-        PropTypes.oneOf(["PREV", "NEXT", "..."])
+        PropTypes.oneOf(["PREV", "NEXT", "..."]),
       ]).isRequired,
-      onClick: PropTypes.func
+      onClick: PropTypes.func,
     })
   ).isRequired,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
+  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
 };

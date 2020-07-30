@@ -1,6 +1,7 @@
 package ido.arduino.controller;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class UserController {
 
 	@Autowired
 	private S3Service s3Service;
-	
+
 	@PostMapping("/login")
 	public @ResponseBody UserDTO findUser(@RequestBody Map<String, String> data) {
 		String socialID = data.get("socialID");
@@ -44,7 +45,7 @@ public class UserController {
 		Calendar cal = Calendar.getInstance();
 		if (loggedUser != null && loggedUser.getAge() != null) {
 			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
-		}	
+		}
 		System.out.println("current user?" + loggedUser);
 		return loggedUser;
 	}
@@ -62,8 +63,8 @@ public class UserController {
 	}
 
 	@PutMapping("/user")
-		public int updateUser(@RequestBody UserDTO user) {
-		System.out.println("user??????????" + user );
+	public int updateUser(@RequestBody UserDTO user) {
+		System.out.println("user??????????" + user);
 		int updateResult = userService.update(user);
 		if (updateResult == 1) {
 			System.out.println("successfully updated!");
@@ -91,14 +92,14 @@ public class UserController {
 		System.out.println("user list? " + list);
 		return list;
 	}
-	
-	  @PostMapping("/user/upload")
-	    public ResponseEntity<String> uploadFile(@RequestPart(value= "file") final MultipartFile multipartFile) {
-	        s3Service.uploadFile(multipartFile);
-	        final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
-	        return new ResponseEntity<>(response, HttpStatus.OK);
-	    }
-	
+
+	@PostMapping("/user/upload")
+	public ResponseEntity<String> uploadFile(@RequestPart(value = "file") final MultipartFile multipartFile) {
+		s3Service.uploadFile(multipartFile);
+		final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	// TODO: User 가입한 Team 목록
 
 }
