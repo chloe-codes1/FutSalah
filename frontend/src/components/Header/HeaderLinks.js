@@ -150,7 +150,7 @@ export default function HeaderLinks(props) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Link to={"/"} className={classes.link}>
+        <Link to={"/myteam"} className={classes.link}>
           {userinfo.logged && (
             <Button
               color="transparent"
@@ -178,7 +178,7 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         {userinfo.logged && (
           <IconButton>
-            <Avatar src="assets/img/faces/marc.jpg" className={classes.small} />
+            <Avatar className={classes.small} />
           </IconButton>
         )}
       </ListItem>
