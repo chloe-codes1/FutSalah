@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // react components for routing our app without refresh
@@ -9,85 +9,136 @@ import classNames from "classnames";
 // component
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
-import Tooltip from "@material-ui/core/Tooltip";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
+//import GridContainer from "components/Grid/GridContainer.js";
+//import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import Parallax from "components/Parallax/Parallax.js";
 
+import axios from "axios";
+
 import Icon from "@material-ui/core/Icon";
 
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
-import { IconButton, Button } from "@material-ui/core";
+import {
+  Button,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  ListItemSecondaryAction,
+} from "@material-ui/core";
+
+import CreateTeamDialog from "../../components/Dialog/CreateTeamDialog.js";
 
 const useStyles = makeStyles(styles);
 
-const cardStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 140,
-  },
-});
-
 function MyTeamPage(props) {
+  const [myTeam, setMyTeam] = useState([]);
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "http://localhost:9999/api/team",
+    }).then((res) => {
+      console.log("success");
+      //console.log(res);
+      setMyTeam(res.data);
+    });
+  }, []);
   const classes = useStyles();
-  const classesCard = cardStyles();
-  const { ...rest } = props;
+  const [createTeam, setCreateTeam] = useState(false);
+  const socialID = "115986181695146980233";
+  const createTeamClick = () => {
+    setCreateTeam(true);
+  };
+  const createTeamClose = () => {
+    setCreateTeam(false);
+  };
+
+  const refreshTeam = useCallback(() => {
+    axios({
+      method: "get",
+      url: "http://localhost:9999/api/team",
+    }).then((res) => {
+      console.log("success");
+      //console.log(res);
+      setMyTeam(res.data);
+    });
+  });
+
   return (
-    <div>
-      <Header
-        brand="FutSalah"
-        color="transparent"
-        rightLinks={<HeaderLinks />}
-        fixed
-        changeColorOnScroll={{
-          height: 200,
-          color: "white",
-        }}
-        {...rest}
+    <>
+      <CreateTeamDialog
+        open={createTeam}
+        onClose={createTeamClose}
+        idData={socialID}
+        refreshTeam={refreshTeam}
       />
-      <Parallax small filter image={require("assets/img/myteambg.jpg")} />
-      <div className={classNames(classes.main, classes.mainRaised)}>
-        <div className={classes.container}>
-          <GridContainer justify="left">
-            <GridItem xs={12} sm={12} md={6}>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<Icon className="fa fa-plus-circle" />}
-              >
-                팀 생성
-              </Button>
-            </GridItem>
-          </GridContainer>
-          <GridContainer justify="left">
-            <GridItem xs={12} sm={12} md={6}></GridItem>
-          </GridContainer>
-          <GridContainer justify="center">
-            <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
-              <CustomInput
-                id="email"
-                labelText="이메일"
-                formControlProps={{
-                  fullWidth: true,
-                }}
-              />
-            </GridItem>
-          </GridContainer>
+      ;
+      <div>
+        <Header
+          brand="FutSalah"
+          color="transparent"
+          rightLinks={<HeaderLinks />}
+          fixed
+          changeColorOnScroll={{
+            height: 200,
+            color: "white",
+          }}
+        />
+        <Parallax small filter image={require("assets/img/myteambg.jpg")} />
+        <div className={classNames(classes.main, classes.mainRaised)}>
+          <div className={classes.container}>
+            <Grid container spacing={3}>
+              <Grid item xs>
+                <h3>나의 팀 목록</h3>
+              </Grid>
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item xs>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<Icon className="fa fa-plus-circle" />}
+                  onClick={createTeamClick}
+                >
+                  팀 생성
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item></Grid>
+            </Grid>
+          </div>
+          <Divider />
+          <div>
+            <List>
+              {myTeam.map((team, index) => {
+                return (
+                  <>
+                    <ListItem key={index} button>
+                      <ListItemAvatar>
+                        <Avatar>logo</Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={team.name} />
+                      <ListItemText primary={team.description} />
+                      <ListItemSecondaryAction>
+                        <Button>팀 상세</Button>
+                        <Button>팀 나가기</Button>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                    <Divider />
+                  </>
+                );
+              })}
+            </List>
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 }
 
