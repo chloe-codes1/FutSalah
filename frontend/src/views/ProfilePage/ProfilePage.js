@@ -7,6 +7,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Datetime from "react-datetime";
+import Dropzone from "../Dropzone/Dropzone";
 import Fade from "@material-ui/core/Fade";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -245,6 +246,7 @@ export default function ProfilePage(props) {
                 <div className={classes.profile}>
                   <div>
                     <img src={profile} alt="..." className={imageClasses} />
+                    <Dropzone />
                   </div>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{userinfo.name}</h3>
