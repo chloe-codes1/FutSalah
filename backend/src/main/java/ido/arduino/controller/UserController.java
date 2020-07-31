@@ -107,9 +107,10 @@ public class UserController {
 		return list;
 	}
 
-	@PostMapping("/user/upload")
-	public ResponseEntity<String> uploadFile(@RequestPart(value = "file") final MultipartFile multipartFile) {
-		s3Service.uploadFile(multipartFile);
+	@PostMapping("/user/upload/{userID}")
+	public ResponseEntity<String> uploadFile(@PathVariable int userID, @RequestPart(value = "file") final MultipartFile multipartFile) {
+		System.out.println("file" + userID + multipartFile);
+		s3Service.uploadFile(multipartFile, userID);
 		final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

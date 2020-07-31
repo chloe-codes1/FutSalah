@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import ido.arduino.dao.UserMapper;
+import ido.arduino.dto.UserDTO;
  
 @Service
 public class S3ServiceImpl implements S3Service {
@@ -23,12 +26,15 @@ public class S3ServiceImpl implements S3Service {
     private static final Logger LOGGER = LoggerFactory.getLogger(S3ServiceImpl.class);
  
     @Autowired
+    private UserMapper userMapper;
+    
+    @Autowired
     private AmazonS3 amazonS3;
     @Value("${aws.s3.bucket}")
     private String bucketName;
     @Override
     @Async  // @Async annotation을 사용하면 해당 method가 다른 thread에서 실행되게 할 수 있다!! 
-    public void uploadFile(final MultipartFile multipartFile) {
+    public void uploadFile(final MultipartFile multipartFile, int userID) {
         LOGGER.info("File upload in progress.");
         try {
             final File file = convertMultiPartFileToFile(multipartFile);
