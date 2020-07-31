@@ -285,7 +285,7 @@ export default function ProfilePage(props) {
 
                 <GridContainer>
                   <GridItem>
-                    <h3 className={classes.buttonTitle}>출생연도  - {age} 살</h3>
+                    <h3 className={classes.buttonTitle}>출생연도 </h3>
                   </GridItem>
 
                   <GridItem>
@@ -517,7 +517,7 @@ export default function ProfilePage(props) {
                     당신을 나타내는 사진을 업로드 하세요!
                   </Typography>
                   <Grid mt={5}>
-                    <Dropzone align="center" />
+                    <Dropzone align="center" userID={user.userID} />
                   </Grid>
                   </div>
               </Fade>

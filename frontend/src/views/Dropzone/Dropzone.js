@@ -3,8 +3,10 @@ import './Dropzone.css'
 import React, { useEffect, useRef, useState } from "react";
 
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
-const Dropzone = () => {
+const Dropzone = (props) => {
+  const {userID} = props
   const fileInputRef = useRef();
   const modalImageRef = useRef();
   const modalRef = useRef();
@@ -15,6 +17,7 @@ const Dropzone = () => {
   const [validFiles, setValidFiles] = useState([]);
   const [unsupportedFiles, setUnsupportedFiles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
 
   useEffect(() => {
     let filteredArr = selectedFiles.reduce((acc, current) => {
@@ -141,11 +144,11 @@ const Dropzone = () => {
     uploadRef.current.innerHTML = "File(s) Uploading...";
     for (let i = 0; i < validFiles.length; i++) {
       const formData = new FormData();
-      formData.append("image", validFiles[i]);
+      formData.append("file", validFiles[i]);
       formData.append("key", "");
 
       axios
-        .post("https://api.imgbb.com/1/upload", formData, {
+        .post(`http://localhost:9999/api/user/upload/${userID}`, formData, {
           onUploadProgress: (progressEvent) => {
             const uploadPercentage = Math.floor(
               (progressEvent.loaded / progressEvent.total) * 100
@@ -161,6 +164,9 @@ const Dropzone = () => {
               setUnsupportedFiles([...validFiles]);
             }
           },
+        }).then(()=> {
+          history.push("/");
+          alert("이미지가 성공적으로 업로드 되었습니다!");
         })
         .catch(() => {
           uploadRef.current.innerHTML = `<span class="error">Error Uploading File(s)</span>`;
@@ -176,13 +182,7 @@ const Dropzone = () => {
   return (
     <>
       <div className="container">
-        {unsupportedFiles.length === 0 && validFiles.length ? (
-          <button className="file-upload-btn" onClick={() => uploadFiles()}>
-            Upload Files
-          </button>
-        ) : (
-          ""
-        )}
+ 
         {unsupportedFiles.length ? (
           <p>Please remove all unsupported files.</p>
         ) : (
@@ -239,6 +239,13 @@ const Dropzone = () => {
             </div>
           ))}
         </div>
+        {unsupportedFiles.length === 0 && validFiles.length ? (
+          <button className="file-upload-btn" onClick={() => uploadFiles()}>
+            Upload Files
+          </button>
+        ) : (
+          ""
+        )}
       </div>
       <div className="modal" ref={modalRef}>
         <div className="overlay"></div>
