@@ -34,7 +34,7 @@ function AddInfoDialog(props) {
   const searchUser = (name) => {
     axios({
       method: "get",
-      url: "http://localhost:9999/api/user/" + name,
+      url: "http://i3a112.p.ssafy.io:8000/api/user/" + name,
     })
       .then((res) => {
         console.log("success!");

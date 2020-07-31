@@ -1,7 +1,7 @@
 // validation
 import * as Yup from "yup";
 
-import {Grid, Tooltip} from "@material-ui/core";
+import { Grid, Tooltip } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 
 import Backdrop from "@material-ui/core/Backdrop";
@@ -131,7 +131,7 @@ export default function ProfilePage(props) {
   const getUserInfo = async () =>
     await axios({
       method: "POST",
-      url: "http://localhost:9999/api/login",
+      url: "http://i3a112.p.ssafy.io:8000/api/login",
       data: user,
     })
       .then((res) => {
@@ -193,7 +193,7 @@ export default function ProfilePage(props) {
 
     axios({
       method: "PUT",
-      url: "http://localhost:9999/api/user",
+      url: "http://i3a112.p.ssafy.io:8000/api/user",
       data: updatedUser,
       headers: {},
       validateStatus: false,
@@ -213,7 +213,7 @@ export default function ProfilePage(props) {
     console.log("params", params);
     axios({
       method: "DELETE",
-      url: "http://localhost:9999/api/user",
+      url: "http://i3a112.p.ssafy.io:8000/api/user",
       data: params,
       validateStatus: false,
     })
@@ -292,7 +292,7 @@ export default function ProfilePage(props) {
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
-                      value={age? age : user.age}
+                      value={age ? age : user.age}
                       onChange={(value) => setAge(value)}
                     />
                   </GridItem>
@@ -393,46 +393,50 @@ export default function ProfilePage(props) {
                     {formik.errors.position}
                   </div>
                 )}
-                <GridItem><h3 className={classes.buttonTitle}>키</h3></GridItem>
+                <GridItem>
+                  <h3 className={classes.buttonTitle}>키</h3>
+                </GridItem>
 
                 <GridItem>
-                <CustomInput
-                  id="height"
-                  // labelText="키"
-                  formControlProps={{
-                    fullWidth: true,
-                  }}
-                  inputProps={{
-                    value: formik.values.height,
-                    onChange: formik.handleChange,
-                  }}
-                  className={`form-control ${
-                    formik.touched.height && formik.errors.height
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                />
+                  <CustomInput
+                    id="height"
+                    // labelText="키"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      value: formik.values.height,
+                      onChange: formik.handleChange,
+                    }}
+                    className={`form-control ${
+                      formik.touched.height && formik.errors.height
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
                 </GridItem>
                 {formik.touched.height && formik.errors.height && (
                   <div className="invalid-feedback">{formik.errors.height}</div>
                 )}
- <GridItem><h3 className={classes.buttonTitle}>몸무게</h3></GridItem>
-                  <GridItem>
-                <CustomInput
-                  id="weight"
-                  formControlProps={{
-                    fullWidth: true,
-                  }}
-                  inputProps={{
-                    onChange: formik.handleChange,
-                    value: formik.values.weight,
-                  }}
-                  className={`form-control ${
-                    formik.touched.weight && formik.errors.weight
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                />
+                <GridItem>
+                  <h3 className={classes.buttonTitle}>몸무게</h3>
+                </GridItem>
+                <GridItem>
+                  <CustomInput
+                    id="weight"
+                    formControlProps={{
+                      fullWidth: true,
+                    }}
+                    inputProps={{
+                      onChange: formik.handleChange,
+                      value: formik.values.weight,
+                    }}
+                    className={`form-control ${
+                      formik.touched.weight && formik.errors.weight
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
                 </GridItem>
                 {formik.touched.weight && formik.errors.weight && (
                   <div className="invalid-feedback">{formik.errors.weight}</div>
@@ -507,7 +511,7 @@ export default function ProfilePage(props) {
                 timeout: 500,
               }}
             >
-              <Fade in={dropZone} >
+              <Fade in={dropZone}>
                 <div className={modal.paper} align="center">
                   <Typography
                     variant="h5"
@@ -519,7 +523,7 @@ export default function ProfilePage(props) {
                   <Grid mt={5}>
                     <Dropzone align="center" userID={user.userID} />
                   </Grid>
-                  </div>
+                </div>
               </Fade>
             </Modal>
           </div>
