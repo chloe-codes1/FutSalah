@@ -1,4 +1,4 @@
-import './Dropzone.css'
+import './Dropzone.scss'
 
 import React, { useEffect, useRef, useState } from "react";
 
