@@ -79,7 +79,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
   const createTeam = useCallback(() => {
     axios({
       method: "post",
-      url: "http://localhost:9999/api/team",
+      url: "http://i3a112.p.ssafy.io:8000/api/team",
       data: team,
     })
       .then(() => {

@@ -44,7 +44,7 @@ function MyTeamPage(props) {
   useEffect(() => {
     axios({
       method: "post",
-      url: "http://localhost:9999/api/team/my",
+      url: "http://i3a112.p.ssafy.io:8000/api/team/my",
       data: {
         socialID: socialID,
       },
@@ -74,7 +74,7 @@ function MyTeamPage(props) {
   const refreshTeam = useCallback(() => {
     axios({
       method: "post",
-      url: "http://localhost:9999/api/team/my",
+      url: "http://i3a112.p.ssafy.io:8000/api/team/my",
       data: {
         socialID: socialID,
       },

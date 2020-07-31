@@ -39,7 +39,7 @@ export default function SearchTeamPage(props) {
     // 전체 데이터 받아오기
     // 나중에 페이징되는 데이터 받기로 변경하기
     axios
-      .get("http://localhost:9999/api/team")
+      .get("http://i3a112.p.ssafy.io:8000/api/team")
       .then((response) => {
         console.log(response.data);
         setTeamList(response.data);

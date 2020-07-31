@@ -26,7 +26,7 @@ function LoginDialog(props) {
     );
     axios({
       method: "post",
-      url: "http://localhost:9999/api/login",
+      url: "http://i3a112.p.ssafy.io:8000/api/login",
       data: {
         socialID: res.profileObj.googleId,
       },
@@ -58,7 +58,7 @@ function LoginDialog(props) {
     initUser(res.profile.id, "", res.profile.properties.nickname, "");
     axios({
       method: "post",
-      url: "http://localhost:9999/api/login",
+      url: "http://i3a112.p.ssafy.io:8000/api/login",
       data: {
         socialID: res.profile.id,
       },

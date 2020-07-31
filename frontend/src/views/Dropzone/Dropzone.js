@@ -1,12 +1,12 @@
-import './Dropzone.scss'
+import "./Dropzone.scss";
 
 import React, { useEffect, useRef, useState } from "react";
 
-import axios from 'axios';
+import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 const Dropzone = (props) => {
-  const {userID} = props
+  const { userID } = props;
   const fileInputRef = useRef();
   const modalImageRef = useRef();
   const modalRef = useRef();
@@ -148,23 +148,28 @@ const Dropzone = (props) => {
       formData.append("key", "");
 
       axios
-        .post(`http://localhost:9999/api/user/upload/${userID}`, formData, {
-          onUploadProgress: (progressEvent) => {
-            const uploadPercentage = Math.floor(
-              (progressEvent.loaded / progressEvent.total) * 100
-            );
-            progressRef.current.innerHTML = `${uploadPercentage}%`;
-            progressRef.current.style.width = `${uploadPercentage}%`;
+        .post(
+          `http://i3a112.p.ssafy.io:8000/api/user/upload/${userID}`,
+          formData,
+          {
+            onUploadProgress: (progressEvent) => {
+              const uploadPercentage = Math.floor(
+                (progressEvent.loaded / progressEvent.total) * 100
+              );
+              progressRef.current.innerHTML = `${uploadPercentage}%`;
+              progressRef.current.style.width = `${uploadPercentage}%`;
 
-            if (uploadPercentage === 100) {
-              uploadRef.current.innerHTML = "File(s) Uploaded";
-              validFiles.length = 0;
-              setValidFiles([...validFiles]);
-              setSelectedFiles([...validFiles]);
-              setUnsupportedFiles([...validFiles]);
-            }
-          },
-        }).then(()=> {
+              if (uploadPercentage === 100) {
+                uploadRef.current.innerHTML = "File(s) Uploaded";
+                validFiles.length = 0;
+                setValidFiles([...validFiles]);
+                setSelectedFiles([...validFiles]);
+                setUnsupportedFiles([...validFiles]);
+              }
+            },
+          }
+        )
+        .then(() => {
           history.push("/");
           alert("이미지가 성공적으로 업로드 되었습니다!");
         })
@@ -182,7 +187,6 @@ const Dropzone = (props) => {
   return (
     <>
       <div className="container">
- 
         {unsupportedFiles.length ? (
           <p>Please remove all unsupported files.</p>
         ) : (
