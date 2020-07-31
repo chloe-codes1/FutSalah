@@ -1,12 +1,14 @@
 // validation
 import * as Yup from "yup";
 
+import {Grid, Tooltip} from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Datetime from "react-datetime";
+import Dropzone from "../Dropzone/Dropzone";
 import Fade from "@material-ui/core/Fade";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -18,7 +20,6 @@ import HeaderLinks from "components/Header/HeaderLinks.js";
 import { Link } from "react-router-dom";
 import Modal from "@material-ui/core/Modal";
 import Parallax from "components/Parallax/Parallax.js";
-import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 // context to use logged in user info
 import UserContext from "../../contexts/UserContext";
@@ -80,6 +81,13 @@ export default function ProfilePage(props) {
     setOpen(false);
   };
 
+  const handleDropZone = () => {
+    setDropZone(true);
+  };
+  const handleDropZoneClose = () => {
+    setDropZone(false);
+  };
+
   const [user, setUser] = useState({
     userID: 0,
     socialID: "",
@@ -94,7 +102,8 @@ export default function ProfilePage(props) {
   const [isLoadded, setIsLoadded] = useState(false);
   const [pos, setPos] = useState("");
   const [age, setAge] = useState(0);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [dropZone, setDropZone] = useState(false);
   const { userinfo, userDispatch } = useContext(UserContext);
   const formik = useFormik({
     initialValues,
@@ -142,6 +151,7 @@ export default function ProfilePage(props) {
         formik.setValues(userUpdate);
         setUser(userUpdate);
         setPos(res.data.position);
+        // setAge(res.data.age);
         setIsLoadded(true);
       })
       .catch((e) => {
@@ -155,10 +165,10 @@ export default function ProfilePage(props) {
   }, []);
 
   if (isLoadded) {
-    // console.log(
-    //   "formik initialValues->",
-    //   JSON.stringify(formik.initialValues, null, 2)
-    // );
+    console.log(
+      "formik initialValues->",
+      JSON.stringify(formik.initialValues, null, 2)
+    );
     console.log("formik values->", JSON.stringify(formik.values, null, 2));
     // console.log("user->", JSON.stringify(user, null, 2));
   }
@@ -174,7 +184,7 @@ export default function ProfilePage(props) {
       userID: user.userID,
       email: formik.values.email,
       position: pos,
-      age: Number(age._d?.getFullYear()),
+      age: Number(age?._d?.getFullYear()),
       weight: formik.values.weight,
       height: formik.values.height,
       profileURL: formik.values.profileURL,
@@ -197,28 +207,27 @@ export default function ProfilePage(props) {
       .catch((err) => console.error("Wasn't able to update property...", err));
   };
 
-    const deleteUser = () => {
-      let params = new FormData();
-      params.append("userID", user.userID)
-      console.log('params', params)
-      axios({
-        method: "DELETE",
-        url: "http://localhost:9999/api/user",
-        data: params,
-        validateStatus: false,
+  const deleteUser = () => {
+    let params = new FormData();
+    params.append("userID", user.userID);
+    console.log("params", params);
+    axios({
+      method: "DELETE",
+      url: "http://localhost:9999/api/user",
+      data: params,
+      validateStatus: false,
+    })
+      .then(() => {
+        console.log("user delete succeed");
+        userDispatch({
+          type: "LOGOUT_USER",
+        });
+        history.push("/");
+        alert("그동안 FutSalah를 이용해 주셔서 감사합니다.");
+        formik.resetForm();
       })
-        .then(() => {
-          console.log("user delete succeed");
-          userDispatch({
-            type: "LOGOUT_USER",
-          })
-          history.push("/");
-          alert("그동안 FutSalah를 이용해 주셔서 감사합니다.");
-          formik.resetForm();
-        })
-        .catch((err) => console.error("Wasn't able to delete user...", err));
-    };
-  
+      .catch((err) => console.error("Wasn't able to delete user...", err));
+  };
 
   console.log("age..", age._d?.getFullYear());
   console.log("pos..", pos);
@@ -243,9 +252,9 @@ export default function ProfilePage(props) {
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
-                  <div>
+                  <Button onClick={handleDropZone} color="white">
                     <img src={profile} alt="..." className={imageClasses} />
-                  </div>
+                  </Button>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{userinfo.name}</h3>
                   </div>
@@ -276,14 +285,14 @@ export default function ProfilePage(props) {
 
                 <GridContainer>
                   <GridItem>
-                    <h3 className={classes.buttonTitle}>출생연도</h3>
+                    <h3 className={classes.buttonTitle}>출생연도 </h3>
                   </GridItem>
 
                   <GridItem>
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
-                      value={age ? age : formik.values.age}
+                      value={age? age : user.age}
                       onChange={(value) => setAge(value)}
                     />
                   </GridItem>
@@ -384,10 +393,12 @@ export default function ProfilePage(props) {
                     {formik.errors.position}
                   </div>
                 )}
+                <GridItem><h3 className={classes.buttonTitle}>키</h3></GridItem>
 
+                <GridItem>
                 <CustomInput
                   id="height"
-                  labelText="키"
+                  // labelText="키"
                   formControlProps={{
                     fullWidth: true,
                   }}
@@ -401,12 +412,14 @@ export default function ProfilePage(props) {
                       : ""
                   }`}
                 />
+                </GridItem>
                 {formik.touched.height && formik.errors.height && (
                   <div className="invalid-feedback">{formik.errors.height}</div>
                 )}
+ <GridItem><h3 className={classes.buttonTitle}>몸무게</h3></GridItem>
+                  <GridItem>
                 <CustomInput
                   id="weight"
-                  labelText="몸무게"
                   formControlProps={{
                     fullWidth: true,
                   }}
@@ -420,6 +433,7 @@ export default function ProfilePage(props) {
                       : ""
                   }`}
                 />
+                </GridItem>
                 {formik.touched.weight && formik.errors.weight && (
                   <div className="invalid-feedback">{formik.errors.weight}</div>
                 )}
@@ -448,10 +462,18 @@ export default function ProfilePage(props) {
             >
               <Fade in={open}>
                 <div className={modal.paper} align="center">
-                  <Typography variant="h5" id="transition-modal-title" style={{ marginTop: "10px", marginBottom: "15px"}}>
+                  <Typography
+                    variant="h5"
+                    id="transition-modal-title"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
                     정말 떠나실건가요? ㅠ_ㅠ
                   </Typography>
-                  <Typography id="transition-modal-description" align="center" style={{fontSize: "0.8rem"}}>
+                  <Typography
+                    id="transition-modal-description"
+                    align="center"
+                    style={{ fontSize: "0.8rem" }}
+                  >
                     스마트한 풋살 경기를 위한 최고의 플랫폼이 될 수 있도록
                     <br />
                     저희 FutSalah는 지속적으로 노력중입니다. <br />
@@ -469,10 +491,35 @@ export default function ProfilePage(props) {
                   >
                     탈퇴하기
                   </Button>
-                  <Button onClick={handleClose} >
-                    계속 사용할래요!
-                  </Button>
+                  <Button onClick={handleClose}>계속 사용할래요!</Button>
                 </div>
+              </Fade>
+            </Modal>
+            <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              className={modal.modal}
+              open={dropZone}
+              onClose={handleDropZoneClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+                timeout: 500,
+              }}
+            >
+              <Fade in={dropZone} >
+                <div className={modal.paper} align="center">
+                  <Typography
+                    variant="h5"
+                    id="transition-modal-title"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    당신을 나타내는 사진을 업로드 하세요!
+                  </Typography>
+                  <Grid mt={5}>
+                    <Dropzone align="center" userID={user.userID} />
+                  </Grid>
+                  </div>
               </Fade>
             </Modal>
           </div>
