@@ -131,7 +131,7 @@ export default function HeaderLinks(props) {
   const onRegister = useCallback(() => {
     axios({
       method: "post",
-      url: "http://localhost:9999/api/user",
+      url: "http://i3a112.p.ssafy.io:8000/api/user",
       data: user,
     })
       .then(() => {

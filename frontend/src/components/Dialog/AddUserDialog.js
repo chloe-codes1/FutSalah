@@ -14,49 +14,13 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "components/CustomButtons/Button.js";
 
+import axios from "axios";
+
 function AddInfoDialog(props) {
   const { open, onClose, modifyTeamList } = props;
 
-  // 테스트데이터
-
-  // 검색 결과 목록
-  const testTeamList = [
-    {
-      id: 5,
-      name: "김아두이노",
-      position: "Fixo",
-      age: 1999,
-      height: 20,
-      weight: 10,
-    },
-    {
-      id: 6,
-      name: "이풋살",
-      position: "Pivo",
-      age: 1990,
-      height: 200,
-      weight: 300,
-    },
-    {
-      id: 7,
-      name: "박살라",
-      age: 2012,
-      height: 500,
-      weight: 300,
-      position: "ALA",
-    },
-    {
-      id: 8,
-      name: "최팀구함",
-      position: "ALL",
-      age: 2011,
-      height: 120,
-      weight: 40,
-    },
-  ];
-
   const [searchWord, setSearchWord] = useState("");
-  const [serachTeamList, setSerachTeamList] = useState(testTeamList);
+  const [serachTeamList, setSerachTeamList] = useState([]);
 
   const handleClose = () => {
     onClose();
@@ -65,6 +29,20 @@ function AddInfoDialog(props) {
   const addMember = (userInfo) => {
     modifyTeamList(userInfo);
     handleClose();
+  };
+
+  const searchUser = (name) => {
+    axios({
+      method: "get",
+      url: "http://i3a112.p.ssafy.io:8000/api/user/" + name,
+    })
+      .then((res) => {
+        console.log("success!");
+        setSerachTeamList(res.data);
+      })
+      .catch(() => {
+        console.log("으악!");
+      });
   };
 
   return (
@@ -86,6 +64,7 @@ function AddInfoDialog(props) {
             style={{ marginLeft: "10px" }}
             onClick={() => {
               console.log("회원 검색!!!!!");
+              searchUser(searchWord);
             }}
           >
             검색
