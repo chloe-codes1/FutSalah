@@ -6,7 +6,7 @@ deploy-to-server:
     - echo 'start deployment'
   script:
     - cd /home/ubuntu/s03p12a112/backend/
-    - mvn -N io.takari:maven:wrapper
+    - sudo mvn -N io.takari:maven:wrapper
     - ./mvnw clean package
     - cd /home/ubuntu/s03p12a112/backend/target/
     - nohub java -jar backend-0.0.1-SNAPSHOT.jar &
