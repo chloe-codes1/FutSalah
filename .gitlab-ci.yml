@@ -9,6 +9,7 @@ deploy-to-server:
     - cd /home/ubuntu/s03p12a112/backend/
     - sudo mvn package
     - cd /home/ubuntu/s03p12a112/backend/target/
+    - kill $(lsof -t -i:8000)
     - nohup java -jar backend-0.0.1-SNAPSHOT.jar &
     - cd /home/ubuntu/s03p12a112/frontend/
     - npm run build
