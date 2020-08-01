@@ -5,8 +5,6 @@ deploy-to-server:
   before_script:
     - echo 'start deployment'
     - whoami
-    - sudo -u ubuntu -s
-    - whoami
   script:
     - cd /home/ubuntu/s03p12a112/backend/
     - sudo mvn package
@@ -14,7 +12,7 @@ deploy-to-server:
     - kill $(lsof -t -i:8000)
     - nohup java -jar backend-0.0.1-SNAPSHOT.jar &
     - cd /home/ubuntu/s03p12a112/frontend/
-    - npm run build
+    - sudo npm run build
     - sudo service nginx restart
   after_script:
     - echo 'deployment is done'
