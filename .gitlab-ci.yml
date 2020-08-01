@@ -10,11 +10,10 @@ deploy-to-server:
     - sudo mvn package
     - cd /home/ubuntu/s03p12a112/backend/target/
     - kill $(lsof -t -i:8000)
-    - nohup java -jar backend-0.0.1-SNAPSHOT.jar &
+    - nohup java -jar backend-0.0.1-SNAPSHOT.jar > nohup.out &
     - cd /home/ubuntu/s03p12a112/frontend/
     - sudo npm run build
     - sudo service nginx restart
-    - exit
   after_script:
     - echo 'deployment is done'
   tags:
