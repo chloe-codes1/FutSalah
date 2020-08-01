@@ -6,6 +6,7 @@ deploy-to-server:
     - echo 'start deployment'
   script:
     - cd /home/ubuntu/s03p12a112/backend/
+    - chmod +x mvnw
     - mvn -N io.takari:maven:wrapper
     - ./mvnw clean package
     - cd /home/ubuntu/s03p12a112/backend/target/
