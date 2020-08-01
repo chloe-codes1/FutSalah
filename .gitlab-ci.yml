@@ -5,6 +5,7 @@ deploy-to-server:
   before_script:
     - echo 'start deployment'
   script:
+    - kill $(lsof -t -i:8000)
     - cd /home/ubuntu/s03p12a112/backend/
     - ./mvnw clean package
     - cd /home/ubuntu/s03p12a112/backend/target/
