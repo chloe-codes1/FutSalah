@@ -5,11 +5,11 @@ deploy-to-server:
   before_script:
     - echo 'start deployment'
   script:
-    - cd ~/s03p12a112/backend/
+    - cd /home/ubuntu/s03p12a112/backend/
     - ./mvnw clean package
-    - cd ~/s03p12a112/backend/target/
+    - cd /home/ubuntu/s03p12a112/backend/target/
     - nohub java -jar backend-0.0.1-SNAPSHOT.jar &
-    - cd ~/s03p12a112/frontend/
+    - cd /home/ubuntu/s03p12a112/frontend/
     - npm run build
     - sudo service nginx restart
   tags:
