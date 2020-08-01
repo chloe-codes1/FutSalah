@@ -6,7 +6,7 @@ deploy-to-server:
     - echo 'start deployment'
   script:
     - cd /home/ubuntu/s03p12a112/backend/
-    - kill $(lsof -t -i:8000)
+    - lsof -n -i:8000 | grep LISTEN | awk '{ print $2 }' | uniq | xargs kill -9
     - ./mvnw clean package
     - cd /home/ubuntu/s03p12a112/backend/target/
     - nohub java -jar backend-0.0.1-SNAPSHOT.jar &
