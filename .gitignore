@@ -33,7 +33,7 @@ sketch
 .metadata
 .vscode
 
-
+.env
 ### AWS Credentials
 aws.yml
 
