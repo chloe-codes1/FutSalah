@@ -9,14 +9,12 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 public class BackendApplication {
 	
 	private static final String PROPERTIES = 
-			"spring.config.location="
-			+ "classpath:/mysql.yml"
+			"classpath:/mysql.yml"
 			+ ",classpath:/aws.yml"
-			+ ",classpaht:/application.properties";
-	
+			+ ",classpath:/application.properties";
 	
 	public static void main(String[] args) {
-		System.setProperty("spring.config.loacation", PROPERTIES);
+		System.setProperty("spring.config.location", PROPERTIES);
 		SpringApplication.run(BackendApplication.class, args);
 	}
 

@@ -11,6 +11,7 @@ public interface UserMapper {
 	int insert(UserDTO user);
 	int update(UserDTO user);
 	int delete(int userID);
+	void uploadProfileImage(int userID, String uniqueFileName);
 	UserDTO findBySocialID(String socialID);
 	UserDTO findByUserID(int userID);
 	List<UserDTO> searchUsersByName(String name);
