@@ -14,9 +14,9 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 public class S3Config {
 	
 	// 아래의 3개 값들은 application 실행 시 application.properties에서 설정한 값을 읽어온다!
-    @Value("${aws.access_key_id}")
+    @Value("${aws.accessKeyId}")
     private String accessKeyId;
-    @Value("${aws.secret_access_key}")
+    @Value("${aws.secretAccessKey}")
     private String secretAccessKey;
     @Value("${aws.s3.region}")
     private String region;

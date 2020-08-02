@@ -18,7 +18,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import ido.arduino.dao.UserMapper;
-import ido.arduino.dto.UserDTO;
  
 @Service
 public class S3ServiceImpl implements S3Service {
@@ -35,12 +34,13 @@ public class S3ServiceImpl implements S3Service {
     @Override
     @Async  // @Async annotation을 사용하면 해당 method가 다른 thread에서 실행되게 할 수 있다!! 
     public void uploadFile(final MultipartFile multipartFile, int userID) {
-        LOGGER.info("File upload in progress.");
+        LOGGER.info("File upload in progress...");
         try {
             final File file = convertMultiPartFileToFile(multipartFile);
-            uploadFileToS3Bucket(bucketName, file);
+            uploadFileToS3Bucket(bucketName, file, userID);
             LOGGER.info("File upload is completed.");
-            file.delete();  // S3 업로드 후 프로젝트에 저장된 파일 지우낑
+            Boolean result = file.delete();  // S3 업로드 후 프로젝트에 저장된 파일 지우기
+            System.out.println("Delete result?"+ result);
         } catch (final AmazonServiceException ex) {
             LOGGER.info("File upload is failed.");
             LOGGER.error("Error= {} while uploading file.", ex.getMessage());
@@ -57,9 +57,10 @@ public class S3ServiceImpl implements S3Service {
         return file;
     }
  
-    private void uploadFileToS3Bucket(final String bucketName, final File file) {
-        final String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
+    private void uploadFileToS3Bucket(final String bucketName, final File file, int userID) {
+        String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
         LOGGER.info("Uploading file with name= " + uniqueFileName);
+        userMapper.uploadProfileImage(userID, uniqueFileName);
         final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, uniqueFileName, file);
         amazonS3.putObject(putObjectRequest);
     }

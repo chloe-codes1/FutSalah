@@ -1,7 +1,6 @@
 package ido.arduino.controller;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,8 +59,6 @@ public class UserController {
 		System.out.println("current user?" + loggedUser);
 		return loggedUser;
 	}
-	
-
 
 
 	@PostMapping("/user")
