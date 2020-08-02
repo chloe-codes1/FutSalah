@@ -4,13 +4,17 @@ deploy-to-server:
     - master
   before_script:
     - echo 'start deployment'
+    - whoami
   script:
     - cd /home/ubuntu/s03p12a112/backend/
-    - ./mvnw clean package
+    - sudo mvn package
     - cd /home/ubuntu/s03p12a112/backend/target/
-    - nohub java -jar backend-0.0.1-SNAPSHOT.jar &
+    - kill $(lsof -t -i:8000)
+    - setsid nohup java -jar backend-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
     - cd /home/ubuntu/s03p12a112/frontend/
-    - npm run build
+    - sudo npm run build
     - sudo service nginx restart
+  after_script:
+    - echo 'deployment is done'
   tags:
     - deploy

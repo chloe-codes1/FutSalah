@@ -149,7 +149,7 @@ const Dropzone = (props) => {
 
       axios
         .post(
-          `http://i3a112.p.ssafy.io:8000/api/user/upload/${userID}`,
+          `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/upload/${userID}`,
           formData,
           {
             onUploadProgress: (progressEvent) => {

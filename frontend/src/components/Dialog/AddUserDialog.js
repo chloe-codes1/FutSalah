@@ -1,19 +1,16 @@
+import { Dialog, DialogTitle, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 
-import { Dialog, DialogTitle, TextField } from "@material-ui/core";
-
+import Button from "components/CustomButtons/Button.js";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-
-import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
-import Button from "components/CustomButtons/Button.js";
-
 import axios from "axios";
 
 function AddInfoDialog(props) {
@@ -34,7 +31,7 @@ function AddInfoDialog(props) {
   const searchUser = (name) => {
     axios({
       method: "get",
-      url: "http://i3a112.p.ssafy.io:8000/api/user/" + name,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/` + name,
     })
       .then((res) => {
         console.log("success!");

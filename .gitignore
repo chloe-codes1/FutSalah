@@ -33,8 +33,11 @@ sketch
 .metadata
 .vscode
 
-
+.env
 ### AWS Credentials
 aws.yml
+
+### MySQL Credentials
+mysql.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/react,visualstudiocode

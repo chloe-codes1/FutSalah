@@ -1,19 +1,18 @@
-import React, { useReducer, useCallback } from "react";
-
-import { makeStyles } from "@material-ui/core/styles";
-
 import {
+  Avatar,
+  Button,
   Dialog,
   DialogTitle,
-  TextField,
-  Button,
   Grid,
   List,
   ListItem,
-  Avatar,
+  TextField,
 } from "@material-ui/core";
+import React, { useCallback, useReducer } from "react";
 
 import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+
 //import logo from "../../assets/img/examples/teamlogo.png";
 
 const initialState = {
@@ -79,7 +78,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
   const createTeam = useCallback(() => {
     axios({
       method: "post",
-      url: "http://i3a112.p.ssafy.io:8000/api/team",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team`,
       data: team,
     })
       .then(() => {
