@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import TableContainer from "@material-ui/core/TableContainer";
+import React, { useEffect, useState } from "react";
+
+import AddUserDialog from "components/Dialog/AddUserDialog";
+import Button from "components/CustomButtons/Button.js";
+import Footer from "components/Footer/Footer.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+// core components
+import Header from "components/Header/Header.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+// Dialogs
+import ModifyTeamInfoDialog from "components/Dialog/ModifyTeamInfoDialog";
+import Paginations from "components/Pagination/Pagination.js";
+import Parallax from "components/Parallax/Parallax.js";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Tooltip from "@material-ui/core/Tooltip";
+import axios from "axios";
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
 
-// core components
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import Button from "components/CustomButtons/Button.js";
-import Tooltip from "@material-ui/core/Tooltip";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Parallax from "components/Parallax/Parallax.js";
-import Paginations from "components/Pagination/Pagination.js";
 
-// Dialogs
-import ModifyTeamInfoDialog from "components/Dialog/ModifyTeamInfoDialog";
-import AddUserDialog from "components/Dialog/AddUserDialog";
 
-import axios from "axios";
 
-import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
 const useStyles = makeStyles(styles);
 
 export default function ProfilePage(props) {
@@ -131,7 +132,7 @@ export default function ProfilePage(props) {
   useEffect(() => {
     //   axios({
     //     method: "post",
-    //     url: "http://i3a112.p.ssafy.io:8000/api/team",
+    //     url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team`,
     //     data: user,
     //     headers: {},
     //   }) .then(() => {

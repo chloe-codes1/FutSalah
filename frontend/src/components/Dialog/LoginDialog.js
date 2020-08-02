@@ -1,13 +1,10 @@
-import React from "react";
-
 import { Dialog, DialogTitle } from "@material-ui/core";
-
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 
 import { GoogleLogin } from "react-google-login";
 import KakaoLogin from "react-kakao-login";
-
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import React from "react";
 import axios from "axios";
 
 function LoginDialog(props) {
@@ -26,7 +23,7 @@ function LoginDialog(props) {
     );
     axios({
       method: "post",
-      url: "http://i3a112.p.ssafy.io:8000/api/login",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/login`,
       data: {
         socialID: res.profileObj.googleId,
       },
@@ -58,7 +55,7 @@ function LoginDialog(props) {
     initUser(res.profile.id, "", res.profile.properties.nickname, "");
     axios({
       method: "post",
-      url: "http://i3a112.p.ssafy.io:8000/api/login",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/login`,
       data: {
         socialID: res.profile.id,
       },
