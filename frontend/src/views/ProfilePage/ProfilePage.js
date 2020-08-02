@@ -131,7 +131,7 @@ export default function ProfilePage(props) {
   const getUserInfo = async () =>
     await axios({
       method: "POST",
-      url: "http://i3a112.p.ssafy.io:8000/api/login",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/login`,
       data: user,
     })
       .then((res) => {
@@ -193,7 +193,7 @@ export default function ProfilePage(props) {
 
     axios({
       method: "PUT",
-      url: "http://i3a112.p.ssafy.io:8000/api/user",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
       data: updatedUser,
       headers: {},
       validateStatus: false,
@@ -213,7 +213,7 @@ export default function ProfilePage(props) {
     console.log("params", params);
     axios({
       method: "DELETE",
-      url: "http://i3a112.p.ssafy.io:8000/api/user",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
       data: params,
       validateStatus: false,
     })

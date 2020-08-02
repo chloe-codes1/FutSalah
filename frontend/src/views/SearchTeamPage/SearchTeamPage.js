@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import GridList from "@material-ui/core/GridList";
-import { Link } from "react-router-dom";
-// core components
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
+import React, { useEffect, useState } from "react";
+
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
-import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
-import Paginations from "components/Pagination/Pagination.js";
+import CardHeader from "components/Card/CardHeader.js";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-
-import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
+import Footer from "components/Footer/Footer.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+import GridList from "@material-ui/core/GridList";
+// core components
+import Header from "components/Header/Header.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+import { Link } from "react-router-dom";
+import Paginations from "components/Pagination/Pagination.js";
+import axios from "axios";
 import bgImage from "assets/img/searchTeam-bg.jpg";
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
 // import teamImage from "assets/img/basicTeamImg.jpg";
 import teamImage from "assets/img/basicTeamImg1.jpg";
-
-import axios from "axios";
 
 const useStyles = makeStyles(styles);
 
@@ -39,7 +38,7 @@ export default function SearchTeamPage(props) {
     // 전체 데이터 받아오기
     // 나중에 페이징되는 데이터 받기로 변경하기
     axios
-      .get("http://i3a112.p.ssafy.io:8000/api/team")
+      .get(`${process.env.REACT_APP_SERVER_BASE_URL}/api/team`)
       .then((response) => {
         console.log(response.data);
         setTeamList(response.data);
