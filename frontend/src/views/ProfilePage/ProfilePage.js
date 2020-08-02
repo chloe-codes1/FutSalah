@@ -299,13 +299,14 @@ export default function ProfilePage(props) {
                   </GridItem>
 
                   <GridItem>
+                    <span className={classes.buttonTitle}>  {user.age > 0? "나이:"+ user?.age +"세" : ""}</span>
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
-                      value={age ? age : user.age}
                       onChange={(value) => setAge(value)}
                     />
                   </GridItem>
+             
                 </GridContainer>
                 <GridContainer>
                   <GridItem className={classes.marginBottom}>
