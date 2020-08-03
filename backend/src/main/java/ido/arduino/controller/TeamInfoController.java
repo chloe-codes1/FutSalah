@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserDTO;
 import ido.arduino.service.TeamInfoService;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.service.TeamInfoService;
@@ -81,7 +82,22 @@ public class TeamInfoController {
 		}
 		return entity;
 	}
-
+	
+	//팀 생성한 내용 나의 팀 목록에 추가 
+	@PostMapping("/teammy")
+	public ResponseEntity<Map<String, Object>> insertmy(@RequestBody TeamInfoDto teamInfo) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			int result = tService.insert(teamInfo);
+			entity = handleSuccess(teamInfo.getClass() + "가 추가되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+		
+		
 	// 팀정보 수정하기
 	@ApiOperation(value = "팀 정보 수정.", response = String.class)
 	@PutMapping("/team/{teamID}")

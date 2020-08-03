@@ -14,7 +14,7 @@
 		
 		<typeAlias type="ido.arduino.dto.MyTeamDto" alias="myteam"/>
 		<typeAlias type="ido.arduino.dto.LocationDto" alias="location"/>
-		
+		<typeAlias type="ido.arduino.dto.UserTeamConnDto" alias="userteamconn"/>
 	</typeAliases>
 	<mappers>
 		<!-- 사용할 mapper 등록 -->

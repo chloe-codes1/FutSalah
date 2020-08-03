@@ -21,6 +21,7 @@ public class TeamInfoDto {
 	private Integer mileage;
 	private String profileURL;
 	private String name;
+	private int leader;
 
 	/*
 	 * //팀이름 중복 public int compareTo(TeamInfoDto o) {
