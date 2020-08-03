@@ -10,6 +10,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserDTO;
 import ido.arduino.repo.TeamInfoRepo;
 
 @Service
@@ -23,37 +24,31 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Override
 	public int insert(TeamInfoDto info) {
-		// TODO Auto-generated method stub
 		return tRepo.insert(info);
 	}
 
 	@Override
 	public int update(TeamInfoDto info) {
-		// TODO Auto-generated method stub
 		return tRepo.update(info);
 	}
 
 	@Override
 	public int delete(String teamID) {
-		// TODO Auto-generated method stub
 		return tRepo.delete(teamID);
 	}
 
 	@Override
 	public List<TeamInfoSimpleDto> selectAll() {
-		// TODO Auto-generated method stub
 		return tRepo.selectAll();
 	}
 
 	@Override
 	public List<MyTeamDto> selectAllmyteam() {
-		// TODO Auto-generated method stub
 		return tRepo.selectAllmyteam();
 	}
 
 	@Override
 	public List<LocationDto> selectSido() throws Exception {
-		// TODO Auto-generated method stub
 		return tRepo.selectSido();
 	}
 
@@ -65,6 +60,16 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	@Override
 	public int checkIfExists(String name) {
 		return teamMapper.checkIfExists(name);
+	}
+
+	@Override
+	public List<UserDTO> getAllCrewInfo(int teamID) {
+		return teamMapper.getAllCrewInfo(teamID);
+	}
+
+	@Override
+	public List<TeamInfoDto> searchTeamByName(String name) {
+		return teamMapper.searchTeamByName(name);
 	}
 
 }
