@@ -25,7 +25,12 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Override
 	public int insert(TeamInfoDto info) {
-		return tRepo.insert(info);
+		int result = tRepo.insert(info);
+		if (result == 1) {
+			return tRepo.selectlast();
+		} else {
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
@@ -48,14 +53,8 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		// TODO Auto-generated method stub
 		return tRepo.selectAllmyteam(id);
 	}
-	public List<MyTeamDto> selectAllmyteam() {
-		return tRepo.selectAllmyteam();
-	}
 
-	@Override
-	public List<LocationDto> selectSido() throws Exception {
-		return tRepo.selectSido();
-	}
+
 
 
 
@@ -77,6 +76,18 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	@Override
 	public List<TeamInfoDto> searchTeamByName(String name) {
 		return teamMapper.searchTeamByName(name);
+	}
+
+	@Override
+	public int updatemy(UserDTO userID) {
+		// TODO Auto-generated method stub
+		return tRepo.updatemy(userID);
+	}
+
+	@Override
+	public int insertmy(UserTeamConnDto uteam) {
+		// TODO Auto-generated method stub
+		return tRepo.insertmy(uteam);
 	}
 
 }

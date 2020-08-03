@@ -13,6 +13,7 @@ public interface TeamInfoService {
 
 	int insert(TeamInfoDto info);
 
+	int updatemy(UserDTO userID);
 	int update(TeamInfoDto info);
 
 	int delete(String teamID);
@@ -23,8 +24,6 @@ public interface TeamInfoService {
 	
 	
 
-	List<LocationDto> selectSido() throws Exception;// 서울,,,
-	
 	TeamInfoDto getTeamInfo(int teamID);
 	
 	int checkIfExists(String name);
@@ -32,4 +31,6 @@ public interface TeamInfoService {
 	List<UserDTO> getAllCrewInfo(int teamID);
 	
 	List<TeamInfoDto> searchTeamByName(String name);
+
+	int insertmy(UserTeamConnDto uteam);
 }
