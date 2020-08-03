@@ -62,3 +62,21 @@ _오늘 풋살한판 풋살르자!_
 ### 7/22 (수)
 
 - [x] : DB 설계
+
+<br>
+<br>
+
+## Environment variables 🧚‍♀️
+
+- `REACT_APP_`: custom variables need this prefix
+- use `process.env.REACT_APP_{env_var_name}`
+  
+  <br>
+
+ex) `.env`
+```javascript
+PORT= // client port
+REACT_APP_SERVER_BASE_URL=  // server url
+REACT_APP_S3_BASE_URL=  // s3 url
+```
+ 

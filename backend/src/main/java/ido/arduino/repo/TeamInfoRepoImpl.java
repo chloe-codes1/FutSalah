@@ -23,25 +23,21 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 
 	@Override
 	public int insert(TeamInfoDto info) {
-		// TODO Auto-generated method stub
 		return template.insert(ns + "insert", info);
 	}
 
 	@Override
 	public int update(TeamInfoDto info) {
-		// TODO Auto-generated method stub
 		return template.update(ns + "update", info);
 	}
 
 	@Override
 	public int delete(String teamID) {
-		// TODO Auto-generated method stub
 		return template.delete(ns + "delete", teamID);
 	}
 
 	@Override
 	public List<TeamInfoSimpleDto> selectAll() {
-		// TODO Auto-generated method stub
 		return template.selectList(ns + "selectAll");
 	}
 
@@ -56,7 +52,14 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 		// TODO Auto-generated method stub
 		return template.insert(ns+"insertmy",uteam);
 	}
+	public List<MyTeamDto> selectAllmyteam() {
+		return template.selectList(ns + "selectAllmyteam");
+	}
 
+	@Override
+	public List<LocationDto> selectSido() throws Exception {
+		return template.selectList(ns + "selectsido");
+	}
 
 	
 

@@ -3,7 +3,7 @@
   "version": "1.9.0",
   "description": "Material Kit React. Coded by Creative Tim",
   "private": true,
-  "proxy": "http://localhost:9999/*",
+  "proxy": "http://localhost:8000/*",
   "main": "src/index.js",
   "dependencies": {
     "@material-ui/core": "4.10.0",

@@ -2,6 +2,7 @@ import "./Dropzone.scss";
 
 import React, { useEffect, useRef, useState } from "react";
 
+import Button from "components/CustomButtons/Button.js";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -146,6 +147,7 @@ const Dropzone = (props) => {
       const formData = new FormData();
       formData.append("file", validFiles[i]);
       formData.append("key", "");
+      console.log("userid??", userID)
 
       axios
         .post(
@@ -243,13 +245,7 @@ const Dropzone = (props) => {
             </div>
           ))}
         </div>
-        {unsupportedFiles.length === 0 && validFiles.length ? (
-          <button className="file-upload-btn" onClick={() => uploadFiles()}>
-            Upload Files
-          </button>
-        ) : (
-          ""
-        )}
+  
       </div>
       <div className="modal" ref={modalRef}>
         <div className="overlay"></div>
@@ -258,7 +254,13 @@ const Dropzone = (props) => {
         </span>
         <div className="modal-image" ref={modalImageRef}></div>
       </div>
-
+      {unsupportedFiles.length === 0 && validFiles.length ? (
+          <Button className="file-upload-btn" onClick={() => uploadFiles()}>
+            Upload Files
+          </Button>
+        ) : (
+          ""
+        )}
       <div className="upload-modal" ref={uploadModalRef}>
         <div className="overlay"></div>
         <div className="close" onClick={() => closeUploadModal()}>

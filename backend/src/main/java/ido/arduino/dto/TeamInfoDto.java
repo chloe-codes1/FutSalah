@@ -1,6 +1,6 @@
 package ido.arduino.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Alias("TeamInfoDTO")
 public class TeamInfoDto {
 	// 팀정보
 	private int teamID;

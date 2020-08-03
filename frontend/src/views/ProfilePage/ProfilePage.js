@@ -17,7 +17,6 @@ import GridItem from "components/Grid/GridItem.js";
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
 import Modal from "@material-ui/core/Modal";
 import Parallax from "components/Parallax/Parallax.js";
 import Typography from "@material-ui/core/Typography";
@@ -79,6 +78,7 @@ export default function ProfilePage(props) {
 
   const handleClose = () => {
     setOpen(false);
+    alert("더 노력하는 FutSalah가 되겠습니다!")
   };
 
   const handleDropZone = () => {
@@ -137,6 +137,18 @@ export default function ProfilePage(props) {
       .then((res) => {
         console.log("get user info succeed!");
         console.log("res??", res.data);
+        let profileURL = res.data.profileURL;
+        if (profileURL){
+          if (profileURL.slice(0,33) == 'https://lh5.googleusercontent.com'){
+            
+          }else{
+            profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL
+          }
+        }else{
+          profileURL = profile
+        }
+
+
         const userUpdate = {
           ...user,
           userID: res.data.userID,
@@ -146,7 +158,7 @@ export default function ProfilePage(props) {
           age: res.data.age,
           weight: res.data.weight,
           height: res.data.height,
-          profileURL: res.data.profileURL,
+          profileURL:  profileURL,
         };
         formik.setValues(userUpdate);
         setUser(userUpdate);
@@ -187,7 +199,6 @@ export default function ProfilePage(props) {
       age: Number(age?._d?.getFullYear()),
       weight: formik.values.weight,
       height: formik.values.height,
-      profileURL: formik.values.profileURL,
     };
     console.log("updatedUser", updatedUser);
 
@@ -252,9 +263,9 @@ export default function ProfilePage(props) {
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
-                  <Button onClick={handleDropZone} color="white">
-                    <img src={profile} alt="..." className={imageClasses} />
-                  </Button>
+                <Tooltip title="프로파일 사진 변경하기" interactive>
+                    <img src={formik.values.profileURL} className={imageClasses} onClick={handleDropZone} style={{cursor: "pointer"}}/>
+                  </Tooltip>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{userinfo.name}</h3>
                   </div>
@@ -289,13 +300,14 @@ export default function ProfilePage(props) {
                   </GridItem>
 
                   <GridItem>
+                    <span className={classes.buttonTitle}>  {user.age > 0? "나이:"+ user?.age +"세" : ""}</span>
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
-                      value={age ? age : user.age}
                       onChange={(value) => setAge(value)}
                     />
                   </GridItem>
+             
                 </GridContainer>
                 <GridContainer>
                   <GridItem className={classes.marginBottom}>
@@ -513,16 +525,16 @@ export default function ProfilePage(props) {
             >
               <Fade in={dropZone}>
                 <div className={modal.paper} align="center">
+                 
+                  <Grid mt={5}>
+                    <Dropzone align="center" userID={user.userID} />
+                  </Grid>
                   <Typography
-                    variant="h5"
                     id="transition-modal-title"
                     style={{ marginTop: "10px", marginBottom: "15px" }}
                   >
                     당신을 나타내는 사진을 업로드 하세요!
                   </Typography>
-                  <Grid mt={5}>
-                    <Dropzone align="center" userID={user.userID} />
-                  </Grid>
                 </div>
               </Fade>
             </Modal>
