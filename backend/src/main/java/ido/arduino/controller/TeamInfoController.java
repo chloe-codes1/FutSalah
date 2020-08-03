@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserDTO;
 import ido.arduino.service.TeamInfoService;
 import io.swagger.annotations.ApiOperation;
 
@@ -54,13 +55,19 @@ public class TeamInfoController {
 		return currentTeam;
 	}
 	
+	// 팀원 정보 조회 by teamID
+	@GetMapping("/team/member/{teamID}")
+	public @ResponseBody List<UserDTO> getAllCrewInfo(@PathVariable int teamID){
+		List<UserDTO> list = tService.getAllCrewInfo(teamID);
+		return list;
+	}
+	
 	// 팀 이름 중복검사
 	@GetMapping("/team/check/{name}")
 	public @ResponseBody int checkIfExists(@PathVariable String name) {
 		return tService.checkIfExists(name);
 	}
 	
-	// de
 	// 나의 팀 목록에서 확인하기
 	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
 	@PostMapping("/team/my")
