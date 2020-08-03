@@ -27,4 +27,6 @@ public interface TeamInfoService {
 	int checkIfExists(String name);
 	
 	List<UserDTO> getAllCrewInfo(int teamID);
+	
+	List<TeamInfoDto> searchTeamByName(String name);
 }

@@ -26,4 +26,9 @@
 		INNER JOIN team on userteamconn.teamID = team.teamID
 		WHERE team.teamID = #{teamID}
 	</select>
+	
+	<!-- 팀 이름으로 검색 -->
+	<select id="searchTeamByName" parameterType="String" resultType="TeamInfoDTO">
+		SELECT*FROM team WHERE name LIKE CONCAT('%', #{name},'%')
+	</select>
 </mapper>
