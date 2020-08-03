@@ -9,6 +9,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.repo.TeamInfoRepo;
 
 @Service
@@ -42,15 +43,12 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public List<MyTeamDto> selectAllmyteam() {
+	public List<MyTeamDto> selectAllmyteam(String id) {
 		// TODO Auto-generated method stub
-		return tRepo.selectAllmyteam();
+		return tRepo.selectAllmyteam(id);
 	}
 
-	@Override
-	public List<LocationDto> selectSido() throws Exception {
-		// TODO Auto-generated method stub
-		return tRepo.selectSido();
-	}
+
+
 
 }

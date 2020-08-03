@@ -60,8 +60,6 @@ public class UserController {
 		System.out.println("current user?" + loggedUser);
 		return loggedUser;
 	}
-	
-
 
 
 	@PostMapping("/user")

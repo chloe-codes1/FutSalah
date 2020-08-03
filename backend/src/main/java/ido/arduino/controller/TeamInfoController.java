@@ -22,11 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
-import ido.arduino.dto.UserDTO;
+import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.service.TeamInfoService;
-import ido.arduino.dto.TeamInfoDto;
-import ido.arduino.service.TeamInfoService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -49,25 +46,19 @@ public class TeamInfoController {
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
 
-	// de
 	// 나의 팀 목록에서 확인하기
 	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
 	@PostMapping("/team/my")
-	public ResponseEntity<List<MyTeamDto>> selectAllmyteam() throws Exception {
+	public ResponseEntity<List<MyTeamDto>> selectAllmyteam
+	(@RequestBody Map<String, String> param) throws Exception {
+		
+		 String id  = param.get("socialID");
 		logger.debug("selectAllmyteam - 호출");
 		System.out.println("check.............................");
-		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(), HttpStatus.OK);
+		
+		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(id), HttpStatus.OK);
 	}
 
-	// 나의 팀 목록에서 지우기 -> 팀나가기
-	// @ApiOperation(value = "내가 속한 팀을삭제한다 ", response = List.class)
-	// @PostMapping("/team/my")
-	// public ResponseEntity<List<MyTeamDto>> selectAllmyteam () throws Exception {
-	// logger.debug("selectAllmyteam - 호출");
-	// System.out.println("check.............................");
-	// return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(),
-	// HttpStatus.OK);
-	// }
 
 	// 팀 생성하기
 	@ApiOperation(value = "새로운 팀 정보 등록.", response = String.class)
@@ -75,6 +66,7 @@ public class TeamInfoController {
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody TeamInfoDto teamInfo) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
+			
 			int result = tService.insert(teamInfo);
 			entity = handleSuccess(teamInfo.getClass() + "가 추가되었습니다.");
 		} catch (RuntimeException e) {
@@ -82,21 +74,8 @@ public class TeamInfoController {
 		}
 		return entity;
 	}
-	
-	//팀 생성한 내용 나의 팀 목록에 추가 
-	@PostMapping("/teammy")
-	public ResponseEntity<Map<String, Object>> insertmy(@RequestBody TeamInfoDto teamInfo) {
-		ResponseEntity<Map<String, Object>> entity = null;
-		try {
-			int result = tService.insert(teamInfo);
-			entity = handleSuccess(teamInfo.getClass() + "가 추가되었습니다.");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
-		}
-		return entity;
-	}
-	
-		
+
+
 		
 	// 팀정보 수정하기
 	@ApiOperation(value = "팀 정보 수정.", response = String.class)

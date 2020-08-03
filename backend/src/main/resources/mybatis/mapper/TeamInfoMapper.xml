@@ -12,13 +12,10 @@
 	</insert>
 	
 	<!-- 목록에 추가하기 -->
-
 	<insert id="insertmy" parameterType="userteamconn">
-		insert into userteamconn ( userID,teamID)
+		insert into userteamconn (userID,teamID)
 		values (#{userID},#{teamID})
 	</insert>
-	
-	
 
 
 	<!-- 팀 수정 -->
@@ -57,7 +54,7 @@
 		inner join userteamconn on team.teamID = userteamconn.teamID
 		inner join user
 		on userteamconn.userID=user.userID
-		where user.userID=1;
+		where user.userID=#{userID};
 	</select>
 
 	<!-- 나의 팀에서 나가기 -->

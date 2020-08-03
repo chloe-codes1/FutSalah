@@ -6,6 +6,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserTeamConnDto;
 
 public interface TeamInfoRepo {
 
@@ -19,8 +20,8 @@ public interface TeamInfoRepo {
 	public List<TeamInfoSimpleDto> selectAll();
 
 	// 나의 팀 정보
-	public List<MyTeamDto> selectAllmyteam();
+	public List<MyTeamDto> selectAllmyteam(String id);
 
-	// 선택 옵션
-	List<LocationDto> selectSido() throws Exception;
+	int insertmy(UserTeamConnDto uteam);
+
 }
