@@ -23,9 +23,16 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 
 	@Override
 	public int insert(TeamInfoDto info) {
+		// 팀 정보 삽입
 		return template.insert(ns + "insert", info);
 	}
 
+	@Override
+	public List<MyTeamDto> selectAllmyteam(String id) {
+		//나의 팀 목록 받아오기 
+		return template.selectList(ns + "selectAllmyteam",id);
+	}
+	
 	@Override
 	public int update(TeamInfoDto info) {
 		return template.update(ns + "update", info);
@@ -38,28 +45,30 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 
 	@Override
 	public List<TeamInfoSimpleDto> selectAll() {
+		// 모든 팀 목록 
 		return template.selectList(ns + "selectAll");
 	}
 
-	@Override
-	public List<MyTeamDto> selectAllmyteam(String id) {
-		// TODO Auto-generated method stub
-		return template.selectList(ns + "selectAllmyteam",id);
-	}
+	
 
 	@Override
 	public int insertmy(UserTeamConnDto uteam) {
 		// TODO Auto-generated method stub
 		return template.insert(ns+"insertmy",uteam);
 	}
-	public List<MyTeamDto> selectAllmyteam() {
-		return template.selectList(ns + "selectAllmyteam");
+
+	@Override
+	public int updatemy(UserDTO userID) {
+		// TODO Auto-generated method stub
+		return template.update(ns+"updatemy", userID);
 	}
 
 	@Override
-	public List<LocationDto> selectSido() throws Exception {
-		return template.selectList(ns + "selectsido");
+	public int selectlast() {
+		// TODO Auto-generated method stub
+		return template.selectOne(ns  +"selectlast");
 	}
+
 
 	
 

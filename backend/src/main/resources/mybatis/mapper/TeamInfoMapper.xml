@@ -7,16 +7,25 @@
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
 		insert into team ( name,
-		description,profileURL)
-		values (#{name},#{description}, #{profileURL})
+		description,profileURL,leader)
+		values (#{name},#{description}, #{profileURL},#{leader})
 	</insert>
+	
+	<select id="selectlast"  resultType="int">
+		select last_insert_id()	
+	</select>
+	
+	<!-- 목록에 추가하기 -->
+	<update id="updatemy" parameterType="teaminfo">
+		update team set leader= #{leader}
+	</update>
 	
 	<!-- 목록에 추가하기 -->
 	<insert id="insertmy" parameterType="userteamconn">
 		insert into userteamconn (userID,teamID)
 		values (#{userID},#{teamID})
 	</insert>
-
+	
 
 	<!-- 팀 수정 -->
 	<update id="update" parameterType="teaminfo">
@@ -38,11 +47,7 @@
 		team.draws, team.defeats, team.profileURL
 		from team
 	</select>
-
-	<!-- 팀찾기 -지역, 검색 -->
-	<select id="selectsido" resultType="location">
-		select
-	</select>
+	
 
 
 	<!-- 나의 팀목록 로고, 팀명, 팀설명 -->
@@ -52,8 +57,7 @@
 		team.description, team.profileURL, team.teamID
 		from team
 		inner join userteamconn on team.teamID = userteamconn.teamID
-		inner join user
-		on userteamconn.userID=user.userID
+		inner join user on userteamconn.userID=user.userID
 		where user.userID=#{userID};
 	</select>
 
