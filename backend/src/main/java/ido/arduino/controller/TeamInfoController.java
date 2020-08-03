@@ -129,6 +129,13 @@ public class TeamInfoController {
 		return entity;
 	}
 	
+	// 팀 검색 by name
+	@GetMapping("/team/search/{name}")
+	public @ResponseBody List<TeamInfoDto> searchTeamByName (@PathVariable String name){
+		List<TeamInfoDto> list = tService.searchTeamByName(name);
+		return list;
+	}
+	
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", true);
@@ -144,5 +151,4 @@ public class TeamInfoController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	// TODO: Team 검색
 }
