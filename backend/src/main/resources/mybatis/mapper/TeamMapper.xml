@@ -12,7 +12,7 @@
 	</select>
 	
 	<!-- 팀 이름 중복 검사 -->
-	<select id="checkIfExists" parameterType="String">
+	<select id="checkIfExists" parameterType="String" resultType="int">
 		SELECT COUNT(name) FROM team WHERE name= #{name}
 	</select>
 

@@ -46,6 +46,7 @@ public class TeamInfoController {
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
 	
+	// 팀 정보 조회 by teamID
 	@ApiOperation(value = "팀 leader를 포함한 팀 정보를 반환한다.", response = String.class)
 	@GetMapping("/team/{teamID}")
 	public @ResponseBody TeamInfoDto getTeamInfo(@PathVariable int teamID) {
@@ -53,6 +54,11 @@ public class TeamInfoController {
 		return currentTeam;
 	}
 	
+	// 팀 이름 중복검사
+	@GetMapping("/team/check/{name}")
+	public @ResponseBody int checkIfExists(@PathVariable String name) {
+		return tService.checkIfExists(name);
+	}
 	
 	// de
 	// 나의 팀 목록에서 확인하기
