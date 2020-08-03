@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ido.arduino.dao.TeamMapper;
 import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
@@ -16,6 +17,9 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Autowired
 	TeamInfoRepo tRepo;
+	
+	@Autowired
+	TeamMapper teamMapper;
 
 	@Override
 	public int insert(TeamInfoDto info) {
@@ -51,6 +55,16 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public List<LocationDto> selectSido() throws Exception {
 		// TODO Auto-generated method stub
 		return tRepo.selectSido();
+	}
+
+	@Override
+	public TeamInfoDto getTeamInfo(int teamID) {
+		return teamMapper.getTeamInfo(teamID);
+	}
+
+	@Override
+	public int checkIfExists(String name) {
+		return teamMapper.checkIfExists(name);
 	}
 
 }

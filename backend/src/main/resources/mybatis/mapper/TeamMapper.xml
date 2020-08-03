@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.dao.TeamMapper">
+	<!-- teamID로 leader를 포함한 팀 전체 정보 -->
+	<select id="getTeamInfo" parameterType="int"
+		resultType="TeamInfoDTO">
+		SELECT name, description, leader, wins, defeats, draws FROM
+		team WHERE teamID = #{teamID}
+	</select>
+	
+	<!-- 팀 이름 중복 검사 -->
+	<select id="checkIfExists" parameterType="String">
+		SELECT COUNT(name) FROM team WHERE name= #{name}
+	</select>
+
+</mapper>

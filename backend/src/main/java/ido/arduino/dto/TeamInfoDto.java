@@ -1,5 +1,7 @@
 package ido.arduino.dto;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Alias("TeamInfoDTO")
 public class TeamInfoDto {
 	// 팀정보
 	private int teamID;
@@ -19,6 +22,7 @@ public class TeamInfoDto {
 	private Integer mileage;
 	private String profileURL;
 	private String name;
+	private int leader;
 
 	/*
 	 * //팀이름 중복 public int compareTo(TeamInfoDto o) {
