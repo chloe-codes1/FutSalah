@@ -20,4 +20,8 @@ public interface TeamInfoService {
 	List<MyTeamDto> selectAllmyteam(); // 나의 팀 목록
 
 	List<LocationDto> selectSido() throws Exception;// 서울,,,
+	
+	TeamInfoDto getTeamInfo(int teamID);
+	
+	int checkIfExists(String name);
 }
