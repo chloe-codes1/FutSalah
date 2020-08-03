@@ -12,7 +12,7 @@
 	
 	<!-- 회원 정보 수정 -->
 	<update id="update" parameterType="UserDTO">
-		UPDATE user SET name = #{name}, age = #{age}, position = #{position}, height = #{height}, weight = #{weight}
+		UPDATE user SET email=#{email}, name = #{name}, age = #{age}, position = #{position}, height = #{height}, weight = #{weight}
 		WHERE userID = #{userID}
 	</update>
 	

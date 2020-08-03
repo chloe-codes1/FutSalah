@@ -78,6 +78,7 @@ export default function ProfilePage(props) {
 
   const handleClose = () => {
     setOpen(false);
+    alert("더 노력하는 FutSalah가 되겠습니다!")
   };
 
   const handleDropZone = () => {
