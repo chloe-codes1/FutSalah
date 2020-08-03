@@ -10,6 +10,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserDTO;
 import ido.arduino.repo.TeamInfoRepo;
 
 @Service
@@ -65,6 +66,11 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	@Override
 	public int checkIfExists(String name) {
 		return teamMapper.checkIfExists(name);
+	}
+
+	@Override
+	public List<UserDTO> getAllCrewInfo(int teamID) {
+		return teamMapper.getAllCrewInfo(teamID);
 	}
 
 }

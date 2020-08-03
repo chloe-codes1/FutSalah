@@ -6,6 +6,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserDTO;
 
 public interface TeamInfoService {
 
@@ -24,4 +25,6 @@ public interface TeamInfoService {
 	TeamInfoDto getTeamInfo(int teamID);
 	
 	int checkIfExists(String name);
+	
+	List<UserDTO> getAllCrewInfo(int teamID);
 }
