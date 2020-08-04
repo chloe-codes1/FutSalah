@@ -10,6 +10,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.repo.TeamInfoRepo;
 
@@ -24,7 +25,12 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Override
 	public int insert(TeamInfoDto info) {
-		return tRepo.insert(info);
+		int result = tRepo.insert(info);
+		if (result == 1) {
+			return tRepo.selectlast();
+		} else {
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
@@ -43,14 +49,14 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public List<MyTeamDto> selectAllmyteam() {
-		return tRepo.selectAllmyteam();
+	public List<MyTeamDto> selectAllmyteam(String id) {
+		// TODO Auto-generated method stub
+		return tRepo.selectAllmyteam(id);
 	}
 
-	@Override
-	public List<LocationDto> selectSido() throws Exception {
-		return tRepo.selectSido();
-	}
+
+
+
 
 	@Override
 	public TeamInfoDto getTeamInfo(int teamID) {
@@ -70,6 +76,18 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	@Override
 	public List<TeamInfoDto> searchTeamByName(String name) {
 		return teamMapper.searchTeamByName(name);
+	}
+
+	@Override
+	public int updatemy(UserDTO userID) {
+		// TODO Auto-generated method stub
+		return tRepo.updatemy(userID);
+	}
+
+	@Override
+	public int insertmy(UserTeamConnDto uteam) {
+		// TODO Auto-generated method stub
+		return tRepo.insertmy(uteam);
 	}
 
 }
