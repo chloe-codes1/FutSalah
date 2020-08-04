@@ -24,10 +24,10 @@ public class TeamInfoDto {
 	private String name;
 	private int leader; // 팀을 생성한 userid
 
-	public static TeamInfoDto of(TeamCreateRequest tcr, int userid) {
+	public static TeamInfoDto of(TeamCreateRequest tcr, int userid, String code) {
 		TeamInfoDto tid = new TeamInfoDto(
 					0, 0, 0, 0, 0,
-					"", tcr.getDescription(), 0,
+					code, tcr.getDescription(), 0,
 					 "", tcr.getName(),userid
 				);
 		

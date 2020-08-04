@@ -7,8 +7,8 @@
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
 		insert into team ( name,
-		description,profileURL,leader)
-		values (#{name},#{description}, #{profileURL},#{leader})
+		description,profileURL,leader, code)
+		values (#{name},#{description}, #{profileURL},#{leader}, #{code})
 	</insert>
 	
 	<select id="selectlast"  resultType="int">
