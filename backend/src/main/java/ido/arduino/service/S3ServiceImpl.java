@@ -61,6 +61,7 @@ public class S3ServiceImpl implements S3Service {
         String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
         LOGGER.info("Uploading file with name= " + uniqueFileName);
         userMapper.uploadProfileImage(userID, uniqueFileName);
+        
         final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, uniqueFileName, file);
         amazonS3.putObject(putObjectRequest);
     }
