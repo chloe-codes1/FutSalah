@@ -10,19 +10,11 @@
 	<typeAliases>
 		<!-- 사용할 DTO들을 예약어로 등록 -->
 		<typeAlias type="ido.arduino.dto.TeamInfoDto" alias="teaminfo"/>
-		<typeAlias type="ido.arduino.dto.TeamInfoSimpleDto" alias="teamsimple"/>
-		
-		<typeAlias type="ido.arduino.dto.MyTeamDto" alias="myteam"/>
-		<typeAlias type="ido.arduino.dto.LocationDto" alias="location"/>
 		
 	</typeAliases>
 	<mappers>
 		<!-- 사용할 mapper 등록 -->
 		<mapper resource="mybatis/mapper/TeamInfoMapper.xml" />
 		<mapper resource="mybatis/mapper/UserMapper.xml"/>
-<<<<<<< HEAD
-		<mapper resource="mybatis/mapper/TeamMapper.xml"/>
-=======
->>>>>>> e09385afcccf6866d4c06c31f6e1cd93e3044047
 	</mappers>
 </configuration>

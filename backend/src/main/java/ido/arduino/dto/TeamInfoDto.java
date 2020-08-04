@@ -22,8 +22,17 @@ public class TeamInfoDto {
 	private Integer mileage;
 	private String profileURL;
 	private String name;
-	private int leader;
+	private int leader; // 팀을 생성한 userid
 
+	public static TeamInfoDto of(TeamCreateRequest tcr, int userid) {
+		TeamInfoDto tid = new TeamInfoDto(
+					0, 0, 0, 0, 0,
+					"", tcr.getDescription(), 0,
+					 "", tcr.getName(),userid
+				);
+		
+		return tid;
+	}
 	/*
 	 * //팀이름 중복 public int compareTo(TeamInfoDto o) {
 	 * 

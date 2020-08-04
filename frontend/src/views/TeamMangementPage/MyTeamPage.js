@@ -1,33 +1,38 @@
+import React, { useState, useContext, useEffect, useCallback } from "react";
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
+
+import classNames from "classnames";
+
+// component
+import Header from "components/Header/Header.js";
+import Footer from "components/Footer/Footer.js";
+//import GridContainer from "components/Grid/GridContainer.js";
+//import GridItem from "components/Grid/GridItem.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+import Parallax from "components/Parallax/Parallax.js";
+
+import axios from "axios";
+
+import Icon from "@material-ui/core/Icon";
+
+import styles from "assets/jss/material-kit-react/views/profilePage.js";
 import {
-  Avatar,
   Button,
   Divider,
   Grid,
   List,
   ListItem,
   ListItemAvatar,
-  ListItemSecondaryAction,
+  Avatar,
   ListItemText,
+  ListItemSecondaryAction,
 } from "@material-ui/core";
-import React, { useCallback, useContext, useEffect, useState } from "react";
 
 import CreateTeamDialog from "../../components/Dialog/CreateTeamDialog.js";
-import Footer from "components/Footer/Footer.js";
-// component
-import Header from "components/Header/Header.js";
-//import GridContainer from "components/Grid/GridContainer.js";
-//import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Icon from "@material-ui/core/Icon";
-// react components for routing our app without refresh
-import { Link } from "react-router-dom";
-import Parallax from "components/Parallax/Parallax.js";
 import UserContext from "../../contexts/UserContext.js";
-import axios from "axios";
-import classNames from "classnames";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
 
@@ -39,7 +44,7 @@ function MyTeamPage(props) {
   useEffect(() => {
     axios({
       method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+      url: "http://i3a112.p.ssafy.io:8000/api/team/my",
       data: {
         socialID: socialID,
       },
@@ -69,7 +74,7 @@ function MyTeamPage(props) {
   const refreshTeam = useCallback(() => {
     axios({
       method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+      url: "http://i3a112.p.ssafy.io:8000/api/team/my",
       data: {
         socialID: socialID,
       },
@@ -151,10 +156,7 @@ function MyTeamPage(props) {
                         <ListItemText primary={team.name} />
                         <ListItemText primary={team.description} />
                         <ListItemSecondaryAction>
-                          <Link
-                            to={"/teaminfo/" + team.teamID}
-                            className={classes.link}
-                          >
+                          <Link to={"/teaminfo/" + team.teamID} className={classes.link}>
                             <Button>팀 상세</Button>
                           </Link>
                           <Button>팀 나가기</Button>
