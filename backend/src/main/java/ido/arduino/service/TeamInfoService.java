@@ -6,6 +6,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserDTO;
 
 public interface TeamInfoService {
 
@@ -20,4 +21,12 @@ public interface TeamInfoService {
 	List<MyTeamDto> selectAllmyteam(); // 나의 팀 목록
 
 	List<LocationDto> selectSido() throws Exception;// 서울,,,
+	
+	TeamInfoDto getTeamInfo(int teamID);
+	
+	int checkIfExists(String name);
+	
+	List<UserDTO> getAllCrewInfo(int teamID);
+	
+	List<TeamInfoDto> searchTeamByName(String name);
 }

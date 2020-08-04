@@ -17,15 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.UserDTO;
 import ido.arduino.service.TeamInfoService;
-import ido.arduino.dto.TeamInfoDto;
-import ido.arduino.service.TeamInfoService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -47,8 +46,28 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
-
-	// de
+	
+	// 팀 정보 조회 by teamID
+	@ApiOperation(value = "팀 leader를 포함한 팀 정보를 반환한다.", response = String.class)
+	@GetMapping("/team/{teamID}")
+	public @ResponseBody TeamInfoDto getTeamInfo(@PathVariable int teamID) {
+		TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
+		return currentTeam;
+	}
+	
+	// 팀원 정보 조회 by teamID
+	@GetMapping("/team/member/{teamID}")
+	public @ResponseBody List<UserDTO> getAllCrewInfo(@PathVariable int teamID){
+		List<UserDTO> list = tService.getAllCrewInfo(teamID);
+		return list;
+	}
+	
+	// 팀 이름 중복검사
+	@GetMapping("/team/check/{name}")
+	public @ResponseBody int checkIfExists(@PathVariable String name) {
+		return tService.checkIfExists(name);
+	}
+	
 	// 나의 팀 목록에서 확인하기
 	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
 	@PostMapping("/team/my")
@@ -109,7 +128,14 @@ public class TeamInfoController {
 		}
 		return entity;
 	}
-
+	
+	// 팀 검색 by name
+	@GetMapping("/team/search/{name}")
+	public @ResponseBody List<TeamInfoDto> searchTeamByName (@PathVariable String name){
+		List<TeamInfoDto> list = tService.searchTeamByName(name);
+		return list;
+	}
+	
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", true);
@@ -125,5 +151,4 @@ public class TeamInfoController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	// TODO: Team 검색
 }
