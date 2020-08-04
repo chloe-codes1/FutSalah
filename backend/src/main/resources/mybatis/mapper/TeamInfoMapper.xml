@@ -42,8 +42,9 @@
 	</delete>
 
 	<!-- 팀찾기페이지- 목록에 띄우는 것 -->
-	<select id="selectAll"  resultType="teamsimple">
-		select team.name, team.wins, team.draws, team.defeats, team.profileURL
+	<select id="selectAll" resultType="teamsimple">
+		select team.name, team.wins,
+		team.draws, team.defeats, team.profileURL
 		from team
 	</select>
 	
