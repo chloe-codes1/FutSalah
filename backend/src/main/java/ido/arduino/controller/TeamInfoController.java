@@ -110,8 +110,10 @@ public class TeamInfoController {
 		ResponseEntity<Map<String, Object>> entity = null;
 
 		try {
-			// TODO: 팀ID 가장 큰(가장 최근) 번호 가져와서 그 다음 번호로 QR내용 생성
-			createQRCodeImage("TeamID", 350, 350, 0x00000000, 0xFFFFFFFF);
+			// 생성 시 부여 받을 TeamID 값
+			int id = getAutoIncrement();
+			
+			createQRCodeImage(Integer.toString(id), 350, 350, 0x00000000, 0xFFFFFFFF);
 		} catch (WriterException e) {
 			System.out.println("QR생성 실패");
 		} catch (IOException e) {
@@ -190,14 +192,22 @@ public class TeamInfoController {
 		MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor, qrLightColor); // 진한색, 연한색
 		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
 
-		File temp = File.createTempFile(text, ".png");
+		//File temp = File.createTempFile(text, ".png");
 		
 		File file = new File("c:\\qrtest.jpg");        // 파일의 이름을 설정한다
         ImageIO.write(qrImage, "jpg", file);                     // write메소드를 이용해 파일을 만든다
 		
-		ImageIO.write(qrImage, "png", temp); // temp 위치에 qr이 이미지 생성됨.
-		InputStream is = new FileInputStream(temp.getAbsolutePath()); // 인풋 스트림으로 변환(향후 S3로 업로드하기위한 작업)
+		//ImageIO.write(qrImage, "png", temp); // temp 위치에 qr이 이미지 생성됨.
+		//InputStream is = new FileInputStream(temp.getAbsolutePath()); // 인풋 스트림으로 변환(향후 S3로 업로드하기위한 작업)
 
 		// 로직처리후 temp.delete() 와 is.close()를 해줘야함.
+	}
+	
+	// 다음 auto-increment 값 가져오기
+	public int getAutoIncrement() {
+		int autoIn = 0;
+		autoIn = tService.getNextTeamId();
+		
+		return autoIn;
 	}
 }
