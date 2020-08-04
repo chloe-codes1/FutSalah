@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="false" />
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+	<typeAliases>
+		<!-- 사용할 DTO들을 예약어로 등록 -->
+		<typeAlias type="ido.arduino.dto.TeamInfoDto" alias="teaminfo"/>
+		<typeAlias type="ido.arduino.dto.TeamInfoSimpleDto" alias="teamsimple"/>
+		
+		<typeAlias type="ido.arduino.dto.MyTeamDto" alias="myteam"/>
+		<typeAlias type="ido.arduino.dto.LocationDto" alias="location"/>
+		
+	</typeAliases>
+	<mappers>
+		<!-- 사용할 mapper 등록 -->
+		<mapper resource="mybatis/mapper/TeamInfoMapper.xml" />
+		<mapper resource="mybatis/mapper/UserMapper.xml"/>
+		<mapper resource="mybatis/mapper/TeamMapper.xml"/>
+	</mappers>
+</configuration>
