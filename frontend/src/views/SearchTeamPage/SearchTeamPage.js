@@ -216,7 +216,7 @@ export default function SearchTeamPage(props) {
                         </h4>
                       </CardBody>
                       <CardFooter className={classes.cardFooter}>
-                        <Link to={"/teaminfo/1"}>
+                        <Link to={`/teaminfo/${t.teamId}`}>
                           <Button color="success" size="lg">
                             팀 정보
                           </Button>

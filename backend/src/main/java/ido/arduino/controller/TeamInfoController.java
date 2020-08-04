@@ -53,8 +53,7 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
-	
-	
+
 	// 팀 정보 조회 by teamID
 	@ApiOperation(value = "팀 leader를 포함한 팀 정보를 반환한다.", response = String.class)
 	@GetMapping("/team/{teamID}")
@@ -62,20 +61,20 @@ public class TeamInfoController {
 		TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
 		return currentTeam;
 	}
-	
+
 	// 팀원 정보 조회 by teamID
 	@GetMapping("/team/member/{teamID}")
-	public @ResponseBody List<UserDTO> getAllCrewInfo(@PathVariable int teamID){
+	public @ResponseBody List<UserDTO> getAllCrewInfo(@PathVariable int teamID) {
 		List<UserDTO> list = tService.getAllCrewInfo(teamID);
 		return list;
 	}
-	
+
 	// 팀 이름 중복검사
 	@GetMapping("/team/check/{name}")
 	public @ResponseBody int checkIfExists(@PathVariable String name) {
 		return tService.checkIfExists(name);
 	}
-	
+
 	// 나의 팀 목록에서 확인하기
 	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
 	@PostMapping("/team/my")
@@ -138,14 +137,14 @@ public class TeamInfoController {
 		}
 		return entity;
 	}
-	
+
 	// 팀 검색 by name
 	@GetMapping("/team/search/{name}")
-	public @ResponseBody List<TeamInfoDto> searchTeamByName (@PathVariable String name){
+	public @ResponseBody List<TeamInfoDto> searchTeamByName(@PathVariable String name) {
 		List<TeamInfoDto> list = tService.searchTeamByName(name);
 		return list;
 	}
-	
+
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", true);
