@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// 생성한 api url로 접근 허용하기
 			"/api/login", "/api/user", "/api/user/*", "/api/user/upload/*",
 			"/api/team", "/api/team/*", "/api/team/check/*","/api/team/member/*", "/api/team/search/*",
+			"/api/match/fsearch/*",
 			// assets 허용
 			"assets/*"
 			};

@@ -15,7 +15,6 @@ import ido.arduino.dto.UserTeamConnDto;
 
 @Repository
 public class TeamInfoRepoImpl implements TeamInfoRepo {
-
 	private static String ns = "ido.arduino.mapper.TeamInfoDto.";
 
 	@Autowired
@@ -49,8 +48,6 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 		return template.selectList(ns + "selectAll");
 	}
 
-	
-
 	@Override
 	public int insertmy(UserTeamConnDto uteam) {
 		// TODO Auto-generated method stub
@@ -68,8 +65,4 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 		// TODO Auto-generated method stub
 		return template.selectOne(ns  +"selectlast");
 	}
-
-
-	
-
 }
