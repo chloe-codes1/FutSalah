@@ -12,7 +12,6 @@
 	
 	<!-- 회원 정보 수정 -->
 	<update id="update" parameterType="UserDTO">
-<<<<<<< HEAD
 		UPDATE user SET email=#{email}, name = #{name}, age = #{age}, position = #{position}, height = #{height}, weight = #{weight}
 		WHERE userID = #{userID}
 	</update>
@@ -21,12 +20,6 @@
 		UPDATE user SET profileURL=#{uniqueFileName} WHERE userID=#{userID}
 	</update>
 	
-=======
-		UPDATE user SET name = #{name}, age = #{age}, position = #{position}, height = #{height}, weight = #{weight}
-		WHERE userID = #{userID}
-	</update>
-	
->>>>>>> e09385afcccf6866d4c06c31f6e1cd93e3044047
 	<!-- 회원 삭제 -->
 	<delete id="delete" parameterType="int">
 		DELETE FROM user WHERE userID = #{userID}
@@ -37,20 +30,14 @@
 		SELECT*FROM user WHERE socialID=#{socialID}
 	</select>
 	
-<<<<<<< HEAD
 	<!-- userID로 User 찾기 -->
 	
 	
-=======
->>>>>>> e09385afcccf6866d4c06c31f6e1cd93e3044047
 	<!-- Search users by name -->
 	<select id="searchUsersByName" parameterType="String" resultType="UserDTO">
 		SELECT * FROM user WHERE name LIKE CONCAT('%',#{name},'%')
 	</select>
 
-<<<<<<< HEAD
 	
-=======
->>>>>>> e09385afcccf6866d4c06c31f6e1cd93e3044047
 
 </mapper>

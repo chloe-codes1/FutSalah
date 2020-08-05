@@ -199,7 +199,6 @@ public class TeamInfoController {
 			throws WriterException, IOException {
 		QRCodeWriter qrCodeWriter = new QRCodeWriter();
 		BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height); // 텍스트, 바코드 포맷,가로,세로
-
 		MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor, qrLightColor); // 진한색, 연한색
 		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
 
@@ -219,7 +218,7 @@ public class TeamInfoController {
 	// 다음 auto-increment 값 가져오기
 	public int getAutoIncrement() {
 		int autoIn = 0;
-		autoIn = tService.getNextTeamId();
+		autoIn = tService.getNextTeamId() + 1;
 		
 		return autoIn;
 	}

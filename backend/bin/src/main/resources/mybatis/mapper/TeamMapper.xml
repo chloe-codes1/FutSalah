@@ -29,6 +29,11 @@
 	
 	<!-- 팀 이름으로 검색 -->
 	<select id="searchTeamByName" parameterType="String" resultType="TeamInfoDTO">
-		SELECT*FROM team WHERE name LIKE CONCAT('%', #{name},'%')
+		SELECT * FROM team WHERE name LIKE CONCAT('%', #{name},'%')
+	</select>
+	
+	<!-- 다음 Auto_increment 값 반환 -->
+	<select id="getNextTeamId" resultType="int">
+		SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'team' AND table_schema = DATABASE()
 	</select>
 </mapper>
