@@ -15,11 +15,10 @@ import lombok.NoArgsConstructor;
 public class Matching2DTO {
 	private int matchID;
 	private int homeTeamID;
+	private String homeName;
 	private int awayTeamID;
-	private Date date;
+	private String awayName;
 	private int time;
-	private int isBooked;
-	private int locationID;
-	private int state;
-	private int stadium;
+//	private Date date;
+//	private int stadium;
 }
