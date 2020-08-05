@@ -34,13 +34,12 @@ const headerLinksStyle = (theme) => ({
     },
   },
   listItemText: {
-    padding: "16px 0 16px 0",
-    margin: "0 8px 0 8px",
+    padding: "10px 0 10px 0",
+    margin: "0 5px 0 3px",
   },
   ButtonNavLink: {
     width: "20px",
     marginRight: "10px",
-    margin: "8px 0 8px 0",
     [theme.breakpoints.down("sm")]: {
       width: "30%",
       marginLeft: "30px",
@@ -66,7 +65,7 @@ const headerLinksStyle = (theme) => ({
     borderRadius: "3px",
     lineHeight: "20px",
     textDecoration: "none",
-    margin: "4px",
+    margin: "0px",
     display: "inline-flex",
     "&:hover,&:focus": {
       color: "inherit",
@@ -129,16 +128,12 @@ const headerLinksStyle = (theme) => ({
       padding: "10px 20px",
     },
   },
-  // avatar: {
-  //   margin: "0 0 0 0",
-  // },
-  buttonIcon: {
-    margin: "8px 0 8px 0",
+  avatar: {
+    margin: "0 5px 0 5px",
   },
   small: {
-    margin: "0 0 0 0",
-    width: theme.spacing(4),
-    height: theme.spacing(4),
+    width: theme.spacing(3),
+    height: theme.spacing(3),
   },
   large: {
     width: theme.spacing(7),
@@ -147,17 +142,6 @@ const headerLinksStyle = (theme) => ({
   ...tooltip,
   marginRight5: {
     marginRight: "5px",
-  },
-  badgeRoot: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  paperRoot: {
-    display: "flex",
-  },
-  paper: {
-    marginRight: theme.spacing(2),
   },
 });
 
