@@ -6,7 +6,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
@@ -50,19 +49,16 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 
 	@Override
 	public int insertmy(UserTeamConnDto uteam) {
-		// TODO Auto-generated method stub
 		return template.insert(ns+"insertmy",uteam);
 	}
 
 	@Override
 	public int updatemy(UserDTO userID) {
-		// TODO Auto-generated method stub
 		return template.update(ns+"updatemy", userID);
 	}
 
 	@Override
 	public int selectlast() {
-		// TODO Auto-generated method stub
 		return template.selectOne(ns  +"selectlast");
 	}
 }
