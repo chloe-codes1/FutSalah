@@ -5,10 +5,11 @@ import { Player } from "./Player";
 
 export default function Formation({ playerPos, setPlayerPos }) {
   const movePlayer = (goalIdx, player) => {
-    const nextPlayerPos = [...playerPos];
     for (let i = 0; i < playerPos.length; i++) {
       if (player.idx === playerPos[i].idx) {
         // i번째 선수의 idx를 goalIdx로 변경
+        const nextPlayerPos = [...playerPos];
+
         nextPlayerPos[i] = {
           ...playerPos[i],
           idx: goalIdx,
@@ -17,6 +18,7 @@ export default function Formation({ playerPos, setPlayerPos }) {
         return;
       }
     }
+    setPlayerPos([...playerPos, Object.assign(player, { idx: goalIdx })]);
   };
 
   const canMove = (idx) => {
@@ -29,7 +31,7 @@ export default function Formation({ playerPos, setPlayerPos }) {
   const renderPiece = (idx) => {
     for (let i = 0; i < playerPos.length; i++) {
       if (playerPos[i].idx === idx) {
-        return <Player player={playerPos[i]} />;
+        return <Player player={playerPos[i]} inField />;
       }
     }
     return null;
