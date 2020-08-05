@@ -13,4 +13,5 @@ public interface TeamMapper {
 	int checkIfExists(String name);
 	List<UserDTO> getAllCrewInfo(int teamID);
 	List<TeamInfoDto> searchTeamByName(String name);
+	int getNextTeamId();
 }

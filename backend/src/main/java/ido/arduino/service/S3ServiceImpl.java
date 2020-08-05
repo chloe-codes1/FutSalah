@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
- 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
- 
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -56,11 +56,24 @@ public class S3ServiceImpl implements S3Service {
         }
         return file;
     }
- 
+    
     private void uploadFileToS3Bucket(final String bucketName, final File file, int userID) {
         String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
         LOGGER.info("Uploading file with name= " + uniqueFileName);
         userMapper.uploadProfileImage(userID, uniqueFileName);
+        
+        final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, uniqueFileName, file);
+        amazonS3.putObject(putObjectRequest);
+    }
+    
+
+    // QR 업로드
+    public void uploadQRToS3Bucket(final String bucketName, final File file, String title) {
+    	// uniqueFileName : QR + teamId
+        String uniqueFileName = title;
+        
+        LOGGER.info("Uploading file with name= " + uniqueFileName);
+        
         final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, uniqueFileName, file);
         amazonS3.putObject(putObjectRequest);
     }
