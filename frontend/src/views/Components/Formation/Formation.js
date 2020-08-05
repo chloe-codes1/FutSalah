@@ -2,8 +2,9 @@ import React, { useState, useCallback } from "react";
 import { FormationBoard } from "./FormationBoard";
 import { FormationSquare } from "./FormationSquare";
 import { Player } from "./Player";
+import image from "assets/img/backgroundFormation.jpg";
 
-export default function Formation({ playerPos, setPlayerPos }) {
+export default function Formation({ playerPos, setPlayerPos, memberNum }) {
   const movePlayer = (goalIdx, player) => {
     for (let i = 0; i < playerPos.length; i++) {
       if (player.idx === playerPos[i].idx) {
@@ -18,7 +19,12 @@ export default function Formation({ playerPos, setPlayerPos }) {
         return;
       }
     }
-    setPlayerPos([...playerPos, Object.assign(player, { idx: goalIdx })]);
+    if (
+      playerPos.find((element) => element.userid === player.userid) ===
+        undefined &&
+      playerPos.length < memberNum
+    )
+      setPlayerPos([...playerPos, Object.assign(player, { idx: goalIdx })]);
   };
 
   const canMove = (idx) => {
@@ -42,6 +48,9 @@ export default function Formation({ playerPos, setPlayerPos }) {
         margin: "0 auto",
         width: "30vw",
         height: "36vw",
+        backgroundImage: `url(${image})`,
+        backgroundSize: "cover",
+        backgroundColor: "green",
         // border: "2px solid white",
       }}
     >

@@ -2,14 +2,12 @@ import React from "react";
 import { useDrop } from "react-dnd";
 import { Overlay } from "./Overlay";
 
-export const FormationSquare = ({ canMove, movePlayer, posNum, children }) => {
-  const [{ isOver, canDrop }, drop] = useDrop({
+export const FormationBench = ({ removePlayer }) => {
+  const [{ isOver }, drop] = useDrop({
     accept: "position",
-    canDrop: () => canMove(posNum),
-    drop: (item) => movePlayer(posNum, item.player),
+    drop: (item) => removePlayer(item.player.idx),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
     }),
   });
 
@@ -28,11 +26,10 @@ export const FormationSquare = ({ canMove, movePlayer, posNum, children }) => {
           height: "100%",
         }}
       >
-        {children}
+        <strong>벤치</strong>
       </div>
-      {isOver && canDrop && <Overlay color="skyblue" />}
-      {isOver && !canDrop && <Overlay color="darkred" />}
-      {!isOver && canDrop && <Overlay color="white" />}
+      {isOver && <Overlay color="darkred" />}
+      {!isOver && <Overlay color="white" />}
     </div>
   );
 };

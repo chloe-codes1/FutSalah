@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDrag } from "react-dnd";
+import { useDrop } from "react-dnd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -10,13 +10,12 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import NavPills from "components/NavPills/NavPills.js";
 import Formation from "views/Components/Formation/Formation";
+import { FormationBench } from "views/Components/Formation/FormationBench";
 
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import { Player } from "views/Components/Formation/Player";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -53,42 +52,6 @@ export default function ProfilePage(props) {
   // const id = params.get("id");
 
   // 테스트 데이터
-  // 팀원 목록
-  const testTeamList = [
-    {
-      id: 1,
-      name: "김싸피",
-      position: "Pixo",
-      age: 25,
-      height: 200,
-      weight: 100,
-    },
-    {
-      id: 2,
-      name: "이철수",
-      position: "Ala",
-      age: 26,
-      height: 190,
-      weight: 130,
-    },
-    {
-      id: 3,
-      name: "박영희",
-      position: "ALL",
-      age: 24,
-      height: 220,
-      weight: 110,
-    },
-    {
-      id: 4,
-      name: "바둑이",
-      position: "Golerio",
-      age: 5,
-      height: 110,
-      weight: 140,
-    },
-  ];
-
   // 팀 전적
   const testRecord = {
     win: 2,
@@ -130,21 +93,25 @@ export default function ProfilePage(props) {
   const [playerPos1, setPlayerPos1] = useState([
     {
       idx: 8,
+      userid: 2,
       name: "김싸피",
       position: "ALA",
     },
     {
       idx: 0,
+      userid: 3,
       name: "박철수",
       position: "GOLERIO",
     },
     {
       idx: 12,
+      userid: 4,
       name: "이영희",
       position: "FIXO",
     },
     {
       idx: 19,
+      userid: 5,
       name: "바둑이",
       position: "PIVO",
     },
@@ -166,6 +133,15 @@ export default function ProfilePage(props) {
 
   const removeTeamList = (id) => {
     setTeamList(teamList.filter((tl) => tl.id !== id));
+  };
+
+  const removePlayer1 = (idx) => {
+    console.log(idx);
+    setPlayerPos1(playerPos1.filter((pp) => pp.idx !== idx));
+  };
+
+  const removePlayer2 = (idx) => {
+    setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
   };
 
   useEffect(() => {
@@ -259,48 +235,95 @@ export default function ProfilePage(props) {
               </GridItem>
               {/* 포메이션 부분 */}
               <GridItem xs={12} sm={6}>
-                <div
-                  style={{
-                    marginTop: "20px",
-                    marginLeft: "70%",
-                    height: "50px",
-                  }}
-                >
-                  <Button
-                    onClick={() => {
-                      // 포메이션 저장 함수넣기
-                      console.log(playerPos1);
-                      console.log(playerPos2);
-                    }}
-                  >
-                    <strong>포메이션 저장</strong>
-                  </Button>
-                </div>
                 <NavPills
                   color="warning"
                   horizontal={{
-                    tabsGrid: { xs: 12, sm: 4, md: 2 },
-                    contentGrid: { xs: 12, sm: 8, md: 10 },
+                    tabsGrid: { xs: 6, sm: 4, md: 2 },
+                    contentGrid: { xs: 6, sm: 8, md: 10 },
                   }}
                   tabs={[
                     {
                       // 5:5 포메이션
                       tabButton: "5:5",
                       tabContent: (
-                        <Formation
-                          playerPos={playerPos1}
-                          setPlayerPos={setPlayerPos1}
-                        />
+                        <div>
+                          <div
+                            style={{
+                              marginTop: "20px",
+                              marginLeft: "10%",
+                              height: "50px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                color: "black",
+                                display: "inline-block",
+                                marginRight: "5%",
+                                backgroundColor: "lightgray",
+                                width: "50%",
+                                height: "35px",
+                                textAlign: "center",
+                              }}
+                            >
+                              <FormationBench removePlayer={removePlayer1} />
+                            </div>
+                            <Button
+                              onClick={() => {
+                                // 포메이션 저장 함수넣기
+                                console.log(playerPos1);
+                              }}
+                            >
+                              <strong>포메이션 저장</strong>
+                            </Button>
+                          </div>
+                          <Formation
+                            playerPos={playerPos1}
+                            setPlayerPos={setPlayerPos1}
+                            memberNum={5}
+                          />
+                        </div>
                       ),
                     },
                     {
                       // 6:6 포메이션
                       tabButton: "6:6",
                       tabContent: (
-                        <Formation
-                          playerPos={playerPos2}
-                          setPlayerPos={setPlayerPos2}
-                        />
+                        <div>
+                          <div
+                            style={{
+                              marginTop: "20px",
+                              marginLeft: "10%",
+                              height: "50px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                color: "black",
+                                display: "inline-block",
+                                marginRight: "5%",
+                                backgroundColor: "lightgray",
+                                width: "50%",
+                                height: "35px",
+                                textAlign: "center",
+                              }}
+                            >
+                              <FormationBench removePlayer={removePlayer2} />
+                            </div>
+                            <Button
+                              onClick={() => {
+                                // 포메이션 저장 함수넣기
+                                console.log(playerPos1);
+                              }}
+                            >
+                              <strong>포메이션 저장</strong>
+                            </Button>
+                          </div>
+                          <Formation
+                            playerPos={playerPos2}
+                            setPlayerPos={setPlayerPos2}
+                            memberNum={6}
+                          />
+                        </div>
                       ),
                     },
                   ]}
@@ -339,6 +362,7 @@ export default function ProfilePage(props) {
                                           player={{
                                             name: t.name,
                                             position: t.position,
+                                            userid: t.userID,
                                           }}
                                         />
                                       </Button>
