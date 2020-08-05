@@ -112,6 +112,4 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	// TODO: User 가입한 Team 목록
-
 }

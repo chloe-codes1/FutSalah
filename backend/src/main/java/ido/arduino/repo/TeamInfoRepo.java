@@ -15,7 +15,7 @@ public interface TeamInfoRepo {
 
 	int selectlast();
 	int updatemy(UserDTO userID);
-	//int insertmy(UserDTO uteam);
+	int insertmy(UserTeamConnDto uteam);
 	// 나의 팀 정보
 	public List<MyTeamDto> selectAllmyteam(String id);
 		
@@ -25,7 +25,5 @@ public interface TeamInfoRepo {
 
 	// 팀찾기 페이지 간단 정보
 	public List<TeamInfoSimpleDto> selectAll();
-
-	int insertmy(UserTeamConnDto uteam);
 
 }
