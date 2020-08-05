@@ -38,28 +38,9 @@ const useStyles = makeStyles(styles);
 
 function MyTeamPage(props) {
   const { userinfo } = useContext(UserContext);
-  const { socialID } = userinfo;
-  //console.log(socialID);
   const [myTeam, setMyTeam] = useState([]);
   useEffect(() => {
-    axios({
-      method: "post",
-      url: "http://i3a112.p.ssafy.io:8000/api/team/my",
-      data: {
-        socialID: socialID,
-      },
-    })
-      .then((res) => {
-        console.log("my team list call success");
-        console.log(res);
-        if (res.data.length > 0) {
-          setExistTeam(true);
-          setMyTeam(res.data);
-        }
-      })
-      .catch(() => {
-        console.log("my team list call fail");
-      });
+    refreshTeam();
   }, []);
   const classes = useStyles();
   const [createTeam, setCreateTeam] = useState(false);
@@ -76,7 +57,7 @@ function MyTeamPage(props) {
       method: "post",
       url: "http://i3a112.p.ssafy.io:8000/api/team/my",
       data: {
-        socialID: socialID,
+        socialID: window.sessionStorage.getItem("id"),
       },
     })
       .then((res) => {
@@ -99,7 +80,6 @@ function MyTeamPage(props) {
         idData={userinfo.socialID}
         refreshTeam={refreshTeam}
       />
-      ;
       <div>
         <Header
           brand="FutSalah"

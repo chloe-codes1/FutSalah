@@ -32,7 +32,12 @@ function LoginDialog(props) {
         if (e.data.socialID === res.profileObj.googleId) {
           console.log("already registered!!");
           // context 값 변경
-          loggedUser(res.profileObj.googleId, res.profileObj.name, "google");
+          loggedUser(
+            res.profileObj.googleId,
+            res.profileObj.name,
+            "google",
+            e.data.profileURL
+          );
           onClose();
         } else {
           console.log("not registered");
@@ -64,7 +69,12 @@ function LoginDialog(props) {
       if (e.data.socialID === String(res.profile.id)) {
         console.log("already registered!!");
         // context 값 변경
-        loggedUser(res.profile.id, res.profile.properties.nickname, "kakao");
+        loggedUser(
+          res.profile.id,
+          res.profile.properties.nickname,
+          "kakao",
+          e.data.profileURL
+        );
         onClose();
       } else {
         console.log("not registered");
