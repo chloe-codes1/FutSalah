@@ -6,58 +6,77 @@
 
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
-		insert into team ( name, description,profileURL) 
-     	values (#{name},#{description}, #{profileURL})
-     </insert>
-     
-     
-	<!-- 팀 수정 -->
-	<update id="update" parameterType="teaminfo" >
-		 update team 
-		 set name=#{name}, description=#{description}, guCode=#{guCode} 
-      	 ,profileURL=#{profileURL}
-     	 where teamID=#{teamID}
+		insert into team ( name,
+		description,profileURL,leader, code)
+		values (#{name},#{description}, #{profileURL},#{leader}, #{code})
+	</insert>
+	
+	<select id="selectlast"  resultType="int">
+		select last_insert_id()	
+	</select>
+	
+	<!-- 목록에 추가하기 -->
+	<update id="updatemy" parameterType="teaminfo">
+		update team set leader= #{leader}
 	</update>
 	
-	<!--  팀 삭제  -->
-	<delete id="delete" parameterType="string">
-		delete from team where name=#{name}
-	</delete>
+	<!-- 목록에 추가하기 -->
+	<insert id="insertmy" parameterType="userteamconn">
+		insert into userteamconn (userID,teamID)
+		values (#{userID},#{teamID})
+	</insert>
 	
+
+	<!-- 팀 수정 -->
+	<update id="update" parameterType="teaminfo">
+		update team
+		set name=#{name}, description=#{description}, guCode=#{guCode}
+		,profileURL=#{profileURL}
+		where teamID=#{teamID}
+	</update>
+
+	<!-- 팀 삭제 -->
+	<delete id="delete" parameterType="string">
+		delete from team where
+		name=#{name}
+	</delete>
+
 	<!-- 팀찾기페이지- 목록에 띄우는 것 -->
-	<select id="selectAll"  resultType="teamsimple">
-		select team.name, team.wins, team.draws, team.defeats, team.profileURL 
+	<select id="selectAll" resultType="teamsimple">
+		select team.name, team.wins,
+		team.draws, team.defeats, team.profileURL
 		from team
 	</select>
 	
-	<!-- 팀찾기 -지역, 검색  -->
-	<select id="selectsido" resultType="location">
-		select 
-	</select>
 
 
-	<!-- 나의 팀목록 로고, 팀명, 팀설명-->
-	<select id="selectAllmyteam"  resultType="myteam">
-		select team.name, team.description, team.profileURL, team.teamID
-		from team 
+	<!-- 나의 팀목록 로고, 팀명, 팀설명 -->
+	<!-- 내 정보 조회에서 해당 팀 보여주기 -->
+	<select id="selectAllmyteam" resultType="myteam">
+		select team.name,
+		team.description, team.profileURL, team.teamID
+		from team
 		inner join userteamconn on team.teamID = userteamconn.teamID
-		inner join user on userteamconn.userID=user.userID 
-		where user.userID=1;
+		inner join user on userteamconn.userID=user.userID
+		where user.userID=#{userID};
 	</select>
-	
-	<!-- 나의 팀에서 나가기-->
+
+	<!-- 나의 팀에서 나가기 -->
 	<delete id="deletemyteam" parameterType="teaminfo">
-		delete from userteamconn where userID=1 and teamID=1;
+		delete from userteamconn
+		where userID=1 and teamID=1;
 	</delete>
-	
-	
-	<!-- 팀정보 팀이름, 팀설명, 팀장id, 팀원 정보 목록,-->
-	<select id="selectAllteam"  resultType="myteam">
-		select team.name, team.description, team.profileURL, team.teamID
-		from team 
+
+
+	<!-- 팀정보 팀이름, 팀설명, 팀장id, 팀원 정보 목록, -->
+	<select id="selectAllteam" resultType="myteam">
+		select team.name,
+		team.description, team.profileURL, team.teamID
+		from team
 		inner join userteamconn on team.teamID = userteamconn.teamID
-		inner join user on userteamconn.userID=user.userID 
+		inner join user
+		on userteamconn.userID=user.userID
 		where user.userID=1;
 	</select>
-	
+
 </mapper>
