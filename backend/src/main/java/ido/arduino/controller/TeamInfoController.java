@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.bouncycastle.asn1.dvcs.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -91,6 +93,14 @@ public class TeamInfoController {
 	@GetMapping("/team/check/{name}")
 	public @ResponseBody int checkIfExists(@PathVariable String name) {
 		return tService.checkIfExists(name);
+	}
+
+	// 팀원 추가
+	@PostMapping("/team/crew")
+	public @ResponseBody int addCrewIntoTeam(@RequestBody Map<String, Integer> data){
+		int userID = data.get("userID");
+		int teamID = data.get("teamID");
+		return tService.insertmy(new UserTeamConnDto(userID, teamID));
 	}
 
 	// 나의 팀 목록에서 확인하기
