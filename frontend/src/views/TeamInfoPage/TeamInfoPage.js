@@ -125,6 +125,30 @@ export default function ProfilePage(props) {
   const [record, setRecord] = useState(testRecord); // 경기전적 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
 
+  const [playerPos1, setPlayerPos1] = useState([
+    {
+      idx: 8,
+      name: "김싸피",
+      position: "ALA",
+    },
+    {
+      idx: 0,
+      name: "박철수",
+      position: "GOLERIO",
+    },
+    {
+      idx: 12,
+      name: "이영희",
+      position: "FIXO",
+    },
+    {
+      idx: 19,
+      name: "바둑이",
+      position: "PIVO",
+    },
+  ]); // 포메이션 정보
+  const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보
+
   const [modifyOpen, setModifyOpen] = useState(false); // 팀 정보 창
   const [addUserOpen, setAddUserOpen] = useState(false); // 팀원 추가 창
   const [anchorEl, setAnchorEl] = useState(null); // 팝오버 열릴지 아닐지
@@ -234,9 +258,21 @@ export default function ProfilePage(props) {
             <GridItem xs={12} sm={6}>
               <div
                 style={{
-                  height: "70px",
+                  marginTop: "20px",
+                  marginLeft: "70%",
+                  height: "50px",
                 }}
-              ></div>
+              >
+                <Button
+                  onClick={() => {
+                    // 포메이션 저장 함수넣기
+                    console.log(playerPos1);
+                    console.log(playerPos2);
+                  }}
+                >
+                  <strong>포메이션 저장</strong>
+                </Button>
+              </div>
               <NavPills
                 color="warning"
                 horizontal={{
@@ -248,20 +284,24 @@ export default function ProfilePage(props) {
                     // 5:5 포메이션
                     tabButton: "5:5",
                     tabContent: (
-                      // <GridContainer className={classes.formation}>
                       <DndProvider backend={HTML5Backend}>
-                        <Formation />
+                        <Formation
+                          playerPos={playerPos1}
+                          setPlayerPos={setPlayerPos1}
+                        />
                       </DndProvider>
-                      // </GridContainer>
                     ),
                   },
                   {
                     // 6:6 포메이션
                     tabButton: "6:6",
                     tabContent: (
-                      <GridContainer
-                        className={classes.formation}
-                      ></GridContainer>
+                      <DndProvider backend={HTML5Backend}>
+                        <Formation
+                          playerPos={playerPos2}
+                          setPlayerPos={setPlayerPos2}
+                        />
+                      </DndProvider>
                     ),
                   },
                 ]}
