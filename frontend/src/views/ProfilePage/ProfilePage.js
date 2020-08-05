@@ -151,7 +151,6 @@ export default function ProfilePage(props) {
         const userUpdate = {
           ...user,
           userID: res.data.userID,
-          name: res.data.name,
           email: res.data.email,
           position: res.data.position,
           age: res.data.age,
@@ -192,6 +191,7 @@ export default function ProfilePage(props) {
       return;
     }
     const updatedUser = {
+      name: userinfo.name,
       userID: user.userID,
       email: formik.values.email,
       position: pos,
