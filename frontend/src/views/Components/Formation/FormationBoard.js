@@ -8,19 +8,21 @@ const boardStyle = {
   flexWrap: "wrap",
 };
 
-const squareStyle = { width: "20%", height: "25%" };
+const squareStyle = { width: "20%", height: "20%" };
 
-export const FormationBoard = ({ renderPiece }) => {
+export const FormationBoard = ({ canMove, movePlayer, renderPiece }) => {
   function renderSquare(i) {
     return (
       <div key={i} style={squareStyle}>
-        <FormationSquare>{renderPiece(i)}</FormationSquare>
+        <FormationSquare canMove={canMove} movePlayer={movePlayer} posNum={i}>
+          {renderPiece(i)}
+        </FormationSquare>
       </div>
     );
   }
 
   const squares = [];
-  for (let i = 1; i < 21; i += 1) {
+  for (let i = 1; i < 26; i += 1) {
     squares.push(renderSquare(i));
   }
   return <div style={boardStyle}>{squares}</div>;

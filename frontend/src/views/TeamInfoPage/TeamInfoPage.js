@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDrop } from "react-dnd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -9,12 +10,12 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import NavPills from "components/NavPills/NavPills.js";
 import Formation from "views/Components/Formation/Formation";
+import { FormationBench } from "views/Components/Formation/FormationBench";
 
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+import { Player } from "views/Components/Formation/Player";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -51,42 +52,6 @@ export default function ProfilePage(props) {
   // const id = params.get("id");
 
   // 테스트 데이터
-  // 팀원 목록
-  const testTeamList = [
-    {
-      id: 1,
-      name: "김싸피",
-      position: "Pixo",
-      age: 25,
-      height: 200,
-      weight: 100,
-    },
-    {
-      id: 2,
-      name: "이철수",
-      position: "Ala",
-      age: 26,
-      height: 190,
-      weight: 130,
-    },
-    {
-      id: 3,
-      name: "박영희",
-      position: "ALL",
-      age: 24,
-      height: 220,
-      weight: 110,
-    },
-    {
-      id: 4,
-      name: "바둑이",
-      position: "Golerio",
-      age: 5,
-      height: 110,
-      weight: 140,
-    },
-  ];
-
   // 팀 전적
   const testRecord = {
     win: 2,
@@ -125,6 +90,34 @@ export default function ProfilePage(props) {
   const [record, setRecord] = useState(testRecord); // 경기전적 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
 
+  const [playerPos1, setPlayerPos1] = useState([
+    {
+      idx: 8,
+      userid: 2,
+      name: "김싸피",
+      position: "ALA",
+    },
+    {
+      idx: 0,
+      userid: 3,
+      name: "박철수",
+      position: "GOLERIO",
+    },
+    {
+      idx: 12,
+      userid: 4,
+      name: "이영희",
+      position: "FIXO",
+    },
+    {
+      idx: 19,
+      userid: 5,
+      name: "바둑이",
+      position: "PIVO",
+    },
+  ]); // 포메이션 정보
+  const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보
+
   const [modifyOpen, setModifyOpen] = useState(false); // 팀 정보 창
   const [addUserOpen, setAddUserOpen] = useState(false); // 팀원 추가 창
   const [anchorEl, setAnchorEl] = useState(null); // 팝오버 열릴지 아닐지
@@ -140,6 +133,15 @@ export default function ProfilePage(props) {
 
   const removeTeamList = (id) => {
     setTeamList(teamList.filter((tl) => tl.id !== id));
+  };
+
+  const removePlayer1 = (idx) => {
+    console.log(idx);
+    setPlayerPos1(playerPos1.filter((pp) => pp.idx !== idx));
+  };
+
+  const removePlayer2 = (idx) => {
+    setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
   };
 
   useEffect(() => {
@@ -197,88 +199,297 @@ export default function ProfilePage(props) {
         style={{ alignItems: "stretch" }}
       >
         <div className={classes.container}>
-          <GridContainer spacing={3}>
-            {/* header 부분 */}
-            <GridItem className={classes.title} xs={12}>
-              <img className={classes.logo} src={teamImage} alt="..." />
-              <div
-                style={{
-                  margin: "auto 1%",
-                }}
-              >
-                <span>{teamInfo.region}</span>
-                <Tooltip
-                  id="tooltip-ALA"
-                  title={teamInfo.description}
-                  placement="bottom-start"
-                  classes={{ tooltip: classes.tooltip }}
+          <DndProvider backend={HTML5Backend}>
+            <GridContainer spacing={3}>
+              {/* header 부분 */}
+              <GridItem className={classes.title} xs={12}>
+                <img className={classes.logo} src={teamImage} alt="..." />
+                <div
+                  style={{
+                    margin: "auto 1%",
+                  }}
                 >
-                  <h1>
-                    <strong>{teamInfo.name}</strong>
-                  </h1>
-                </Tooltip>
-              </div>
+                  <span>{teamInfo.region}</span>
+                  <Tooltip
+                    id="tooltip-ALA"
+                    title={teamInfo.description}
+                    placement="bottom-start"
+                    classes={{ tooltip: classes.tooltip }}
+                  >
+                    <h1>
+                      <strong>{teamInfo.name}</strong>
+                    </h1>
+                  </Tooltip>
+                </div>
 
-              {/* 팀장인 경우만 보이게 */}
-              <Button
-                className={classes.modifyButton}
-                size="sm"
-                onClick={() => {
-                  setModifyOpen(true);
-                }}
-              >
-                수정
-              </Button>
-            </GridItem>
-            {/* 포메이션 부분 */}
-            <GridItem xs={12} sm={6}>
-              <div
-                style={{
-                  height: "70px",
-                }}
-              ></div>
-              <NavPills
-                color="warning"
-                horizontal={{
-                  tabsGrid: { xs: 12, sm: 4, md: 2 },
-                  contentGrid: { xs: 12, sm: 8, md: 10 },
-                }}
-                tabs={[
-                  {
-                    // 5:5 포메이션
-                    tabButton: "5:5",
-                    tabContent: (
-                      // <GridContainer className={classes.formation}>
-                      <DndProvider backend={HTML5Backend}>
-                        <Formation />
-                      </DndProvider>
-                      // </GridContainer>
-                    ),
-                  },
-                  {
-                    // 6:6 포메이션
-                    tabButton: "6:6",
-                    tabContent: (
-                      <GridContainer
-                        className={classes.formation}
-                      ></GridContainer>
-                    ),
-                  },
-                ]}
-              />
-            </GridItem>
-            {/* 팀원, 전적, 신청관리 */}
-            <GridItem xs={12} sm={6}>
-              <NavPills
-                color="warning"
-                tabs={[
-                  {
-                    // 팀원목록
-                    tabButton: "팀원",
-                    tabContent: (
-                      <TableContainer>
-                        <div className={classes.table}>
+                {/* 팀장인 경우만 보이게 */}
+                <Button
+                  className={classes.modifyButton}
+                  size="sm"
+                  onClick={() => {
+                    setModifyOpen(true);
+                  }}
+                >
+                  수정
+                </Button>
+              </GridItem>
+              {/* 포메이션 부분 */}
+              <GridItem xs={12} sm={6}>
+                <NavPills
+                  color="warning"
+                  horizontal={{
+                    tabsGrid: { xs: 6, sm: 4, md: 2 },
+                    contentGrid: { xs: 6, sm: 8, md: 10 },
+                  }}
+                  tabs={[
+                    {
+                      // 5:5 포메이션
+                      tabButton: "5:5",
+                      tabContent: (
+                        <div>
+                          <div
+                            style={{
+                              marginTop: "20px",
+                              marginLeft: "10%",
+                              height: "50px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                color: "black",
+                                display: "inline-block",
+                                marginRight: "5%",
+                                backgroundColor: "lightgray",
+                                width: "50%",
+                                height: "35px",
+                                textAlign: "center",
+                              }}
+                            >
+                              <FormationBench removePlayer={removePlayer1} />
+                            </div>
+                            <Button
+                              onClick={() => {
+                                // 포메이션 저장 함수넣기
+                                console.log(playerPos1);
+                              }}
+                            >
+                              <strong>포메이션 저장</strong>
+                            </Button>
+                          </div>
+                          <Formation
+                            playerPos={playerPos1}
+                            setPlayerPos={setPlayerPos1}
+                            memberNum={5}
+                          />
+                        </div>
+                      ),
+                    },
+                    {
+                      // 6:6 포메이션
+                      tabButton: "6:6",
+                      tabContent: (
+                        <div>
+                          <div
+                            style={{
+                              marginTop: "20px",
+                              marginLeft: "10%",
+                              height: "50px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                color: "black",
+                                display: "inline-block",
+                                marginRight: "5%",
+                                backgroundColor: "lightgray",
+                                width: "50%",
+                                height: "35px",
+                                textAlign: "center",
+                              }}
+                            >
+                              <FormationBench removePlayer={removePlayer2} />
+                            </div>
+                            <Button
+                              onClick={() => {
+                                // 포메이션 저장 함수넣기
+                                console.log(playerPos1);
+                              }}
+                            >
+                              <strong>포메이션 저장</strong>
+                            </Button>
+                          </div>
+                          <Formation
+                            playerPos={playerPos2}
+                            setPlayerPos={setPlayerPos2}
+                            memberNum={6}
+                          />
+                        </div>
+                      ),
+                    },
+                  ]}
+                />
+              </GridItem>
+              {/* 팀원, 전적, 신청관리 */}
+              <GridItem xs={12} sm={6}>
+                <NavPills
+                  color="warning"
+                  tabs={[
+                    {
+                      // 팀원목록
+                      tabButton: "팀원",
+                      tabContent: (
+                        <TableContainer>
+                          <div className={classes.table}>
+                            <Table>
+                              <TableBody>
+                                {teamList.map((t) => (
+                                  <TableRow key={t.userId}>
+                                    <TableCell align="center">
+                                      <img
+                                        className={classes.memberImg}
+                                        src={teamImage}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <Button
+                                        onClick={(e) => {
+                                          setAnchorEl(e.target);
+                                          setOpenedPopoverId(t.userId);
+                                        }}
+                                        color="transparent"
+                                      >
+                                        <Player
+                                          player={{
+                                            name: t.name,
+                                            position: t.position,
+                                            userid: t.userID,
+                                          }}
+                                        />
+                                      </Button>
+                                      <Popover
+                                        classes={{
+                                          paper: classes.popover,
+                                        }}
+                                        open={openedPopoverId === t.userId}
+                                        anchorEl={anchorEl}
+                                        onClose={() => {
+                                          setAnchorEl(null);
+                                          setOpenedPopoverId(null);
+                                        }}
+                                        anchorOrigin={{
+                                          vertical: "bottom",
+                                          horizontal: "center",
+                                        }}
+                                        transformOrigin={{
+                                          vertical: "top",
+                                          horizontal: "center",
+                                        }}
+                                      >
+                                        <h3 className={classes.popoverHeader}>
+                                          {t.name}
+                                        </h3>
+                                        <div className={classes.popoverBody}>
+                                          <h5>{t.position}</h5>
+                                          <div>나이: {t.age}</div>
+                                          <div>키: {t.height}</div>
+                                          <div>몸무게: {t.weight}</div>
+                                        </div>
+                                      </Popover>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {t.position}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <Button
+                                        onClick={() => {
+                                          console.log(t.name + "방출");
+                                          removeTeamList(t.id);
+                                        }}
+                                      >
+                                        <RemoveIcon />
+                                      </Button>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                          <Button
+                            onClick={() => {
+                              setAddUserOpen(true);
+                            }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        </TableContainer>
+                      ),
+                    },
+                    {
+                      // 경기전적
+                      tabButton: "경기전적",
+                      tabContent: (
+                        <TableContainer className={classes.table}>
                           <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell align="center" colSpan="4">
+                                  <h3>
+                                    <strong>
+                                      &lt;{record.win}승 {record.lose}패{" "}
+                                      {record.draw}
+                                      무&gt;
+                                    </strong>
+                                  </h3>
+                                </TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell align="center">
+                                  <strong>HOME</strong>
+                                </TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                                <TableCell align="center">
+                                  <strong>AWAY</strong>
+                                </TableCell>
+                              </TableRow>
+                              {record.result.map((result) => (
+                                <TableRow key={result.resultid}>
+                                  <TableCell align="center">
+                                    {result.homeTeamName}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {result.homeScore}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {result.awayScore}
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    {result.awayTeamName}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      ),
+                    },
+                    {
+                      // 팀원신청관리
+                      // 팀장만 접근 가능
+                      tabButton: "팀원 신청 관리",
+                      tabContent: (
+                        <TableContainer className={classes.table}>
+                          <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell></TableCell>
+                                <TableCell align="center">이름</TableCell>
+                                <TableCell align="center">포지션</TableCell>
+                                <TableCell colSpan="2"></TableCell>
+                              </TableRow>
+                            </TableHead>
                             <TableBody>
                               {teamList.map((t) => (
                                 <TableRow key={t.userId}>
@@ -334,8 +545,16 @@ export default function ProfilePage(props) {
                                   <TableCell align="center">
                                     <Button
                                       onClick={() => {
-                                        console.log(t.name + "방출");
-                                        removeTeamList(t.id);
+                                        console.log(t.name + "영입");
+                                      }}
+                                    >
+                                      <AddIcon />
+                                    </Button>
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    <Button
+                                      onClick={() => {
+                                        console.log(t.name + "은(는) 안돼");
                                       }}
                                     >
                                       <RemoveIcon />
@@ -345,167 +564,17 @@ export default function ProfilePage(props) {
                               ))}
                             </TableBody>
                           </Table>
-                        </div>
-                        <Button
-                          onClick={() => {
-                            setAddUserOpen(true);
-                          }}
-                        >
-                          <AddIcon />
-                        </Button>
-                      </TableContainer>
-                    ),
-                  },
-                  {
-                    // 경기전적
-                    tabButton: "경기전적",
-                    tabContent: (
-                      <TableContainer className={classes.table}>
-                        <Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell align="center" colSpan="4">
-                                <h3>
-                                  <strong>
-                                    &lt;{record.win}승 {record.lose}패{" "}
-                                    {record.draw}
-                                    무&gt;
-                                  </strong>
-                                </h3>
-                              </TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            <TableRow>
-                              <TableCell align="center">
-                                <strong>HOME</strong>
-                              </TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell align="center">
-                                <strong>AWAY</strong>
-                              </TableCell>
-                            </TableRow>
-                            {record.result.map((result) => (
-                              <TableRow key={result.resultid}>
-                                <TableCell align="center">
-                                  {result.homeTeamName}
-                                </TableCell>
-                                <TableCell align="center">
-                                  {result.homeScore}
-                                </TableCell>
-                                <TableCell align="center">
-                                  {result.awayScore}
-                                </TableCell>
-                                <TableCell align="center">
-                                  {result.awayTeamName}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    ),
-                  },
-                  {
-                    // 팀원신청관리
-                    // 팀장만 접근 가능
-                    tabButton: "팀원 신청 관리",
-                    tabContent: (
-                      <TableContainer className={classes.table}>
-                        <Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell></TableCell>
-                              <TableCell align="center">이름</TableCell>
-                              <TableCell align="center">포지션</TableCell>
-                              <TableCell colSpan="2"></TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {teamList.map((t) => (
-                              <TableRow key={t.userId}>
-                                <TableCell align="center">
-                                  <img
-                                    className={classes.memberImg}
-                                    src={teamImage}
-                                  />
-                                </TableCell>
-                                <TableCell align="center">
-                                  <Button
-                                    onClick={(e) => {
-                                      setAnchorEl(e.target);
-                                      setOpenedPopoverId(t.userId);
-                                    }}
-                                    color="transparent"
-                                  >
-                                    {t.name}
-                                  </Button>
-                                  <Popover
-                                    classes={{
-                                      paper: classes.popover,
-                                    }}
-                                    open={openedPopoverId === t.userId}
-                                    anchorEl={anchorEl}
-                                    onClose={() => {
-                                      setAnchorEl(null);
-                                      setOpenedPopoverId(null);
-                                    }}
-                                    anchorOrigin={{
-                                      vertical: "bottom",
-                                      horizontal: "center",
-                                    }}
-                                    transformOrigin={{
-                                      vertical: "top",
-                                      horizontal: "center",
-                                    }}
-                                  >
-                                    <h3 className={classes.popoverHeader}>
-                                      {t.name}
-                                    </h3>
-                                    <div className={classes.popoverBody}>
-                                      <h5>{t.position}</h5>
-                                      <div>나이: {t.age}</div>
-                                      <div>키: {t.height}</div>
-                                      <div>몸무게: {t.weight}</div>
-                                    </div>
-                                  </Popover>
-                                </TableCell>
-                                <TableCell align="center">
-                                  {t.position}
-                                </TableCell>
-                                <TableCell align="center">
-                                  <Button
-                                    onClick={() => {
-                                      console.log(t.name + "영입");
-                                    }}
-                                  >
-                                    <AddIcon />
-                                  </Button>
-                                </TableCell>
-                                <TableCell align="center">
-                                  <Button
-                                    onClick={() => {
-                                      console.log(t.name + "은(는) 안돼");
-                                    }}
-                                  >
-                                    <RemoveIcon />
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    ),
-                  },
-                ]}
-              />
-            </GridItem>
-          </GridContainer>
+                        </TableContainer>
+                      ),
+                    },
+                  ]}
+                />
+              </GridItem>
+            </GridContainer>
+          </DndProvider>
         </div>
       </Parallax>
-      <Footer />
+      {/* <Footer /> */}
       <ModifyTeamInfoDialog
         open={modifyOpen}
         onClose={() => {
