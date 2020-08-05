@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Dialog, DialogTitle, TextField } from "@material-ui/core";
 
@@ -12,19 +12,14 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 function AddInfoDialog(props) {
   const { open, onClose, teamInfo, modifyTeamInfo } = props;
 
-  const [inputTeamInfo, setInputTeamInfo] = useState({});
+  const [inputTeamInfo, setInputTeamInfo] = useState(teamInfo);
 
   const handleClose = () => {
     onClose();
   };
 
-  useEffect(() => {
-    console.log(teamInfo);
-    setInputTeamInfo(teamInfo);
-  }, [teamInfo]);
-
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm">
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>팀 정보 변경</DialogTitle>
       <List>
         <ListItem>
@@ -39,7 +34,6 @@ function AddInfoDialog(props) {
             }}
           />
         </ListItem>
-        <ListItem>팀 설명</ListItem>
         <ListItem>
           <TextareaAutosize
             label="팀 설명"
@@ -52,11 +46,11 @@ function AddInfoDialog(props) {
                 description: e.target.value,
               });
             }}
-            style={{ resize: "none", width: "100%" }}
+            style={{ resize: "none" }}
           />
         </ListItem>
 
-        <ListItem style={{ display: "flex", justifyContent: "flex-end" }}>
+        <ListItem>
           <Button
             onClick={() => {
               modifyTeamInfo(inputTeamInfo);

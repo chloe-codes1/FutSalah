@@ -78,7 +78,7 @@ export default function ProfilePage(props) {
 
   const handleClose = () => {
     setOpen(false);
-    alert("더 노력하는 FutSalah가 되겠습니다!")
+    alert("더 노력하는 FutSalah가 되겠습니다!");
   };
 
   const handleDropZone = () => {
@@ -138,16 +138,15 @@ export default function ProfilePage(props) {
         console.log("get user info succeed!");
         console.log("res??", res.data);
         let profileURL = res.data.profileURL;
-        if (profileURL){
-          if (profileURL.slice(0,33) == 'https://lh5.googleusercontent.com'){
-            
-          }else{
-            profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL
+        if (profileURL) {
+          if (profileURL.slice(0, 33) == "https://lh5.googleusercontent.com") {
+            console.log("google profile image 있는 유저")
+          } else {
+            profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
           }
-        }else{
-          profileURL = profile
+        } else {
+          profileURL = profile;
         }
-
 
         const userUpdate = {
           ...user,
@@ -158,7 +157,7 @@ export default function ProfilePage(props) {
           age: res.data.age,
           weight: res.data.weight,
           height: res.data.height,
-          profileURL:  profileURL,
+          profileURL: profileURL,
         };
         formik.setValues(userUpdate);
         setUser(userUpdate);
@@ -171,7 +170,7 @@ export default function ProfilePage(props) {
       });
 
   useEffect(() => {
-    const socialID = userinfo.socialID;
+    const socialID = window.sessionStorage.getItem("id");
     user.socialID = socialID;
     getUserInfo();
   }, []);
@@ -263,8 +262,13 @@ export default function ProfilePage(props) {
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
-                <Tooltip title="프로파일 사진 변경하기" interactive>
-                    <img src={formik.values.profileURL} className={imageClasses} onClick={handleDropZone} style={{cursor: "pointer"}}/>
+                  <Tooltip title="프로파일 사진 변경하기" interactive>
+                    <img
+                      src={formik.values.profileURL}
+                      className={imageClasses}
+                      onClick={handleDropZone}
+                      style={{ cursor: "pointer" }}
+                    />
                   </Tooltip>
                   <div className={classes.name}>
                     <h3 className={classes.title}>{userinfo.name}</h3>
@@ -300,14 +304,16 @@ export default function ProfilePage(props) {
                   </GridItem>
 
                   <GridItem>
-                    <span className={classes.buttonTitle}>  {user.age > 0? "나이:"+ user?.age +"세" : ""}</span>
+                    <span className={classes.buttonTitle}>
+                      {" "}
+                      {user.age > 0 ? "나이:" + user?.age + "세" : ""}
+                    </span>
                     <Datetime
                       dateFormat="YYYY"
                       timeFormat={false}
                       onChange={(value) => setAge(value)}
                     />
                   </GridItem>
-             
                 </GridContainer>
                 <GridContainer>
                   <GridItem className={classes.marginBottom}>
@@ -525,7 +531,6 @@ export default function ProfilePage(props) {
             >
               <Fade in={dropZone}>
                 <div className={modal.paper} align="center">
-                 
                   <Grid mt={5}>
                     <Dropzone align="center" userID={user.userID} />
                   </Grid>

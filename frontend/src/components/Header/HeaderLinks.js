@@ -9,6 +9,7 @@ import AddInfoDialog from "../Dialog/AddInfoDialog";
 import Button from "components/CustomButtons/Button.js";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
+import Badge from "@material-ui/core/Badge";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
@@ -117,15 +118,17 @@ export default function HeaderLinks(props) {
       value,
     });
   }, []);
-  const loggedUser = useCallback((id, name, provider) => {
+  const loggedUser = useCallback((id, name, provider, profileURL) => {
     window.sessionStorage.setItem("id", id);
     window.sessionStorage.setItem("name", name);
     window.sessionStorage.setItem("provider", provider);
+    window.sessionStorage.setItem("profileURL", profileURL);
     userDispatch({
       type: "LOGIN_USER",
       id,
       name,
       provider,
+      profileURL,
     });
   }, []);
   const onRegister = useCallback(() => {
@@ -134,10 +137,10 @@ export default function HeaderLinks(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
       data: user,
     })
-      .then(() => {
+      .then((e) => {
         console.log("success");
         alert("정보 저장이 완료되었습니다!");
-        loggedUser(user.socialID, user.name, "social");
+        loggedUser(user.socialID, user.name, "social", e.data.profileURL);
         addInfoClose();
       })
       .catch((e) => {
@@ -211,9 +214,16 @@ export default function HeaderLinks(props) {
       </ListItem>
       <ListItem className={classes.listItem}>
         {userinfo.logged && (
-          <IconButton>
-            <Avatar className={classes.small} />
-          </IconButton>
+          <Badge
+            badgeContent={4}
+            color="secondary"
+            className={classes.badgeRoot}
+          >
+            <IconButton size="small" className={classes.buttonIcon}>
+              <Avatar className={classes.small} src={userinfo.profileURL} />
+              {/* <Avatar src={userinfo.profileURL} /> */}
+            </IconButton>
+          </Badge>
         )}
       </ListItem>
       <ListItem className={classes.listItem}>

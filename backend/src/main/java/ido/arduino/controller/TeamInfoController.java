@@ -1,12 +1,18 @@
 package ido.arduino.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,13 +26,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageConfig;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
 import ido.arduino.dto.MyTeamDto;
-import ido.arduino.dto.SocialIDRequest;
 import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.dto.UserTeamConnDto;
+import ido.arduino.service.S3ServiceImpl;
 import ido.arduino.service.TeamInfoService;
 import ido.arduino.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -40,10 +53,16 @@ public class TeamInfoController {
 	private static final String FAIL = "fail";
 
 	@Autowired
+	S3ServiceImpl s3Service;
+	
+	@Autowired
 	TeamInfoService tService;
 	
 	@Autowired
 	UserService uService;
+	
+	@Value("${aws.s3.bucket}")
+    private String bucketName;
 
 	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
 	@GetMapping("/team")
@@ -53,7 +72,6 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
-
 	// 팀 정보 조회 by teamID
 	@ApiOperation(value = "팀 leader를 포함한 팀 정보를 반환한다.", response = String.class)
 	@GetMapping("/team/{teamID}")
@@ -95,11 +113,26 @@ public class TeamInfoController {
 	@PostMapping("/team")
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody TeamCreateRequest teamInfo) {
 		ResponseEntity<Map<String, Object>> entity = null;
-		System.out.println(teamInfo.toString());
+
+		int id = 0;
+		try {
+			// 생성 시 부여 받을 TeamID 값
+			id = getAutoIncrement();
+			System.out.println(">>>>>>>>>>>>>>>>>>>>" + id);
+			
+			createQRCodeImage(Integer.toString(id), 350, 350, 0x00000000, 0xFFFFFFFF);
+		} catch (WriterException e) {
+			System.out.println("QR생성 실패");
+		} catch (IOException e) {
+			System.out.println("QR생성 실패");
+		}
+		
 		try {
 			UserDTO user = uService.findBySocialID(teamInfo.getSocialID());
 			int userId = user.getUserID();
-			TeamInfoDto newTeam = TeamInfoDto.of(teamInfo, userId);
+			String code = "QR" + Integer.toString(id);
+			System.out.println(">>>>>>>>>>>>>>>>>>>>" + code);
+			TeamInfoDto newTeam = TeamInfoDto.of(teamInfo, userId, code);
 			int lastTeamId = tService.insert(newTeam);
 			tService.insertmy(new UserTeamConnDto(userId, lastTeamId));
 		
@@ -107,6 +140,7 @@ public class TeamInfoController {
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
+		
 		return entity;
 	}
 	
@@ -160,4 +194,32 @@ public class TeamInfoController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	// QR코드 생성
+	public void createQRCodeImage(String text, int width, int height, int qrDarkColor, int qrLightColor)
+			throws WriterException, IOException {
+		QRCodeWriter qrCodeWriter = new QRCodeWriter();
+		BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height); // 텍스트, 바코드 포맷,가로,세로
+		MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor, qrLightColor); // 진한색, 연한색
+		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
+
+//		File file = new File("c:\\qrtest.jpg");        // 파일의 이름을 설정한다
+//        ImageIO.write(qrImage, "jpg", file);             // write메소드를 이용해 파일을 만든다
+		
+		String title = "QR" + text;
+		File temp = File.createTempFile(title, ".png");
+		ImageIO.write(qrImage, "png", temp); 	// temp 위치에 qr이 이미지 생성됨.
+		//InputStream is = new FileInputStream(temp.getAbsolutePath()); // 인풋 스트림으로 변환(향후 S3로 업로드하기위한 작업)
+		s3Service.uploadQRToS3Bucket(bucketName, temp, title);
+		
+		// 로직처리후 temp.delete() 와 is.close()를 해줘야함.
+		temp.delete();
+	}
+	
+	// 다음 auto-increment 값 가져오기
+	public int getAutoIncrement() {
+		int autoIn = 0;
+		autoIn = tService.getNextTeamId() + 1;
+		
+		return autoIn;
+	}
 }

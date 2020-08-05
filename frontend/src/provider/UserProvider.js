@@ -2,11 +2,10 @@ import React, { useEffect, useReducer } from "react";
 
 import UserContext from "../contexts/UserContext";
 
-// 초기값 테스트
 const initialState = {
   socialID: "",
   name: "",
-  //profileURL: "",
+  profileURL: "",
   provider: "",
   logged: false,
 };
@@ -20,6 +19,7 @@ const reducer = (state, action) => {
         socialID: action.id,
         name: action.name,
         provider: action.provider,
+        profileURL: action.profileURL,
         logged: true,
       };
     case "LOGOUT_USER":
@@ -27,6 +27,7 @@ const reducer = (state, action) => {
       window.sessionStorage.removeItem("id");
       window.sessionStorage.removeItem("name");
       window.sessionStorage.removeItem("provider");
+      window.sessionStorage.removeItem("profileURL");
       window.location.href = "/";
       return {
         ...initialState,
@@ -45,15 +46,16 @@ const UserProvider = ({ children }) => {
     if (id) {
       const name = window.sessionStorage.getItem("name");
       const provider = window.sessionStorage.getItem("provider");
+      const profileURL = window.sessionStorage.getItem("profileURL");
       userDispatch({
         type: "LOGIN_USER",
         id,
         name,
         provider,
+        profileURL,
       });
     }
   }, []);
-  
 
   return (
     <UserContext.Provider value={{ userinfo, userDispatch }}>

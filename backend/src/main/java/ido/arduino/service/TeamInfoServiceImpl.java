@@ -77,6 +77,11 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public List<TeamInfoDto> searchTeamByName(String name) {
 		return teamMapper.searchTeamByName(name);
 	}
+	
+	@Override
+	public int getNextTeamId() {
+		return teamMapper.getNextTeamId();
+	}
 
 	@Override
 	public int updatemy(UserDTO userID) {

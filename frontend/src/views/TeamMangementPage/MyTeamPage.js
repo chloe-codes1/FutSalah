@@ -1,65 +1,41 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-// react components for routing our app without refresh
-import { Link } from "react-router-dom";
-
-import classNames from "classnames";
-
-// component
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-//import GridContainer from "components/Grid/GridContainer.js";
-//import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import Parallax from "components/Parallax/Parallax.js";
-
-import axios from "axios";
-
-import Icon from "@material-ui/core/Icon";
-
-import styles from "assets/jss/material-kit-react/views/profilePage.js";
 import {
+  Avatar,
   Button,
   Divider,
   Grid,
   List,
   ListItem,
   ListItemAvatar,
-  Avatar,
-  ListItemText,
   ListItemSecondaryAction,
+  ListItemText,
 } from "@material-ui/core";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 import CreateTeamDialog from "../../components/Dialog/CreateTeamDialog.js";
+import Footer from "components/Footer/Footer.js";
+// component
+import Header from "components/Header/Header.js";
+//import GridContainer from "components/Grid/GridContainer.js";
+//import GridItem from "components/Grid/GridItem.js";
+import HeaderLinks from "components/Header/HeaderLinks.js";
+import Icon from "@material-ui/core/Icon";
+// react components for routing our app without refresh
+import { Link } from "react-router-dom";
+import Parallax from "components/Parallax/Parallax.js";
 import UserContext from "../../contexts/UserContext.js";
+import axios from "axios";
+import classNames from "classnames";
+// @material-ui/core components
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
 
 function MyTeamPage(props) {
   const { userinfo } = useContext(UserContext);
-  const { socialID } = userinfo;
-  //console.log(socialID);
   const [myTeam, setMyTeam] = useState([]);
   useEffect(() => {
-    axios({
-      method: "post",
-      url: "http://i3a112.p.ssafy.io:8000/api/team/my",
-      data: {
-        socialID: socialID,
-      },
-    })
-      .then((res) => {
-        console.log("my team list call success");
-        console.log(res);
-        if (res.data.length > 0) {
-          setExistTeam(true);
-          setMyTeam(res.data);
-        }
-      })
-      .catch(() => {
-        console.log("my team list call fail");
-      });
+    refreshTeam();
   }, []);
   const classes = useStyles();
   const [createTeam, setCreateTeam] = useState(false);
@@ -74,9 +50,9 @@ function MyTeamPage(props) {
   const refreshTeam = useCallback(() => {
     axios({
       method: "post",
-      url: "http://i3a112.p.ssafy.io:8000/api/team/my",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
       data: {
-        socialID: socialID,
+        socialID: window.sessionStorage.getItem("id"),
       },
     })
       .then((res) => {
@@ -99,7 +75,6 @@ function MyTeamPage(props) {
         idData={userinfo.socialID}
         refreshTeam={refreshTeam}
       />
-      ;
       <div>
         <Header
           brand="FutSalah"
