@@ -5,9 +5,10 @@ const popoverStyles = {
       "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
     lineHeight: "1.5em",
     background: "#fff",
-    border: "none",
+    border: "2px solid black",
     borderRadius: "3px",
     display: "block",
+    width: "20%",
     maxWidth: "276px",
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontStyle: "normal",
@@ -22,26 +23,27 @@ const popoverStyles = {
     whiteSpace: "normal",
     lineBreak: "auto",
     fontSize: "0.875rem",
-    wordWrap: "break-word"
+    wordWrap: "break-word",
   },
   popoverBottom: {
-    marginTop: "5px"
+    marginTop: "5px",
   },
   popoverHeader: {
     backgroundColor: "#fff",
     border: "none",
     padding: "15px 15px 5px",
-    fontSize: "1.125rem",
+    // fontSize: "1.125rem",
+    fontWeight: 500,
     margin: "0",
     color: "#555",
     borderTopLeftRadius: "calc(0.3rem - 1px)",
-    borderTopRightRadius: "calc(0.3rem - 1px)"
+    borderTopRightRadius: "calc(0.3rem - 1px)",
   },
   popoverBody: {
     padding: "10px 15px 15px",
     lineHeight: "1.4",
-    color: "#555"
-  }
+    color: "#555",
+  },
 };
 
 export default popoverStyles;
