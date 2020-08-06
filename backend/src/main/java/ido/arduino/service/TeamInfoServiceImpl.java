@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ido.arduino.dao.TeamMapper;
+
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.LocationDto;
+
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
@@ -56,10 +58,8 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	//----------------myteam---------------------------
 	@Override
 	public List<MyTeamDto> selectAllmyteam(String id) {
-		// TODO Auto-generated method stub
 		return tRepo.selectAllmyteam(id);
 	}
-
 
 	@Override
 	public int updatemy(UserDTO userID) {
@@ -99,6 +99,7 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
+
 	public TeamInfoDto getTeamInfo(int teamID) {
 		return teamMapper.getTeamInfo(teamID);
 	}
@@ -128,6 +129,8 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public List<Formation> selectformation() {
 		// TODO Auto-generated method stub
 		return tRepo.selectformation();
+
+	
 	}
 
 }

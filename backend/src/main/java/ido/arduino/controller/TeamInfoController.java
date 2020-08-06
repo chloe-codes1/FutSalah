@@ -73,6 +73,16 @@ public class TeamInfoController {
 		return tService.checkIfExists(name);
 	}
 
+
+	// 팀원 추가
+	@PostMapping("/team/crew")
+	public @ResponseBody int addCrewIntoTeam(@RequestBody Map<String, Integer> data){
+		int userID = data.get("userID");
+		int teamID = data.get("teamID");
+		return tService.insertmy(new UserTeamConnDto(userID, teamID));
+	}
+
+
 	// 팀 생성하기
 	@ApiOperation(value = "새로운 팀 정보 등록.", response = String.class)
 	@PostMapping("/team")
@@ -231,7 +241,7 @@ public class TeamInfoController {
 		return entity;
 	}
 
-	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
+	@ApiOperation(value = "포메이션 정보 반환한다.", response = List.class)
 	@GetMapping("/team/formation")
 	public ResponseEntity<List<Formation>> selectformation() throws Exception {
 		logger.debug("selectformation - 호출");

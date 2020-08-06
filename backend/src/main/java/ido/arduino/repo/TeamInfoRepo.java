@@ -14,6 +14,7 @@ public interface TeamInfoRepo {
  
 	//----------------create team---------------------------
 
+
 	int insert(TeamInfoDto info);
 	int update(TeamInfoDto info);
 	int delete(String teamID);
@@ -22,7 +23,7 @@ public interface TeamInfoRepo {
 	//----------------find team---------------------------
 	
 	public List<TeamInfoSimpleDto> selectAll();
-	
+
 	
 	//----------------my team---------------------------
 	int selectlast();	// 가장 최근 생성한 팀 
@@ -38,5 +39,7 @@ public interface TeamInfoRepo {
 	public List<Formation> selectformation();
 
 	
+
+
 
 }
