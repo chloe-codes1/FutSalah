@@ -9,7 +9,7 @@ const teamInfoStyle = {
   container: {
     ...container,
     width: "100%",
-    paddingTop: "10%",
+    paddingTop: "7%",
     color: "white",
     zIndex: 2,
   },

@@ -33,6 +33,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
@@ -54,38 +55,17 @@ public class TeamInfoController {
 
 	@Autowired
 	S3ServiceImpl s3Service;
-	
+
 	@Autowired
 	TeamInfoService tService;
-	
+
 	@Autowired
 	UserService uService;
-	
+
 	@Value("${aws.s3.bucket}")
-    private String bucketName;
+	private String bucketName;
 
-	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
-	@GetMapping("/team")
-	public ResponseEntity<List<TeamInfoSimpleDto>> selectAll() throws Exception {
-		logger.debug("selectAll - 호출");
-		System.out.println("CaaaORS Filtering on...........................................................");
-
-		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
-	}
-	// 팀 정보 조회 by teamID
-	@ApiOperation(value = "팀 leader를 포함한 팀 정보를 반환한다.", response = String.class)
-	@GetMapping("/team/{teamID}")
-	public @ResponseBody TeamInfoDto getTeamInfo(@PathVariable int teamID) {
-		TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
-		return currentTeam;
-	}
-
-	// 팀원 정보 조회 by teamID
-	@GetMapping("/team/member/{teamID}")
-	public @ResponseBody List<UserDTO> getAllCrewInfo(@PathVariable int teamID) {
-		List<UserDTO> list = tService.getAllCrewInfo(teamID);
-		return list;
-	}
+	// ----------------create team---------------------------
 
 	// 팀 이름 중복검사
 	@GetMapping("/team/check/{name}")
@@ -93,18 +73,13 @@ public class TeamInfoController {
 		return tService.checkIfExists(name);
 	}
 
-	// 나의 팀 목록에서 확인하기
-	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
-	@PostMapping("/team/my")
-	public ResponseEntity<List<MyTeamDto>> selectAllmyteam
-	(@RequestBody Map<String, Object> body) throws Exception {
-		System.out.println(body.toString());
-			UserDTO user = uService.findBySocialID((String)body.get("socialID"));
-			int userId = user.getUserID();
-		logger.debug("selectAllmyteam - 호출");
-		System.out.println("check.............................");
-		
-		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(String.valueOf(userId)), HttpStatus.OK);
+
+	// 팀원 추가
+	@PostMapping("/team/crew")
+	public @ResponseBody int addCrewIntoTeam(@RequestBody Map<String, Integer> data){
+		int userID = data.get("userID");
+		int teamID = data.get("teamID");
+		return tService.insertmy(new UserTeamConnDto(userID, teamID));
 	}
 
 
@@ -119,14 +94,14 @@ public class TeamInfoController {
 			// 생성 시 부여 받을 TeamID 값
 			id = getAutoIncrement();
 			System.out.println(">>>>>>>>>>>>>>>>>>>>" + id);
-			
+
 			createQRCodeImage(Integer.toString(id), 350, 350, 0x00000000, 0xFFFFFFFF);
 		} catch (WriterException e) {
 			System.out.println("QR생성 실패");
 		} catch (IOException e) {
 			System.out.println("QR생성 실패");
 		}
-		
+
 		try {
 			UserDTO user = uService.findBySocialID(teamInfo.getSocialID());
 			int userId = user.getUserID();
@@ -135,15 +110,15 @@ public class TeamInfoController {
 			TeamInfoDto newTeam = TeamInfoDto.of(teamInfo, userId, code);
 			int lastTeamId = tService.insert(newTeam);
 			tService.insertmy(new UserTeamConnDto(userId, lastTeamId));
-		
+
 			entity = handleSuccess(newTeam.getClass() + "가 추가되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
-		
+
 		return entity;
 	}
-	
+
 	// 팀정보 수정하기
 	@ApiOperation(value = "팀 정보 수정.", response = String.class)
 	@PutMapping("/team/{teamID}")
@@ -172,12 +147,160 @@ public class TeamInfoController {
 		return entity;
 	}
 
+	
+	
+	
+	// ----------------find team---------------------------
+
+	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
+	@GetMapping("/team")
+	public ResponseEntity<List<TeamInfoSimpleDto>> selectAll() throws Exception {
+		logger.debug("selectAll - 호출");
+		System.out.println("CaaaORS Filtering on...........................................................");
+
+		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
+	}
+
 	// 팀 검색 by name
 	@GetMapping("/team/search/{name}")
 	public @ResponseBody List<TeamInfoDto> searchTeamByName(@PathVariable String name) {
 		List<TeamInfoDto> list = tService.searchTeamByName(name);
 		return list;
 	}
+	
+	
+	
+
+	// ----------------my team---------------------------
+	// 나의 팀 목록에서 확인하기
+	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
+	@PostMapping("/team/my")
+	public ResponseEntity<List<MyTeamDto>> selectAllmyteam(@RequestBody Map<String, Object> body) throws Exception {
+		System.out.println(body.toString());
+		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
+		int userId = user.getUserID();
+		logger.debug("selectAllmyteam - 호출");
+		System.out.println("check.............................");
+
+		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(String.valueOf(userId)), HttpStatus.OK);
+	}
+
+	
+	
+	
+	// ----------------team info---------------------------
+
+	// 팀 정보 조회 by teamID
+	@ApiOperation(value = "팀 leader를 포함한 팀 정보를 반환한다.", response = String.class)
+	@GetMapping("/team/{teamID}")
+	public @ResponseBody TeamInfoDto getTeamInfo(@PathVariable int teamID) {
+		TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
+		return currentTeam;
+	}
+
+	// 팀원 정보 조회 by teamID
+	@GetMapping("/team/member/{teamID}")
+	public @ResponseBody List<UserDTO> getAllCrewInfo(@PathVariable int teamID) {
+		List<UserDTO> list = tService.getAllCrewInfo(teamID);
+		return list;
+	}
+
+	
+	
+	
+	// ----------------formation---------------------------
+	// formation 삽입
+	@ApiOperation(value = "포메이션 삽입 ", response = List.class)
+	@PostMapping("/team/formation")
+	public ResponseEntity<Map<String, Object>> insertformation(@RequestBody Formation form) {
+		ResponseEntity<Map<String, Object>> entity = null;
+
+		try {
+			TeamInfoDto team = tService.getTeamInfo(form.getTeamID());
+			int result = tService.insertformation(form);
+			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+
+		return entity;
+	}
+
+	// formation 수정하기
+	@ApiOperation(value = "formation 정보 수정.", response = String.class)
+	@PutMapping("/team/formation")
+	public ResponseEntity<Map<String, Object>> updateformation(@RequestBody Formation form) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			int result = tService.updateformation(form);
+			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+
+	// 팀 정보 삭제
+	@ApiOperation(value = "포메이션 정보 삭제.", response = String.class)
+	@DeleteMapping("/team/formation/{grid}")
+	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int grid) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			int result = tService.deleteformation(grid);
+			entity = handleSuccess(grid + "가 삭제되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+
+	@ApiOperation(value = "포메이션 정보 반환한다.", response = List.class)
+	@GetMapping("/team/formation")
+	public ResponseEntity<List<Formation>> selectformation() throws Exception {
+		logger.debug("selectformation - 호출");
+		System.out.println("호오오오추우울...........................................................");
+
+		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
+	}
+	
+	
+	
+
+	// ----------------QR코드 생성---------------------------
+	// QR코드 생성
+	public void createQRCodeImage(String text, int width, int height, int qrDarkColor, int qrLightColor)
+			throws WriterException, IOException {
+		QRCodeWriter qrCodeWriter = new QRCodeWriter();
+		BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height); // 텍스트, 바코드 포맷,가로,세로
+		MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor, qrLightColor); // 진한색, 연한색
+		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
+
+//		File file = new File("c:\\qrtest.jpg");        // 파일의 이름을 설정한다
+//        ImageIO.write(qrImage, "jpg", file);             // write메소드를 이용해 파일을 만든다
+
+		String title = "QR" + text;
+		File temp = File.createTempFile(title, ".png");
+		ImageIO.write(qrImage, "png", temp); // temp 위치에 qr이 이미지 생성됨.
+		// InputStream is = new FileInputStream(temp.getAbsolutePath()); // 인풋 스트림으로
+		// 변환(향후 S3로 업로드하기위한 작업)
+		s3Service.uploadQRToS3Bucket(bucketName, temp, title);
+
+		// 로직처리후 temp.delete() 와 is.close()를 해줘야함.
+		temp.delete();
+	}
+
+	// 다음 auto-increment 값 가져오기
+	public int getAutoIncrement() {
+		int autoIn = 0;
+		autoIn = tService.getNextTeamId() + 1;
+
+		return autoIn;
+	}
+	
+	
+	
+
+	// ----------------예외처리---------------------------
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();
@@ -194,32 +317,4 @@ public class TeamInfoController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	// QR코드 생성
-	public void createQRCodeImage(String text, int width, int height, int qrDarkColor, int qrLightColor)
-			throws WriterException, IOException {
-		QRCodeWriter qrCodeWriter = new QRCodeWriter();
-		BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height); // 텍스트, 바코드 포맷,가로,세로
-		MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor, qrLightColor); // 진한색, 연한색
-		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
-
-//		File file = new File("c:\\qrtest.jpg");        // 파일의 이름을 설정한다
-//        ImageIO.write(qrImage, "jpg", file);             // write메소드를 이용해 파일을 만든다
-		
-		String title = "QR" + text;
-		File temp = File.createTempFile(title, ".png");
-		ImageIO.write(qrImage, "png", temp); 	// temp 위치에 qr이 이미지 생성됨.
-		//InputStream is = new FileInputStream(temp.getAbsolutePath()); // 인풋 스트림으로 변환(향후 S3로 업로드하기위한 작업)
-		s3Service.uploadQRToS3Bucket(bucketName, temp, title);
-		
-		// 로직처리후 temp.delete() 와 is.close()를 해줘야함.
-		temp.delete();
-	}
-	
-	// 다음 auto-increment 값 가져오기
-	public int getAutoIncrement() {
-		int autoIn = 0;
-		autoIn = tService.getNextTeamId() + 1;
-		
-		return autoIn;
-	}
 }

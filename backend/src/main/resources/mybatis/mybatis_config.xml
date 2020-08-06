@@ -15,11 +15,14 @@
 		<typeAlias type="ido.arduino.dto.MyTeamDto" alias="myteam"/>
 		<typeAlias type="ido.arduino.dto.LocationDto" alias="location"/>
 		<typeAlias type="ido.arduino.dto.UserTeamConnDto" alias="userteamconn"/>
+		<typeAlias type="ido.arduino.dto.Formation" alias="formation"/>
 	</typeAliases>
 	<mappers>
 		<!-- 사용할 mapper 등록 -->
 		<mapper resource="mybatis/mapper/TeamInfoMapper.xml" />
 		<mapper resource="mybatis/mapper/UserMapper.xml"/>
 		<mapper resource="mybatis/mapper/TeamMapper.xml"/>
+		<mapper resource="mybatis/mapper/Matching2Mapper.xml"/>
+		<mapper resource="mybatis/mapper/LocationMapper.xml"/>
 	</mappers>
 </configuration>
