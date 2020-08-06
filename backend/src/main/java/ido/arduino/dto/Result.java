@@ -15,6 +15,4 @@ public class Result {
 	private int homeScore;
 	private int awayScore;
 	
-	
-
 }

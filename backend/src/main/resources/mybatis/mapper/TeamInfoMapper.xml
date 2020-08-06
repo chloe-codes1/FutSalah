@@ -116,4 +116,9 @@
 		where formCode=#{formCode} and teamID =#{teamID}
 	</select>
 
+	
+	<!-- 경기전적 출력 -->
+	<select id="resultscore" resultType="result">
+	select * from 
+	</select>
 </mapper>
