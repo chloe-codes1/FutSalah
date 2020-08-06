@@ -100,6 +100,7 @@ function AdminLoginDialog(props) {
           >
             Sign In
           </Button>
+          {/* 로그인이 된 경우 AdminInfo/:id 로 보내기 */}
         </ListItem>
       </List>
     </Dialog>

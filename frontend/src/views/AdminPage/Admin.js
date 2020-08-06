@@ -67,64 +67,7 @@ export default function Admin(props) {
         filter
         image={require("assets/img/liveMatchbg.png")}
         style={{ alignItems: "stretch" }}
-      >
-        <div className={classes.container}>
-          {userinfo.logged && (
-            <GridContainer spacing={3}>
-              <GridItem xs={12}>
-                <div style={{ display: "block" }}>
-                  <h3>{matchInfo.location}</h3>
-                  <h3>{matchInfo.kickofftime}</h3>
-                </div>
-              </GridItem>
-              <GridItem xs={12}>
-                <List className={classes.list}>
-                  <ListItem className={classes.leftListItem}>
-                    <Button size="sm" color="primary">
-                      Home
-                    </Button>
-                    <h1>{matchInfo.hometeam}</h1>
-                    <h1>{scoreInfo.hometeamscore}</h1>
-                  </ListItem>
-                  <ListItem className={classes.centerListItem}>
-                    <h1>vs</h1>
-                  </ListItem>
-                  <ListItem className={classes.rightListItem}>
-                    <Button size="sm" color="secondary">
-                      Away
-                    </Button>
-                    <h1>{matchInfo.awayteam}</h1>
-                    <h1>{scoreInfo.awayteamscore}</h1>
-                  </ListItem>
-                </List>
-              </GridItem>
-              <GridItem xs={12} className={classes.arriveInfoContainer}>
-                <GridItem xs={4} className={classes.arriveInfo}>
-                  <h2>도착 정보</h2>
-                </GridItem>
-                <GridItem xs={8} className={classes.arriveContents}>
-                  <GridItem xs={12} className={classes.arriveContent}>
-                    <GridItem xs={3} className={classes.arriveContentTeam}>
-                      <h3>Home</h3>
-                    </GridItem>
-                    <GridItem xs={9} className={classes.arriveContentTime}>
-                      <p>{arriveTimeInfo.hometeamarrivetime}</p>
-                    </GridItem>
-                  </GridItem>
-                  <GridItem xs={12} className={classes.arriveContent}>
-                    <GridItem xs={3} className={classes.arriveContentTeam}>
-                      <h3>Away</h3>
-                    </GridItem>
-                    <GridItem xs={9} className={classes.arriveContentTime}>
-                      <p>{arriveTimeInfo.awayteamarrivetime}</p>
-                    </GridItem>
-                  </GridItem>
-                </GridItem>
-              </GridItem>
-            </GridContainer>
-          )}
-        </div>
-      </Parallax>
+      ></Parallax>
       <Footer />
     </div>
   );
