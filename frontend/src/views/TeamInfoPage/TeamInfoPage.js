@@ -483,8 +483,8 @@ export default function ProfilePage(props) {
                                   <strong>AWAY</strong>
                                 </TableCell>
                               </TableRow>
-                              {record.result.map((result) => (
-                                <TableRow key={result.resultid}>
+                              {record.result.map((result, index) => (
+                                <TableRow key={index}>
                                   <TableCell align="center">
                                     {result.homeTeamName}
                                   </TableCell>
@@ -520,8 +520,8 @@ export default function ProfilePage(props) {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {teamList.map((t) => (
-                                <TableRow key={t.userId}>
+                              {teamList.map((t, index) => (
+                                <TableRow key={index}>
                                   <TableCell align="center">
                                     <img
                                       className={classes.memberImg}
