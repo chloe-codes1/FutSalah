@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDrop } from "react-dnd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -53,34 +52,29 @@ export default function ProfilePage(props) {
 
   // 테스트 데이터
   // 팀 전적
-  const testRecord = {
-    win: 2,
-    lose: 0,
-    draw: 1,
-    result: [
-      {
-        resultid: 1,
-        homeScore: 2,
-        awayScore: 1,
-        homeTeamName: "Korea",
-        awayTeamName: "Japan",
-      },
-      {
-        resultid: 2,
-        homeScore: 2,
-        awayScore: 5,
-        homeTeamName: "China",
-        awayTeamName: "Korea",
-      },
-      {
-        resultid: 3,
-        homeScore: 1,
-        awayScore: 1,
-        homeTeamName: "Korea",
-        awayTeamName: "USA",
-      },
-    ],
-  };
+  const testRecord = [
+    {
+      resultid: 1,
+      homeScore: 2,
+      awayScore: 1,
+      homeTeamName: "Korea",
+      awayTeamName: "Japan",
+    },
+    {
+      resultid: 2,
+      homeScore: 2,
+      awayScore: 5,
+      homeTeamName: "China",
+      awayTeamName: "Korea",
+    },
+    {
+      resultid: 3,
+      homeScore: 1,
+      awayScore: 1,
+      homeTeamName: "Korea",
+      awayTeamName: "USA",
+    },
+  ];
 
   // 팀 정보
   const TeamId = rest.match.params.id;
@@ -115,16 +109,29 @@ export default function ProfilePage(props) {
       name: "바둑이",
       position: "PIVO",
     },
-  ]); // 포메이션 정보
-  const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보
+  ]); // 포메이션 정보 (5:5)
+  const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보 (6:6)
 
   const [modifyOpen, setModifyOpen] = useState(false); // 팀 정보 창
   const [addUserOpen, setAddUserOpen] = useState(false); // 팀원 추가 창
   const [anchorEl, setAnchorEl] = useState(null); // 팝오버 열릴지 아닐지
   const [openedPopoverId, setOpenedPopoverId] = useState(null); // 팀원 팝오버 인덱스
 
+  // 팀 정보 변경
   const modifyTeamInfo = (info) => {
     setTeamInfo(info);
+    console.log(info);
+    axios({
+      method: "put",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
+      data: info,
+    })
+      .then((res) => {
+        console.log("update success");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   const modifyTeamList = (user) => {
@@ -135,11 +142,13 @@ export default function ProfilePage(props) {
     setTeamList(teamList.filter((tl) => tl.id !== id));
   };
 
+  // 포메이션 선수 제거 (5:5)
   const removePlayer1 = (idx) => {
     console.log(idx);
     setPlayerPos1(playerPos1.filter((pp) => pp.idx !== idx));
   };
 
+  // 포메이션 선수 제거 (6:6)
   const removePlayer2 = (idx) => {
     setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
   };
@@ -156,7 +165,7 @@ export default function ProfilePage(props) {
         setTeamInfo({
           ...res.data,
           id: TeamId,
-          region: "서울시 종로구(test data)",
+          // region: "서울시 종로구(test data)",
         });
       })
       .catch((e) => {
@@ -209,7 +218,7 @@ export default function ProfilePage(props) {
                     margin: "auto 1%",
                   }}
                 >
-                  <span>{teamInfo.region}</span>
+                  {/* <span>{teamInfo.region}</span> */}
                   <Tooltip
                     id="tooltip-ALA"
                     title={teamInfo.description}
@@ -435,8 +444,8 @@ export default function ProfilePage(props) {
                                 <TableCell align="center" colSpan="4">
                                   <h3>
                                     <strong>
-                                      &lt;{record.win}승 {record.lose}패{" "}
-                                      {record.draw}
+                                      &lt;{teamInfo.wins}승 {teamInfo.defeats}패{" "}
+                                      {teamInfo.draws}
                                       무&gt;
                                     </strong>
                                   </h3>
@@ -454,19 +463,19 @@ export default function ProfilePage(props) {
                                   <strong>AWAY</strong>
                                 </TableCell>
                               </TableRow>
-                              {record.result.map((result) => (
-                                <TableRow key={result.resultid}>
+                              {record.map((r) => (
+                                <TableRow key={r.resultid}>
                                   <TableCell align="center">
-                                    {result.homeTeamName}
+                                    {r.homeTeamName}
                                   </TableCell>
                                   <TableCell align="center">
-                                    {result.homeScore}
+                                    {r.homeScore}
                                   </TableCell>
                                   <TableCell align="center">
-                                    {result.awayScore}
+                                    {r.awayScore}
                                   </TableCell>
                                   <TableCell align="center">
-                                    {result.awayTeamName}
+                                    {r.awayTeamName}
                                   </TableCell>
                                 </TableRow>
                               ))}
