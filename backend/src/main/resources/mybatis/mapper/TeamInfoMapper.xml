@@ -14,7 +14,7 @@
 	<!-- 팀 수정 -->
 	<update id="update" parameterType="teaminfo">
 		update team
-		set name=#{name}, description=#{description}, guCode=#{guCode}
+		set name=#{name}, description=#{description}, locationID=#{locationID}
 		,profileURL=#{profileURL}
 		where teamID=#{teamID}
 	</update>
@@ -24,6 +24,8 @@
 		delete from team where
 		name=#{name}
 	</delete>
+
+
 	
 	
 	<!--myteam -->
@@ -43,6 +45,17 @@
 		values (#{userID},#{teamID})
 	</insert>
 	
+
+
+	<!-- 팀찾기페이지- 목록에 띄우는 것 -->
+	<select id="selectAll" resultType="teamsimple">
+		select team.name, team.wins,
+		team.draws, team.defeats, team.profileURL
+		from team
+	</select>
+	
+
+
 	<!-- 나의 팀목록 로고, 팀명, 팀설명 -->
 	<!-- 내 정보 조회에서 해당 팀 보여주기 -->
 	<select id="selectAllmyteam" resultType="myteam">

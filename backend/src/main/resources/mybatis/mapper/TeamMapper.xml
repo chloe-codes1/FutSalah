@@ -7,7 +7,7 @@
 	<!-- leader를 포함한 팀 전체 정보 by teamID -->
 	<select id="getTeamInfo" parameterType="int"
 		resultType="TeamInfoDTO">
-		SELECT name, description, leader, wins, defeats, draws FROM
+		SELECT * FROM
 		team WHERE teamID = #{teamID}
 	</select>
 

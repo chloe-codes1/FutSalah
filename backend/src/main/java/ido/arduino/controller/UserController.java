@@ -60,7 +60,6 @@ public class UserController {
 		return loggedUser;
 	}
 
-
 	@PostMapping("/user")
 	public @ResponseBody UserDTO createUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user);
