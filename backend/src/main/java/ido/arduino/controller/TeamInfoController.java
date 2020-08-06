@@ -189,6 +189,8 @@ public class TeamInfoController {
 		return list;
 	}
 
+	
+
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", true);

@@ -30,7 +30,7 @@
 	<!-- 팀 수정 -->
 	<update id="update" parameterType="teaminfo">
 		update team
-		set name=#{name}, description=#{description}, guCode=#{guCode}
+		set name=#{name}, description=#{description}, locationID=#{locationID}
 		,profileURL=#{profileURL}
 		where teamID=#{teamID}
 	</update>
