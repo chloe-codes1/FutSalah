@@ -14,7 +14,7 @@ import TableRow from "@material-ui/core/TableRow";
 import axios from "axios";
 
 function AddInfoDialog(props) {
-  const { open, onClose, modifyTeamList } = props;
+  const { open, onClose, modifyTeamList, teamID } = props;
 
   const [searchWord, setSearchWord] = useState("");
   const [serachTeamList, setSerachTeamList] = useState([]);
@@ -23,8 +23,24 @@ function AddInfoDialog(props) {
     onClose();
   };
 
-  const addMember = (userInfo) => {
-    modifyTeamList(userInfo);
+  const addMember = (userInfo, teamID) => {
+    const userTeamConn = {
+      userID: userInfo.userID,
+      teamID,
+    };
+    console.log(userTeamConn);
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/crew`,
+      data: userTeamConn,
+    })
+      .then(() => {
+        console.log("팀원 추가");
+        modifyTeamList(userInfo);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
     handleClose();
   };
 
@@ -34,8 +50,24 @@ function AddInfoDialog(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/` + name,
     })
       .then((res) => {
-        console.log("success!");
-        setSerachTeamList(res.data);
+        const searchList = res.data;
+        axios({
+          method: "get",
+          url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member/${teamID}`,
+        })
+          .then((res) => {
+            console.log("팀원으로 속하지 않은 유저 검색");
+            setSerachTeamList(
+              searchList.filter(
+                (sl) =>
+                  res.data.find((data) => data.userID === sl.userID) ===
+                  undefined
+              )
+            );
+          })
+          .catch(() => {
+            console.log("으악으악!");
+          });
       })
       .catch(() => {
         console.log("으악!");
@@ -104,7 +136,7 @@ function AddInfoDialog(props) {
                       <TableCell>
                         <Button
                           onClick={() => {
-                            addMember(list);
+                            addMember(list, teamID);
                           }}
                         >
                           추가

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+
+import UserContext from "../../contexts/UserContext";
 
 import AddUserDialog from "components/Dialog/AddUserDialog";
 import Button from "components/CustomButtons/Button.js";
@@ -78,7 +80,7 @@ export default function ProfilePage(props) {
 
   // 팀 정보
   const TeamId = rest.match.params.id;
-
+  const { userinfo } = useContext(UserContext);
   const [subMenu, setSubMenu] = useState(0); // 팀운리스트, 전적 버튼 안덱스
   const [teamList, setTeamList] = useState([]); // 팀원 목록
   const [record, setRecord] = useState(testRecord); // 경기전적 목록
@@ -116,11 +118,13 @@ export default function ProfilePage(props) {
   const [addUserOpen, setAddUserOpen] = useState(false); // 팀원 추가 창
   const [anchorEl, setAnchorEl] = useState(null); // 팝오버 열릴지 아닐지
   const [openedPopoverId, setOpenedPopoverId] = useState(null); // 팀원 팝오버 인덱스
+  const [openedJoinPopoverId, setOpenedJoinPopoverId] = useState(null); // 신청 유저 팝오버 인덱스
+  const [openedDescPopoverId, setOpenedDescPopoverId] = useState(null); // 팀 설명 오픈 여부
 
   // 팀 정보 변경
   const modifyTeamInfo = (info) => {
     setTeamInfo(info);
-    console.log(info);
+    console.log(info); // 변경된 팀정보 출력
     axios({
       method: "put",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
@@ -160,12 +164,11 @@ export default function ProfilePage(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
     })
       .then((res) => {
-        console.log("success");
-        // console.log(res);
+        console.log("팀 정보 success");
+        // console.log(res.data); // 아직 지역은 안가져옴.
         setTeamInfo({
           ...res.data,
           id: TeamId,
-          // region: "서울시 종로구(test data)",
         });
       })
       .catch((e) => {
@@ -178,15 +181,27 @@ export default function ProfilePage(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member/${TeamId}`,
     })
       .then((res) => {
-        console.log("success");
+        console.log("팀원 정보 success");
+        console.log(res.data);
         setTeamList(res.data);
-        // setTeamInfo({
-        //   ...res.data,
-        // });
       })
       .catch((e) => {
         console.log("error", e);
       });
+
+    // // 포메이션 정보 가져오기
+    // axios({
+    //   method: "get",
+    //   url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation`,
+    // })
+    //   .then((res) => {
+    //     console.log("포메이션 success");
+    //     console.log(res.data);
+    //       setPlayerPos1(res.data);
+    //   })
+    //   .catch((e) => {
+    //     console.log("error", e);
+    //   });
   }, []);
 
   return (
@@ -202,11 +217,7 @@ export default function ProfilePage(props) {
         }}
         {...rest}
       />
-      <Parallax
-        filter
-        image={require("assets/img/teamInfobg.jpg")}
-        style={{ alignItems: "stretch" }}
-      >
+      <Parallax filter image={require("assets/img/teamInfobg.jpg")}>
         <div className={classes.container}>
           <DndProvider backend={HTML5Backend}>
             <GridContainer spacing={3}>
@@ -219,28 +230,53 @@ export default function ProfilePage(props) {
                   }}
                 >
                   {/* <span>{teamInfo.region}</span> */}
-                  <Tooltip
-                    id="tooltip-ALA"
-                    title={teamInfo.description}
-                    placement="bottom-start"
-                    classes={{ tooltip: classes.tooltip }}
+                  <div
+                    onClick={(e) => {
+                      setAnchorEl(e.target);
+                      setOpenedDescPopoverId(true);
+                    }}
                   >
                     <h1>
                       <strong>{teamInfo.name}</strong>
                     </h1>
-                  </Tooltip>
+                  </div>
+                  <Popover
+                    classes={{
+                      paper: classes.popover,
+                    }}
+                    open={openedDescPopoverId}
+                    anchorEl={anchorEl}
+                    onClose={() => {
+                      setAnchorEl(null);
+                      setOpenedDescPopoverId(null);
+                    }}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                  >
+                    <h5 className={classes.popoverHeader}>팀 설명</h5>
+                    <p className={classes.popoverBody}>
+                      {teamInfo.description}
+                    </p>
+                  </Popover>
                 </div>
-
                 {/* 팀장인 경우만 보이게 */}
-                <Button
-                  className={classes.modifyButton}
-                  size="sm"
-                  onClick={() => {
-                    setModifyOpen(true);
-                  }}
-                >
-                  수정
-                </Button>
+                {UserContext.userID === teamInfo.leader && (
+                  <Button
+                    className={classes.modifyButton}
+                    size="sm"
+                    onClick={() => {
+                      setModifyOpen(true);
+                    }}
+                  >
+                    수정
+                  </Button>
+                )}
               </GridItem>
               {/* 포메이션 부분 */}
               <GridItem xs={12} sm={6}>
@@ -352,7 +388,7 @@ export default function ProfilePage(props) {
                             <Table>
                               <TableBody>
                                 {teamList.map((t) => (
-                                  <TableRow key={t.userId}>
+                                  <TableRow key={t.userID}>
                                     <TableCell align="center">
                                       <img
                                         className={classes.memberImg}
@@ -399,7 +435,7 @@ export default function ProfilePage(props) {
                                         </h3>
                                         <div className={classes.popoverBody}>
                                           <h5>{t.position}</h5>
-                                          <div>나이: {t.age}</div>
+                                          <div>출생연도: {t.age}</div>
                                           <div>키: {t.height}</div>
                                           <div>몸무게: {t.weight}</div>
                                         </div>
@@ -501,7 +537,7 @@ export default function ProfilePage(props) {
                             </TableHead>
                             <TableBody>
                               {teamList.map((t) => (
-                                <TableRow key={t.userId}>
+                                <TableRow key={t.userID}>
                                   <TableCell align="center">
                                     <img
                                       className={classes.memberImg}
@@ -512,7 +548,7 @@ export default function ProfilePage(props) {
                                     <Button
                                       onClick={(e) => {
                                         setAnchorEl(e.target);
-                                        setOpenedPopoverId(t.userId);
+                                        setOpenedJoinPopoverId(t.userId);
                                       }}
                                       color="transparent"
                                     >
@@ -522,11 +558,11 @@ export default function ProfilePage(props) {
                                       classes={{
                                         paper: classes.popover,
                                       }}
-                                      open={openedPopoverId === t.userId}
+                                      open={openedJoinPopoverId === t.userId}
                                       anchorEl={anchorEl}
                                       onClose={() => {
                                         setAnchorEl(null);
-                                        setOpenedPopoverId(null);
+                                        setOpenedJoinPopoverId(null);
                                       }}
                                       anchorOrigin={{
                                         vertical: "bottom",
@@ -542,7 +578,7 @@ export default function ProfilePage(props) {
                                       </h3>
                                       <div className={classes.popoverBody}>
                                         <h5>{t.position}</h5>
-                                        <div>나이: {t.age}</div>
+                                        <div>출생연도: {t.age}</div>
                                         <div>키: {t.height}</div>
                                         <div>몸무게: {t.weight}</div>
                                       </div>
@@ -597,6 +633,7 @@ export default function ProfilePage(props) {
         onClose={() => {
           setAddUserOpen(false);
         }}
+        teamID={teamInfo.teamID}
         modifyTeamList={modifyTeamList}
       />
     </div>
