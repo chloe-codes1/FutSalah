@@ -147,6 +147,9 @@ public class TeamInfoController {
 		return entity;
 	}
 
+	
+	
+	
 	// ----------------find team---------------------------
 
 	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
@@ -164,6 +167,9 @@ public class TeamInfoController {
 		List<TeamInfoDto> list = tService.searchTeamByName(name);
 		return list;
 	}
+	
+	
+	
 
 	// ----------------my team---------------------------
 	// 나의 팀 목록에서 확인하기
@@ -179,6 +185,9 @@ public class TeamInfoController {
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(String.valueOf(userId)), HttpStatus.OK);
 	}
 
+	
+	
+	
 	// ----------------team info---------------------------
 
 	// 팀 정보 조회 by teamID
@@ -196,6 +205,9 @@ public class TeamInfoController {
 		return list;
 	}
 
+	
+	
+	
 	// ----------------formation---------------------------
 	// formation 삽입
 	@ApiOperation(value = "포메이션 삽입 ", response = List.class)
@@ -204,6 +216,7 @@ public class TeamInfoController {
 		ResponseEntity<Map<String, Object>> entity = null;
 
 		try {
+			TeamInfoDto team = tService.getTeamInfo(form.getTeamID());
 			int result = tService.insertformation(form);
 			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
 		} catch (RuntimeException e) {
@@ -249,6 +262,9 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
 	}
+	
+	
+	
 
 	// ----------------QR코드 생성---------------------------
 	// QR코드 생성
@@ -280,6 +296,9 @@ public class TeamInfoController {
 
 		return autoIn;
 	}
+	
+	
+	
 
 	// ----------------예외처리---------------------------
 

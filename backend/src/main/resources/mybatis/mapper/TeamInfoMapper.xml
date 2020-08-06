@@ -110,7 +110,7 @@
 	<!-- 포메이션 리스트출력 -->
 	<select id = "selectformation"  resultType="formation" >
 		select * from formation
-		where formCode=5 and teamID =1
+		where formCode=#{formCode} and teamID =#{teamID}
 	</select>
 
 </mapper>
