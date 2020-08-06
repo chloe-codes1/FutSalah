@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.dao.Matching2Mapper">
+	<!-- 아직 진행되지 않은 예정된 오늘 경기를 가져옴 -->
+	<select id="searchScheduledMatch" parameterType="int" resultType="Matching2DTO">
+		SELECT m.matchID, m.homeTeamID, a.name as homeName, m.awayTeamID, b.name as awayName, m.time
+		FROM matching as m, team as a, team as b
+		WHERE m.state = 1 and m.stadium = #{stadium} and date = date_format(now(), '%Y-%m-%d') and m.homeTeamID = a.teamID and m.awayTeamID = b.teamID;
+	</select>
+</mapper>

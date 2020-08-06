@@ -7,7 +7,7 @@
 	<!-- leader를 포함한 팀 전체 정보 by teamID -->
 	<select id="getTeamInfo" parameterType="int"
 		resultType="TeamInfoDTO">
-		SELECT name, description, leader, wins, defeats, draws FROM
+		SELECT * FROM
 		team WHERE teamID = #{teamID}
 	</select>
 
@@ -29,6 +29,11 @@
 	
 	<!-- 팀 이름으로 검색 -->
 	<select id="searchTeamByName" parameterType="String" resultType="TeamInfoDTO">
-		SELECT*FROM team WHERE name LIKE CONCAT('%', #{name},'%')
+		SELECT * FROM team WHERE name LIKE CONCAT('%', #{name},'%')
+	</select>
+	
+	<!-- 현재 가장 큰 teamID 값 반환 -->
+	<select id="getNextTeamId" resultType="int">
+		SELECT max(teamID) from team;
 	</select>
 </mapper>

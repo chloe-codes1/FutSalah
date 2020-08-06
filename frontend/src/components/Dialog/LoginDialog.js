@@ -1,5 +1,6 @@
 import { Dialog, DialogTitle } from "@material-ui/core";
 
+import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import KakaoLogin from "react-kakao-login";
 import List from "@material-ui/core/List";
@@ -110,6 +111,9 @@ function LoginDialog(props) {
             useDefaultStyle
             getProfile={true} // 카카오계정 프로필정보를 가져옴
           />
+        </ListItem>
+        <ListItem>
+          <Link to={"/Admin"}>관리자 로그인</Link>
         </ListItem>
       </List>
     </Dialog>

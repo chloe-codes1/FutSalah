@@ -1,11 +1,15 @@
 import { container } from "assets/jss/material-kit-react.js";
 import { defaultFont } from "assets/jss/material-kit-react.js";
-import { Table } from "@material-ui/core";
+import tooltipsStyle from "assets/jss/material-kit-react/tooltipsStyle.js";
+import popoverStyles from "assets/jss/material-kit-react/popoverStyles.js";
 
 const teamInfoStyle = {
+  ...tooltipsStyle,
+  ...popoverStyles,
   container: {
     ...container,
-    paddingTop: 100,
+    width: "100%",
+    paddingTop: "7%",
     color: "white",
     zIndex: 2,
   },
@@ -17,9 +21,11 @@ const teamInfoStyle = {
     listStyle: "none",
     paddingTop: "0",
     paddingBottom: "0",
+    color: "inherit",
   },
   listItem: {
     float: "left",
+    color: "inherit",
     position: "relative",
     display: "block",
     width: "auto",
@@ -38,7 +44,7 @@ const teamInfoStyle = {
     // },
   },
   button: {
-    opacity: "0.5",
+    opacity: "0.6",
     boxShadow: "none",
     "&:hover,&:focus": {
       boxShadow: "none",
@@ -52,21 +58,45 @@ const teamInfoStyle = {
   },
   formation: {
     margin: "auto",
-    width: "80%",
+    width: "90%",
     height: "300px",
     backgroundColor: "white",
-  },
-  table: {
-    backgroundColor: "white",
+    // border: "2px solid #FF9800",
   },
   hiddenTable: {
     display: "none",
   },
-  record: {
-    marginTop: "50px",
-  },
   hiddenRecord: {
     display: "none",
+  },
+  title: {
+    display: "flex",
+    lineHeight: "100%",
+    marginBottom: "0",
+  },
+  logo: {
+    borderRadius: "70%",
+    width: "80px",
+    height: "80px",
+    margin: "auto 0 auto 5%",
+    // boxShadow: "2px 2px 2px #000",
+    border: "5px solid black",
+  },
+  modifyButton: {
+    margin: "auto 1%",
+    height: "40px",
+  },
+  table: {
+    height: "300px",
+    backgroundColor: "white",
+    overflow: "scroll",
+  },
+  memberImg: {
+    borderRadius: "70%",
+    width: "50px",
+    height: "50px",
+    margin: "auto 0 auto 5%",
+    border: "4px solid black",
   },
 };
 

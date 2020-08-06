@@ -60,7 +60,6 @@ public class UserController {
 		return loggedUser;
 	}
 
-
 	@PostMapping("/user")
 	public @ResponseBody UserDTO createUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user);
@@ -111,7 +110,5 @@ public class UserController {
 		final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
-	// TODO: User 가입한 Team 목록
 
 }
