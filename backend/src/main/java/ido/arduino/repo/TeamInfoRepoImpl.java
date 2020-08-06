@@ -6,6 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
+import ido.arduino.dto.Formation;
+import ido.arduino.dto.LocationDto;
+
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
@@ -19,18 +23,13 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	@Autowired
 	SqlSessionTemplate template;
 
+	// ----------------create team---------------------------
 	@Override
 	public int insert(TeamInfoDto info) {
 		// 팀 정보 삽입
 		return template.insert(ns + "insert", info);
 	}
 
-	@Override
-	public List<MyTeamDto> selectAllmyteam(String id) {
-		//나의 팀 목록 받아오기 
-		return template.selectList(ns + "selectAllmyteam",id);
-	}
-	
 	@Override
 	public int update(TeamInfoDto info) {
 		return template.update(ns + "update", info);
@@ -41,24 +40,71 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 		return template.delete(ns + "delete", teamID);
 	}
 
+	
+	
+	
+	// ----------------find team---------------------------
 	@Override
 	public List<TeamInfoSimpleDto> selectAll() {
-		// 모든 팀 목록 
+		// 모든 팀 목록
 		return template.selectList(ns + "selectAll");
+	}
+
+
+	//----------------my team---------------------------
+	@Override
+	public List<MyTeamDto> selectAllmyteam(String id) {
+		// 나의 팀 목록 받아오기
+		return template.selectList(ns + "selectAllmyteam", id);
 	}
 
 	@Override
 	public int insertmy(UserTeamConnDto uteam) {
-		return template.insert(ns+"insertmy",uteam);
+		// TODO Auto-generated method stub
+		return template.insert(ns + "insertmy", uteam);
 	}
-
 	@Override
 	public int updatemy(UserDTO userID) {
-		return template.update(ns+"updatemy", userID);
+		// TODO Auto-generated method stub
+		return template.update(ns + "updatemy", userID);
+
 	}
 
 	@Override
 	public int selectlast() {
-		return template.selectOne(ns  +"selectlast");
+
+		// TODO Auto-generated method stub
+		return template.selectOne(ns + "selectlast");
 	}
+
+	
+	
+	
+	
+	//----------------formation---------------------------
+	@Override
+	public int insertformation(Formation form) {
+		// TODO Auto-generated method stub
+		return template.insert(ns + "insertformation", form);
+	}
+
+	@Override
+	public int updateformation(Formation form) {
+		// TODO Auto-generated method stub
+		return template.update(ns + "updateformation", form);
+	}
+
+	@Override
+	public int deleteformation(int grid) {
+		// TODO Auto-generated method stub
+		return template.delete(ns + "deleteformation", grid);
+	}
+
+	@Override
+	public List<Formation> selectformation() {
+		// TODO Auto-generated method stub
+		return template.selectList(ns+"selectformation");
+	}
+
+
 }
