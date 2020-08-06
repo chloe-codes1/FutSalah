@@ -36,7 +36,6 @@ import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import styles from 'assets/jss/material-kit-react/views/teamInfoPage.js';
 import teamImage from "assets/img/basicTeamImg1.jpg";
-import { useDrop } from 'react-dnd';
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
@@ -172,14 +171,11 @@ export default function ProfilePage(props) {
     })
       .then((res) => {
         console.log('success');
-        // console.log(res);
         let profileURL = res.data.profileURL
         if (profileURL) {
          teamInfo.profileURL = process.env.REACT_APP_S3_BASE_URL + '/' + profileURL;
-          console.log("s???")
         }else{
           teamInfo.profileURL=process.env.REACT_APP_S3_BASE_URL + '/team-default-' + Math.ceil(Math.random(1,8))+'.png';
-          console.log("뭐냐구", teamInfo.profileURL)
         }
         setTeamInfo({
           ...res.data,
@@ -375,8 +371,8 @@ export default function ProfilePage(props) {
                           <div className={classes.table}>
                             <Table>
                               <TableBody>
-                                {teamList.map((t) => (
-                                  <TableRow key={t.userId}>
+                                {teamList.map((t, index) => (
+                                  <TableRow key={index}>
                                     <TableCell align="center">
                                       <img
                                         className={classes.memberImg}
