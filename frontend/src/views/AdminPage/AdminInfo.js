@@ -29,7 +29,7 @@ export default function AdminInfo(props) {
 
   const testMatchInfo = {
     id: 1,
-    location: "고양풋살센터",
+    stadium: "고양풋살센터",
     kickofftime: "2020-08-03 18:00",
     hometeam: "백석FC",
     awayteam: "팀동휘",
@@ -51,6 +51,13 @@ export default function AdminInfo(props) {
   const [scoreInfo, setScoreInfo] = useState(testScoreInfo);
   const [arriveTimeInfo, setArriveTimeInfo] = useState(testArriveTimeInfo);
 
+  // 현재 날짜 정보 (년, 월, 일, 요일)
+  const dateInfo = new Date();
+  const year = dateInfo.getFullYear();
+  const month = dateInfo.getMonth();
+  const date = dateInfo.getDate();
+  const day = dateInfo.getDay();
+
   const loadMatchInfo = async () => {
     axios({
       method: "get",
@@ -60,10 +67,11 @@ export default function AdminInfo(props) {
         console.log(res);
         setMatchInfo({
           ...res.data,
-          location: "고양풋살센터",
-          kickofftime: "2020-08-03 18:00",
-          hometeam: "백석FC",
-          awayteam: "팀동휘",
+          stadium: userinfo.stadium,
+          kickofftime: `${year}-${month}-${date} (${day}) ${res.data.time}:00`,
+          // ex) 2020-08-06 (목) 18:00
+          hometeam: res.data.homeName,
+          awayteam: res.data.awayName,
         });
       })
       .catch((e) => {
@@ -97,7 +105,7 @@ export default function AdminInfo(props) {
           <GridContainer spacing={3}>
             <GridItem xs={12}>
               <div style={{ display: "block" }}>
-                <h3>{matchInfo.location}</h3>
+                <h3>{matchInfo.stadium}</h3>
                 <h3>{matchInfo.kickofftime}</h3>
               </div>
             </GridItem>
