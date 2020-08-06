@@ -1,13 +1,14 @@
 // validation
 import * as Yup from "yup";
 
-import { Grid, Tooltip } from "@material-ui/core";
+import { Grid, Modal, Tooltip } from "@material-ui/core";
 import React, { useContext, useEffect, useState } from "react";
 
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 import Datetime from "react-datetime";
+// react components for routing our app without refresh
 import Dropzone from "../Dropzone/Dropzone";
 import Fade from "@material-ui/core/Fade";
 import Footer from "components/Footer/Footer.js";
@@ -16,8 +17,6 @@ import GridItem from "components/Grid/GridItem.js";
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-// react components for routing our app without refresh
-import Modal from "@material-ui/core/Modal";
 import Parallax from "components/Parallax/Parallax.js";
 import Typography from "@material-ui/core/Typography";
 // context to use logged in user info
@@ -147,7 +146,7 @@ export default function ProfilePage(props) {
         } else {
           profileURL = profile;
         }
-
+        
         const userUpdate = {
           ...user,
           userID: res.data.userID,
@@ -532,7 +531,7 @@ export default function ProfilePage(props) {
               <Fade in={dropZone}>
                 <div className={modal.paper} align="center">
                   <Grid mt={5}>
-                    <Dropzone align="center" userID={user.userID} />
+                    <Dropzone align="center" ID={user.userID} path="user"/>
                   </Grid>
                   <Typography
                     id="transition-modal-title"
