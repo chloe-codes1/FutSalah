@@ -44,16 +44,6 @@
 		insert into userteamconn (userID,teamID)
 		values (#{userID},#{teamID})
 	</insert>
-	
-
-
-	<!-- 팀찾기페이지- 목록에 띄우는 것 -->
-	<select id="selectAll" resultType="teamsimple">
-		select team.name, team.wins,
-		team.draws, team.defeats, team.profileURL
-		from team
-	</select>
-	
 
 
 	<!-- 나의 팀목록 로고, 팀명, 팀설명 -->
