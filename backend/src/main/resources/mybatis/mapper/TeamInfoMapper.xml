@@ -4,13 +4,30 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ido.arduino.mapper.TeamInfoDto">
 
+	<!-- create team  -->
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
 		insert into team ( name,
 		description,profileURL,leader, code)
 		values (#{name},#{description}, #{profileURL},#{leader}, #{code})
 	</insert>
+	<!-- 팀 수정 -->
+	<update id="update" parameterType="teaminfo">
+		update team
+		set name=#{name}, description=#{description}, guCode=#{guCode}
+		,profileURL=#{profileURL}
+		where teamID=#{teamID}
+	</update>
+
+	<!-- 팀 삭제 -->
+	<delete id="delete" parameterType="string">
+		delete from team where
+		name=#{name}
+	</delete>
 	
+	
+	<!--myteam -->
+	<!-- 팀생성한 것중 가장 최근 것 선택 -->
 	<select id="selectlast"  resultType="int">
 		select last_insert_id()	
 	</select>
@@ -26,30 +43,6 @@
 		values (#{userID},#{teamID})
 	</insert>
 	
-
-	<!-- 팀 수정 -->
-	<update id="update" parameterType="teaminfo">
-		update team
-		set name=#{name}, description=#{description}, guCode=#{guCode}
-		,profileURL=#{profileURL}
-		where teamID=#{teamID}
-	</update>
-
-	<!-- 팀 삭제 -->
-	<delete id="delete" parameterType="string">
-		delete from team where
-		name=#{name}
-	</delete>
-
-	<!-- 팀찾기페이지- 목록에 띄우는 것 -->
-	<select id="selectAll" resultType="teamsimple">
-		select team.name, team.wins,
-		team.draws, team.defeats, team.profileURL
-		from team
-	</select>
-	
-
-
 	<!-- 나의 팀목록 로고, 팀명, 팀설명 -->
 	<!-- 내 정보 조회에서 해당 팀 보여주기 -->
 	<select id="selectAllmyteam" resultType="myteam">
@@ -62,12 +55,26 @@
 	</select>
 
 	<!-- 나의 팀에서 나가기 -->
-	<delete id="deletemyteam" parameterType="teaminfo">
+	<delete id="deletemyteam" parameterType="myteam">
 		delete from userteamconn
-		where userID=1 and teamID=1;
+		where userID=#{userID} and teamID=#{teamID};
 	</delete>
+	
+	
+
+	
+	<!-- find team -->
+	<!-- 팀찾기페이지- 목록에 띄우는 것 -->
+	<select id="selectAll" resultType="teamsimple">
+		select team.name, team.wins,
+		team.draws, team.defeats, team.profileURL
+		from team
+	</select>
+	
 
 
+	
+	<!-- team info -->
 	<!-- 팀정보 팀이름, 팀설명, 팀장id, 팀원 정보 목록, -->
 	<select id="selectAllteam" resultType="myteam">
 		select team.name,
@@ -76,7 +83,34 @@
 		inner join userteamconn on team.teamID = userteamconn.teamID
 		inner join user
 		on userteamconn.userID=user.userID
-		where user.userID=1;
+		where user.userID=#{userID};
+	</select>
+	
+	
+	<!-- formation -->
+	<!--포메이션  -->
+	<insert id="insertformation" parameterType="formation">
+		insert into formation (userID,teamID, formCode,grid)
+		values (#{userID},#{teamID},#{formCode} ,#{grid})
+	</insert>
+	
+	<!-- 포메이션 수정 -->
+	<update id="updateformation" parameterType="formation">
+		update formation
+		set formCode=#{formCode}, userID=#{userID}, grid=#{grid}
+		where teamID=#{teamID}
+	</update>
+
+	<!-- 포메이션 삭제 -->
+	<delete id="deleteformation" parameterType="int">
+		delete from formation where
+		grid=#{grid}
+	</delete>
+	
+	<!-- 포메이션 리스트출력 -->
+	<select id = "selectformation"  resultType="formation" >
+		select * from formation
+		where formCode=5 and teamID =1
 	</select>
 
 </mapper>
