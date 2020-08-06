@@ -36,4 +36,9 @@
 	<select id="getNextTeamId" resultType="int">
 		SELECT max(teamID) from team;
 	</select>
+	
+	<!-- 팀 프로파일 사진 업로드 -->
+	<update id="uploadProfileImage" parameterType="map">
+		UPDATE team SET profileURL=#{uniqueFileName} WHERE teamID=#{teamID}
+	</update>
 </mapper>

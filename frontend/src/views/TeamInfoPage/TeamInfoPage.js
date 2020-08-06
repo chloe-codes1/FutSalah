@@ -1,53 +1,73 @@
-import React, { useEffect, useState } from "react";
-import { useDrop } from "react-dnd";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { Grid, Modal, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from 'react';
 
-import AddUserDialog from "components/Dialog/AddUserDialog";
-import Button from "components/CustomButtons/Button.js";
-import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import NavPills from "components/NavPills/NavPills.js";
-import Formation from "views/Components/Formation/Formation";
-import { FormationBench } from "views/Components/Formation/FormationBench";
-
+import AddIcon from '@material-ui/icons/Add';
+import AddUserDialog from 'components/Dialog/AddUserDialog';
+import Backdrop from "@material-ui/core/Backdrop";
+import Button from 'components/CustomButtons/Button.js';
+import { DndProvider } from 'react-dnd';
+import Dropzone from "../Dropzone/Dropzone";
+import Fade from "@material-ui/core/Fade";
+import Formation from 'views/Components/Formation/Formation';
+import { FormationBench } from 'views/Components/Formation/FormationBench';
+import GridContainer from 'components/Grid/GridContainer.js';
+import GridItem from 'components/Grid/GridItem.js';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 // core components
-import Header from "components/Header/Header.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
-import { Player } from "views/Components/Formation/Player";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Tooltip from "@material-ui/core/Tooltip";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
-import Popover from "@material-ui/core/Popover";
-
+import Header from 'components/Header/Header.js';
+import HeaderLinks from 'components/Header/HeaderLinks.js';
 // Dialogs
-import ModifyTeamInfoDialog from "components/Dialog/ModifyTeamInfoDialog";
-import Paginations from "components/Pagination/Pagination.js";
-import Parallax from "components/Parallax/Parallax.js";
-
-import axios from "axios";
+import ModifyTeamInfoDialog from 'components/Dialog/ModifyTeamInfoDialog';
+import NavPills from 'components/NavPills/NavPills.js';
+import Paginations from 'components/Pagination/Pagination.js';
+import Parallax from 'components/Parallax/Parallax.js';
+import { Player } from 'views/Components/Formation/Player';
+import Popover from '@material-ui/core/Popover';
+import RemoveIcon from '@material-ui/icons/Remove';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
+import axios from 'axios';
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
-
+import { makeStyles } from '@material-ui/core/styles';
+import styles from 'assets/jss/material-kit-react/views/teamInfoPage.js';
 import teamImage from "assets/img/basicTeamImg1.jpg";
+import { useDrop } from 'react-dnd';
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
-
+const modalStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    borderRadius: "10px",
+  },
+}));
 export default function ProfilePage(props) {
   const classes = useStyles();
+  const modal = modalStyles();
   const { ...rest } = props;
 
+  const handleDropZone = () => {
+    setDropZone(true);
+  };
+  const handleDropZoneClose = () => {
+    setDropZone(false);
+  };
+
+  const [dropZone, setDropZone] = useState(false);
   // const params = new URLSearchParams(paramsString);
   // const id = params.get("id");
 
@@ -62,22 +82,22 @@ export default function ProfilePage(props) {
         resultid: 1,
         homeScore: 2,
         awayScore: 1,
-        homeTeamName: "Korea",
-        awayTeamName: "Japan",
+        homeTeamName: 'Korea',
+        awayTeamName: 'Japan',
       },
       {
         resultid: 2,
         homeScore: 2,
         awayScore: 5,
-        homeTeamName: "China",
-        awayTeamName: "Korea",
+        homeTeamName: 'China',
+        awayTeamName: 'Korea',
       },
       {
         resultid: 3,
         homeScore: 1,
         awayScore: 1,
-        homeTeamName: "Korea",
-        awayTeamName: "USA",
+        homeTeamName: 'Korea',
+        awayTeamName: 'USA',
       },
     ],
   };
@@ -94,26 +114,26 @@ export default function ProfilePage(props) {
     {
       idx: 8,
       userid: 2,
-      name: "김싸피",
-      position: "ALA",
+      name: '김싸피',
+      position: 'ALA',
     },
     {
       idx: 0,
       userid: 3,
-      name: "박철수",
-      position: "GOLERIO",
+      name: '박철수',
+      position: 'GOLERIO',
     },
     {
       idx: 12,
       userid: 4,
-      name: "이영희",
-      position: "FIXO",
+      name: '이영희',
+      position: 'FIXO',
     },
     {
       idx: 19,
       userid: 5,
-      name: "바둑이",
-      position: "PIVO",
+      name: '바둑이',
+      position: 'PIVO',
     },
   ]); // 포메이션 정보
   const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보
@@ -147,36 +167,46 @@ export default function ProfilePage(props) {
   useEffect(() => {
     // 팀 정보 가져오기
     axios({
-      method: "get",
+      method: 'get',
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
     })
       .then((res) => {
-        console.log("success");
+        console.log('success');
         // console.log(res);
+        let profileURL = res.data.profileURL
+        if (profileURL) {
+         teamInfo.profileURL = process.env.REACT_APP_S3_BASE_URL + '/' + profileURL;
+          console.log("s???")
+        }else{
+          teamInfo.profileURL=process.env.REACT_APP_S3_BASE_URL + '/team-default-' + Math.ceil(Math.random(1,8))+'.png';
+          console.log("뭐냐구", teamInfo.profileURL)
+        }
         setTeamInfo({
           ...res.data,
           id: TeamId,
-          region: "서울시 종로구(test data)",
+          region: '서울시 종로구(test data)',
+          profileURL:teamInfo.profileURL
         });
+
       })
       .catch((e) => {
-        console.log("error", e);
+        console.log('error', e);
       });
 
     // 팀원 목록 가져오기
     axios({
-      method: "get",
+      method: 'get',
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member/${TeamId}`,
     })
       .then((res) => {
-        console.log("success");
+        console.log('success');
         setTeamList(res.data);
         // setTeamInfo({
         //   ...res.data,
         // });
       })
       .catch((e) => {
-        console.log("error", e);
+        console.log('error', e);
       });
   }, []);
 
@@ -189,24 +219,27 @@ export default function ProfilePage(props) {
         fixed
         changeColorOnScroll={{
           height: 200,
-          color: "white",
+          color: 'white',
         }}
         {...rest}
       />
       <Parallax
         filter
-        image={require("assets/img/teamInfobg.jpg")}
-        style={{ alignItems: "stretch" }}
+        image={require('assets/img/teamInfobg.jpg')}
+        style={{ alignItems: 'stretch' }}
       >
         <div className={classes.container}>
           <DndProvider backend={HTML5Backend}>
             <GridContainer spacing={3}>
               {/* header 부분 */}
               <GridItem className={classes.title} xs={12}>
-                <img className={classes.logo} src={teamImage} alt="..." />
+              <Tooltip title="팀 대표 사진 변경하기" interactive>
+                <img className={classes.logo} src={teamInfo.profileURL} alt="team"    onClick={handleDropZone}
+                      style={{ cursor: "pointer" }}/>
+                         </Tooltip>
                 <div
                   style={{
-                    margin: "auto 1%",
+                    margin: 'auto 1%',
                   }}
                 >
                   <span>{teamInfo.region}</span>
@@ -244,25 +277,25 @@ export default function ProfilePage(props) {
                   tabs={[
                     {
                       // 5:5 포메이션
-                      tabButton: "5:5",
+                      tabButton: '5:5',
                       tabContent: (
                         <div>
                           <div
                             style={{
-                              marginTop: "20px",
-                              marginLeft: "10%",
-                              height: "50px",
+                              marginTop: '20px',
+                              marginLeft: '10%',
+                              height: '50px',
                             }}
                           >
                             <div
                               style={{
-                                color: "black",
-                                display: "inline-block",
-                                marginRight: "5%",
-                                backgroundColor: "lightgray",
-                                width: "50%",
-                                height: "35px",
-                                textAlign: "center",
+                                color: 'black',
+                                display: 'inline-block',
+                                marginRight: '5%',
+                                backgroundColor: 'lightgray',
+                                width: '50%',
+                                height: '35px',
+                                textAlign: 'center',
                               }}
                             >
                               <FormationBench removePlayer={removePlayer1} />
@@ -286,25 +319,25 @@ export default function ProfilePage(props) {
                     },
                     {
                       // 6:6 포메이션
-                      tabButton: "6:6",
+                      tabButton: '6:6',
                       tabContent: (
                         <div>
                           <div
                             style={{
-                              marginTop: "20px",
-                              marginLeft: "10%",
-                              height: "50px",
+                              marginTop: '20px',
+                              marginLeft: '10%',
+                              height: '50px',
                             }}
                           >
                             <div
                               style={{
-                                color: "black",
-                                display: "inline-block",
-                                marginRight: "5%",
-                                backgroundColor: "lightgray",
-                                width: "50%",
-                                height: "35px",
-                                textAlign: "center",
+                                color: 'black',
+                                display: 'inline-block',
+                                marginRight: '5%',
+                                backgroundColor: 'lightgray',
+                                width: '50%',
+                                height: '35px',
+                                textAlign: 'center',
                               }}
                             >
                               <FormationBench removePlayer={removePlayer2} />
@@ -336,7 +369,7 @@ export default function ProfilePage(props) {
                   tabs={[
                     {
                       // 팀원목록
-                      tabButton: "팀원",
+                      tabButton: '팀원',
                       tabContent: (
                         <TableContainer>
                           <div className={classes.table}>
@@ -377,12 +410,12 @@ export default function ProfilePage(props) {
                                           setOpenedPopoverId(null);
                                         }}
                                         anchorOrigin={{
-                                          vertical: "bottom",
-                                          horizontal: "center",
+                                          vertical: 'bottom',
+                                          horizontal: 'center',
                                         }}
                                         transformOrigin={{
-                                          vertical: "top",
-                                          horizontal: "center",
+                                          vertical: 'top',
+                                          horizontal: 'center',
                                         }}
                                       >
                                         <h3 className={classes.popoverHeader}>
@@ -402,7 +435,7 @@ export default function ProfilePage(props) {
                                     <TableCell align="center">
                                       <Button
                                         onClick={() => {
-                                          console.log(t.name + "방출");
+                                          console.log(t.name + '방출');
                                           removeTeamList(t.id);
                                         }}
                                       >
@@ -426,7 +459,7 @@ export default function ProfilePage(props) {
                     },
                     {
                       // 경기전적
-                      tabButton: "경기전적",
+                      tabButton: '경기전적',
                       tabContent: (
                         <TableContainer className={classes.table}>
                           <Table>
@@ -435,7 +468,7 @@ export default function ProfilePage(props) {
                                 <TableCell align="center" colSpan="4">
                                   <h3>
                                     <strong>
-                                      &lt;{record.win}승 {record.lose}패{" "}
+                                      &lt;{record.win}승 {record.lose}패{' '}
                                       {record.draw}
                                       무&gt;
                                     </strong>
@@ -478,7 +511,7 @@ export default function ProfilePage(props) {
                     {
                       // 팀원신청관리
                       // 팀장만 접근 가능
-                      tabButton: "팀원 신청 관리",
+                      tabButton: '팀원 신청 관리',
                       tabContent: (
                         <TableContainer className={classes.table}>
                           <Table>
@@ -520,12 +553,12 @@ export default function ProfilePage(props) {
                                         setOpenedPopoverId(null);
                                       }}
                                       anchorOrigin={{
-                                        vertical: "bottom",
-                                        horizontal: "center",
+                                        vertical: 'bottom',
+                                        horizontal: 'center',
                                       }}
                                       transformOrigin={{
-                                        vertical: "top",
-                                        horizontal: "center",
+                                        vertical: 'top',
+                                        horizontal: 'center',
                                       }}
                                     >
                                       <h3 className={classes.popoverHeader}>
@@ -545,7 +578,7 @@ export default function ProfilePage(props) {
                                   <TableCell align="center">
                                     <Button
                                       onClick={() => {
-                                        console.log(t.name + "영입");
+                                        console.log(t.name + '영입');
                                       }}
                                     >
                                       <AddIcon />
@@ -554,7 +587,7 @@ export default function ProfilePage(props) {
                                   <TableCell align="center">
                                     <Button
                                       onClick={() => {
-                                        console.log(t.name + "은(는) 안돼");
+                                        console.log(t.name + '은(는) 안돼');
                                       }}
                                     >
                                       <RemoveIcon />
@@ -590,6 +623,32 @@ export default function ProfilePage(props) {
         }}
         modifyTeamList={modifyTeamList}
       />
+        <Modal
+              aria-labelledby="transition-modal-title"
+              aria-describedby="transition-modal-description"
+              className={modal.modal}
+              open={dropZone}
+              onClose={handleDropZoneClose}
+              closeAfterTransition
+              BackdropComponent={Backdrop}
+              BackdropProps={{
+                timeout: 500,
+              }}
+            >
+              <Fade in={dropZone}>
+                <div className={modal.paper} align="center">
+                  <Grid mt={5}>
+                    <Dropzone align="center" ID={teamInfo.teamID} path="team"/>
+                  </Grid>
+                  <Typography
+                    id="transition-modal-title"
+                    style={{ marginTop: "10px", marginBottom: "15px" }}
+                  >
+                    당신의 팀을 나타내는 사진을 업로드 하세요!
+                  </Typography>
+                </div>
+              </Fade>
+            </Modal>
     </div>
   );
 }
