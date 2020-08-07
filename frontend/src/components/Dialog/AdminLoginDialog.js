@@ -9,6 +9,7 @@ import {
 
 import React, { useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -37,30 +38,33 @@ function AdminLoginDialog(props) {
   const [adminId, setAdminId] = useState("");
   const [password, setPassword] = useState("");
 
+  const history = useHistory();
+
   const handleClose = () => {
     onClose();
   };
 
   const responseAdmin = (res) => {
-    console.log(adminId, password);
-    initUser(adminId, "", "", "");
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/login`,
-      data: {
-        ID: adminId, // socialID => ID
-      },
-    }).then((e) => {
-      console.log(e.data);
-      // context 값 변경
-      loggedUser(
-        res.profile.id, // 입력받은 Admin Id
-        e.data.name, // db에 저장되어 있는 관리자 이름
-        "admin", // 로그인 종류 (google, kakao, admin)
-        e.data.profileURL // db에 저장되어 있는 프로필 사진
-      );
-      onClose();
-    });
+    console.log(res);
+    history.push("/Admin/1");
+    // initUser(adminId, "", "", "");
+    // axios({
+    //   method: "post",
+    //   url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/login`,
+    //   data: {
+    //     ID: adminId, // socialID => ID
+    //   },
+    // }).then((e) => {
+    //   console.log(e.data);
+    //   // context 값 변경
+    //   loggedUser(
+    //     res.profile.id, // 입력받은 Admin Id
+    //     e.data.name, // db에 저장되어 있는 관리자 이름
+    //     "admin", // 로그인 종류 (google, kakao, admin)
+    //     e.data.profileURL // db에 저장되어 있는 프로필 사진
+    //   );
+    //   onClose();
+    // });
   };
 
   return (

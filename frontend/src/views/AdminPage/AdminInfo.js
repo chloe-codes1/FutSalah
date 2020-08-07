@@ -56,7 +56,6 @@ export default function AdminInfo(props) {
   const year = dateInfo.getFullYear();
   const month = dateInfo.getMonth();
   const date = dateInfo.getDate();
-  const day = dateInfo.getDay();
 
   const loadMatchInfo = async () => {
     axios({
@@ -68,7 +67,7 @@ export default function AdminInfo(props) {
         setMatchInfo({
           ...res.data,
           stadium: userinfo.stadium,
-          kickofftime: `${year}-${month}-${date} (${day}) ${res.data.time}:00`,
+          kickofftime: `${year}-${month}-${date} ${res.data.time}:00`,
           // ex) 2020-08-06 (목) 18:00
           hometeam: res.data.homeName,
           awayteam: res.data.awayName,
@@ -79,9 +78,9 @@ export default function AdminInfo(props) {
       });
   };
 
-  useEffect(() => {
-    loadMatchInfo();
-  }, []);
+  // useEffect(() => {
+  //   loadMatchInfo();
+  // }, []);
 
   return (
     <div>
