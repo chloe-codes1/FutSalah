@@ -81,7 +81,7 @@ export default function ProfilePage(props) {
       resultid: 1,
       homeScore: 2,
       awayScore: 1,
-      homeTeamName: "Korea",
+      homeTeamName: "팀동휘",
       awayTeamName: "Japan",
     },
     {
@@ -89,51 +89,25 @@ export default function ProfilePage(props) {
       homeScore: 2,
       awayScore: 5,
       homeTeamName: "China",
-      awayTeamName: "Korea",
+      awayTeamName: "팀동휘",
     },
     {
       resultid: 3,
       homeScore: 1,
       awayScore: 1,
-      homeTeamName: "Korea",
+      homeTeamName: "팀동휘",
       awayTeamName: "USA",
     },
   ];
 
   // 팀 정보
   const TeamId = rest.match.params.id;
-  const { userinfo } = useContext(UserContext);
-  const [subMenu, setSubMenu] = useState(0); // 팀운리스트, 전적 버튼 안덱스
+  // const { userinfo } = useContext(UserContext);
   const [teamList, setTeamList] = useState([]); // 팀원 목록
   const [record, setRecord] = useState(testRecord); // 경기전적 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
 
-  const [playerPos1, setPlayerPos1] = useState([
-    {
-      idx: 8,
-      userid: 437,
-      name: "김싸피",
-      position: "ALA",
-    },
-    {
-      idx: 0,
-      userid: 361,
-      name: "박철수",
-      position: "GOLERIO",
-    },
-    {
-      idx: 12,
-      userid: 46,
-      name: "이영희",
-      position: "FIXO",
-    },
-    {
-      idx: 19,
-      userid: 523,
-      name: "바둑이",
-      position: "PIVO",
-    },
-  ]); // 포메이션 정보 (5:5)
+  const [playerPos1, setPlayerPos1] = useState([]); // 포메이션 정보 (5:5)
   const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보 (6:6)
 
   const [modifyOpen, setModifyOpen] = useState(false); // 팀 정보 창
@@ -164,8 +138,24 @@ export default function ProfilePage(props) {
     setTeamList(teamList.concat(user));
   };
 
+  // 선수 방출
   const removeTeamList = (id) => {
-    setTeamList(teamList.filter((tl) => tl.id !== id));
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member`,
+      data: {
+        teamID: teamInfo.teamID,
+        userID: id,
+      },
+    })
+      .then(() => {
+        console.log("remove member success");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+
+    setTeamList(teamList.filter((tl) => tl.userID !== id));
   };
 
   // 포메이션 선수 제거 (5:5)
@@ -442,7 +432,7 @@ export default function ProfilePage(props) {
                                       <Button
                                         onClick={(e) => {
                                           setAnchorEl(e.target);
-                                          setOpenedPopoverId(t.userId);
+                                          setOpenedPopoverId(t.userID);
                                         }}
                                         color="transparent"
                                       >
@@ -458,7 +448,7 @@ export default function ProfilePage(props) {
                                         classes={{
                                           paper: classes.popover,
                                         }}
-                                        open={openedPopoverId === t.userId}
+                                        open={openedPopoverId === t.userID}
                                         anchorEl={anchorEl}
                                         onClose={() => {
                                           setAnchorEl(null);
@@ -491,7 +481,7 @@ export default function ProfilePage(props) {
                                       <Button
                                         onClick={() => {
                                           console.log(t.name + "방출");
-                                          removeTeamList(t.id);
+                                          removeTeamList(t.userID);
                                         }}
                                       >
                                         <RemoveIcon />
