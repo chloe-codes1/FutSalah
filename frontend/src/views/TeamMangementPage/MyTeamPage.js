@@ -131,7 +131,10 @@ function MyTeamPage(props) {
                         <ListItemText primary={team.name} />
                         <ListItemText primary={team.description} />
                         <ListItemSecondaryAction>
-                          <Link to={"/teaminfo/" + team.teamID} className={classes.link}>
+                          <Link
+                            to={"/teaminfo/" + team.teamID}
+                            className={classes.link}
+                          >
                             <Button>팀 상세</Button>
                           </Link>
                           <Button>팀 나가기</Button>

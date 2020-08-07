@@ -15,6 +15,7 @@ import Profile from "views/ProfilePage/ProfilePage.js";
 import TeamInfo from "views/TeamInfoPage/TeamInfoPage.js";
 import SearchTeam from "views/SearchTeamPage/SearchTeamPage.js";
 import MyTeam from "views/TeamMangementPage/MyTeamPage.js";
+import TeamMatch from "views/TeamMatchPage/TeamMatchPage.js";
 
 var hist = createBrowserHistory();
 
@@ -31,6 +32,7 @@ ReactDOM.render(
         <Route exact path="/searchTeam" component={SearchTeam} />
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/myteam" component={MyTeam} />
+        <Route exact path="/match" component={TeamMatch} />
         <Route exact path="/" component={Components} />
       </Switch>
     </Router>
