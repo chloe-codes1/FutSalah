@@ -23,10 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -42,7 +40,6 @@ import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.dto.UserTeamConnDto;
-import ido.arduino.service.S3Service;
 import ido.arduino.service.S3ServiceImpl;
 import ido.arduino.service.TeamInfoService;
 import ido.arduino.service.UserService;
@@ -57,11 +54,8 @@ public class TeamInfoController {
 	private static final String FAIL = "fail";
 
 	@Autowired
-	S3ServiceImpl s3ServiceImpl;
+	S3ServiceImpl s3Service;
 
-	@Autowired
-	S3Service s3Service;
-	
 	@Autowired
 	TeamInfoService tService;
 
@@ -100,12 +94,14 @@ public class TeamInfoController {
 			// 생성 시 부여 받을 TeamID 값
 			id = getAutoIncrement();
 			System.out.println(">>>>>>>>>>>>>>>>>>>>" + id);
+
 			createQRCodeImage(Integer.toString(id), 350, 350, 0x00000000, 0xFFFFFFFF);
 		} catch (WriterException e) {
 			System.out.println("QR생성 실패");
 		} catch (IOException e) {
 			System.out.println("QR생성 실패");
 		}
+
 		try {
 			UserDTO user = uService.findBySocialID(teamInfo.getSocialID());
 			int userId = user.getUserID();
@@ -114,10 +110,12 @@ public class TeamInfoController {
 			TeamInfoDto newTeam = TeamInfoDto.of(teamInfo, userId, code);
 			int lastTeamId = tService.insert(newTeam);
 			tService.insertmy(new UserTeamConnDto(userId, lastTeamId));
+
 			entity = handleSuccess(newTeam.getClass() + "가 추가되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
+
 		return entity;
 	}
 
@@ -149,15 +147,7 @@ public class TeamInfoController {
 		return entity;
 	}
 
-	// 팀 프로파일 이미지 업로드
-	@PostMapping("/team/upload/{teamID}")
-	public ResponseEntity<String> uploadFile(@PathVariable int teamID, @RequestPart(value = "file") final MultipartFile multipartFile) {
-		System.out.println("file" + teamID + multipartFile);
-		final String status = "team";
-		s3Service.uploadFile(multipartFile, teamID, status);
-		final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+	
 	
 	
 	// ----------------find team---------------------------
@@ -269,7 +259,7 @@ public class TeamInfoController {
 	public ResponseEntity<List<Formation>> selectformation() throws Exception {
 		logger.debug("selectformation - 호출");
 		System.out.println("호오오오추우울...........................................................");
-
+		
 		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
 	}
 	
@@ -293,7 +283,7 @@ public class TeamInfoController {
 		ImageIO.write(qrImage, "png", temp); // temp 위치에 qr이 이미지 생성됨.
 		// InputStream is = new FileInputStream(temp.getAbsolutePath()); // 인풋 스트림으로
 		// 변환(향후 S3로 업로드하기위한 작업)
-		s3ServiceImpl.uploadQRToS3Bucket(bucketName, temp, title);
+		s3Service.uploadQRToS3Bucket(bucketName, temp, title);
 
 		// 로직처리후 temp.delete() 와 is.close()를 해줘야함.
 		temp.delete();

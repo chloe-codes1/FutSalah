@@ -84,8 +84,7 @@
 		team.description, team.profileURL, team.teamID
 		from team
 		inner join userteamconn on team.teamID = userteamconn.teamID
-		inner join user
-		on userteamconn.userID=user.userID
+		inner join user on userteamconn.userID=user.userID
 		where user.userID=#{userID};
 	</select>
 	
@@ -113,12 +112,18 @@
 	<!-- 포메이션 리스트출력 -->
 	<select id = "selectformation"  resultType="formation" >
 		select * from formation
-		where formCode=#{formCode} and teamID =#{teamID}
+		where teamID =#{teamID}
 	</select>
 
 	
 	<!-- 경기전적 출력 -->
 	<select id="resultscore" resultType="result">
-	select * from 
+	select result.homeScore, result.awayScore from result, team
+	inner join team on matching.homeTeamID = team.teamID
+	inner join team on matching.awayTeamID = team.teamID
 	</select>
+	
+	
+	<!-- 나한테 요청온 팀 보이기 -->
+	
 </mapper>
