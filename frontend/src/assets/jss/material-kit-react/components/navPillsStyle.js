@@ -41,16 +41,16 @@ const navPillsStyle = (theme) => ({
     float: "left",
     position: "relative",
     display: "block",
-    // borderRadius: "30px",
-    minWidth: "100px",
+    minWidth: "20%",
+    maxWidth: "100%",
     textAlign: "center",
     transition: "all .3s",
     padding: "10px 15px",
     color: "white",
     height: "auto",
     opacity: "1",
-    maxWidth: "100%",
     margin: "0 5px",
+    fontSize: 20,
   },
   pillsWithIcons: {
     borderRadius: "4px",
@@ -65,11 +65,9 @@ const navPillsStyle = (theme) => ({
     },
   },
   horizontalPills: {
+    minWidth: "100%",
     width: "100%",
     float: "none !important",
-    "& + button": {
-      margin: "10px 0",
-    },
   },
   contentWrapper: {
     marginTop: "20px",

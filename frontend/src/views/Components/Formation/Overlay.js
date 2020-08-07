@@ -1,5 +1,5 @@
 import React from "react";
-export const Overlay = ({ color }) => {
+export const Overlay = ({ color, borderRadius }) => {
   return (
     <div
       style={{
@@ -11,6 +11,7 @@ export const Overlay = ({ color }) => {
         zIndex: 1,
         opacity: 0.5,
         backgroundColor: color,
+        borderRadius,
       }}
     />
   );
