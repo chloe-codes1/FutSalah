@@ -27,14 +27,10 @@ const useStyles = makeStyles(styles);
 // -> 추가정보를 입력받아 backend에 전달 -> backend는 정보를 전달받아 user update
 const initialState = {
   user: {
-    socialID: "",
+    ID: "",
+    password: "",
     name: "",
-    email: "",
-    age: "",
-    position: "",
-    height: "",
-    weight: "",
-    profileURL: "",
+    stadium: "",
   },
 };
 
@@ -45,10 +41,10 @@ function reducer(state, action) {
         ...state,
         user: {
           ...state.user,
-          socialID: action.getId,
+          ID: action.getId,
+          password: action.getPassword,
           name: action.getName,
-          profileURL: action.getImageURL,
-          email: action.getEmail,
+          stadium: action.getStadium,
         },
       };
     case "CHANGE_INPUT":
@@ -58,14 +54,6 @@ function reducer(state, action) {
         user: {
           ...state.user,
           [action.name]: action.value,
-        },
-      };
-    case "CHANGE_AGE":
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          age: action.getAge,
         },
       };
     case "CREATE_USER":
@@ -96,7 +84,7 @@ export default function HeaderLinks(props) {
     setAddInfoOpen(false);
   };
 
-  const initUser = useCallback((getId, getEmail, getName, getImageURL) => {
+  const initUser = useCallback((getId, getPassword, getName, getStadium) => {
     // console.log(getId);
     // console.log(getEmail);
     // console.log(getName);
@@ -104,9 +92,9 @@ export default function HeaderLinks(props) {
     dispatch({
       type: "INIT_USER",
       getId,
-      getEmail,
+      getPassword,
       getName,
-      getImageURL,
+      getStadium,
     });
   }, []);
   const onChange = useCallback((e) => {
@@ -147,17 +135,6 @@ export default function HeaderLinks(props) {
         addInfoClose();
       });
   }, [user]);
-
-  const changeAge = useCallback((getAge) => {
-    console.log(getAge);
-    const name = "age";
-    const value = String(getAge);
-    dispatch({
-      type: "CHANGE_INPUT",
-      name,
-      value,
-    });
-  }, []);
 
   return (
     <List className={classes.list}>
