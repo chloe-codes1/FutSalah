@@ -102,8 +102,7 @@ export default function ProfilePage(props) {
 
   // 팀 정보
   const TeamId = rest.match.params.id;
-  const { userinfo } = useContext(UserContext);
-  const [subMenu, setSubMenu] = useState(0); // 팀운리스트, 전적 버튼 안덱스
+  // const { userinfo } = useContext(UserContext);
   const [teamList, setTeamList] = useState([]); // 팀원 목록
   const [record, setRecord] = useState(testRecord); // 경기전적 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
@@ -164,8 +163,28 @@ export default function ProfilePage(props) {
     setTeamList(teamList.concat(user));
   };
 
+  // 선수 방출
   const removeTeamList = (id) => {
-    setTeamList(teamList.filter((tl) => tl.id !== id));
+    const removeMember = {
+      userID: id,
+      teamID: teamInfo.teamID,
+    };
+
+    console.log(removeMember);
+
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member`,
+      data: removeMember,
+    })
+      .then((res) => {
+        console.log("remove member success");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+
+    setTeamList(teamList.filter((tl) => tl.userID !== id));
   };
 
   // 포메이션 선수 제거 (5:5)
@@ -442,7 +461,7 @@ export default function ProfilePage(props) {
                                       <Button
                                         onClick={(e) => {
                                           setAnchorEl(e.target);
-                                          setOpenedPopoverId(t.userId);
+                                          setOpenedPopoverId(t.userID);
                                         }}
                                         color="transparent"
                                       >
@@ -458,7 +477,7 @@ export default function ProfilePage(props) {
                                         classes={{
                                           paper: classes.popover,
                                         }}
-                                        open={openedPopoverId === t.userId}
+                                        open={openedPopoverId === t.userID}
                                         anchorEl={anchorEl}
                                         onClose={() => {
                                           setAnchorEl(null);
@@ -491,7 +510,7 @@ export default function ProfilePage(props) {
                                       <Button
                                         onClick={() => {
                                           console.log(t.name + "방출");
-                                          removeTeamList(t.id);
+                                          removeTeamList(t.userID);
                                         }}
                                       >
                                         <RemoveIcon />
