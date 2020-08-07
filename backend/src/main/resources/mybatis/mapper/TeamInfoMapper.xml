@@ -11,6 +11,7 @@
 		description,profileURL,leader, code)
 		values (#{name},#{description}, #{profileURL},#{leader}, #{code})
 	</insert>
+	
 	<!-- 팀 수정 -->
 	<update id="update" parameterType="teaminfo">
 		update team
