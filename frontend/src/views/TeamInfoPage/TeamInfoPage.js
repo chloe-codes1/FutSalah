@@ -252,7 +252,7 @@ export default function ProfilePage(props) {
                     }}
                     anchorOrigin={{
                       vertical: "bottom",
-                      horizontal: "center",
+                      horizontal: "right",
                     }}
                     transformOrigin={{
                       vertical: "top",
