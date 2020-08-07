@@ -1,7 +1,7 @@
 import { container } from "assets/jss/material-kit-react.js";
 import { defaultFont } from "assets/jss/material-kit-react.js";
-import tooltipsStyle from "assets/jss/material-kit-react/tooltipsStyle.js";
 import popoverStyles from "assets/jss/material-kit-react/popoverStyles.js";
+import tooltipsStyle from "assets/jss/material-kit-react/tooltipsStyle.js";
 
 const teamInfoStyle = {
   ...tooltipsStyle,
@@ -76,11 +76,9 @@ const teamInfoStyle = {
   },
   logo: {
     borderRadius: "70%",
-    width: "80px",
-    height: "80px",
+    width: "85px",
+    height: "85px",
     margin: "auto 0 auto 5%",
-    // boxShadow: "2px 2px 2px #000",
-    border: "5px solid black",
   },
   modifyButton: {
     margin: "auto 1%",

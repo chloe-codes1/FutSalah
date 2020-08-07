@@ -4,19 +4,30 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import UserContext from "../../contexts/UserContext";
 
-import AddUserDialog from "components/Dialog/AddUserDialog";
-import Button from "components/CustomButtons/Button.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-import NavPills from "components/NavPills/NavPills.js";
 import Formation from "views/Components/Formation/Formation";
 import { FormationBench } from "views/Components/Formation/FormationBench";
+import { Grid, Modal, Typography } from "@material-ui/core";
 
+import AddIcon from "@material-ui/icons/Add";
+import AddUserDialog from "components/Dialog/AddUserDialog";
+import Backdrop from "@material-ui/core/Backdrop";
+import Button from "components/CustomButtons/Button.js";
+import Dropzone from "../Dropzone/Dropzone";
+import Fade from "@material-ui/core/Fade";
+import GridItem from "components/Grid/GridItem.js";
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
+// Dialogs
+import ModifyTeamInfoDialog from "components/Dialog/ModifyTeamInfoDialog";
+import NavPills from "components/NavPills/NavPills.js";
+import Paginations from "components/Pagination/Pagination.js";
+import Parallax from "components/Parallax/Parallax.js";
 import { Player } from "views/Components/Formation/Player";
+import Popover from "@material-ui/core/Popover";
+import RemoveIcon from "@material-ui/icons/Remove";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -24,31 +35,42 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
-import Popover from "@material-ui/core/Popover";
-
-// Dialogs
-import ModifyTeamInfoDialog from "components/Dialog/ModifyTeamInfoDialog";
-import Paginations from "components/Pagination/Pagination.js";
-import Parallax from "components/Parallax/Parallax.js";
-
 import axios from "axios";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
-
 import teamImage from "assets/img/basicTeamImg1.jpg";
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
-
+const modalStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    borderRadius: "10px",
+  },
+}));
 export default function ProfilePage(props) {
   const classes = useStyles();
+  const modal = modalStyles();
   const { ...rest } = props;
 
+  const handleDropZone = () => {
+    setDropZone(true);
+  };
+  const handleDropZoneClose = () => {
+    setDropZone(false);
+  };
+
+  const [dropZone, setDropZone] = useState(false);
   // const params = new URLSearchParams(paramsString);
   // const id = params.get("id");
 
@@ -89,25 +111,25 @@ export default function ProfilePage(props) {
   const [playerPos1, setPlayerPos1] = useState([
     {
       idx: 8,
-      userid: 2,
+      userid: 437,
       name: "김싸피",
       position: "ALA",
     },
     {
       idx: 0,
-      userid: 3,
+      userid: 361,
       name: "박철수",
       position: "GOLERIO",
     },
     {
       idx: 12,
-      userid: 4,
+      userid: 46,
       name: "이영희",
       position: "FIXO",
     },
     {
       idx: 19,
-      userid: 5,
+      userid: 523,
       name: "바둑이",
       position: "PIVO",
     },
@@ -164,11 +186,23 @@ export default function ProfilePage(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
     })
       .then((res) => {
-        console.log("팀 정보 success");
-        // console.log(res.data); // 아직 지역은 안가져옴.
+        console.log("success");
+        let profileURL = res.data.profileURL;
+        if (profileURL) {
+          teamInfo.profileURL =
+            process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
+        } else {
+          teamInfo.profileURL =
+            process.env.REACT_APP_S3_BASE_URL +
+            "/team-default-" +
+            Math.ceil(Math.random(1, 8)) +
+            ".png";
+        }
         setTeamInfo({
           ...res.data,
           id: TeamId,
+          region: "서울시 종로구(test data)",
+          profileURL: teamInfo.profileURL,
         });
       })
       .catch((e) => {
@@ -223,13 +257,22 @@ export default function ProfilePage(props) {
             <GridContainer spacing={3}>
               {/* header 부분 */}
               <GridItem className={classes.title} xs={12}>
-                <img className={classes.logo} src={teamImage} alt="..." />
+                <Tooltip title="팀 대표 사진 변경하기" interactive>
+                  <img
+                    className={classes.logo}
+                    src={teamInfo.profileURL}
+                    alt="team"
+                    onClick={handleDropZone}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
                 <div
                   style={{
                     margin: "auto 1%",
                   }}
                 >
-                  {/* <span>{teamInfo.region}</span> */}
+                  {/* 지역은 나중에 받아오기 */}
+                  <span>{teamInfo.region}</span>
                   <div
                     onClick={(e) => {
                       setAnchorEl(e.target);
@@ -266,17 +309,17 @@ export default function ProfilePage(props) {
                   </Popover>
                 </div>
                 {/* 팀장인 경우만 보이게 */}
-                {UserContext.userID === teamInfo.leader && (
-                  <Button
-                    className={classes.modifyButton}
-                    size="sm"
-                    onClick={() => {
-                      setModifyOpen(true);
-                    }}
-                  >
-                    수정
-                  </Button>
-                )}
+                {/* {UserContext.userID === teamInfo.leader && ( */}
+                <Button
+                  className={classes.modifyButton}
+                  size="sm"
+                  onClick={() => {
+                    setModifyOpen(true);
+                  }}
+                >
+                  수정
+                </Button>
+                {/* )} */}
               </GridItem>
               {/* 포메이션 부분 */}
               <GridItem xs={12} sm={6}>
@@ -387,8 +430,8 @@ export default function ProfilePage(props) {
                           <div className={classes.table}>
                             <Table>
                               <TableBody>
-                                {teamList.map((t) => (
-                                  <TableRow key={t.userID}>
+                                {teamList.map((t, index) => (
+                                  <TableRow key={index}>
                                     <TableCell align="center">
                                       <img
                                         className={classes.memberImg}
@@ -499,19 +542,19 @@ export default function ProfilePage(props) {
                                   <strong>AWAY</strong>
                                 </TableCell>
                               </TableRow>
-                              {record.map((r) => (
-                                <TableRow key={r.resultid}>
+                              {record.map((result, index) => (
+                                <TableRow key={index}>
                                   <TableCell align="center">
-                                    {r.homeTeamName}
+                                    {result.homeTeamName}
                                   </TableCell>
                                   <TableCell align="center">
-                                    {r.homeScore}
+                                    {result.homeScore}
                                   </TableCell>
                                   <TableCell align="center">
-                                    {r.awayScore}
+                                    {result.awayScore}
                                   </TableCell>
                                   <TableCell align="center">
-                                    {r.awayTeamName}
+                                    {result.awayTeamName}
                                   </TableCell>
                                 </TableRow>
                               ))}
@@ -536,8 +579,8 @@ export default function ProfilePage(props) {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {teamList.map((t) => (
-                                <TableRow key={t.userID}>
+                              {teamList.map((t, index) => (
+                                <TableRow key={index}>
                                   <TableCell align="center">
                                     <img
                                       className={classes.memberImg}
@@ -636,6 +679,32 @@ export default function ProfilePage(props) {
         teamID={teamInfo.teamID}
         modifyTeamList={modifyTeamList}
       />
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={modal.modal}
+        open={dropZone}
+        onClose={handleDropZoneClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={dropZone}>
+          <div className={modal.paper} align="center">
+            <Grid mt={5}>
+              <Dropzone align="center" ID={teamInfo.teamID} path="team" />
+            </Grid>
+            <Typography
+              id="transition-modal-title"
+              style={{ marginTop: "10px", marginBottom: "15px" }}
+            >
+              당신의 팀을 나타내는 사진을 업로드 하세요!
+            </Typography>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 }

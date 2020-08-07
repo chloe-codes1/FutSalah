@@ -36,6 +36,7 @@ function AddInfoDialog(props) {
     })
       .then(() => {
         console.log("팀원 추가");
+        console.log(userInfo);
         modifyTeamList(userInfo);
       })
       .catch((e) => {
