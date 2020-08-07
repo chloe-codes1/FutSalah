@@ -8,6 +8,7 @@ const playerStyle = {
   fontSize: 15,
   fontWeight: "bold",
 };
+
 export const Player = ({ player, inField }) => {
   const [{ isDragging }, drag] = useDrag({
     item: { type: "position", player },
