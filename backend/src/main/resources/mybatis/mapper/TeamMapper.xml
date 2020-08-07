@@ -18,27 +18,39 @@
 	</select>
 
 	<!-- 팀원 정보 by teamID -->
-	<select id="getAllCrewInfo" parameterType="int" resultType="UserDTO">
+	<select id="getAllCrewInfo" parameterType="int"
+		resultType="UserDTO">
 		SELECT user.userID, user.name, user.position,
-		user.age, user.height, user.weight, user.profileURL
+		user.age,
+		user.height, user.weight, user.profileURL
 		FROM user
-		INNER JOIN userteamconn ON user.userID = userteamconn.userID
-		INNER JOIN team on userteamconn.teamID = team.teamID
+		INNER JOIN
+		userteamconn ON user.userID = userteamconn.userID
+		INNER JOIN team on
+		userteamconn.teamID = team.teamID
 		WHERE team.teamID = #{teamID}
 	</select>
-	
+
 	<!-- 팀 이름으로 검색 -->
-	<select id="searchTeamByName" parameterType="String" resultType="TeamInfoDTO">
+	<select id="searchTeamByName" parameterType="String"
+		resultType="TeamInfoDTO">
 		SELECT * FROM team WHERE name LIKE CONCAT('%', #{name},'%')
 	</select>
-	
+
 	<!-- 현재 가장 큰 teamID 값 반환 -->
 	<select id="getNextTeamId" resultType="int">
-		SELECT max(teamID) from team;
+		SELECT max(teamID) from
+		team;
 	</select>
-	
+
 	<!-- 팀 프로파일 사진 업로드 -->
 	<update id="uploadProfileImage" parameterType="map">
-		UPDATE team SET profileURL=#{uniqueFileName} WHERE teamID=#{teamID}
+		UPDATE team SET
+		profileURL=#{uniqueFileName} WHERE teamID=#{teamID}
 	</update>
+
+	<!-- 팀원 방출 -->
+	<delete id="deleteCrew" parameterType="map">
+		delete from userteamconn where userID = #{userID} and teamID = #{teamID}
+	</delete>
 </mapper>

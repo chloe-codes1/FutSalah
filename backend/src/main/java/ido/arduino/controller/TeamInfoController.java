@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -215,8 +216,11 @@ public class TeamInfoController {
 		return list;
 	}
 
-	
-	
+	// 팀원 방출
+	@PostMapping("/team/member")
+	public @ResponseBody int deleteCrew(@RequestParam("userID")int userID, @RequestParam("teamID")int teamID ) {
+		return tService.deleteCrew(teamID, userID);
+	}
 	
 	// ----------------formation---------------------------
 	// formation 삽입
