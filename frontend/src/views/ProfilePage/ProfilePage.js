@@ -138,7 +138,7 @@ export default function ProfilePage(props) {
         console.log("res??", res.data);
         let profileURL = res.data.profileURL;
         if (profileURL) {
-          if (profileURL.slice(0, 33) == "https://lh5.googleusercontent.com") {
+          if (profileURL.slice(0, 10) == "https://lh") {
             console.log("google profile image 있는 유저")
           } else {
             profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;

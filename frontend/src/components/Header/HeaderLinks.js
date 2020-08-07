@@ -165,17 +165,6 @@ export default function HeaderLinks(props) {
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
-        <Link to={"/teaminfo/1"} className={classes.link}>
-          <Button
-            color="transparent"
-            target="_blank"
-            className={classes.navLink}
-          >
-            팀정보(데모)
-          </Button>
-        </Link>
-      </ListItem>
-      <ListItem className={classes.listItem}>
         <Link to={"/searchteam"} className={classes.link}>
           <Button
             color="transparent"
