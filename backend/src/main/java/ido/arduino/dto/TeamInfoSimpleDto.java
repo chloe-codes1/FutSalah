@@ -15,6 +15,7 @@ public class TeamInfoSimpleDto {
 	private int draws;
 	private String profileURL;
 	private String name;
+	private int teamID;
 
 
 }
