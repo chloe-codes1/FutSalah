@@ -76,6 +76,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
   }, []);
 
   const createTeam = useCallback(() => {
+    
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team`,

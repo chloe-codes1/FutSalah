@@ -53,8 +53,6 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		return tRepo.delete(teamID);
 	}
 
-
-
 	//----------------myteam---------------------------
 	@Override
 	public List<MyTeamDto> selectAllmyteam(String id) {
