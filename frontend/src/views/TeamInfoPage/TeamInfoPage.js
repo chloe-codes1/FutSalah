@@ -165,19 +165,15 @@ export default function ProfilePage(props) {
 
   // 선수 방출
   const removeTeamList = (id) => {
-    const removeMember = {
-      userID: id,
-      teamID: teamInfo.teamID,
-    };
-
-    console.log(removeMember);
-
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member`,
-      data: removeMember,
+      data: {
+        teamID: teamInfo.teamID,
+        userID: id,
+      },
     })
-      .then((res) => {
+      .then(() => {
         console.log("remove member success");
       })
       .catch((e) => {
