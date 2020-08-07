@@ -37,15 +37,7 @@ export default function SearchTeamPage(props) {
   useEffect(() => {
     // 전체 데이터 받아오기
     // 나중에 페이징되는 데이터 받기로 변경하기
-    axios
-      .get(`${process.env.REACT_APP_SERVER_BASE_URL}/api/team`)
-      .then((response) => {
-        console.log(response.data);
-        setTeamList(response.data);
-      })
-      .catch(() => {
-        console.log("악 실패");
-      });
+    searchAll();
   }, []);
 
   // 전체 페이지 수 1로 고정
@@ -73,6 +65,34 @@ export default function SearchTeamPage(props) {
 
   const nextPage = () => {
     if (pageNum !== totalPage) setPageNum(pageNum + 1);
+  };
+
+  // 팀 전체 검색
+  const searchAll = () => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_BASE_URL}/api/team`)
+      .then((response) => {
+        console.log(response.data);
+        setTeamList(response.data);
+      })
+      .catch(() => {
+        console.log("악 실패");
+      });
+  };
+
+  // 팀이름으로 검색
+  const searchByName = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/search/${searchWord}`,
+    })
+      .then((res) => {
+        console.log("search by name success");
+        setTeamList(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   return (
@@ -141,11 +161,8 @@ export default function SearchTeamPage(props) {
               size="sm"
               style={{ marginLeft: "10px" }}
               onClick={() => {
-                // 검색
-                // axios 통신 (검색어와 지역명 보내기)
-                console.log(
-                  "region: " + region + "\nsearchWord: " + searchWord
-                );
+                if (searchWord === "") searchAll();
+                else searchByName();
               }}
             >
               검색
