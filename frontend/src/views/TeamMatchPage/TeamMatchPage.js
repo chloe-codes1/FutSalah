@@ -1,15 +1,7 @@
-import {
-  Avatar,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
-} from "@material-ui/core";
-import Button from "components/CustomButtons/Button.js";
 import React, { useCallback, useContext, useEffect, useState } from "react";
+
+import { Divider, Grid, List, ListItem } from "@material-ui/core";
+import Button from "components/CustomButtons/Button.js";
 import Footer from "components/Footer/Footer.js";
 // component
 import Header from "components/Header/Header.js";
@@ -20,6 +12,7 @@ import Icon from "@material-ui/core/Icon";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
+//import Dropdown from "components/CustomDropdown/CustomDropdown.js";
 import UserContext from "../../contexts/UserContext.js";
 import axios from "axios";
 
@@ -30,9 +23,124 @@ import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 
+import MatchSearch from "./MatchSearch.js";
+import MatchCard from "./MatchCard.js";
+
+const initialState = [
+  {
+    name: "일산풋볼",
+    matchDay: "2020-08-12 20:00",
+    matchType: "5:5",
+    location: "경기도 고양시",
+    teamImg: 3,
+    matchState: 1,
+    stadium: true,
+  },
+  {
+    name: "멀티캠퍼스",
+    matchDay: "2020-08-13 10:00",
+    matchType: "5:5",
+    location: "서울특별시 강남구",
+    teamImg: 2,
+    matchState: 1,
+    stadium: true,
+  },
+  {
+    name: "싸피풋살",
+    matchDay: "2020-08-14 15:00",
+    matchType: "5:5",
+    location: "서울특별시 강남구",
+    teamImg: 1,
+    matchState: 1,
+    stadium: false,
+  },
+  {
+    name: "고양덕양",
+    matchDay: "2020-08-15 17:00",
+    matchType: "6:6",
+    location: "경기도 고양시",
+    teamImg: 2,
+    matchState: 1,
+    stadium: true,
+  },
+  {
+    name: "bootcamp",
+    matchDay: "2020-08-11 20:00",
+    matchType: "5:5",
+    location: "경기도 수원시",
+    teamImg: 3,
+    matchState: 2,
+    stadium: true,
+  },
+  {
+    name: "ReactJS",
+    matchDay: "2020-08-13 18:00",
+    matchType: "5:5",
+    location: "서울특별시 강남구",
+    teamImg: 2,
+    matchState: 2,
+    stadium: true,
+  },
+  {
+    name: "VueJS",
+    matchDay: "2020-08-14 15:00",
+    matchType: "5:5",
+    location: "서울특별시 강남구",
+    teamImg: 1,
+    matchState: 2,
+    stadium: false,
+  },
+  {
+    name: "신분당선",
+    matchDay: "2020-08-15 17:00",
+    matchType: "6:6",
+    location: "경기도 성남시",
+    teamImg: 2,
+    matchState: 2,
+    stadium: true,
+  },
+  {
+    name: "교대역",
+    matchDay: "2020-07-13 20:00",
+    matchType: "6:6",
+    location: "서울특별시 서초구",
+    teamImg: 3,
+    matchState: 3,
+    stadium: true,
+  },
+  {
+    name: "용인시청",
+    matchDay: "2020-07-14 22:00",
+    matchType: "5:5",
+    location: "경기도 용인시",
+    teamImg: 2,
+    matchState: 3,
+    stadium: true,
+  },
+  {
+    name: "12층",
+    matchDay: "2020-07-21 15:00",
+    matchType: "5:5",
+    location: "서울특별시 강남구",
+    teamImg: 1,
+    matchState: 3,
+    stadium: false,
+  },
+  {
+    name: "버거킹",
+    matchDay: "2020-08-03 17:00",
+    matchType: "6:6",
+    location: "경기도 수원시",
+    teamImg: 2,
+    matchState: 3,
+    stadium: true,
+  },
+];
+
 const useStyles = makeStyles(styles);
 function TeamMatchPage() {
   const classes = useStyles();
+  const [matchingList, setMatchingList] = useState(initialState);
   return (
     <div>
       <Header
@@ -54,24 +162,40 @@ function TeamMatchPage() {
               <h4>팀에게 딱 맞는 매칭 상대를 검색해보세요.</h4>
               <br />
             </GridItem>
-            <GridItem>
-              <Button
-                color="info"
-                size="sm"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i className="fas fa-search" />
-                매칭 검색
-              </Button>
-            </GridItem>
           </GridContainer>
         </div>
       </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <Button>팀 매칭</Button>
+          <MatchSearch />
         </div>
+        <Divider />
+        <br />
+        {matchingList.length === 0 && (
+          <Grid container justify="center">
+            <Grid item>
+              <h5>현재 매칭중인 팀이 존재하지 않습니다.</h5>
+            </Grid>
+          </Grid>
+        )}
+        {!(matchingList.length === 0) &&
+          matchingList.map((match, index) => {
+            if ((index + 1) % 3 === 0) {
+              return (
+                <Grid container justify="center" spacing={3}>
+                  <Grid item>
+                    <MatchCard match={matchingList[index - 2]} />
+                  </Grid>
+                  <Grid item>
+                    <MatchCard match={matchingList[index - 1]} />
+                  </Grid>
+                  <Grid item>
+                    <MatchCard match={matchingList[index]} />
+                  </Grid>
+                </Grid>
+              );
+            }
+          })}
       </div>
       <Footer />
     </div>
