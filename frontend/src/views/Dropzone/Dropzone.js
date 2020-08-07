@@ -7,7 +7,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 const Dropzone = (props) => {
-  const { userID } = props;
+  const { ID, path } = props;
   const fileInputRef = useRef();
   const modalImageRef = useRef();
   const modalRef = useRef();
@@ -147,11 +147,12 @@ const Dropzone = (props) => {
       const formData = new FormData();
       formData.append("file", validFiles[i]);
       formData.append("key", "");
-      console.log("userid??", userID)
+      console.log("id??", ID)
+      console.log("path??", path)
 
       axios
         .post(
-          `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/upload/${userID}`,
+          `${process.env.REACT_APP_SERVER_BASE_URL}/api/${path}/upload/${ID}`,
           formData,
           {
             onUploadProgress: (progressEvent) => {
@@ -172,7 +173,7 @@ const Dropzone = (props) => {
           }
         )
         .then(() => {
-          history.push("/");
+          history.go(0)
           alert("이미지가 성공적으로 업로드 되었습니다!");
         })
         .catch(() => {

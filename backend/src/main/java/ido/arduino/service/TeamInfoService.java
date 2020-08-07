@@ -18,7 +18,6 @@ public interface TeamInfoService {
 	int update(TeamInfoDto info);
 	int delete(String teamID);
 
-
 	//----------------myteam---------------------------
 	int insertmy(UserTeamConnDto uteam);
 	int updatemy(UserDTO userID);
