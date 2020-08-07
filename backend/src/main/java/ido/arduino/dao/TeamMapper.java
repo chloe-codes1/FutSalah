@@ -15,4 +15,5 @@ public interface TeamMapper {
 	List<TeamInfoDto> searchTeamByName(String name);
 	int getNextTeamId();
 	void uploadProfileImage(int teamID, String uniqueFileName);
+	int deleteCrew(int teamID, int userID);
 }

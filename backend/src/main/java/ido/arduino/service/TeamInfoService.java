@@ -33,6 +33,7 @@ public interface TeamInfoService {
 	List<UserDTO> getAllCrewInfo(int teamID);
 	List<TeamInfoDto> searchTeamByName(String name);
 	int getNextTeamId();
+	int deleteCrew(int teamID, int userID);
 
 
 	

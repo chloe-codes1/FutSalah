@@ -98,11 +98,11 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
   return (
     <Dialog fullWidth open={open} onClose={onClose}>
       <DialogTitle>팀 생성하기</DialogTitle>
-      <Grid container justify="center">
+      {/* <Grid container justify="center">
         <Grid item>
           <Avatar className={classes.large}>TeamLogo</Avatar>
         </Grid>
-      </Grid>
+      </Grid> */}
 
       <Grid container spacing={3}>
         <Grid item xs></Grid>

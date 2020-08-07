@@ -97,10 +97,15 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-
 	public TeamInfoDto getTeamInfo(int teamID) {
 		return teamMapper.getTeamInfo(teamID);
 	}
+	
+	@Override
+	public int deleteCrew(int teamID, int userID) {
+		return teamMapper.deleteCrew(teamID, userID);
+	}
+
 
 	
 	//----------------formation---------------------------
