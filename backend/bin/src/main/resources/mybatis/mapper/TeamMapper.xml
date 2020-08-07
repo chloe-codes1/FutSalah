@@ -32,8 +32,8 @@
 		SELECT * FROM team WHERE name LIKE CONCAT('%', #{name},'%')
 	</select>
 	
-	<!-- 다음 Auto_increment 값 반환 -->
+	<!-- 현재 가장 큰 teamID 값 반환 -->
 	<select id="getNextTeamId" resultType="int">
-		SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'team' AND table_schema = DATABASE()
+		SELECT max(teamID) from team;
 	</select>
 </mapper>

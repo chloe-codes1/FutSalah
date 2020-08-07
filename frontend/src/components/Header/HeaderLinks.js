@@ -187,6 +187,17 @@ export default function HeaderLinks(props) {
         </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
+        <Link to={"/match"} className={classes.link}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
+            팀 매칭
+          </Button>
+        </Link>
+      </ListItem>
+      <ListItem className={classes.listItem}>
         <Link to={"/myteam"} className={classes.link}>
           {userinfo.logged && (
             <Button
@@ -214,16 +225,20 @@ export default function HeaderLinks(props) {
       </ListItem>
       <ListItem className={classes.listItem}>
         {userinfo.logged && (
-          <Badge
-            badgeContent={4}
-            color="secondary"
-            className={classes.badgeRoot}
-          >
-            <IconButton size="small" className={classes.buttonIcon}>
-              <Avatar className={classes.small} src={userinfo.profileURL} />
-              {/* <Avatar src={userinfo.profileURL} /> */}
-            </IconButton>
-          </Badge>
+          <IconButton size="small" className={classes.buttonIcon}>
+            <Avatar className={classes.small} src={userinfo.profileURL} />
+            {/* <Avatar src={userinfo.profileURL} /> */}
+          </IconButton>
+          // <Badge
+          //   badgeContent={4}
+          //   color="secondary"
+          //   className={classes.badgeRoot}
+          // >
+          //   <IconButton size="small" className={classes.buttonIcon}>
+          //     <Avatar className={classes.small} src={userinfo.profileURL} />
+          //     {/* <Avatar src={userinfo.profileURL} /> */}
+          //   </IconButton>
+          // </Badge>
         )}
       </ListItem>
       <ListItem className={classes.listItem}>

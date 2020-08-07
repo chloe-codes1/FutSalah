@@ -9,11 +9,13 @@ import "assets/scss/material-kit-react.scss?v=1.9.0";
 
 // pages for this product
 import Admin from "views/AdminPage/Admin.js";
+import AdminInfo from "views/AdminPage/AdminInfo.js";
 import Components from "views/Components/Components.js";
 import Profile from "views/ProfilePage/ProfilePage.js";
 import TeamInfo from "views/TeamInfoPage/TeamInfoPage.js";
 import SearchTeam from "views/SearchTeamPage/SearchTeamPage.js";
 import MyTeam from "views/TeamMangementPage/MyTeamPage.js";
+import TeamMatch from "views/TeamMatchPage/TeamMatchPage.js";
 
 var hist = createBrowserHistory();
 
@@ -25,10 +27,12 @@ ReactDOM.render(
     <Router history={hist}>
       <Switch>
         <Route exact path="/admin" component={Admin} />
+        <Route exact path="/admin/:id" component={AdminInfo} />
         <Route exact path="/teamInfo/:id" component={TeamInfo} />
         <Route exact path="/searchTeam" component={SearchTeam} />
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/myteam" component={MyTeam} />
+        <Route exact path="/match" component={TeamMatch} />
         <Route exact path="/" component={Components} />
       </Switch>
     </Router>
