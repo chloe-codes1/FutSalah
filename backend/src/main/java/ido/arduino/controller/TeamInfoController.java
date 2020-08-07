@@ -218,7 +218,9 @@ public class TeamInfoController {
 
 	// 팀원 방출
 	@PostMapping("/team/member")
-	public @ResponseBody int deleteCrew(@RequestParam("userID")int userID, @RequestParam("teamID")int teamID ) {
+	public @ResponseBody int deleteCrew(@RequestBody Map<String, Integer> data ) {
+		int teamID = data.get("teamID");
+		int userID = data.get("userID");
 		return tService.deleteCrew(teamID, userID);
 	}
 	
