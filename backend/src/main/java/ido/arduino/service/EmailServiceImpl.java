@@ -51,7 +51,7 @@ public class EmailServiceImpl{
 			// 메일 내용 + 요청 보내는 유저 정보
 
 			String str = "<h2> 안녕하세요, " + leaderName + "님!</h2>" + "<h3>" + requestorName + "님께서 " + teamName
-					+ "팀 가입 요청을 보내셨습니다. </h3>" + "<br/> 요청자 이름: " + requestorName + "<br/> Email: " + requestorEmail
+					+ "팀 가입을 요청하였습니다. </h3>" + "<br/> 요청자 이름: " + requestorName + "<br/> Email: " + requestorEmail
 					+ "<br/> 포지션: " + requestorPosition + "<h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/teaminfo/" + teamID + "'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"

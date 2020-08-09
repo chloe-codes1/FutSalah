@@ -14,6 +14,7 @@ import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.TeamLeaderDTO;
+import ido.arduino.dto.TeamLocationDTO;
 import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.repo.TeamInfoRepo;
@@ -91,8 +92,18 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 	
 	@Override
-	public List<TeamInfoDto> searchTeamByName(String name) {
+	public List<TeamLocationDTO> searchTeamByName(String name) {
 		return teamMapper.searchTeamByName(name);
+	}
+	
+	@Override
+	public List<TeamLocationDTO> searchTeamByLocation(String gu) {
+		return teamMapper.searchTeamByLocation(gu);
+	}
+	
+	@Override
+	public List<TeamLocationDTO> searchTeamByBoth(String name, String gu) {
+		return teamMapper.searchTeamByBoth(name, gu);
 	}
 	
 	@Override
@@ -116,28 +127,26 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Override
 	public int insertformation(Formation form) {
-		// TODO Auto-generated method stub
 		return tRepo.insertformation(form);
 	}
 
 	@Override
 	public int updateformation(Formation form) {
-		// TODO Auto-generated method stub
 		return tRepo.updateformation(form);
 	}
 
 	@Override
 	public int deleteformation(int grid) {
-		// TODO Auto-generated method stub
 		return tRepo.deleteformation(grid);
 	}
 
 	@Override
 	public List<Formation> selectformation() {
-		// TODO Auto-generated method stub
 		return tRepo.selectformation();
 
 	
 	}
+
+
 
 }

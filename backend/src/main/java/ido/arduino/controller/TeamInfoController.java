@@ -3,6 +3,7 @@ package ido.arduino.controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.TeamLeaderDTO;
+import ido.arduino.dto.TeamLocationDTO;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.service.EmailServiceImpl;
@@ -188,12 +190,25 @@ public class TeamInfoController {
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
 
-	// 팀 검색 by name
-	@GetMapping("/team/search/{name}")
-	public @ResponseBody List<TeamInfoDto> searchTeamByName(@PathVariable String name) {
-		List<TeamInfoDto> list = tService.searchTeamByName(name);
+	// 팀 검색 by 1) name 2) location 3) both	
+	@ApiOperation(value = "팀 검색 by 1) name 2) location 3) both", response = List.class)
+	@PostMapping("/team/search/{condition}")
+	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition,@RequestBody Map<String, String> data ) {
+		List<TeamLocationDTO> list = new ArrayList<>();
+		if (condition.equals("name")) {
+			String name = data.get("name");
+			list = tService.searchTeamByName(name);
+		}else if (condition.equals("location")) {
+			String gu = data.get("gu");
+			list = tService.searchTeamByLocation(gu);
+		}else if (condition.equals("both")) {
+			String name = data.get("name");
+			String gu = data.get("gu");
+			list = tService.searchTeamByBoth(name, gu);
+		}
 		return list;
 	}
+	
 
 	// ----------------my team---------------------------
 	// 나의 팀 목록에서 확인하기

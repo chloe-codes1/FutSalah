@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
+import ido.arduino.dto.TeamLocationDTO;
 import ido.arduino.dto.UserDTO;
 
 @Mapper
@@ -14,7 +15,9 @@ public interface TeamMapper {
 	TeamLeaderDTO getTeamLeaderInfo(int teamID);
 	int checkIfExists(String name);
 	List<UserDTO> getAllCrewInfo(int teamID);
-	List<TeamInfoDto> searchTeamByName(String name);
+	List<TeamLocationDTO> searchTeamByName(String name);
+	List<TeamLocationDTO> searchTeamByLocation(String gu);
+	List<TeamLocationDTO> searchTeamByBoth(String name,String gu);
 	int getNextTeamId();
 	void uploadProfileImage(int teamID, String uniqueFileName);
 	int deleteCrew(int teamID, int userID);
