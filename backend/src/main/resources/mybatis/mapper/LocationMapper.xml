@@ -10,6 +10,4 @@
 		SELECT * FROM
 		location WHERE locationID = #{locationID}
 	</select>
-
-
 </mapper>
