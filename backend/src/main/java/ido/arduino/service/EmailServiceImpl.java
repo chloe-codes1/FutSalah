@@ -13,7 +13,7 @@ import ido.arduino.dto.UserDTO;
 @Service
 public class EmailServiceImpl{
 
-	private static final String url = "http://i3a112.p.ssafy.io";
+	private static final String base_url = "http://i3a112.p.ssafy.io";
 
 	JavaMailSender emailSender;
 
@@ -53,7 +53,7 @@ public class EmailServiceImpl{
 			String str = "<h2> 안녕하세요, " + leaderName + "님!</h2>" + "<h3>" + requestorName + "님께서 " + teamName
 					+ "팀 가입 요청을 보내셨습니다. </h3>" + "<br/> 요청자 이름: " + requestorName + "<br/> Email: " + requestorEmail
 					+ "<br/> 포지션: " + requestorPosition + "<h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
-					+ url + "/teaminfo/" + teamID + "'>"
+					+ base_url + "/teaminfo/" + teamID + "'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>요청 수락/거절 하러 가기</button></a>";
 			helper.setText(str, true);
