@@ -14,7 +14,7 @@
 	<!-- leader 상세 정보와 팀 정보 by teamID -->
 	<select id="getTeamLeaderInfo" parameterType="int"
 		resultType="TeamLeaderDTO">
-		SELECT user.userID, user.name as userName, user.email, team.teamID,
+		SELECT user.userID, user.name as leaderName, user.email, team.teamID,
 		team.name as teamName, team.description from user
 		INNER JOIN userteamconn ON user.userID = userteamconn.userID
 		INNER JOIN team on userteamconn.teamID = team.teamID

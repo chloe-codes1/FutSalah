@@ -42,6 +42,7 @@ import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.service.EmailServiceImpl;
@@ -98,9 +99,11 @@ public class TeamInfoController {
 	public @ResponseBody int requestToJoin(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
+		UserDTO requestFrom = uService.findByUserID(userID);
+		TeamLeaderDTO targetTeam = tService.getTeamLeaderInfo(teamID);
 		EmailServiceImpl emailService = new EmailServiceImpl();
 		emailService.setJavaMailSender(javaMailSender);
-		return emailService.requestToJoinMail(userID, teamID);
+		return emailService.requestToJoinMail(requestFrom, targetTeam);
 	}
 
 	// 팀 생성하기
