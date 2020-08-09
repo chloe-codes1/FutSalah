@@ -1,10 +1,15 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { FormationBoard } from "./FormationBoard";
 import { FormationSquare } from "./FormationSquare";
 import { Player } from "./Player";
-import image from "assets/img/backgroundFormation.jpg";
+
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/views/componentsSections/FormationStyle.js";
+
+const useStyles = makeStyles(styles);
 
 export default function Formation({ playerPos, setPlayerPos, memberNum }) {
+  const classes = useStyles();
   const movePlayer = (goalIdx, player) => {
     for (let i = 0; i < playerPos.length; i++) {
       if (player.idx === playerPos[i].idx) {
@@ -43,20 +48,9 @@ export default function Formation({ playerPos, setPlayerPos, memberNum }) {
     return null;
   };
   return (
-    <div
-      style={{
-        margin: "0 auto",
-        width: "30vw",
-        height: "36vw",
-        backgroundImage: `url(${image})`,
-        backgroundSize: "cover",
-        backgroundColor: "green",
-        // border: "2px solid white",
-      }}
-    >
+    <div className={classes.formation}>
       <div
         style={{
-          margin: "0 auto",
           width: "100%",
           height: "83%",
         }}

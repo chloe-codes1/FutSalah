@@ -37,6 +37,12 @@ function AddInfoDialog(props) {
       .then(() => {
         console.log("팀원 추가");
         console.log(userInfo);
+        if (userInfo.profileURL !== null) {
+          if (userInfo.profileURL.indexOf("http") === -1) {
+            userInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL + "/" + userInfo.profileURL;
+          }
+        }
         modifyTeamList(userInfo);
       })
       .catch((e) => {
