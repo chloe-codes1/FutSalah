@@ -20,6 +20,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserDTO findByUserID(int userID) {
+		return userMapper.findByUserID(userID);
+	}
+	
+	@Override
 	public int insert(UserDTO user) {
 		return userMapper.insert(user);
 	}
@@ -39,8 +44,4 @@ public class UserServiceImpl implements UserService {
 		return userMapper.searchUsersByName(name);
 	}
 
-	@Override
-	public UserDTO findByUserID(int userID) {
-		return userMapper.findByUserID(userID);
-	}
 }

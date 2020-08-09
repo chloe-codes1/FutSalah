@@ -13,6 +13,7 @@ import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.repo.TeamInfoRepo;
@@ -84,7 +85,10 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public List<UserDTO> getAllCrewInfo(int teamID) {
 		return teamMapper.getAllCrewInfo(teamID);
 	}
-
+	@Override
+	public TeamLeaderDTO getTeamLeaderInfo(int teamID) {
+		return teamMapper.getTeamLeaderInfo(teamID);
+	}
 	
 	@Override
 	public List<TeamInfoDto> searchTeamByName(String name) {
