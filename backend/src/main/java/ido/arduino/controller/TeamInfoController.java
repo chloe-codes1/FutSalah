@@ -221,7 +221,7 @@ public class TeamInfoController {
 		logger.debug("selectAllmyteam - 호출");
 		System.out.println("check.............................");
 
-		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(String.valueOf(userId)), HttpStatus.OK);
+		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
 
 	// ----------------team info---------------------------

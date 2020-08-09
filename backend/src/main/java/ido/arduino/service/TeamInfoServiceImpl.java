@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ido.arduino.dao.TeamMapper;
 
 import ido.arduino.dto.Formation;
-import ido.arduino.dto.LocationDto;
 
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
@@ -57,7 +56,7 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	//----------------myteam---------------------------
 	@Override
-	public List<MyTeamDto> selectAllmyteam(String id) {
+	public List<MyTeamDto> selectAllmyteam(int id) {
 		return tRepo.selectAllmyteam(id);
 	}
 
@@ -121,7 +120,21 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		return teamMapper.deleteCrew(teamID, userID);
 	}
 
-
+	@Override
+	public int getNumberOfCrews(int teamID) {
+		return teamMapper.getNumberOfCrews(teamID);
+	}
+	
+	@Override
+	public int getNextLeader(int userID, int teamID) {
+		return teamMapper.getNextLeader(userID, teamID);
+	}
+	
+	@Override
+	public int updateLeader(int userID, int teamID) {
+		return teamMapper.updateLeader(userID, teamID);
+	}
+	
 	
 	//----------------formation---------------------------
 
@@ -146,7 +159,6 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	
 	}
-
 
 
 }

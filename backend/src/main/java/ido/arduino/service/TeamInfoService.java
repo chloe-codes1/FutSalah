@@ -23,7 +23,7 @@ public interface TeamInfoService {
 	//----------------myteam---------------------------
 	int insertmy(UserTeamConnDto uteam);
 	int updatemy(UserDTO userID);
-	List<MyTeamDto> selectAllmyteam(String id); // 나의 팀 목록
+	List<MyTeamDto> selectAllmyteam(int id); // 나의 팀 목록
 	
 	//----------------findteam---------------------------
 	List<TeamInfoSimpleDto> selectAll(); // 팀찾기에서 간단한 항목
@@ -36,6 +36,9 @@ public interface TeamInfoService {
 	List<UserDTO> getAllCrewInfo(int teamID);
 	int getNextTeamId();
 	int deleteCrew(int teamID, int userID);
+	int getNumberOfCrews(int teamID);
+	int getNextLeader(int userID, int teamID);
+	int updateLeader(int userID, int teamID);
 	
 	
 	//----------------search team------------------------
