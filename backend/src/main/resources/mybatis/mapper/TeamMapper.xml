@@ -11,6 +11,17 @@
 		team WHERE teamID = #{teamID}
 	</select>
 
+	<!-- leader 상세 정보와 팀 정보 by teamID -->
+	<select id="getTeamLeaderInfo" parameterType="int"
+		resultType="TeamLeaderDTO">
+		SELECT user.userID, user.name as userName, user.email, team.teamID,
+		team.name as teamName, team.description from user
+		INNER JOIN userteamconn ON user.userID = userteamconn.userID
+		INNER JOIN team on userteamconn.teamID = team.teamID
+		WHERE team.teamID = #{teamID} AND user.userID = team.leader
+	</select>
+
+
 	<!-- 팀 이름 중복 검사 -->
 	<select id="checkIfExists" parameterType="String"
 		resultType="int">
@@ -51,6 +62,8 @@
 
 	<!-- 팀원 방출 -->
 	<delete id="deleteCrew" parameterType="map">
-		delete from userteamconn where userID = #{userID} and teamID = #{teamID}
+		DELETE FROM userteamconn
+		WHERE userID = #{userID} AND teamID = #{teamID}
 	</delete>
+
 </mapper>

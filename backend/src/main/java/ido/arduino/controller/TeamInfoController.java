@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,7 @@ import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.dto.UserTeamConnDto;
+import ido.arduino.service.EmailServiceImpl;
 import ido.arduino.service.S3Service;
 import ido.arduino.service.S3ServiceImpl;
 import ido.arduino.service.TeamInfoService;
@@ -62,12 +64,15 @@ public class TeamInfoController {
 
 	@Autowired
 	S3Service s3Service;
-	
+
 	@Autowired
 	TeamInfoService tService;
 
 	@Autowired
 	UserService uService;
+
+	@Autowired
+	JavaMailSender javaMailSender;
 
 	@Value("${aws.s3.bucket}")
 	private String bucketName;
@@ -80,15 +85,23 @@ public class TeamInfoController {
 		return tService.checkIfExists(name);
 	}
 
-
 	// 팀원 추가
 	@PostMapping("/team/crew")
-	public @ResponseBody int addCrewIntoTeam(@RequestBody Map<String, Integer> data){
+	public @ResponseBody int addCrewIntoTeam(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
 		return tService.insertmy(new UserTeamConnDto(userID, teamID));
 	}
 
+	// 팀 가입 신청
+	@PostMapping("/team/join")
+	public @ResponseBody int requestToJoin(@RequestBody Map<String, Integer> data) {
+		int userID = data.get("userID");
+		int teamID = data.get("teamID");
+		EmailServiceImpl emailService = new EmailServiceImpl();
+		emailService.setJavaMailSender(javaMailSender);
+		return emailService.requestToJoinMail(userID, teamID);
+	}
 
 	// 팀 생성하기
 	@ApiOperation(value = "새로운 팀 정보 등록.", response = String.class)
@@ -152,15 +165,15 @@ public class TeamInfoController {
 
 	// 팀 프로파일 이미지 업로드
 	@PostMapping("/team/upload/{teamID}")
-	public ResponseEntity<String> uploadFile(@PathVariable int teamID, @RequestPart(value = "file") final MultipartFile multipartFile) {
+	public ResponseEntity<String> uploadFile(@PathVariable int teamID,
+			@RequestPart(value = "file") final MultipartFile multipartFile) {
 		System.out.println("file" + teamID + multipartFile);
 		final String status = "team";
 		s3Service.uploadFile(multipartFile, teamID, status);
 		final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
-	
+
 	// ----------------find team---------------------------
 
 	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
@@ -178,9 +191,6 @@ public class TeamInfoController {
 		List<TeamInfoDto> list = tService.searchTeamByName(name);
 		return list;
 	}
-	
-	
-	
 
 	// ----------------my team---------------------------
 	// 나의 팀 목록에서 확인하기
@@ -196,9 +206,6 @@ public class TeamInfoController {
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(String.valueOf(userId)), HttpStatus.OK);
 	}
 
-	
-	
-	
 	// ----------------team info---------------------------
 
 	// 팀 정보 조회 by teamID
@@ -218,12 +225,12 @@ public class TeamInfoController {
 
 	// 팀원 방출
 	@PostMapping("/team/member")
-	public @ResponseBody int deleteCrew(@RequestBody Map<String, Integer> data ) {
+	public @ResponseBody int deleteCrew(@RequestBody Map<String, Integer> data) {
 		int teamID = data.get("teamID");
 		int userID = data.get("userID");
 		return tService.deleteCrew(teamID, userID);
 	}
-	
+
 	// ----------------formation---------------------------
 	// formation 삽입
 	@ApiOperation(value = "포메이션 삽입 ", response = List.class)
@@ -278,9 +285,6 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
 	}
-	
-	
-	
 
 	// ----------------QR코드 생성---------------------------
 	// QR코드 생성
@@ -312,9 +316,6 @@ public class TeamInfoController {
 
 		return autoIn;
 	}
-	
-	
-	
 
 	// ----------------예외처리---------------------------
 
