@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import Button from "components/CustomButtons/Button.js";
 import Footer from "components/Footer/Footer.js";
@@ -17,39 +19,65 @@ import Parallax from "components/Parallax/Parallax.js";
 import UserContext from "../../contexts/UserContext";
 
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  withStyles,
+  Theme,
+  createStyles,
+  makeStyles,
+} from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminPage.js";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@material-ui/core";
+
 const useStyles = makeStyles(styles);
+
+const StyledTableCell = withStyles((theme: Theme) =>
+  createStyles({
+    head: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    body: {
+      fontSize: 14,
+    },
+  })
+)(TableCell);
+
+const StyledTableRow = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+      },
+    },
+  })
+)(TableRow);
 
 export default function AdminInfo(props) {
   const { userinfo, userDispatch } = useContext(UserContext);
   const classes = useStyles();
+  const history = useHistory();
   const { ...rest } = props;
 
-  const testMatchInfo = {
-    id: 1,
-    stadium: "고양풋살센터",
-    kickofftime: "2020-08-03 18:00",
-    hometeam: "백석FC",
-    awayteam: "팀동휘",
-  };
-
-  const testScoreInfo = {
-    id: 1,
-    hometeamscore: 1,
-    awayteamscore: 2,
-  };
-
-  const testArriveTimeInfo = {
-    id: 1,
-    hometeamarrivetime: "2020-08-03 17:58",
-    awayteamarrivetime: "2020-08-03 17:49",
-  };
-
+  const testMatchInfo = [
+    {
+      matchID: 1,
+      time: 18,
+      homeTeamID: 20,
+      homeName: "백석FC",
+      awayTeamID: 22,
+      awayName: "팀동휘",
+    },
+  ];
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
-  const [scoreInfo, setScoreInfo] = useState(testScoreInfo);
-  const [arriveTimeInfo, setArriveTimeInfo] = useState(testArriveTimeInfo);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -63,24 +91,18 @@ export default function AdminInfo(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/1`,
     })
       .then((res) => {
-        console.log(res);
-        setMatchInfo({
-          ...res.data,
-          stadium: userinfo.stadium,
-          kickofftime: `${year}-${month}-${date} ${res.data.time}:00`,
-          // ex) 2020-08-06 (목) 18:00
-          hometeam: res.data.homeName,
-          awayteam: res.data.awayName,
-        });
+        console.log(res.data);
+        setMatchInfo(res.data);
+        console.log(matchInfo);
       })
       .catch((e) => {
         console.log("error", e);
       });
   };
 
-  // useEffect(() => {
-  //   loadMatchInfo();
-  // }, []);
+  useEffect(() => {
+    loadMatchInfo();
+  }, []);
 
   return (
     <div>
@@ -103,56 +125,60 @@ export default function AdminInfo(props) {
         <div className={classes.container}>
           <GridContainer spacing={3}>
             <GridItem xs={12}>
-              <div style={{ display: "block" }}>
-                <h3>{matchInfo.stadium}</h3>
-                <h3>{matchInfo.kickofftime}</h3>
-              </div>
-            </GridItem>
-            <GridItem xs={12}>
-              <List className={classes.list}>
-                <ListItem className={classes.leftListItem}>
-                  <Button size="sm" color="primary">
-                    Home
-                  </Button>
-                  <h1>{matchInfo.hometeam}</h1>
-                  <h1>{scoreInfo.hometeamscore}</h1>
-                </ListItem>
-                <ListItem className={classes.centerListItem}>
-                  <h1>vs</h1>
-                </ListItem>
-                <ListItem className={classes.rightListItem}>
-                  <Button size="sm" color="secondary">
-                    Away
-                  </Button>
-                  <h1>{matchInfo.awayteam}</h1>
-                  <h1>{scoreInfo.awayteamscore}</h1>
-                </ListItem>
-              </List>
-            </GridItem>
-            <GridItem xs={12} className={classes.arriveInfoContainer}>
-              <GridItem xs={4} className={classes.arriveInfo}>
-                <h2>도착 정보</h2>
-              </GridItem>
-              <GridItem xs={8} className={classes.arriveContents}>
-                <GridItem xs={12} className={classes.arriveContent}>
-                  <GridItem xs={3} className={classes.arriveContentTeam}>
-                    <h3>Home</h3>
-                  </GridItem>
-                  <GridItem xs={9} className={classes.arriveContentTime}>
-                    <p>{arriveTimeInfo.hometeamarrivetime}</p>
-                  </GridItem>
-                </GridItem>
-                <GridItem xs={12} className={classes.arriveContent}>
-                  <GridItem xs={3} className={classes.arriveContentTeam}>
-                    <h3>Away</h3>
-                  </GridItem>
-                  <GridItem xs={9} className={classes.arriveContentTime}>
-                    <p>{arriveTimeInfo.awayteamarrivetime}</p>
-                  </GridItem>
-                </GridItem>
-              </GridItem>
+              <h1>경기 목록</h1>
+
+              <h3>고양풋살센터</h3>
+
+              <h4>
+                {year}-{month + 1}-{date}
+              </h4>
             </GridItem>
           </GridContainer>
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>No.</StyledTableCell>
+                  <StyledTableCell>Kick-off time</StyledTableCell>
+                  <StyledTableCell>Home</StyledTableCell>
+                  <StyledTableCell>Away</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {matchInfo.map((m, index) =>
+                  m.matchID === undefined ? (
+                    // 데이터를 못 받아올 경우
+                    <StyledTableRow key={testMatchInfo.matchID}>
+                      <StyledTableCell component="th" scope="row">
+                        {testMatchInfo.matchID}
+                      </StyledTableCell>
+                      <StyledTableCell>{testMatchInfo.time}:00</StyledTableCell>
+                      <StyledTableCell>
+                        {testMatchInfo.homeName}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {testMatchInfo.awayName}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ) : (
+                    // 데이터를 받아온 경우
+                    <StyledTableRow key={index}>
+                      <StyledTableCell component="th" scope="row">
+                        {index + 1}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Link to={`/Admin/1/match/${index + 1}`}>
+                          {m.time}:00
+                        </Link>
+                      </StyledTableCell>
+                      <StyledTableCell>{m.homeName}</StyledTableCell>
+                      <StyledTableCell>{m.awayName}</StyledTableCell>
+                    </StyledTableRow>
+                  )
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </Parallax>
       <Footer />

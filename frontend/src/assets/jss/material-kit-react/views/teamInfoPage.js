@@ -7,9 +7,11 @@ const teamInfoStyle = {
   ...tooltipsStyle,
   ...popoverStyles,
   container: {
-    ...container,
-    width: "100%",
-    paddingTop: "7%",
+    marginRight: "auto",
+    marginLeft: "auto",
+    width: "80%",
+    paddingTop: "120px",
+    paddingBottom: "120px",
     color: "white",
     zIndex: 2,
   },
@@ -70,6 +72,7 @@ const teamInfoStyle = {
     display: "none",
   },
   title: {
+    marginTop: "4%",
     display: "flex",
     lineHeight: "100%",
     marginBottom: "0",
@@ -85,9 +88,8 @@ const teamInfoStyle = {
     height: "40px",
   },
   table: {
-    height: "300px",
+    width: "100%",
     backgroundColor: "white",
-    overflow: "scroll",
   },
   memberImg: {
     borderRadius: "70%",
@@ -95,6 +97,12 @@ const teamInfoStyle = {
     height: "50px",
     margin: "auto 0 auto 5%",
     border: "4px solid black",
+  },
+  formation: {
+    minHeight: "500px",
+  },
+  management: {
+    minHeight: "500px",
   },
 };
 

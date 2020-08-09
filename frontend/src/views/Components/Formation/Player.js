@@ -1,46 +1,71 @@
 import React from "react";
-import { useDrag } from "react-dnd";
+import { DragPreviewImage, useDrag } from "react-dnd";
+import playerPreview from "assets/img/playerPreview.png";
 
-const playerStyle = {
-  padding: 0,
-  margin: "auto",
-  cursor: "pointer",
-  fontSize: 15,
-  fontWeight: "bold",
-};
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
-export const Player = ({ player, inField }) => {
-  const [{ isDragging }, drag] = useDrag({
+import styles from "assets/jss/material-kit-react/views/componentsSections/PlayerStyle.js";
+
+const useStyles = makeStyles(styles);
+
+export const Player = ({ player, inField, children }) => {
+  const classes = useStyles();
+
+  const [{ isDragging }, drag, preview] = useDrag({
     item: { type: "position", player },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
+
+  // 포지션에 따라 배경색 정해짐
+  const selectBGcolor = (pos) => {
+    switch (pos) {
+      case "all":
+        return classes.all;
+      case "pivo":
+        return classes.pivo;
+      case "ala":
+        return classes.ala;
+      case "fixo":
+        return classes.fixo;
+      case "goleiro":
+        return classes.goleiro;
+      case "":
+        return classes.noPosition;
+      default:
+        return classes.player;
+    }
+  };
   return inField ? (
-    <div
-      ref={drag}
-      style={{
-        ...playerStyle,
-        textAlign: "center",
-        height: "90%",
-        borderRadius: "70%",
-        backgroundColor: "darkblue",
-        opacity: isDragging ? 0.5 : 1,
-        width: player.idx === 0 ? "18%" : "90%",
-      }}
-    >
-      {player.position}
-      <br />
-      {player.name}
-    </div>
+    <>
+      <div
+        ref={drag}
+        className={selectBGcolor(player.position)}
+        style={{
+          textAlign: "center",
+          height: "90%",
+          borderRadius: "70%",
+          opacity: isDragging ? 0.5 : 1,
+          width: player.idx === 0 ? "18%" : "90%",
+        }}
+      >
+        {player.position !== "" ? (
+          <div>{player.position}</div>
+        ) : (
+          <div>
+            <br />
+          </div>
+        )}
+        <div style={{ fontSize: 15, fontWeight: 900 }}>{player.name}</div>
+      </div>
+    </>
   ) : (
-    <div
-      ref={drag}
-      style={{
-        ...playerStyle,
-      }}
-    >
-      {player.name}
-    </div>
+    <>
+      <DragPreviewImage connect={preview} src={playerPreview} />
+      <div ref={drag} className={classes.player}>
+        {children}
+      </div>
+    </>
   );
 };
