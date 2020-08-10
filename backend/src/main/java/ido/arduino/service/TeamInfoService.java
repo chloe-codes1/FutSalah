@@ -6,6 +6,8 @@ import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
+import ido.arduino.dto.TeamLeaderDTO;
+import ido.arduino.dto.TeamLocationDTO;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.dto.UserTeamConnDto;
 
@@ -30,10 +32,16 @@ public interface TeamInfoService {
 	
 	//----------------team info---------------------------
 	TeamInfoDto getTeamInfo(int teamID);
+	TeamLeaderDTO getTeamLeaderInfo(int teamID);
 	List<UserDTO> getAllCrewInfo(int teamID);
-	List<TeamInfoDto> searchTeamByName(String name);
 	int getNextTeamId();
 	int deleteCrew(int teamID, int userID);
+	
+	
+	//----------------search team------------------------
+	List<TeamLocationDTO> searchTeamByName(String name);
+	List<TeamLocationDTO> searchTeamByLocation(String gu);
+	List<TeamLocationDTO> searchTeamByBoth(String name,String gu);
 
 
 	
