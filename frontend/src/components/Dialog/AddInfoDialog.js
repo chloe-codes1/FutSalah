@@ -26,20 +26,17 @@ function AddInfoDialog(props) {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="form-dialog-title"
-    >
+    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">회원가입 - 추가정보입력</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          안녕하세요. Futsalah에 오신것을 환영합니다! {userInfo.name}님은 첫번째
-          로그인이시며 서비스이용을 위해 추가정보를 입력 부탁드립니다.
+          안녕하세요. Futsalah에 오신것을 환영합니다! {userInfo.name}님은 첫번째 로그인이시며
+          서비스이용을 위해 추가정보를 입력 부탁드립니다.
         </DialogContentText>
         <TextField
           autoFocus
           margin="dense"
+          name="email"
           id="email"
           label="이메일"
           type="email"
@@ -61,6 +58,7 @@ function AddInfoDialog(props) {
           id="height"
           label="키"
           fullWidth
+          value={userInfo.height}
           onChange={onChange}
         />
         <TextField
@@ -72,9 +70,7 @@ function AddInfoDialog(props) {
           onChange={onChange}
         />
         <FormControl className={classes.formControl} fullWidth>
-          <InputLabel id="demo-simple-select-autowidth-label">
-            선호포지션
-          </InputLabel>
+          <InputLabel id="demo-simple-select-autowidth-label">선호포지션</InputLabel>
           <Select
             labelId="demo-simple-select-autowidth-label"
             name="position"
@@ -87,9 +83,7 @@ function AddInfoDialog(props) {
             <MenuItem value="fixo">FIXO</MenuItem>
             <MenuItem value="goleiro">GOLEIRO</MenuItem>
           </Select>
-          <FormHelperText>
-            풋살에서 선호하는 포지션을 선택해주세요.
-          </FormHelperText>
+          <FormHelperText>풋살에서 선호하는 포지션을 선택해주세요.</FormHelperText>
         </FormControl>
       </DialogContent>
       <DialogActions>
