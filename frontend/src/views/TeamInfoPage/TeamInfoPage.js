@@ -38,13 +38,35 @@ import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
 import axios from "axios";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
 import teamInfobg from "assets/img/teamInfobg.jpg";
 import teamImage from "assets/img/basicTeamImg1.jpg";
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
+
+// table
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    padding: "5px 0",
+  },
+  body: {
+    fontSize: 14,
+    padding: 0,
+    padding: "5px 0",
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
 
 const useStyles = makeStyles(styles);
 const modalStyles = makeStyles((theme) => ({
@@ -60,6 +82,7 @@ const modalStyles = makeStyles((theme) => ({
     borderRadius: "10px",
   },
 }));
+
 export default function ProfilePage(props) {
   const classes = useStyles();
   const modal = modalStyles();
@@ -104,7 +127,7 @@ export default function ProfilePage(props) {
 
   // 팀 정보
   const TeamId = rest.match.params.id;
-  // const { userinfo } = useContext(UserContext);
+  const { userinfo } = useContext(UserContext);
   const [teamList, setTeamList] = useState([]); // 팀원 목록
   const [record, setRecord] = useState(testRecord); // 경기전적 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
@@ -117,6 +140,7 @@ export default function ProfilePage(props) {
     //   idx: 6,
     // },
   ]); // 포메이션 정보 (5:5)
+
   const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보 (6:6)
 
   const [modifyOpen, setModifyOpen] = useState(false); // 팀 정보 창
@@ -178,6 +202,31 @@ export default function ProfilePage(props) {
     setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
   };
 
+  // 팀 가입 신청 수락
+  const acceptJoin = (id) => {
+    // 가입 목록 추가되면 추가
+    // axios({
+    //   method: "post",
+    //   url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join`,
+    //   data: {
+    //     teamID: teaminfo.teamID,
+    //     userID: id,
+    //   },
+    // })
+    //   .then(() => {
+    //     console.log("success");
+    //   })
+    //   .catch((e) => {
+    //     console.log("error", e);
+    //   });
+    console.log(id + " ok");
+  };
+
+  // 팀 가입 신청 거절
+  const rejectJoin = (id) => {
+    // 가입 신청에서 빼기
+    console.log(id + " no");
+  };
   useEffect(() => {
     // 팀 정보 가져오기
     axios({
@@ -292,7 +341,10 @@ export default function ProfilePage(props) {
                   className={classes.logo}
                   src={teamInfo.profileURL}
                   alt="team"
-                  onClick={handleDropZone}
+                  onClick={
+                    Number(userinfo.userID) === teamInfo.leader &&
+                    handleDropZone
+                  }
                   style={{ cursor: "pointer" }}
                 />
               </Tooltip>
@@ -336,18 +388,32 @@ export default function ProfilePage(props) {
                   <p className={classes.popoverBody}>{teamInfo.description}</p>
                 </Popover>
               </div>
-              {/* 팀장인 경우만 보이게 */}
-              {/* {UserContext.userID === teamInfo.leader && ( */}
-              <Button
-                className={classes.modifyButton}
-                size="sm"
-                onClick={() => {
-                  setModifyOpen(true);
-                }}
-              >
-                수정
-              </Button>
-              {/* )} */}
+              {/* 팀 정보 변경 버튼 */}
+              {Number(userinfo.userID) === teamInfo.leader && (
+                <Button
+                  color="info"
+                  className={classes.modifyButton}
+                  size="sm"
+                  onClick={() => {
+                    setModifyOpen(true);
+                  }}
+                >
+                  수정
+                </Button>
+              )}
+              {teamList.find((t) => t.userID === Number(userinfo.userID)) ===
+                undefined && (
+                <Button
+                  color="info"
+                  className={classes.modifyButton}
+                  size="sm"
+                  onClick={() => {
+                    console.log("가입 신청!!");
+                  }}
+                >
+                  가입 신청 하기
+                </Button>
+              )}
             </GridItem>
             {/* 포메이션 부분 */}
             <GridItem className={classes.formation} xs={10} md={5}>
@@ -470,136 +536,252 @@ export default function ProfilePage(props) {
                     // 팀원목록
                     tabButton: "팀원",
                     tabContent: (
-                      <TableContainer>
-                        <div
-                          style={{
-                            height: "350px",
-                            overflow: "auto",
-                            borderRadius: "5px",
-                          }}
-                        >
-                          <Table className={classes.table} size="small">
-                            <TableBody
-                              style={{
-                                width: "100%",
-                              }}
-                            >
-                              {teamList.map((t, index) => (
-                                <Player
-                                  key={index}
-                                  player={{
-                                    name: t.name,
-                                    position: t.position,
-                                    userid: t.userID,
-                                  }}
-                                >
-                                  <TableRow>
-                                    <TableCell
-                                      rowSpan={2}
-                                      align="center"
-                                      width="20%"
-                                    >
-                                      <img
-                                        className={classes.memberImg}
-                                        src={
-                                          t.profileURL === null
-                                            ? teamImage
-                                            : t.profileURL
-                                        }
-                                      />
-                                    </TableCell>
-                                    <TableCell
-                                      width="50%"
-                                      style={{
-                                        borderBottom: "none",
+                      <div>
+                        <TableContainer className={classes.table}>
+                          <div
+                            style={{
+                              height: "350px",
+                              overflow: "auto",
+                              borderRadius: "5px",
+                            }}
+                          >
+                            <Table size="small">
+                              <TableBody
+                                style={{
+                                  width: "100%",
+                                }}
+                              >
+                                {teamList.map((t, index) => {
+                                  return Number(userinfo.userID) ===
+                                    teamInfo.leader ? (
+                                    <Player
+                                      key={index}
+                                      player={{
+                                        name: t.name,
+                                        position: t.position,
+                                        userid: t.userID,
                                       }}
                                     >
-                                      {teamInfo.leader === t.userID && (
-                                        <StarsRoundedIcon />
-                                      )}
-                                      {t.position !== ""
-                                        ? t.position
-                                        : "포지션 없음"}
-                                    </TableCell>
-                                    <TableCell
-                                      rowSpan={2}
-                                      align="center"
-                                      width="30%"
-                                    >
-                                      {teamInfo.leader !== t.userID && (
-                                        <Button
-                                          size="sm"
-                                          onClick={() => {
-                                            console.log(t.name + "방출");
-                                            removeTeamList(t.userID);
-                                          }}
+                                      <TableRow>
+                                        <TableCell
+                                          rowSpan={2}
+                                          align="center"
+                                          width="20%"
+                                        >
+                                          <img
+                                            className={classes.memberImg}
+                                            src={
+                                              t.profileURL === null
+                                                ? teamImage
+                                                : t.profileURL
+                                            }
+                                          />
+                                        </TableCell>
+                                        <TableCell
+                                          width="50%"
                                           style={{
-                                            maxWidth: "100%",
+                                            borderBottom: "none",
                                           }}
                                         >
-                                          <RemoveIcon />
-                                        </Button>
-                                      )}
-                                    </TableCell>
-                                  </TableRow>
-                                  <TableRow>
-                                    <TableCell>
-                                      <div
-                                        onClick={(e) => {
-                                          setAnchorEl(e.target);
-                                          setOpenedPopoverId(t.userID);
-                                        }}
-                                        style={{
-                                          fontSize: 20,
-                                          fontWeight: 400,
-                                        }}
-                                      >
-                                        {t.name}
-                                      </div>
-                                      <Popover
-                                        classes={{
-                                          paper: classes.popover,
-                                        }}
-                                        open={openedPopoverId === t.userID}
-                                        anchorEl={anchorEl}
-                                        onClose={() => {
-                                          setAnchorEl(null);
-                                          setOpenedPopoverId(null);
-                                        }}
-                                        anchorOrigin={{
-                                          vertical: "bottom",
-                                          horizontal: "center",
-                                        }}
-                                        transformOrigin={{
-                                          vertical: "top",
-                                          horizontal: "center",
-                                        }}
-                                      >
-                                        <h3 className={classes.popoverHeader}>
-                                          {t.name}
-                                        </h3>
-                                        <div className={classes.popoverBody}>
-                                          <h5>{t.position}</h5>
-                                          <div>출생연도: {t.age}</div>
-                                          <div>키: {t.height}</div>
-                                          <div>몸무게: {t.weight}</div>
-                                        </div>
-                                      </Popover>
-                                    </TableCell>
-                                  </TableRow>
-                                </Player>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                        <Button
-                          onClick={() => {
-                            setAddUserOpen(true);
-                          }}
-                        >
-                          <AddIcon />
-                        </Button>
-                      </TableContainer>
+                                          {teamInfo.leader === t.userID && (
+                                            <StarsRoundedIcon />
+                                          )}
+                                          {t.position !== ""
+                                            ? t.position
+                                            : "포지션 없음"}
+                                        </TableCell>
+                                        <TableCell
+                                          rowSpan={2}
+                                          align="center"
+                                          width="30%"
+                                        >
+                                          {Number(userinfo.userID) ===
+                                            teamInfo.leader &&
+                                            t.userID !== teamInfo.leader && (
+                                              <Button
+                                                size="sm"
+                                                onClick={() => {
+                                                  console.log(t.name + "방출");
+                                                  removeTeamList(t.userID);
+                                                }}
+                                                style={{
+                                                  maxWidth: "3vw",
+                                                }}
+                                              >
+                                                <RemoveIcon />
+                                              </Button>
+                                            )}
+                                        </TableCell>
+                                      </TableRow>
+                                      <TableRow>
+                                        <TableCell>
+                                          <div
+                                            onClick={(e) => {
+                                              setAnchorEl(e.target);
+                                              setOpenedPopoverId(t.userID);
+                                            }}
+                                            style={{
+                                              fontSize: 20,
+                                              fontWeight: 400,
+                                            }}
+                                          >
+                                            {t.name}
+                                          </div>
+                                          <Popover
+                                            classes={{
+                                              paper: classes.popover,
+                                            }}
+                                            open={openedPopoverId === t.userID}
+                                            anchorEl={anchorEl}
+                                            onClose={() => {
+                                              setAnchorEl(null);
+                                              setOpenedPopoverId(null);
+                                            }}
+                                            anchorOrigin={{
+                                              vertical: "bottom",
+                                              horizontal: "center",
+                                            }}
+                                            transformOrigin={{
+                                              vertical: "top",
+                                              horizontal: "center",
+                                            }}
+                                          >
+                                            <h3
+                                              className={classes.popoverHeader}
+                                            >
+                                              {t.name}
+                                            </h3>
+                                            <div
+                                              className={classes.popoverBody}
+                                            >
+                                              <h5>{t.position}</h5>
+                                              <div>출생연도: {t.age}</div>
+                                              <div>키: {t.height}</div>
+                                              <div>몸무게: {t.weight}</div>
+                                            </div>
+                                          </Popover>
+                                        </TableCell>
+                                      </TableRow>
+                                    </Player>
+                                  ) : (
+                                    <div key={index}>
+                                      <TableRow>
+                                        <TableCell
+                                          rowSpan={2}
+                                          align="center"
+                                          width="20%"
+                                        >
+                                          <img
+                                            className={classes.memberImg}
+                                            src={
+                                              t.profileURL === null
+                                                ? teamImage
+                                                : t.profileURL
+                                            }
+                                          />
+                                        </TableCell>
+                                        <TableCell
+                                          width="50%"
+                                          style={{
+                                            borderBottom: "none",
+                                          }}
+                                        >
+                                          {teamInfo.leader === t.userID && (
+                                            <StarsRoundedIcon />
+                                          )}
+                                          {t.position !== ""
+                                            ? t.position
+                                            : "포지션 없음"}
+                                        </TableCell>
+                                        <TableCell
+                                          rowSpan={2}
+                                          align="center"
+                                          width="30%"
+                                        >
+                                          {Number(userinfo.userID) ===
+                                            teamInfo.leader &&
+                                            t.userID !== teamInfo.leader && (
+                                              <Button
+                                                size="sm"
+                                                onClick={() => {
+                                                  console.log(t.name + "방출");
+                                                  removeTeamList(t.userID);
+                                                }}
+                                                style={{
+                                                  maxWidth: "100%",
+                                                }}
+                                              >
+                                                <RemoveIcon />
+                                              </Button>
+                                            )}
+                                        </TableCell>
+                                      </TableRow>
+                                      <TableRow>
+                                        <TableCell>
+                                          <div
+                                            onClick={(e) => {
+                                              setAnchorEl(e.target);
+                                              setOpenedPopoverId(t.userID);
+                                            }}
+                                            style={{
+                                              fontSize: 20,
+                                              fontWeight: 400,
+                                            }}
+                                          >
+                                            {t.name}
+                                          </div>
+                                          <Popover
+                                            classes={{
+                                              paper: classes.popover,
+                                            }}
+                                            open={openedPopoverId === t.userID}
+                                            anchorEl={anchorEl}
+                                            onClose={() => {
+                                              setAnchorEl(null);
+                                              setOpenedPopoverId(null);
+                                            }}
+                                            anchorOrigin={{
+                                              vertical: "bottom",
+                                              horizontal: "center",
+                                            }}
+                                            transformOrigin={{
+                                              vertical: "top",
+                                              horizontal: "center",
+                                            }}
+                                          >
+                                            <h3
+                                              className={classes.popoverHeader}
+                                            >
+                                              {t.name}
+                                            </h3>
+                                            <div
+                                              className={classes.popoverBody}
+                                            >
+                                              <h5>{t.position}</h5>
+                                              <div>출생연도: {t.age}</div>
+                                              <div>키: {t.height}</div>
+                                              <div>몸무게: {t.weight}</div>
+                                            </div>
+                                          </Popover>
+                                        </TableCell>
+                                      </TableRow>
+                                    </div>
+                                  );
+                                })}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        </TableContainer>
+                        {Number(userinfo.userID) === teamInfo.leader && (
+                          <Button
+                            onClick={() => {
+                              setAddUserOpen(true);
+                            }}
+                          >
+                            <AddIcon />
+                          </Button>
+                        )}
+                      </div>
                     ),
                   },
                   {
@@ -655,102 +837,114 @@ export default function ProfilePage(props) {
                   },
                   {
                     // 팀원신청관리
-                    // 팀장만 접근 가능
                     tabButton: "팀원 신청 관리",
                     tabContent: (
-                      <TableContainer>
-                        <div
-                          style={{
-                            width: "100%",
-                            height: "350px",
-                            overflow: "auto",
-                            borderRadius: "5px",
-                          }}
-                        >
-                          <Table className={classes.table}>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell></TableCell>
-                                <TableCell align="center">이름</TableCell>
-                                <TableCell align="center">포지션</TableCell>
-                                <TableCell colSpan="2"></TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {teamList.map((t, index) => (
-                                <TableRow key={index}>
-                                  <TableCell align="center">
-                                    <img
-                                      className={classes.memberImg}
-                                      src={teamImage}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <Button
-                                      onClick={(e) => {
-                                        setAnchorEl(e.target);
-                                        setOpenedJoinPopoverId(t.userId);
-                                      }}
-                                      color="transparent"
-                                    >
+                      <TableContainer className={classes.table}>
+                        <Table stickyHeader size="small">
+                          <TableHead>
+                            <StyledTableRow>
+                              <StyledTableCell width="20%"></StyledTableCell>
+                              <StyledTableCell width="20%" align="center">
+                                포지션
+                              </StyledTableCell>
+                              <StyledTableCell width="20%" align="center">
+                                이름
+                              </StyledTableCell>
+                              <StyledTableCell
+                                width="40%"
+                                colSpan="2"
+                              ></StyledTableCell>
+                            </StyledTableRow>
+                          </TableHead>
+                          <TableBody>
+                            {teamList.map((t, index) => (
+                              <StyledTableRow key={index}>
+                                <StyledTableCell width="20%" align="center">
+                                  <img
+                                    className={classes.memberImg}
+                                    src={
+                                      t.profileURL === null
+                                        ? teamImage
+                                        : t.profileURL
+                                    }
+                                  />
+                                </StyledTableCell>
+                                <StyledTableCell width="20%" align="center">
+                                  {t.position !== "" ? t.position : "없음"}
+                                </StyledTableCell>
+                                <StyledTableCell width="20%" align="center">
+                                  <Button
+                                    style={{
+                                      maxWidth: "6vw",
+                                    }}
+                                    onClick={(e) => {
+                                      setAnchorEl(e.target);
+                                      setOpenedJoinPopoverId(t.userID);
+                                    }}
+                                    color="transparent"
+                                  >
+                                    {t.name}
+                                  </Button>
+                                  <Popover
+                                    classes={{
+                                      paper: classes.popover,
+                                    }}
+                                    open={openedJoinPopoverId === t.userID}
+                                    anchorEl={anchorEl}
+                                    onClose={() => {
+                                      setAnchorEl(null);
+                                      setOpenedJoinPopoverId(null);
+                                    }}
+                                    anchorOrigin={{
+                                      vertical: "bottom",
+                                      horizontal: "center",
+                                    }}
+                                    transformOrigin={{
+                                      vertical: "top",
+                                      horizontal: "center",
+                                    }}
+                                  >
+                                    <h3 className={classes.popoverHeader}>
                                       {t.name}
-                                    </Button>
-                                    <Popover
-                                      classes={{
-                                        paper: classes.popover,
-                                      }}
-                                      open={openedJoinPopoverId === t.userId}
-                                      anchorEl={anchorEl}
-                                      onClose={() => {
-                                        setAnchorEl(null);
-                                        setOpenedJoinPopoverId(null);
-                                      }}
-                                      anchorOrigin={{
-                                        vertical: "bottom",
-                                        horizontal: "center",
-                                      }}
-                                      transformOrigin={{
-                                        vertical: "top",
-                                        horizontal: "center",
-                                      }}
-                                    >
-                                      <h3 className={classes.popoverHeader}>
-                                        {t.name}
-                                      </h3>
-                                      <div className={classes.popoverBody}>
-                                        <h5>{t.position}</h5>
-                                        <div>출생연도: {t.age}</div>
-                                        <div>키: {t.height}</div>
-                                        <div>몸무게: {t.weight}</div>
-                                      </div>
-                                    </Popover>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    {t.position}
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <Button
-                                      onClick={() => {
-                                        console.log(t.name + "영입");
-                                      }}
-                                    >
-                                      <AddIcon />
-                                    </Button>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <Button
-                                      onClick={() => {
-                                        console.log(t.name + "은(는) 안돼");
-                                      }}
-                                    >
-                                      <RemoveIcon />
-                                    </Button>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
+                                    </h3>
+                                    <div className={classes.popoverBody}>
+                                      <h5>{t.position}</h5>
+                                      <div>출생연도: {t.age}</div>
+                                      <div>키: {t.height}</div>
+                                      <div>몸무게: {t.weight}</div>
+                                    </div>
+                                  </Popover>
+                                </StyledTableCell>
+                                <StyledTableCell width="40%" align="center">
+                                  <Button
+                                    style={{
+                                      maxWidth: "3vw",
+                                    }}
+                                    onClick={() => {
+                                      // 신청 승락
+                                      acceptJoin(t.userID);
+                                    }}
+                                  >
+                                    <AddIcon />
+                                  </Button>
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  <Button
+                                    style={{
+                                      maxWidth: "3vw",
+                                    }}
+                                    onClick={() => {
+                                      // 신청 거절
+                                      rejectJoin(t.userID);
+                                    }}
+                                  >
+                                    <RemoveIcon />
+                                  </Button>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </TableContainer>
                     ),
                   },
