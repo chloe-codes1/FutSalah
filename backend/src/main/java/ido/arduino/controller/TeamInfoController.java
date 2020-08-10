@@ -40,6 +40,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.RequestDTO;
+import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
