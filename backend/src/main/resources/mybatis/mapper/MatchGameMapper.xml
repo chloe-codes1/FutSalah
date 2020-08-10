@@ -7,11 +7,11 @@
 
 	<select id = "selectoption"  resultType="match">
 	select * from matching 
-	<if test="search_option =='all'">
-	where locationID LIKE CONCAT('%',#{keyword},'%')
-	and date LIKE CONCAT('%',#{keyword},'%')
-	and time LIKE CONCAT('%',#{keyword},'%')
-	</if>
+
+	where locationID LIKE CONCAT('%',#{locationID},'%')
+	and date LIKE CONCAT('%',#{date},'%')
+	and time LIKE CONCAT('%',#{time},'%')
+
 	</select>
 
 
