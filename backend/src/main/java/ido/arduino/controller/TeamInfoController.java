@@ -157,7 +157,7 @@ public class TeamInfoController {
 	// 팀 정보 삭제
 	@ApiOperation(value = "팀 정보 삭제.", response = String.class)
 	@DeleteMapping("/team/{teamID}")
-	public ResponseEntity<Map<String, Object>> delete(@PathVariable String teamID) {
+	public ResponseEntity<Map<String, Object>> delete(@PathVariable int teamID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
 			int result = tService.delete(teamID);
@@ -221,7 +221,7 @@ public class TeamInfoController {
 		logger.debug("selectAllmyteam - 호출");
 		System.out.println("check.............................");
 
-		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(String.valueOf(userId)), HttpStatus.OK);
+		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
 
 	// ----------------team info---------------------------

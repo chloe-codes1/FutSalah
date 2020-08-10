@@ -37,7 +37,7 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	}
 
 	@Override
-	public int delete(String teamID) {
+	public int delete(int teamID) {
 		return template.delete(ns + "delete", teamID);
 	}
 
@@ -54,7 +54,7 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 
 	//----------------my team---------------------------
 	@Override
-	public List<MyTeamDto> selectAllmyteam(String id) {
+	public List<MyTeamDto> selectAllmyteam(int id) {
 		// 나의 팀 목록 받아오기
 		return template.selectList(ns + "selectAllmyteam", id);
 	}

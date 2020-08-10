@@ -18,7 +18,7 @@ public interface TeamInfoRepo {
 
 	int insert(TeamInfoDto info);
 	int update(TeamInfoDto info);
-	int delete(String teamID);
+	int delete(int teamID);
 	
 	
 	//----------------find team---------------------------
@@ -30,7 +30,7 @@ public interface TeamInfoRepo {
 	int selectlast();	// 가장 최근 생성한 팀 
 	int insertmy(UserTeamConnDto uteam); //userteamconn에 목록 넣기 
 	int updatemy(UserDTO userID);
-	public List<MyTeamDto> selectAllmyteam(String id);
+	public List<MyTeamDto> selectAllmyteam(int id);
 	
 	
 	//----------------formation---------------------------
