@@ -116,13 +116,31 @@
 
 	
 	<!-- 경기전적 출력 -->
-	<select id="resultscore" resultType="result">
+	<select id="resultscore" resultType="result" parameterType="int">
 	
-	select t1.name as hometeam, t2.name as awayteam, result.homeScore, result.awayScore 
-	from result , team as t1, team as t2 , matching
-	where result.matchID = matching.matchID and 
-	matching.homeTeamID = t1.teamID and matching.awayTeamID = t2.teamID;
-	
+	select
+	c.hometeam, 
+	c.awayteam, 
+	c.homeScore, 
+	c.awayScore 
+from (
+	select 
+		matching.homeTeamID,
+		t1.name as hometeam, 
+		matching.awayTeamID,
+		t2.name as awayteam, 
+		result.homeScore, 
+		result.awayScore 
+	from result , 
+		team as t1, 
+        team as t2 , 
+        matching
+	where result.matchID = matching.matchID 
+		and matching.homeTeamID = t1.teamID 
+		and matching.awayTeamID = t2.teamID) c
+where homeTeamID = #{teamID} or awayTeamID = #{teamID};
+
+
 	</select>
 	
 	

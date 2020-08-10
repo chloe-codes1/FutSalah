@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 
 public class ResultDto {
 	
-	private int resultID;
-	private int matchID;
+
 	private int homeScore;
 	private int awayScore;
+	private String homeTeam;
+	private String awayTeam;
 	
 }
