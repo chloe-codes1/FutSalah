@@ -39,6 +39,7 @@ public class UserController {
 	@Autowired
 	private S3Service s3Service;
 
+	// socialID로 조회
 	@PostMapping("/login")
 	public @ResponseBody UserDTO findUser(@RequestBody Map<String, String> data) {
 		String socialID = data.get("socialID");
@@ -52,6 +53,7 @@ public class UserController {
 		return loggedUser;
 	}
 
+	// userID로 조회
 	@GetMapping("/login/{userID}")
 	public @ResponseBody UserDTO findUserByID(@PathVariable int userID) {
 		UserDTO loggedUser = userService.findByUserID(userID);
@@ -63,6 +65,7 @@ public class UserController {
 		return loggedUser;
 	}
 
+	// 회원 가입
 	@PostMapping("/user")
 	public @ResponseBody UserDTO createUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user);
@@ -75,6 +78,7 @@ public class UserController {
 		return user;
 	}
 
+	// 회원 정보 수정
 	@PutMapping("/user")
 	public @ResponseBody int updateUser(@RequestBody UserDTO user) {
 		System.out.println("user??????????" + user);
@@ -86,7 +90,8 @@ public class UserController {
 		}
 		return updateResult;
 	}
-
+	
+	// 회원 탈퇴
 	@DeleteMapping("/user")
 	public void deleteUser(@RequestParam("userID") int userID) {
 		// 전체 팀 정보 가져오기
@@ -127,6 +132,7 @@ public class UserController {
 		}
 	}
 
+	// search user by name
 	@GetMapping("/user/{name}")
 	public @ResponseBody List<UserDTO> searchByName(@PathVariable String name) {
 		System.out.println("name??" + name);
@@ -135,6 +141,7 @@ public class UserController {
 		return list;
 	}
 
+	// 유저 프로필 사진 업로드
 	@PostMapping("/user/upload/{userID}")
 	public ResponseEntity<String> uploadFile(@PathVariable int userID,
 			@RequestPart(value = "file") final MultipartFile multipartFile) {
@@ -145,4 +152,10 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	// email 중복 검사
+	@PostMapping("/user/check")
+	public @ResponseBody int checkIfEmailExists(@RequestBody Map<String, String> data) {
+		String email = data.get("email");
+		return userService.checkIfEmailExists(email);
+	}
 }

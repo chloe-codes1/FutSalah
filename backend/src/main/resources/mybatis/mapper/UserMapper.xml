@@ -41,4 +41,8 @@
 		SELECT * FROM user WHERE name LIKE CONCAT('%',#{name},'%')
 	</select>
 	
+	<!-- email 중복 검사 -->
+	<select id="checkIfEmailExists" parameterType="String" resultType="int">
+		SELECT COUNT(email) FROM user WHERE email=#{email} 
+	</select>
 </mapper>
