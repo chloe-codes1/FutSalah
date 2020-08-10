@@ -1,5 +1,7 @@
 package ido.arduino.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,5 +22,10 @@ public class LocationController {
 	@GetMapping("/location/{locationID}")
 	public @ResponseBody LocationDto getLocationInfo(@PathVariable int locationID) {
 		return locationService.getLocationInfo(locationID);
+	}
+	
+	@GetMapping("/location")
+	public @ResponseBody List<LocationDto> getAllLocationInfo(){
+		return locationService.getAllLocationInfo();
 	}
 }
