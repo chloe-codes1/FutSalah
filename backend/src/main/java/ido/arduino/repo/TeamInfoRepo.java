@@ -35,7 +35,7 @@ public interface TeamInfoRepo {
 	//----------------formation---------------------------
 	int insertformation(Formation form);
 	int updateformation(Formation form);
-	int deleteformation(int grid);
+	int deleteformation(int userID);
 	public List<Formation> selectformation();
 
 	

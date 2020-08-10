@@ -283,12 +283,12 @@ public class TeamInfoController {
 
 	// 팀 정보 삭제
 	@ApiOperation(value = "포메이션 정보 삭제.", response = String.class)
-	@DeleteMapping("/team/formation/{grid}")
-	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int grid) {
+	@DeleteMapping("/team/formation/{userID}")
+	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int userID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			int result = tService.deleteformation(grid);
-			entity = handleSuccess(grid + "가 삭제되었습니다.");
+			int result = tService.deleteformation(userID);
+			entity = handleSuccess(userID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}

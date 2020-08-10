@@ -49,7 +49,7 @@ public interface TeamInfoService {
 	
 	int insertformation(Formation form);
 	int updateformation(Formation form);
-	int deleteformation(int grid);
+	int deleteformation(int userID);
 	List<Formation> selectformation(); 
 	
 

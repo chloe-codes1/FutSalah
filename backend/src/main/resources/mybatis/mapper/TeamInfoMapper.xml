@@ -117,9 +117,9 @@
 	
 	<!-- 경기전적 출력 -->
 	<select id="resultscore" resultType="result">
-	select result.homeScore, result.awayScore from result
-	inner join team on matching.homeTeamID = team.teamID
-	inner join team on matching.awayTeamID = team.teamID
+	select t1.name as hometeam, t2.name as awayteam, result.homeScore, result.awayScore 
+	from result , team as t1, team as t2
+	where matching.homeTeamID = t1.teamID and matching.awayTeamID = t2.teamID
 	</select>
 	
 	

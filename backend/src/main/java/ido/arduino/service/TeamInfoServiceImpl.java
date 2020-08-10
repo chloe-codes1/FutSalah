@@ -136,8 +136,8 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public int deleteformation(int grid) {
-		return tRepo.deleteformation(grid);
+	public int deleteformation(int userID) {
+		return tRepo.deleteformation(userID);
 	}
 
 	@Override

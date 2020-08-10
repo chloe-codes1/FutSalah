@@ -95,9 +95,9 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	}
 
 	@Override
-	public int deleteformation(int grid) {
+	public int deleteformation(int userID) {
 		// TODO Auto-generated method stub
-		return template.delete(ns + "deleteformation", grid);
+		return template.delete(ns + "deleteformation", userID);
 	}
 
 	@Override
