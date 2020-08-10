@@ -23,9 +23,10 @@ public class TeamInfoDto {
 	private String profileURL;
 	private String name;
 	private int leader; // 팀을 생성한 userid
+	private int locationID;
 
 	public static TeamInfoDto of(TeamCreateRequest tcr, int userid, String code) {
-		TeamInfoDto tid = new TeamInfoDto(0, 0, 0, 0, 0, code, tcr.getDescription(), 0, "", tcr.getName(), userid);
+		TeamInfoDto tid = new TeamInfoDto(0, 0, 0, 0, 0, code, tcr.getDescription(), 0, "", tcr.getName(), userid, 0);
 
 		return tid;
 	}

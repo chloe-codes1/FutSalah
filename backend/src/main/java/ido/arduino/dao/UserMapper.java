@@ -15,4 +15,5 @@ public interface UserMapper {
 	UserDTO findBySocialID(String socialID);
 	UserDTO findByUserID(int userID);
 	List<UserDTO> searchUsersByName(String name);
+	int checkIfEmailExists(String email);
 }

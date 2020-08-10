@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "axios": "^0.19.2",
-    "formik": "^2.1.5",
-    "react-google-login": "^5.1.21"
-  }
-}

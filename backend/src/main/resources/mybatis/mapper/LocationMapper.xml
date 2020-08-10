@@ -4,12 +4,16 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ido.arduino.dao.LocationMapper">
-	<!-- 지역 전체 정보 by teamID -->
+	<!-- 지역 전체 정보 by locationID -->
 	<select id="getLocationInfo" parameterType="int"
 		resultType="LocationDTO">
 		SELECT * FROM
 		location WHERE locationID = #{locationID}
 	</select>
-
-
+	
+	<!-- 지역 정보 전체 리스트 -->
+	<select id="getAllLocationInfo" resultType="LocationDTO">
+		SELECT*FROM location
+	</select>
+	
 </mapper>

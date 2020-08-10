@@ -40,4 +40,7 @@ aws.yml
 ### MySQL Credentials
 mysql.yml
 
+### Gmail Credentials
+mail.properties
+
 # End of https://www.toptal.com/developers/gitignore/api/react,visualstudiocode

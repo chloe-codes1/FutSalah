@@ -32,9 +32,11 @@ function LoginDialog(props) {
       .then((e) => {
         if (e.data.socialID === res.profileObj.googleId) {
           console.log("already registered!!");
+          console.log(e.data);
           // context 값 변경
           loggedUser(
             res.profileObj.googleId,
+            e.data.userID,
             res.profileObj.name,
             "google",
             e.data.profileURL
@@ -72,6 +74,7 @@ function LoginDialog(props) {
         // context 값 변경
         loggedUser(
           res.profile.id,
+          e.data.userID,
           res.profile.properties.nickname,
           "kakao",
           e.data.profileURL

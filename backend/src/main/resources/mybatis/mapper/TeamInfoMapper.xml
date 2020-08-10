@@ -21,13 +21,11 @@
 	</update>
 
 	<!-- 팀 삭제 -->
-	<delete id="delete" parameterType="string">
+	<delete id="delete" parameterType="int">
 		delete from team where
-		name=#{name}
+		teamID=#{teamID}
 	</delete>
 
-
-	
 	
 	<!--myteam -->
 	<!-- 팀생성한 것중 가장 최근 것 선택 -->
@@ -51,7 +49,7 @@
 	<!-- 내 정보 조회에서 해당 팀 보여주기 -->
 	<select id="selectAllmyteam" resultType="myteam">
 		select team.name,
-		team.description, team.profileURL, team.teamID
+		team.description, team.profileURL, team.teamID, team.leader
 		from team
 		inner join userteamconn on team.teamID = userteamconn.teamID
 		inner join user on userteamconn.userID=user.userID
