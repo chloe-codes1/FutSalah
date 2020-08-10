@@ -1,5 +1,7 @@
 package ido.arduino.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,11 @@ public class LocationServiceImpl implements LocationService{
 	@Override
 	public LocationDto getLocationInfo(int locationID) {
 		return locationMapper.getLocationInfo(locationID);
+	}
+
+	@Override
+	public List<LocationDto> getAllLocationInfo() {
+		return locationMapper.getAllLocationInfo();
 	}
 	
 }
