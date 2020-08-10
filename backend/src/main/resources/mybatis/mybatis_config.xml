@@ -24,5 +24,6 @@
 		<mapper resource="mybatis/mapper/TeamMapper.xml"/>
 		<mapper resource="mybatis/mapper/Matching2Mapper.xml"/>
 		<mapper resource="mybatis/mapper/LocationMapper.xml"/>
+		<mapper resource="mybatis/mapper/RequestMapper.xml"/>
 	</mappers>
 </configuration>
