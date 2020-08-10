@@ -215,6 +215,12 @@ public class TeamInfoController {
 		return emailService.refusedToJoinMail(currentRequest, targetTeam);
 	}
 	
+	// 해당 팀의 가입 요청 목록 가져오기
+	@GetMapping("/team/join/{teamID}")
+	public @ResponseBody List<RequestDTO> getAllRequests (@PathVariable int teamID){
+		return rService.getAllRequests(teamID);
+	}
+	
 	
 	// ----------------find team---------------------------
 
