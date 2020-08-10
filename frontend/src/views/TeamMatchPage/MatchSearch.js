@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -19,6 +19,8 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import Button from "components/CustomButtons/Button.js";
+
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -41,12 +43,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const location = [];
+
+const initialState = {
+  search: {
+    sido: "",
+    gu: "",
+    date: "",
+    time: "",
+    type: "",
+    stadium: false,
+  },
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SELECT":
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          [action.name]: action.value,
+        },
+      };
+    case "SIDO":
+      return {};
+    default:
+      return state;
+  }
+};
+
 function MatchSearch() {
   const classes = useStyles();
-  const [selectedDate, setSelectedDate] = React.useState();
-
+  const [selectedDate, setSelectedDate] = useState();
+  const [selectedSido, setSelectedSido] = useState("");
   const handleDateChange = (date) => {
     setSelectedDate(date);
+  };
+  const handleSidoChange = (event) => {
+    console.log(event.target.value);
+    setSelectedSido(event.target.value);
   };
   return (
     <>
@@ -54,10 +90,28 @@ function MatchSearch() {
         <Grid item>
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label">시/도</InputLabel>
-            <Select labelId="demo-simple-select-label" id="demo-simple-select">
-              <MenuItem value={10}>서울특별시</MenuItem>
-              <MenuItem value={20}>경기도</MenuItem>
-              <MenuItem value={30}>제주도</MenuItem>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={selectedSido}
+              onChange={handleSidoChange}
+            >
+              <MenuItem value="서울특별시">서울특별시</MenuItem>
+              <MenuItem value="부산광역시">부산광역시</MenuItem>
+              <MenuItem value="대구광역시">대구광역시</MenuItem>
+              <MenuItem value="인천광역시">인천광역시</MenuItem>
+              <MenuItem value="광주광역시">광주광역시</MenuItem>
+              <MenuItem value="대전광역시">대전광역시</MenuItem>
+              <MenuItem value="울산광역시">울산광역시</MenuItem>
+              <MenuItem value="경기도">경기도</MenuItem>
+              <MenuItem value="강원도">강원도</MenuItem>
+              <MenuItem value="충청북도">충청북도</MenuItem>
+              <MenuItem value="충청남도">충청남도</MenuItem>
+              <MenuItem value="전라북도">전라북도</MenuItem>
+              <MenuItem value="전라남도">전라남도</MenuItem>
+              <MenuItem value="경상북도">경상북도</MenuItem>
+              <MenuItem value="경상남도">경상남도</MenuItem>
+              <MenuItem value="제주도">제주도</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -93,10 +147,7 @@ function MatchSearch() {
           <Grid item>
             <FormControl className={classes.formControl}>
               <InputLabel id="demo-simple-select-label">시간</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-              >
+              <Select labelId="demo-simple-select-label" id="demo-simple-select">
                 <MenuItem value={0}>00:00</MenuItem>
                 <MenuItem value={1}>01:00</MenuItem>
                 <MenuItem value={2}>02:00</MenuItem>
@@ -131,8 +182,8 @@ function MatchSearch() {
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label">경기방식</InputLabel>
             <Select labelId="demo-simple-select-label" id="demo-simple-select">
-              <MenuItem value={10}>5 : 5</MenuItem>
-              <MenuItem value={20}>6 : 6</MenuItem>
+              <MenuItem value={55}>5 : 5</MenuItem>
+              <MenuItem value={66}>6 : 6</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -165,11 +216,7 @@ function MatchSearch() {
       </Grid>
       <Grid container justify="center">
         <Grid item>
-          <Button
-            className={classes.searchButton}
-            variant="contained"
-            color="info"
-          >
+          <Button className={classes.searchButton} variant="contained" color="info">
             <i className="fas fa-search" />
             매칭 검색
           </Button>
