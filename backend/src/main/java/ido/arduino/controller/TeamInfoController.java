@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +39,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
+import ido.arduino.dto.RequestDTO;
 import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
@@ -48,6 +48,7 @@ import ido.arduino.dto.TeamLocationDTO;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.dto.UserTeamConnDto;
 import ido.arduino.service.EmailServiceImpl;
+import ido.arduino.service.RequestService;
 import ido.arduino.service.S3Service;
 import ido.arduino.service.S3ServiceImpl;
 import ido.arduino.service.TeamInfoService;
@@ -75,6 +76,9 @@ public class TeamInfoController {
 	UserService uService;
 
 	@Autowired
+	RequestService rService;
+	
+	@Autowired
 	JavaMailSender javaMailSender;
 
 	@Value("${aws.s3.bucket}")
@@ -96,17 +100,6 @@ public class TeamInfoController {
 		return tService.insertmy(new UserTeamConnDto(userID, teamID));
 	}
 
-	// 팀 가입 신청
-	@PostMapping("/team/join")
-	public @ResponseBody int requestToJoin(@RequestBody Map<String, Integer> data) {
-		int userID = data.get("userID");
-		int teamID = data.get("teamID");
-		UserDTO requestFrom = uService.findByUserID(userID);
-		TeamLeaderDTO targetTeam = tService.getTeamLeaderInfo(teamID);
-		EmailServiceImpl emailService = new EmailServiceImpl();
-		emailService.setJavaMailSender(javaMailSender);
-		return emailService.requestToJoinMail(requestFrom, targetTeam);
-	}
 
 	// 팀 생성하기
 	@ApiOperation(value = "새로운 팀 정보 등록.", response = String.class)
@@ -179,6 +172,56 @@ public class TeamInfoController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	// ----------------join team--------------------------
+	// 팀 가입 신청
+	@PostMapping("/team/join")
+	public @ResponseBody int requestToJoin(@RequestBody Map<String, Integer> data) {
+		int userID = data.get("userID");
+		int teamID = data.get("teamID");
+		rService.insert(userID, teamID);
+		UserDTO requestFrom = uService.findByUserID(userID);
+		TeamLeaderDTO targetTeam = tService.getTeamLeaderInfo(teamID);
+		EmailServiceImpl emailService = new EmailServiceImpl();
+		emailService.setJavaMailSender(javaMailSender);
+		return emailService.requestToJoinMail(requestFrom, targetTeam);
+	}
+	
+	// 팀 가입 요청 수락
+	@PostMapping("/team/join/approve")
+	public @ResponseBody int approveToJoin(@RequestBody Map<String, Integer> data) {
+		int userID = data.get("userID");
+		int teamID = data.get("teamID");
+		RequestDTO currentRequest = rService.getRequest(teamID, userID);
+		int requestID =currentRequest.getRequestID();
+		rService.delete(requestID);
+		tService.insertmy(new UserTeamConnDto(userID, teamID));
+		TeamInfoDto targetTeam = tService.getTeamInfo(teamID);
+		EmailServiceImpl emailService = new EmailServiceImpl();
+		emailService.setJavaMailSender(javaMailSender);
+		return emailService.approvedToJoinMail(currentRequest, targetTeam);
+	}
+	
+	// 팀 가입 요청 거절
+	@PostMapping("/team/join/refuse")
+	public @ResponseBody int refuseToJoin(@RequestBody Map<String, Integer> data) {
+		int userID = data.get("userID");
+		int teamID = data.get("teamID");
+		RequestDTO currentRequest = rService.getRequest(teamID, userID);
+		int requestID =currentRequest.getRequestID();
+		TeamInfoDto targetTeam = tService.getTeamInfo(teamID);
+		rService.delete(requestID);
+		EmailServiceImpl emailService = new EmailServiceImpl();
+		emailService.setJavaMailSender(javaMailSender);
+		return emailService.refusedToJoinMail(currentRequest, targetTeam);
+	}
+	
+	// 해당 팀의 가입 요청 목록 가져오기
+	@GetMapping("/team/join/{teamID}")
+	public @ResponseBody List<RequestDTO> getAllRequests (@PathVariable int teamID){
+		return rService.getAllRequests(teamID);
+	}
+	
+	
 	// ----------------find team---------------------------
 
 	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
