@@ -40,6 +40,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.RequestDTO;
+import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
@@ -326,12 +327,14 @@ public class TeamInfoController {
 
 	// 팀 정보 삭제
 	@ApiOperation(value = "포메이션 정보 삭제.", response = String.class)
-	@DeleteMapping("/team/formation/{grid}")
-	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int grid) {
+	@DeleteMapping("/team/formation/{userID}")
+	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int userID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			int result = tService.deleteformation(grid);
-			entity = handleSuccess(grid + "가 삭제되었습니다.");
+
+			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
+			int result = tService.deleteformation(userID);
+			entity = handleSuccess(userID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
@@ -346,6 +349,21 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
 	}
+	
+	
+	
+	//----------------result game---------------------------
+	@ApiOperation(value = "게임 결과 정보 반환한다.", response = List.class)
+	@GetMapping("/team/result")
+	public ResponseEntity<List<ResultDto>> resultscore() throws Exception {
+		logger.debug("resultscore - 호출");
+		System.out.println("resultscore호추추루룰...........................................................");
+
+		return new ResponseEntity<List<ResultDto>>(tService.resultscore(), HttpStatus.OK);
+	}
+	
+	
+	
 
 	// ----------------QR코드 생성---------------------------
 	// QR코드 생성
