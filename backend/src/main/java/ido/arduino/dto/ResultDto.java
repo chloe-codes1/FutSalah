@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Result {
+public class ResultDto {
 	
 	private int resultID;
 	private int matchID;

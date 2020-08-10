@@ -98,8 +98,8 @@
 	<!-- 포메이션 수정 -->
 	<update id="updateformation" parameterType="formation">
 		update formation
-		set userID=#{userID}, grid=#{grid}
-		where teamID=#{teamID} and formCode=#{formCode}
+		set grid=#{grid}
+		where teamID=#{teamID} and formCode=#{formCode} and userID=#{userID}
 	</update>
 
 	<!-- 포메이션 삭제 -->
@@ -110,16 +110,19 @@
 	
 	<!-- 포메이션 리스트출력 -->
 	<select id = "selectformation"  resultType="formation" >
-		select * from formation
+		select userID, grid from formation
 		where teamID =#{teamID}
 	</select>
 
 	
 	<!-- 경기전적 출력 -->
 	<select id="resultscore" resultType="result">
+	
 	select t1.name as hometeam, t2.name as awayteam, result.homeScore, result.awayScore 
-	from result , team as t1, team as t2
-	where matching.homeTeamID = t1.teamID and matching.awayTeamID = t2.teamID
+	from result , team as t1, team as t2 , matching
+	where result.matchID = matching.matchID and 
+	matching.homeTeamID = t1.teamID and matching.awayTeamID = t2.teamID;
+	
 	</select>
 	
 	

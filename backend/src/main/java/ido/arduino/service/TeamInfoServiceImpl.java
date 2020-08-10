@@ -11,6 +11,7 @@ import ido.arduino.dto.Formation;
 import ido.arduino.dto.LocationDto;
 
 import ido.arduino.dto.MyTeamDto;
+import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.TeamLeaderDTO;
@@ -145,6 +146,15 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		return tRepo.selectformation();
 
 	
+	}
+	
+	
+	//----------------result game---------------------------
+
+	@Override
+	public List<ResultDto> resultscore() {
+		// TODO Auto-generated method stub
+		return tRepo.resultscore();
 	}
 
 

@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +39,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
+import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamCreateRequest;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
@@ -287,6 +287,8 @@ public class TeamInfoController {
 	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int userID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
+
+			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
 			int result = tService.deleteformation(userID);
 			entity = handleSuccess(userID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
@@ -303,6 +305,21 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
 	}
+	
+	
+	
+	//----------------result game---------------------------
+	@ApiOperation(value = "게임 결과 정보 반환한다.", response = List.class)
+	@GetMapping("/team/result")
+	public ResponseEntity<List<ResultDto>> resultscore() throws Exception {
+		logger.debug("resultscore - 호출");
+		System.out.println("resultscore호추추루룰...........................................................");
+
+		return new ResponseEntity<List<ResultDto>>(tService.resultscore(), HttpStatus.OK);
+	}
+	
+	
+	
 
 	// ----------------QR코드 생성---------------------------
 	// QR코드 생성
