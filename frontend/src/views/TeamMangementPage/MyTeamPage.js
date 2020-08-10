@@ -8,6 +8,7 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
+  ListItemIcon,
 } from "@material-ui/core";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
@@ -18,6 +19,7 @@ import Header from "components/Header/Header.js";
 //import GridContainer from "components/Grid/GridContainer.js";
 //import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
+import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import Icon from "@material-ui/core/Icon";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
@@ -128,6 +130,11 @@ function MyTeamPage(props) {
                         <ListItemAvatar>
                           <Avatar>logo</Avatar>
                         </ListItemAvatar>
+                        <ListItemIcon>
+                          {team.leader === userinfo.userID && (
+                            <StarsRoundedIcon />
+                          )}
+                        </ListItemIcon>
                         <ListItemText primary={team.name} />
                         <ListItemText primary={team.description} />
                         <ListItemSecondaryAction>

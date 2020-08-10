@@ -10,6 +10,7 @@ import Formation from "views/Components/Formation/Formation";
 import { FormationBench } from "views/Components/Formation/FormationBench";
 import { Grid, Modal, Typography } from "@material-ui/core";
 
+import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import AddIcon from "@material-ui/icons/Add";
 import AddUserDialog from "components/Dialog/AddUserDialog";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -513,6 +514,9 @@ export default function ProfilePage(props) {
                                         borderBottom: "none",
                                       }}
                                     >
+                                      {teamInfo.leader === t.userID && (
+                                        <StarsRoundedIcon />
+                                      )}
                                       {t.position !== ""
                                         ? t.position
                                         : "포지션 없음"}
@@ -522,18 +526,20 @@ export default function ProfilePage(props) {
                                       align="center"
                                       width="30%"
                                     >
-                                      <Button
-                                        size="sm"
-                                        onClick={() => {
-                                          console.log(t.name + "방출");
-                                          removeTeamList(t.userID);
-                                        }}
-                                        style={{
-                                          maxWidth: "100%",
-                                        }}
-                                      >
-                                        <RemoveIcon />
-                                      </Button>
+                                      {teamInfo.leader !== t.userID && (
+                                        <Button
+                                          size="sm"
+                                          onClick={() => {
+                                            console.log(t.name + "방출");
+                                            removeTeamList(t.userID);
+                                          }}
+                                          style={{
+                                            maxWidth: "100%",
+                                          }}
+                                        >
+                                          <RemoveIcon />
+                                        </Button>
+                                      )}
                                     </TableCell>
                                   </TableRow>
                                   <TableRow>
