@@ -25,7 +25,6 @@ import HeaderLinks from "components/Header/HeaderLinks.js";
 import ModifyTeamInfoDialog from "components/Dialog/ModifyTeamInfoDialog";
 import NavPills from "components/NavPills/NavPills.js";
 import Paginations from "components/Pagination/Pagination.js";
-import Parallax from "components/Parallax/Parallax.js";
 import { Player } from "views/Components/Formation/Player";
 import Popover from "@material-ui/core/Popover";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -130,6 +129,7 @@ export default function ProfilePage(props) {
   const { userinfo } = useContext(UserContext);
   const [teamList, setTeamList] = useState([]); // 팀원 목록
   const [record, setRecord] = useState(testRecord); // 경기전적 목록
+  const [requestList, setRequestList] = useState([]); // 경기전적 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
 
   const [playerPos1, setPlayerPos1] = useState([
@@ -202,31 +202,63 @@ export default function ProfilePage(props) {
     setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
   };
 
+  // 팀 가입 신청
+  const requestJoin = () => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join`,
+      data: {
+        teamID: teamInfo.teamID,
+        userID: userinfo.userID,
+      },
+    })
+      .then(() => {
+        console.log("success");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
   // 팀 가입 신청 수락
   const acceptJoin = (id) => {
-    // 가입 목록 추가되면 추가
-    // axios({
-    //   method: "post",
-    //   url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join`,
-    //   data: {
-    //     teamID: teaminfo.teamID,
-    //     userID: id,
-    //   },
-    // })
-    //   .then(() => {
-    //     console.log("success");
-    //   })
-    //   .catch((e) => {
-    //     console.log("error", e);
-    //   });
-    console.log(id + " ok");
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/approve`,
+      data: {
+        teamID: teamInfo.teamID,
+        userID: id,
+      },
+    })
+      .then(() => {
+        console.log("success");
+        setRequestList(requestList.filter((rl) => rl.userID !== id));
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   // 팀 가입 신청 거절
   const rejectJoin = (id) => {
     // 가입 신청에서 빼기
-    console.log(id + " no");
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/refuse`,
+      data: {
+        teamID: teamInfo.teamID,
+        userID: id,
+      },
+    })
+      .then(() => {
+        console.log("success");
+        setRequestList(requestList.filter((rl) => rl.userID !== id));
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
+
   useEffect(() => {
     // 팀 정보 가져오기
     axios({
@@ -284,6 +316,20 @@ export default function ProfilePage(props) {
         });
         console.log(res.data);
         setTeamList(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+
+    // 가입 신청 목록 가져오기
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/team/join/${TeamId}`,
+    })
+      .then((res) => {
+        console.log("신청목록 success");
+        console.log(res.data);
+        setRequestList(res.data);
       })
       .catch((e) => {
         console.log("error", e);
@@ -766,20 +812,20 @@ export default function ProfilePage(props) {
                                 </StyledTableRow>
                               </TableHead>
                               <TableBody>
-                                {teamList.map((t, index) => (
+                                {requestList.map((r, index) => (
                                   <StyledTableRow key={index}>
                                     <StyledTableCell width="20%" align="center">
                                       <img
                                         className={classes.memberImg}
                                         src={
-                                          t.profileURL === null
+                                          r.profileURL === null
                                             ? teamImage
-                                            : t.profileURL
+                                            : r.profileURL
                                         }
                                       />
                                     </StyledTableCell>
                                     <StyledTableCell width="20%" align="center">
-                                      {t.position !== "" ? t.position : "없음"}
+                                      {r.position !== "" ? r.position : "없음"}
                                     </StyledTableCell>
                                     <StyledTableCell width="20%" align="center">
                                       <Button
@@ -788,17 +834,17 @@ export default function ProfilePage(props) {
                                         }}
                                         onClick={(e) => {
                                           setAnchorEl(e.target);
-                                          setOpenedJoinPopoverId(t.userID);
+                                          setOpenedJoinPopoverId(r.userID);
                                         }}
                                         color="transparent"
                                       >
-                                        {t.name}
+                                        {r.name}
                                       </Button>
                                       <Popover
                                         classes={{
                                           paper: classes.popover,
                                         }}
-                                        open={openedJoinPopoverId === t.userID}
+                                        open={openedJoinPopoverId === r.userID}
                                         anchorEl={anchorEl}
                                         onClose={() => {
                                           setAnchorEl(null);
@@ -814,13 +860,13 @@ export default function ProfilePage(props) {
                                         }}
                                       >
                                         <h3 className={classes.popoverHeader}>
-                                          {t.name}
+                                          {r.name}
                                         </h3>
                                         <div className={classes.popoverBody}>
-                                          <h5>{t.position}</h5>
-                                          <div>출생연도: {t.age}</div>
-                                          <div>키: {t.height}</div>
-                                          <div>몸무게: {t.weight}</div>
+                                          <h5>{r.position}</h5>
+                                          <div>출생연도: {r.age}</div>
+                                          <div>키: {r.height}</div>
+                                          <div>몸무게: {r.weight}</div>
                                         </div>
                                       </Popover>
                                     </StyledTableCell>
@@ -831,7 +877,7 @@ export default function ProfilePage(props) {
                                         }}
                                         onClick={() => {
                                           // 신청 승락
-                                          acceptJoin(t.userID);
+                                          acceptJoin(r.userID);
                                         }}
                                       >
                                         <AddIcon />
@@ -844,7 +890,7 @@ export default function ProfilePage(props) {
                                         }}
                                         onClick={() => {
                                           // 신청 거절
-                                          rejectJoin(t.userID);
+                                          rejectJoin(r.userID);
                                         }}
                                       >
                                         <RemoveIcon />
@@ -872,6 +918,11 @@ export default function ProfilePage(props) {
         }}
         teamInfo={teamInfo}
         modifyTeamInfo={modifyTeamInfo}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
       />
       <AddUserDialog
         open={addUserOpen}
@@ -880,6 +931,11 @@ export default function ProfilePage(props) {
         }}
         teamID={teamInfo.teamID}
         modifyTeamList={modifyTeamList}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
       />
       <Modal
         aria-labelledby="transition-modal-title"
