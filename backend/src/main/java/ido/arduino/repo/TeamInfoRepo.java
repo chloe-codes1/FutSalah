@@ -17,7 +17,7 @@ public interface TeamInfoRepo {
 
 	int insert(TeamInfoDto info);
 	int update(TeamInfoDto info);
-	int delete(String teamID);
+	int delete(int teamID);
 	
 	
 	//----------------find team---------------------------

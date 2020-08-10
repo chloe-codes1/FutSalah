@@ -36,7 +36,7 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	}
 
 	@Override
-	public int delete(String teamID) {
+	public int delete(int teamID) {
 		return template.delete(ns + "delete", teamID);
 	}
 

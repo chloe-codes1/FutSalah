@@ -50,7 +50,7 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public int delete(String teamID) {
+	public int delete(int teamID) {
 		return tRepo.delete(teamID);
 	}
 

@@ -91,17 +91,28 @@ public class UserController {
 
 	@DeleteMapping("/user")
 	public void deleteUser(@RequestParam("userID") int userID) {
-		System.out.println("userID????" + userID);
+		// 전체 팀 정보 가져오기
 		List<MyTeamDto> myTeams = teamService.selectAllmyteam(userID);
 		if (!myTeams.isEmpty()) {
 			myTeams.forEach(team -> {
 				int teamID = team.getTeamID();
-				int numberOfCrews = teamService.getNumberOfCrews(teamID);
-				if (numberOfCrews > 1) {
-					int nextLeaderID = teamService.getNextLeader(userID, teamID);
-					teamService.updateLeader(nextLeaderID, teamID);
-				}else {
-					teamService.updateLeader(0, teamID);
+				// 자신이 팀의 리더이면,
+				if (team.getLeader() == userID) {
+					// 전체 팀원 수 조회 후
+					int numberOfCrews = teamService.getNumberOfCrews(teamID);
+					// 자신을 제외한 팀원이 있을 경우
+					if (numberOfCrews > 1) {
+						// 한 사람을 선택해서
+						int nextLeaderID = teamService.getNextLeader(userID, teamID);
+						// 리더로 지정하고
+						teamService.updateLeader(nextLeaderID, teamID);
+						// userteamconn table을 삭제한다
+						teamService.deleteCrew(teamID, userID);
+					// 자신을 제외한 팀원이 없을 경우
+					}else {
+						// 팀을 삭제한다 (userteamconn은 CASCADE)
+						teamService.delete(teamID);
+					}
 				}
 			});
 		}
