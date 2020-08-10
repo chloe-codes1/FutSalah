@@ -14,5 +14,5 @@ public class MyTeamDto {
 	private String description;
 	private String profileURL;
 	private String name;
-
+	private int leader;
 }

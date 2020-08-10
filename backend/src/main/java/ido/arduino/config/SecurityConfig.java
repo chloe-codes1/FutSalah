@@ -20,8 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/api/team", "/api/team/*", "/api/team/check/*","/api/team/member/*", "/api/team/search/*", "/api/team/upload/*",
 			"/api/match/fsearch/*", "/api/location/*",
 			// assets 허용
-			"assets/*"
-			};
+			"assets/*"};
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

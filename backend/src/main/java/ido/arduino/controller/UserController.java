@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import ido.arduino.dto.MyTeamDto;
+import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.service.S3Service;
+import ido.arduino.service.TeamInfoService;
 import ido.arduino.service.UserService;
 
 @Controller
@@ -31,6 +34,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private TeamInfoService teamService;
 
 	@Autowired
 	private S3Service s3Service;
@@ -54,7 +60,7 @@ public class UserController {
 		Calendar cal = Calendar.getInstance();
 		if (loggedUser != null && loggedUser.getAge() != null) {
 			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
-		}	
+		}
 		System.out.println("current user?" + loggedUser);
 		return loggedUser;
 	}
@@ -72,8 +78,8 @@ public class UserController {
 	}
 
 	@PutMapping("/user")
-		public @ResponseBody int updateUser(@RequestBody UserDTO user) {
-		System.out.println("user??????????" + user );
+	public @ResponseBody int updateUser(@RequestBody UserDTO user) {
+		System.out.println("user??????????" + user);
 		int updateResult = userService.update(user);
 		if (updateResult == 1) {
 			System.out.println("successfully updated!");
@@ -85,7 +91,36 @@ public class UserController {
 
 	@DeleteMapping("/user")
 	public void deleteUser(@RequestParam("userID") int userID) {
-		System.out.println("userID????" + userID);
+		// 전체 팀 정보 가져오기
+		List<MyTeamDto> myTeams = teamService.selectAllmyteam(userID);
+		if (!myTeams.isEmpty()) {
+			myTeams.forEach(team -> {
+				int teamID = team.getTeamID();
+				// 자신이 팀의 리더이면,
+				if (team.getLeader() == userID) {
+					// 전체 팀원 수 조회 후
+					int numberOfCrews = teamService.getNumberOfCrews(teamID);
+					// 자신을 제외한 팀원이 있을 경우
+					if (numberOfCrews > 1) {
+						// 한 사람을 선택해서
+						int nextLeaderID = teamService.getNextLeader(userID, teamID);
+						// 리더로 지정하고
+						teamService.updateLeader(nextLeaderID, teamID);
+						// userteamconn table을 삭제한다
+						teamService.deleteCrew(teamID, userID);
+					// 자신을 제외한 팀원이 없을 경우
+					}else {
+						// 팀을 삭제한다 (userteamconn은 CASCADE)
+						teamService.delete(teamID);
+					}
+				// 자신이 팀 리더가 아니면,
+				}else {
+					// userteamconn table을 삭제한다
+					teamService.deleteCrew(teamID, userID);
+				}
+			});
+		}
+		// 위의 작업 완료 후 유저 삭제
 		int deleteResult = userService.delete(userID);
 		if (deleteResult == 1) {
 			System.out.println("successfully deleted!");
@@ -103,7 +138,8 @@ public class UserController {
 	}
 
 	@PostMapping("/user/upload/{userID}")
-	public ResponseEntity<String> uploadFile(@PathVariable int userID, @RequestPart(value = "file") final MultipartFile multipartFile) {
+	public ResponseEntity<String> uploadFile(@PathVariable int userID,
+			@RequestPart(value = "file") final MultipartFile multipartFile) {
 		System.out.println("file" + userID + multipartFile);
 		final String status = "user";
 		s3Service.uploadFile(multipartFile, userID, status);
