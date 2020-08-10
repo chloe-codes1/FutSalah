@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
 			"/configuration/security", "/swagger-ui.html", "/webjars/**",
 			// 생성한 api url로 접근 허용하기
-			"/api/login", "/api/user", "/api/user/*", "/api/user/upload/*",
+			"/api/login", "/api/user", "/api/user/*", "/api/user/upload/*", "/api/user/check",
 			"/api/team", "/api/team/*", "/api/team/check/*","/api/team/member/*", "/api/team/search/*", "/api/team/upload/*",
 			"/api/match/fsearch/*", "/api/location", "/api/location/*",
 			// assets 허용

@@ -11,4 +11,5 @@ public interface UserService {
 	int update(UserDTO user);
 	int delete(int userID);
 	List<UserDTO> searchUsersByName(String name);
+	int checkIfEmailExists(String email);
 }

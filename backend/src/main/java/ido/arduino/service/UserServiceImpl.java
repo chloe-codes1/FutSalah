@@ -44,4 +44,9 @@ public class UserServiceImpl implements UserService {
 		return userMapper.searchUsersByName(name);
 	}
 
+	@Override
+	public int checkIfEmailExists(String email) {
+		return userMapper.checkIfEmailExists(email);
+	}
+
 }
