@@ -198,11 +198,20 @@ export default function ProfilePage(props) {
         }
         setTeamInfo({
           ...res.data,
-          id: TeamId,
-          region: "서울시 종로구(test data)",
           profileURL: teamInfo.profileURL,
         });
-        console.log(teamInfo);
+        // 지역 정보 가져오기
+        axios({
+          method: "get",
+          url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/${res.data.locationID}`,
+        }).then((res) => {
+          console.log(res.data);
+          setTeamInfo((prevState) => ({
+            ...prevState,
+            region: res.data.sido + " " + res.data.gu,
+          }));
+          console.log(teamInfo);
+        });
       })
       .catch((e) => {
         console.log("error", e);
@@ -463,14 +472,17 @@ export default function ProfilePage(props) {
                       <TableContainer>
                         <div
                           style={{
-                            width: "100%",
                             height: "350px",
                             overflow: "auto",
                             borderRadius: "5px",
                           }}
                         >
                           <Table className={classes.table} size="small">
-                            <TableBody>
+                            <TableBody
+                              style={{
+                                width: "100%",
+                              }}
+                            >
                               {teamList.map((t, index) => (
                                 <Player
                                   key={index}
@@ -481,7 +493,11 @@ export default function ProfilePage(props) {
                                   }}
                                 >
                                   <TableRow>
-                                    <TableCell rowSpan={2} align="center">
+                                    <TableCell
+                                      rowSpan={2}
+                                      align="center"
+                                      width="20%"
+                                    >
                                       <img
                                         className={classes.memberImg}
                                         src={
@@ -501,7 +517,11 @@ export default function ProfilePage(props) {
                                         ? t.position
                                         : "포지션 없음"}
                                     </TableCell>
-                                    <TableCell rowSpan={2} align="center">
+                                    <TableCell
+                                      rowSpan={2}
+                                      align="center"
+                                      width="30%"
+                                    >
                                       <Button
                                         size="sm"
                                         onClick={() => {
