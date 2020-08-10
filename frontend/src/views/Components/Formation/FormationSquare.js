@@ -2,7 +2,13 @@ import React from "react";
 import { useDrop } from "react-dnd";
 import { Overlay } from "./Overlay";
 
-export const FormationSquare = ({ canMove, movePlayer, posNum, children }) => {
+export const FormationSquare = ({
+  canMove,
+  movePlayer,
+  posNum,
+  children,
+  movable,
+}) => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: "position",
     canDrop: () => canMove(posNum),
@@ -15,7 +21,7 @@ export const FormationSquare = ({ canMove, movePlayer, posNum, children }) => {
 
   return (
     <div
-      ref={drop}
+      ref={movable ? drop : null}
       style={{
         position: "relative",
         width: "100%",
