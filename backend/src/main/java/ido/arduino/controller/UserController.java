@@ -113,10 +113,14 @@ public class UserController {
 						// 팀을 삭제한다 (userteamconn은 CASCADE)
 						teamService.delete(teamID);
 					}
+				// 자신이 팀 리더가 아니면,
+				}else {
+					// userteamconn table을 삭제한다
+					teamService.deleteCrew(teamID, userID);
 				}
 			});
 		}
-
+		// 위의 작업 완료 후 유저 삭제
 		int deleteResult = userService.delete(userID);
 		if (deleteResult == 1) {
 			System.out.println("successfully deleted!");
