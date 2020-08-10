@@ -16,6 +16,7 @@
 		<typeAlias type="ido.arduino.dto.LocationDto" alias="location"/>
 		<typeAlias type="ido.arduino.dto.UserTeamConnDto" alias="userteamconn"/>
 		<typeAlias type="ido.arduino.dto.Formation" alias="formation"/>
+		<typeAlias type="ido.arduino.dto.MatchDto" alias="match"/>
 	</typeAliases>
 	<mappers>
 		<!-- 사용할 mapper 등록 -->
@@ -24,5 +25,6 @@
 		<mapper resource="mybatis/mapper/TeamMapper.xml"/>
 		<mapper resource="mybatis/mapper/Matching2Mapper.xml"/>
 		<mapper resource="mybatis/mapper/LocationMapper.xml"/>
+		<mapper resource="mybatis/mapper/MatchGameMapper.xml"/>
 	</mappers>
 </configuration>

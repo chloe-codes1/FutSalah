@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.mapper.MatchDto">
+
+	<select id = "selectoption"  resultType="match">
+	select * from matching 
+	<if test="search_option =='all'">
+	where locationID LIKE CONCAT('%',#{keyword},'%')
+	and date LIKE CONCAT('%',#{keyword},'%')
+	and time LIKE CONCAT('%',#{keyword},'%')
+	</if>
+	</select>
+
+
+</mapper>

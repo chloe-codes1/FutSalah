@@ -18,5 +18,4 @@ public class TeamInfoSimpleDto {
 	private int teamID;
 
 	
-
 }

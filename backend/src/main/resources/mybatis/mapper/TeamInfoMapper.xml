@@ -100,14 +100,14 @@
 	<!-- 포메이션 수정 -->
 	<update id="updateformation" parameterType="formation">
 		update formation
-		set formCode=#{formCode}, userID=#{userID}, grid=#{grid}
-		where teamID=#{teamID}
+		set userID=#{userID}, grid=#{grid}
+		where teamID=#{teamID} and formCode=#{formCode}
 	</update>
 
 	<!-- 포메이션 삭제 -->
 	<delete id="deleteformation" parameterType="int">
 		delete from formation where
-		grid=#{grid}
+		userID=#{userID} 
 	</delete>
 	
 	<!-- 포메이션 리스트출력 -->
@@ -119,12 +119,14 @@
 	
 	<!-- 경기전적 출력 -->
 	<select id="resultscore" resultType="result">
-	select result.homeScore, result.awayScore from result, team
+	select result.homeScore, result.awayScore from result
 	inner join team on matching.homeTeamID = team.teamID
 	inner join team on matching.awayTeamID = team.teamID
 	</select>
 	
 	
-	<!-- 나한테 요청온 팀 보이기 -->
+	
+	
+	
 	
 </mapper>
