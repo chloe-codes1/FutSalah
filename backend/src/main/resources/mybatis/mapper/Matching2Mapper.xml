@@ -7,7 +7,7 @@
 	<select id="searchScheduledMatch" parameterType="int" resultType="Matching2DTO">
 		SELECT m.matchID, m.homeTeamID, a.name as homeName, m.awayTeamID, b.name as awayName, m.time
 		FROM matching as m, team as a, team as b
-		WHERE m.state = 1 and m.stadium = #{stadium} and date = date_format(now(), '%Y-%m-%d') and m.homeTeamID = a.teamID and m.awayTeamID = b.teamID
+		WHERE m.state = 1 and m.courtID = #{stadium} and date = date_format(now(), '%Y-%m-%d') and m.homeTeamID = a.teamID and m.awayTeamID = b.teamID
 		order by m.time ASC
 	</select>
 </mapper>

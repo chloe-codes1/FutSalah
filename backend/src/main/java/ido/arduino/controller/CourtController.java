@@ -25,6 +25,7 @@ public class CourtController {
 	@ApiOperation(value = "구장 관리자 로그인", response = String.class)
 	@PostMapping("/courtLogin")
 	public @ResponseBody CourtAdminDTO login(@RequestBody Map<String, String> data) {
+		System.out.println("?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		String id = data.get("id");
 		String password = data.get("password");
 		

@@ -14,4 +14,5 @@ public class CourtAdminDTO {
 	private int adminID;
 	private String id;
 	private int stadiumID;
+	private String name;
 }
