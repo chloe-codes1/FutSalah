@@ -240,6 +240,7 @@ export default function ProfilePage(props) {
     })
       .then((res) => {
         console.log("포메이션 success");
+        console.log(res.data);
         setPlayerPos1(res.data);
       })
       .catch((e) => {
@@ -315,11 +316,7 @@ export default function ProfilePage(props) {
 
     await axios({
       method: "delete",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation`,
-      data: {
-        teamID: teamInfo.teamID,
-        formCode,
-      },
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation/${teamInfo.teamID}/${formCode}`,
     })
       .then(() => {
         console.log("delete formation success");
