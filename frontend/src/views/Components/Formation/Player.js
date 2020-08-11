@@ -46,7 +46,7 @@ export const Player = ({ player, inField, children, movable }) => {
           height: "90%",
           borderRadius: "70%",
           opacity: isDragging ? 0.5 : 1,
-          width: player.idx === 0 ? "18%" : "90%",
+          width: player.grid === 0 ? "18%" : "90%",
         }}
       >
         {player.position !== "" ? (

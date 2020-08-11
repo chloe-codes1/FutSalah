@@ -2,6 +2,8 @@ import React from "react";
 import { useDrop } from "react-dnd";
 import { Overlay } from "./Overlay";
 
+import benchImg from "assets/img/bench.PNG";
+
 export const FormationBench = ({ removePlayer }) => {
   const [{ isOver }, drop] = useDrop({
     accept: "position",
@@ -19,6 +21,8 @@ export const FormationBench = ({ removePlayer }) => {
         width: "100%",
         height: "100%",
         backgroundColor: "gray",
+        backgroundImage: `url(${benchImg})`,
+        backgroundSize: "100% 100%",
       }}
     >
       <div
@@ -27,12 +31,9 @@ export const FormationBench = ({ removePlayer }) => {
           width: "100%",
           height: "100%",
           textAlign: "center",
+          backgroundColor: "rgba(0 0 0 0.5)",
         }}
-      >
-        <strong>벤치</strong>
-        <br />
-        <span style={{ fontSize: 5 }}>선수를 빼려면 여기에 드롭</span>
-      </div>
+      ></div>
       {isOver && <Overlay color="crimson" />}
     </div>
   );

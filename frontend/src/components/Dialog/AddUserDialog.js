@@ -23,20 +23,18 @@ function AddInfoDialog(props) {
     onClose();
   };
 
+  // 멤버 추가
   const addMember = (userInfo, teamID) => {
     const userTeamConn = {
       userID: userInfo.userID,
       teamID,
     };
-    console.log(userTeamConn);
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/crew`,
       data: userTeamConn,
     })
       .then(() => {
-        console.log("팀원 추가");
-        console.log(userInfo);
         if (userInfo.profileURL !== null) {
           if (userInfo.profileURL.indexOf("http") === -1) {
             userInfo.profileURL =
@@ -44,13 +42,16 @@ function AddInfoDialog(props) {
           }
         }
         modifyTeamList(userInfo);
+        alert(userInfo.name + "님이 성공적으로 추가되었습니다.");
       })
       .catch((e) => {
         console.log("error", e);
       });
     handleClose();
+    setSerachTeamList([]);
   };
 
+  // 이름으로 멤버 찾기
   const searchUser = (name) => {
     axios({
       method: "get",
@@ -99,7 +100,6 @@ function AddInfoDialog(props) {
             size="sm"
             style={{ marginLeft: "10px" }}
             onClick={() => {
-              console.log("회원 검색!!!!!");
               searchUser(searchWord);
             }}
           >
@@ -139,6 +139,7 @@ function AddInfoDialog(props) {
                         />
                       </TableCell> */}
                       <TableCell>{list.name}</TableCell>
+                      <TableCell>{list.email}</TableCell>
                       <TableCell>{list.position}</TableCell>
                       <TableCell>
                         <Button
