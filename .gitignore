@@ -43,4 +43,6 @@ mysql.yml
 ### Gmail Credentials
 mail.properties
 
+
+.temp-backend*
 # End of https://www.toptal.com/developers/gitignore/api/react,visualstudiocode

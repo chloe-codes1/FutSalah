@@ -19,6 +19,7 @@
 		<typeAlias type="ido.arduino.dto.MatchDto" alias="match"/>
 		<typeAlias type="ido.arduino.dto.MatchSimpleDto" alias="simple"/>
 		<typeAlias type="ido.arduino.dto.ResultDto" alias="result"/>
+		<typeAlias type="ido.arduino.dto.DeleteFormationDto" alias="deleteform"/>
 	</typeAliases>
 	<mappers>
 		<!-- 사용할 mapper 등록 -->
@@ -29,5 +30,6 @@
 		<mapper resource="mybatis/mapper/LocationMapper.xml"/>
 		<mapper resource="mybatis/mapper/MatchGameMapper.xml"/>
 		<mapper resource="mybatis/mapper/RequestMapper.xml"/>
+		<mapper resource="mybatis/mapper/CourtMapper.xml"/>
 	</mappers>
 </configuration>

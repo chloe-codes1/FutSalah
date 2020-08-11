@@ -37,6 +37,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.RequestDTO;
@@ -301,6 +302,7 @@ public class TeamInfoController {
 		ResponseEntity<Map<String, Object>> entity = null;
 
 		try {
+			
 			TeamInfoDto team = tService.getTeamInfo(form.getTeamID());
 			int result = tService.insertformation(form);
 			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
@@ -327,14 +329,15 @@ public class TeamInfoController {
 
 	// 팀 정보 삭제
 	@ApiOperation(value = "포메이션 정보 삭제.", response = String.class)
-	@DeleteMapping("/team/formation/{userID}")
-	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int userID) {
+	@DeleteMapping("/team/formation/{teamID}/{formCode}")
+	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int teamID, @PathVariable int formCode) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-
+			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
+			tService.deleteformation(form);
 			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
-			int result = tService.deleteformation(userID);
-			entity = handleSuccess(userID + "가 삭제되었습니다.");
+		//	int result = tService.deleteformation(teamID);
+			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}

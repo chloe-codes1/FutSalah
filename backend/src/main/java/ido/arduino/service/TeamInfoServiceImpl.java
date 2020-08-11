@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ido.arduino.dao.TeamMapper;
-
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 
 import ido.arduino.dto.MyTeamDto;
@@ -150,8 +150,8 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public int deleteformation(int userID) {
-		return tRepo.deleteformation(userID);
+	public int deleteformation(DeleteFormationDto form) {
+		return tRepo.deleteformation(form);
 	}
 
 	@Override

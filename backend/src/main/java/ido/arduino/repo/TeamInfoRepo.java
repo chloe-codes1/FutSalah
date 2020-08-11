@@ -2,6 +2,7 @@ package ido.arduino.repo;
 
 import java.util.List;
 
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.ResultDto;
@@ -36,7 +37,7 @@ public interface TeamInfoRepo {
 	//----------------formation---------------------------
 	int insertformation(Formation form);
 	int updateformation(Formation form);
-	int deleteformation(int userID);
+	int deleteformation(DeleteFormationDto form);
 	public List<Formation> selectformation(int teamID);
 
 	
