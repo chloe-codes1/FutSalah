@@ -35,7 +35,7 @@ function AdminLoginDialog(props) {
 
   const { open, onClose, initAdmin, loggedUser } = props;
 
-  const [adminId, setAdminId] = useState("");
+  const [adminID, setAdminID] = useState("");
   const [password, setPassword] = useState("");
 
   const history = useHistory();
@@ -45,28 +45,30 @@ function AdminLoginDialog(props) {
   };
 
   const responseAdmin = () => {
-    console.log(adminId);
+    console.log(adminID);
     console.log(password);
-
-    // initUser(adminId, "", "", "");
-    // axios({
-    //   method: "post",
-    //   url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/login`,
-    //   data: {
-    //     ID: adminId, // socialID => ID
-    //   },
-    // }).then((e) => {
-    //   console.log(e.data);
-    //   // context 값 변경
-    //   initAdmin(
-    //     res.profile.id, // 입력받은 Admin Id
-    //     e.data.name, // db에 저장되어 있는 관리자 이름
-    //     "admin", // 로그인 종류 (google, kakao, admin)
-    //     e.data.profileURL // db에 저장되어 있는 프로필 사진
-    // history.push("/Admin/1");
-    //   );
-    //   onClose();
-    // });
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/courtLogin`,
+      data: {
+        id: adminID,
+        password: password,
+      },
+    }).then((e) => {
+      console.log(e.data);
+      initAdmin(
+        e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
+        e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
+        e.data.stadiumID // url에 표시할 구장 ID
+      );
+      loggedUser(
+        e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
+        e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
+        e.data.stadiumID // url에 표시할 구장 ID
+      );
+      history.push(`/Admin/${e.data.stadiumID}`);
+      onClose();
+    });
   };
 
   return (
@@ -77,11 +79,11 @@ function AdminLoginDialog(props) {
           <TextField
             variant="outlined"
             name="adminid"
-            label="Admin Id"
+            label="Admin ID"
             type="text"
             id="adminid"
             autoComplete="adminid"
-            onChange={({ target: { value } }) => setAdminId(value)}
+            onChange={({ target: { value } }) => setAdminID(value)}
           />
         </ListItem>
         <ListItem>

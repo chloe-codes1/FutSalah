@@ -15,7 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
-import UserContext from "../../contexts/UserContext";
+import AdminUserContext from "../../contexts/AdminUserContext";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,7 +24,7 @@ import styles from "assets/jss/material-kit-react/views/AdminMatchInfoPage.js";
 const useStyles = makeStyles(styles);
 
 export default function AdminInfo(props) {
-  const { userinfo, userDispatch } = useContext(UserContext);
+  const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
   const classes = useStyles();
   const { match, ...rest } = props;
 

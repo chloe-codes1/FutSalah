@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
-import Button from "components/CustomButtons/Button.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -11,12 +10,10 @@ import GridItem from "components/Grid/GridItem.js";
 // core components
 import AdminHeader from "components/Header/AdminHeader.js";
 import AdminHeaderLinks from "components/Header/AdminHeaderLinks.js";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
-import UserContext from "../../contexts/UserContext";
+import AdminUserContext from "../../contexts/AdminUserContext";
 
 // @material-ui/core components
 import {
@@ -62,7 +59,7 @@ const StyledTableRow = withStyles((theme: Theme) =>
 )(TableRow);
 
 export default function AdminInfo(props) {
-  const { userinfo, userDispatch } = useContext(UserContext);
+  const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
   const classes = useStyles();
   const history = useHistory();
   const { ...rest } = props;

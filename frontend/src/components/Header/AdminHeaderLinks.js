@@ -15,7 +15,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 // dialog components
 import AdminLoginDialog from "../Dialog/AdminLoginDialog";
-import UserContext from "../../contexts/UserContext";
+import AdminUserContext from "../../contexts/AdminUserContext";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
@@ -25,22 +25,26 @@ const useStyles = makeStyles(styles);
 // 첫 로그인(회원가입)일때 -> 1.구글 또는 카카오로 전달받은 ID를 backend로 전달
 // -> backend에서 전달받은 ID가 기존회원인지 판단하여 front로 전달(기존회원이 아닐때 user create) -> front는 기존회원이 아닐때 추가정보 dialog를 호출 ->
 // -> 추가정보를 입력받아 backend에 전달 -> backend는 정보를 전달받아 user update
-const initialState = {
+const adminInitialState = {
   admin: {
-    ID: "",
+    adminID: "",
+    // Admin ID (Admin의 고유 ID : AutoIncrement)
     name: "",
+    // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
     stadiumID: "",
+    // url에 표시할 구장 ID
+    logged: false,
   },
 };
 
-function reducer(state, action) {
+function adminreducer(state, action) {
   switch (action.type) {
     case "INIT_ADMIN":
       return {
         ...state,
         admin: {
           ...state.admin,
-          ID: action.adminID,
+          adminID: action.adminID,
           name: action.name,
           stadiumID: action.stadiumID,
         },
@@ -50,13 +54,12 @@ function reducer(state, action) {
   }
 }
 
-export default function HeaderLinks(props) {
-  const { userinfo, userDispatch } = useContext(UserContext);
+export default function AdminHeaderLinks(props) {
+  const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
   const classes = useStyles();
   const [loginOpen, setLoginOpen] = useState(false);
-  const [addInfoOpen, setAddInfoOpen] = useState(false);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { user } = state;
+  const [state, dispatch] = useReducer(adminreducer, adminInitialState);
+  console.log(adminuserinfo);
 
   const loginClickOpen = () => {
     setLoginOpen(true);
@@ -64,14 +67,9 @@ export default function HeaderLinks(props) {
   const loginClickClose = () => {
     setLoginOpen(false);
   };
-  const addInfo = () => {
-    setAddInfoOpen(true);
-  };
-  const addInfoClose = () => {
-    setAddInfoOpen(false);
-  };
 
   const initAdmin = useCallback((adminID, name, stadiumID) => {
+    // console.log(adminID + " " + name);
     dispatch({
       type: "INIT_ADMIN",
       adminID,
@@ -79,63 +77,37 @@ export default function HeaderLinks(props) {
       stadiumID,
     });
   }, []);
-  const onChange = useCallback((e) => {
-    const { name, value } = e.target;
-    dispatch({
-      type: "CHANGE_INPUT",
-      name,
-      value,
-    });
-  }, []);
-  const loggedUser = useCallback((id, name, provider) => {
-    window.sessionStorage.setItem("id", id);
+
+  const loggedUser = useCallback((adminID, name, stadiumID) => {
+    window.sessionStorage.setItem("adminID", adminID);
     window.sessionStorage.setItem("name", name);
-    window.sessionStorage.setItem("provider", provider);
-    userDispatch({
-      type: "LOGIN_USER",
-      id,
+    window.sessionStorage.setItem("stadiumID", stadiumID);
+    adminUserDispatch({
+      type: "ADMIN_LOGIN_USER",
+      adminID,
       name,
-      provider,
+      stadiumID,
     });
   }, []);
-  const onRegister = useCallback(() => {
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
-      data: user,
-    })
-      .then(() => {
-        console.log("success");
-        alert("정보 저장이 완료되었습니다!");
-        loggedUser(user.socialID, user.name, "social");
-        addInfoClose();
-      })
-      .catch((e) => {
-        console.log("error", e);
-        alert("잠시 후 다시 시도해주세요!");
-        console.log("fail");
-        addInfoClose();
-      });
-  }, [user]);
 
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
-        {userinfo.logged && (
+        {adminuserinfo.logged && (
           <IconButton>
             <Avatar className={classes.small} />
           </IconButton>
         )}
       </ListItem>
       <ListItem className={classes.listItem}>
-        {userinfo.logged && (
+        {adminuserinfo.logged && (
           <ListItemText className={classes.listItemText}>
-            {userinfo.name}님 환영합니다!
+            {adminuserinfo.name}님 환영합니다!
           </ListItemText>
         )}
       </ListItem>
       <ListItem className={classes.listItem}>
-        {!userinfo.logged && (
+        {!adminuserinfo.logged && (
           <Button
             href="#pablo"
             className={classes.ButtonNavLink}
@@ -155,13 +127,13 @@ export default function HeaderLinks(props) {
             register
           </Button>
         )} */}
-        {userinfo.logged && (
+        {adminuserinfo.logged && (
           <Button
             href="#pablo"
             className={classes.ButtonNavLink}
             onClick={() =>
-              userDispatch({
-                type: "LOGOUT_USER",
+              adminUserDispatch({
+                type: "ADMIN_LOGOUT_USER",
               })
             }
             color="warning"
@@ -175,6 +147,7 @@ export default function HeaderLinks(props) {
           open={loginOpen}
           onClose={loginClickClose}
           initAdmin={initAdmin}
+          loggedUser={loggedUser}
         />
       </ListItem>
     </List>

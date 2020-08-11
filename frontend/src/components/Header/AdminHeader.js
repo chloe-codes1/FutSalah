@@ -21,7 +21,7 @@ import styles from "assets/jss/material-kit-react/components/headerStyle.js";
 
 const useStyles = makeStyles(styles);
 
-export default function Header(props) {
+export default function AdminHeader(props) {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   React.useEffect(() => {
@@ -116,11 +116,11 @@ export default function Header(props) {
   );
 }
 
-Header.defaultProp = {
+AdminHeader.defaultProp = {
   color: "white",
 };
 
-Header.propTypes = {
+AdminHeader.propTypes = {
   color: PropTypes.oneOf([
     "primary",
     "info",
