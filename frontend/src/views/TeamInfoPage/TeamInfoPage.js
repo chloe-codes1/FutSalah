@@ -45,7 +45,7 @@ import teamImage from "assets/img/basicTeamImg1.jpg";
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
 
-// table
+// table style
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -96,18 +96,10 @@ export default function ProfilePage(props) {
   const { userinfo } = useContext(UserContext);
   const [teamList, setTeamList] = useState([]); // 팀원 목록
   const [record, setRecord] = useState([]); // 경기전적 목록
-  const [requestList, setRequestList] = useState([]); // 경기전적 목록
+  const [requestList, setRequestList] = useState([]); // 팀원 신청 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
-
-  const [playerPos1, setPlayerPos1] = useState([
-    // {
-    //   userID: 7436,
-    //   name: "salah",
-    //   position: "Ala",
-    //   grid: 6,
-    // },
-  ]); // 포메이션 정보 (5:5)
-
+  const [loading, setLoading] = useState(false); // 로딩 여부
+  const [playerPos1, setPlayerPos1] = useState([]); // 포메이션 정보 (5:5)
   const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보 (6:6)
 
   const [modifyOpen, setModifyOpen] = useState(false); // 팀 정보 창
@@ -120,8 +112,126 @@ export default function ProfilePage(props) {
   const handleDropZone = () => {
     setDropZone(true);
   };
+
   const handleDropZoneClose = () => {
     setDropZone(false);
+  };
+
+  // 팀 정보 가져오기
+  const getTeamInfo = async () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
+    })
+      .then((res) => {
+        // console.log("success");
+        let profileURL = res.data.profileURL;
+        if (profileURL) {
+          teamInfo.profileURL =
+            process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
+        } else {
+          teamInfo.profileURL =
+            process.env.REACT_APP_S3_BASE_URL +
+            "/team-default-" +
+            Math.ceil(Math.random(1, 8)) +
+            ".png";
+        }
+        setTeamInfo({
+          ...res.data,
+          profileURL: teamInfo.profileURL,
+        });
+        // 지역 정보 가져오기
+        axios({
+          method: "get",
+          url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/${res.data.locationID}`,
+        }).then((res) => {
+          // console.log(res.data);
+          setTeamInfo((prevState) => ({
+            ...prevState,
+            region: res.data.sido + " " + res.data.gu,
+          }));
+        });
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 팀원 목록 가져오기
+  const getTeamList = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member/${TeamId}`,
+    })
+      .then((res) => {
+        // console.log("팀원 정보 success");
+        res.data.map((member) => {
+          if (member.profileURL !== null) {
+            if (member.profileURL.indexOf("http") === -1) {
+              member.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
+            }
+          }
+        });
+        // console.log(res.data);
+        setTeamList(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 경기 전적 가져오기
+  const getRecord = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/result/${TeamId}`,
+    })
+      .then((res) => {
+        console.log(res.data);
+        setRecord(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 가입 신청 목록 가져오기
+  const getRequestList = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/${TeamId}`,
+    })
+      .then((res) => {
+        console.log(res.data);
+        res.data.map((member) => {
+          if (member.profileURL !== null) {
+            if (member.profileURL.indexOf("http") === -1) {
+              member.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
+            }
+          }
+        });
+        setRequestList(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 포메이션 정보 가져오기
+  const getFormation = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation/${TeamId}`,
+    })
+      .then((res) => {
+        console.log("포메이션 success");
+        setPlayerPos1(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   // 팀 정보 변경
@@ -239,13 +349,14 @@ export default function ProfilePage(props) {
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/approve`,
       data: {
-        teamID: teamInfo.teamID,
         userID: id,
+        teamID: teamInfo.teamID,
       },
     })
       .then(() => {
         // console.log("success");
         setRequestList(requestList.filter((rl) => rl.userID !== id));
+        getTeamList();
       })
       .catch((e) => {
         console.log("error", e);
@@ -254,13 +365,12 @@ export default function ProfilePage(props) {
 
   // 팀 가입 신청 거절
   const rejectJoin = (id) => {
-    // 가입 신청에서 빼기
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/refuse`,
       data: {
-        teamID: teamInfo.teamID,
         userID: id,
+        teamID: teamInfo.teamID,
       },
     })
       .then(() => {
@@ -274,103 +384,19 @@ export default function ProfilePage(props) {
 
   useEffect(() => {
     // 팀 정보 가져오기
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
-    })
-      .then((res) => {
-        // console.log("success");
-        let profileURL = res.data.profileURL;
-        if (profileURL) {
-          teamInfo.profileURL =
-            process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
-        } else {
-          teamInfo.profileURL =
-            process.env.REACT_APP_S3_BASE_URL +
-            "/team-default-" +
-            Math.ceil(Math.random(1, 8)) +
-            ".png";
-        }
-        setTeamInfo({
-          ...res.data,
-          profileURL: teamInfo.profileURL,
-        });
-        // 지역 정보 가져오기
-        axios({
-          method: "get",
-          url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/${res.data.locationID}`,
-        }).then((res) => {
-          // console.log(res.data);
-          setTeamInfo((prevState) => ({
-            ...prevState,
-            region: res.data.sido + " " + res.data.gu,
-          }));
-        });
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
+    getTeamInfo();
 
     // 팀원 목록 가져오기
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member/${TeamId}`,
-    })
-      .then((res) => {
-        // console.log("팀원 정보 success");
-        res.data.map((member) => {
-          if (member.profileURL !== null) {
-            if (member.profileURL.indexOf("http") === -1) {
-              member.profileURL =
-                process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
-            }
-          }
-        });
-        // console.log(res.data);
-        setTeamList(res.data);
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
+    getTeamList();
 
     // 경기 전적 정보 가져오기
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/result/${TeamId}`,
-    })
-      .then((res) => {
-        console.log(res.data);
-        setRecord(res.data);
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
+    getRecord();
 
     // 가입 신청 목록 가져오기
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/${TeamId}`,
-    })
-      .then((res) => {
-        // console.log(res.data);
-        setRequestList(res.data);
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
+    getRequestList();
 
     // 포메이션 정보 가져오기
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation/${TeamId}`,
-    })
-      .then((res) => {
-        console.log("포메이션 success");
-        setPlayerPos1(res.data);
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
+    getFormation();
   }, []);
 
   return (
@@ -552,7 +578,7 @@ export default function ProfilePage(props) {
                                   storeFormation(5);
                                 }}
                                 style={{
-                                  marginTop: "20px",
+                                  marginTop: "10px",
                                   width: "100%",
                                   height: "35px",
                                 }}
@@ -583,8 +609,8 @@ export default function ProfilePage(props) {
                           {Number(userinfo.userID) === teamInfo.leader && (
                             <div
                               style={{
+                                marginTop: "25px",
                                 textAlign: "center",
-                                lineHeight: "60px",
                                 fontSize: 12,
                               }}
                             >
@@ -620,7 +646,7 @@ export default function ProfilePage(props) {
                                   storeFormation(6);
                                 }}
                                 style={{
-                                  marginTop: "20px",
+                                  marginTop: "10px",
                                   width: "100%",
                                   height: "35px",
                                 }}
@@ -716,6 +742,12 @@ export default function ProfilePage(props) {
                                             <Button
                                               size="sm"
                                               onClick={() => {
+                                                // Confirm(
+                                                //   "정말 이 선수를 방출하시겠습니까?"
+                                                // ) &&
+                                                //   console.log(
+                                                //     t.name + " 방출~"
+                                                //   );
                                                 removeTeamList(t.userID);
                                               }}
                                               style={{
