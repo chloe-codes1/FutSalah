@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.dao.CourtMapper">
+	<!-- Validation -->
+	<select id="checkValid" parameterType="String" resultType="String">
+		SELECT password FROM ADMIN WHERE id = #{id}
+	</select>
+	
+	<select id="login" parameterType="String" resultType="CourtAdminDTO">
+		SELECT adminID, id, stadiumID FROM admin WHERE id = #{id}
+	</select>
+</mapper>
