@@ -8,24 +8,16 @@
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
 	<select id="alloption" resultType="match">
-		select m.date , m.time, m.location, m.isBooked, c.name from matching m, left outer join court c
-
+		select m.date , m.time, m.location, m.isBooked, c.name from matching
+		m, left outer join court c
 		<where>
-			<if test="locationID !=null ">
-				locationID LIKE CONCAT('%',#{locationID},'%')
-			</if>
+			locationID =#{locationID}
 			<if test="date !=null ">
 				and date LIKE CONCAT('%',#{date},'%')
 			</if>
-			<if test="time !=null ">
-				and time LIKE CONCAT('%',#{time},'%')
-			</if>
-			<if test="isBooked !=null ">
-				and isBooked LIKE CONCAT('%',#{isBooked},'%')
-			</if>
-			<if test="courtID !=null ">
-				and courtID LIKE CONCAT('%',#{courtID},'%')
-			</if>
+			and time=#{time}
+			and isBooked =#{isBooked}
+			and courtID =#{courtID}
 		</where>
 	</select>
 
@@ -34,7 +26,7 @@
 
 	<select id="simpleoption" resultType="simple">
 		select * from matching
-		where locationID LIKE CONCAT('%',#{locationID},'%')
+		where locationID =#{locationID}
 		and date LIKE
 		CONCAT('%',#{date},'%')
 	</select>
