@@ -19,5 +19,5 @@ public class MatchDto {
 	private int isBooked;
 	private int locationID;
 	private int state;
-	private int stadium;
+	private int courtID; // 경기장 유무 ..?
 }

@@ -10,10 +10,16 @@
 		SELECT * FROM
 		location WHERE locationID = #{locationID}
 	</select>
-	
+
 	<!-- 지역 정보 전체 리스트 -->
 	<select id="getAllLocationInfo" resultType="LocationDTO">
 		SELECT*FROM location
 	</select>
-	
+
+	<!-- sido로 지역 -->
+	<select id="getLocationBySido" parameterType="String"
+		resultType="LocationDTO">
+		select*from location where sido=#{sido}
+	</select>
+
 </mapper>

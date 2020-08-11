@@ -127,6 +127,7 @@ export default function HeaderLinks(props) {
     userDispatch({
       type: "LOGIN_USER",
       id,
+      uid,
       name,
       provider,
       profileURL,

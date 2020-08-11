@@ -18,6 +18,11 @@
 		INNER JOIN user ON request.userID = user.userID
 		WHERE teamID=#{teamID} AND user.userID=#{userID}
 	</select>
+	
+	<!-- 팀 가입 요청 중복 검사 -->
+	<select id="checkIfRequested" parameterType="map" resultType="int">
+		 SELECT COUNT(*) FROM request WHERE userID=#{userID} AND teamID=#{teamID}
+	</select>
 
 	<!-- 팀 가입 요청 INSERT -->
 	<insert id="insert" parameterType="map">
