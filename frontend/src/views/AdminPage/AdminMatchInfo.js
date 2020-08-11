@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import QRreader from "components/QR/QRreader";
 
 import Button from "components/CustomButtons/Button.js";
@@ -27,6 +28,15 @@ export default function AdminInfo(props) {
   const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
   const classes = useStyles();
   const { match, ...rest } = props;
+  const history = useHistory();
+
+  // component mount시 login보다 매치 가져오기가 먼저 일어남
+  // 따로 먼저 adminuserinfo.stadiumID를 가져와야 함
+  const [adminuser, setAdminUser] = useState({
+    adminID: 0,
+    name: "",
+    stadiumID: 0,
+  });
 
   // Match API에서 받을 것
   const testMatchInfo = {
@@ -69,7 +79,7 @@ export default function AdminInfo(props) {
   const loadMatchInfo = async () => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/1`,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/${adminuser.stadiumID}`,
     })
       .then((res) => {
         setMatchInfo(res.data[matchNo - 1]);
@@ -80,8 +90,14 @@ export default function AdminInfo(props) {
   };
 
   useEffect(() => {
+    const stadiumID = window.sessionStorage.getItem("stadiumID");
+    adminuser.stadiumID = stadiumID;
     loadMatchInfo();
   }, []);
+
+  const toAdminInfo = () => {
+    history.push(`/Admin/${adminuserinfo.stadiumID}`);
+  };
 
   return (
     <div>
@@ -105,7 +121,7 @@ export default function AdminInfo(props) {
           <GridContainer spacing={3}>
             <GridItem xs={12}>
               <div style={{ display: "block" }}>
-                <h3>고양풋살센터</h3>
+                <h3>{adminuserinfo.name}</h3>
                 <h3>
                   {year}-{month + 1}-{date} {matchInfo.time}:00
                 </h3>
@@ -157,6 +173,9 @@ export default function AdminInfo(props) {
               </GridItem>
             </GridItem>
           </GridContainer>
+          <Button size="sm" color="warning" onClick={toAdminInfo}>
+            목록으로
+          </Button>
         </div>
       </Parallax>
       <Footer />

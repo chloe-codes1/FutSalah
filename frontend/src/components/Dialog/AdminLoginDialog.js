@@ -56,18 +56,23 @@ function AdminLoginDialog(props) {
       },
     }).then((e) => {
       console.log(e.data);
-      initAdmin(
-        e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
-        e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
-        e.data.stadiumID // url에 표시할 구장 ID
-      );
-      loggedUser(
-        e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
-        e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
-        e.data.stadiumID // url에 표시할 구장 ID
-      );
-      history.push(`/Admin/${e.data.stadiumID}`);
-      onClose();
+      if (e.data) {
+        initAdmin(
+          e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
+          e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
+          e.data.stadiumID // url에 표시할 구장 ID
+        );
+        loggedUser(
+          e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
+          e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
+          e.data.stadiumID // url에 표시할 구장 ID
+        );
+        history.push(`/Admin/${e.data.stadiumID}`);
+        onClose();
+      } else {
+        alert("아이디 혹은 비밀번호가 틀립니다!");
+        onClose();
+      }
     });
   };
 

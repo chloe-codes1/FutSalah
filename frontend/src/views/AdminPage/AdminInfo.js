@@ -64,6 +64,14 @@ export default function AdminInfo(props) {
   const history = useHistory();
   const { ...rest } = props;
 
+  // component mount시 login보다 매치 가져오기가 먼저 일어남
+  // 따로 먼저 adminuserinfo.stadiumID를 가져와야 함
+  const [adminuser, setAdminUser] = useState({
+    adminID: 0,
+    name: "",
+    stadiumID: 0,
+  });
+
   const testMatchInfo = [
     {
       matchID: 1,
@@ -83,9 +91,9 @@ export default function AdminInfo(props) {
   const date = dateInfo.getDate();
 
   const loadMatchInfo = async () => {
-    axios({
+    await axios({
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/1`,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/${adminuser.stadiumID}`,
     })
       .then((res) => {
         console.log(res.data);
@@ -98,6 +106,8 @@ export default function AdminInfo(props) {
   };
 
   useEffect(() => {
+    const stadiumID = window.sessionStorage.getItem("stadiumID");
+    adminuser.stadiumID = stadiumID;
     loadMatchInfo();
   }, []);
 
@@ -124,7 +134,7 @@ export default function AdminInfo(props) {
             <GridItem xs={12}>
               <h1>경기 목록</h1>
 
-              <h3>고양풋살센터</h3>
+              <h3>{adminuserinfo.name}</h3>
 
               <h4>
                 {year}-{month + 1}-{date}
