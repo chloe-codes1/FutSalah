@@ -9,5 +9,5 @@ public interface RequestService {
 	RequestDTO getRequest(int teamID, int userID);
 	int insert(int userID, int teamID);
 	int delete(int resultID);
-	
+	int checkIfRequested(int userID, int teamID);
 }

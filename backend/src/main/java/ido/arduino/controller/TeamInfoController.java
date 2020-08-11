@@ -180,6 +180,13 @@ public class TeamInfoController {
 	public @ResponseBody int requestToJoin(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
+		int isRequested = rService.checkIfRequested(userID, teamID);
+		
+		// 중복 신청 막기
+		if (isRequested == 1) {
+			return 2;
+		}
+		
 		rService.insert(userID, teamID);
 		UserDTO requestFrom = uService.findByUserID(userID);
 		TeamLeaderDTO targetTeam = tService.getTeamLeaderInfo(teamID);
@@ -356,6 +363,7 @@ public class TeamInfoController {
 	
 	
 	//----------------result game---------------------------
+	// 경기전적
 	@ApiOperation(value = "게임 결과 정보 반환한다.", response = List.class)
 	@GetMapping("/team/result/{teamID}")
 	public ResponseEntity<List<ResultDto>> resultscore(@PathVariable int teamID) throws Exception {
