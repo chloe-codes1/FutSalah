@@ -147,12 +147,16 @@ export default function ProfilePage(props) {
         axios({
           method: "get",
           url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/${res.data.locationID}`,
-        }).then((res) => {
-          setTeamInfo((prevState) => ({
-            ...prevState,
-            region: res.data.sido + " " + res.data.gu,
-          }));
-        });
+        })
+          .then((res) => {
+            setTeamInfo((prevState) => ({
+              ...prevState,
+              region: res.data.sido + " " + res.data.gu,
+            }));
+          })
+          .catch((e) => {
+            console.log("error", e);
+          });
       })
       .catch((e) => {
         console.log("error", e);
@@ -196,7 +200,7 @@ export default function ProfilePage(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/result/${TeamId}`,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setRecord(res.data);
       })
       .catch((e) => {
@@ -213,7 +217,7 @@ export default function ProfilePage(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/${TeamId}`,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         res.data.map((member) => {
           if (member.profileURL !== null) {
             if (member.profileURL.indexOf("http") === -1) {
@@ -255,7 +259,7 @@ export default function ProfilePage(props) {
     setLoading(true);
 
     setTeamInfo(info);
-    // console.log(info); // 변경된 팀정보 출력
+    console.log(info); // 변경된 팀정보 출력
     await axios({
       method: "put",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
@@ -434,6 +438,10 @@ export default function ProfilePage(props) {
     getFormation();
   }, []);
 
+  useEffect(() => {
+    console.log(teamInfo);
+  }, [teamInfo]);
+
   return (
     <div
       style={{
@@ -477,7 +485,11 @@ export default function ProfilePage(props) {
                 <Tooltip title="팀 대표 사진 변경하기" interactive>
                   <img
                     className={classes.logo}
-                    src={teamInfo.profileURL}
+                    src={
+                      teamInfo.profileURL === null
+                        ? teamImage
+                        : teamInfo.profileURL
+                    }
                     alt="team"
                     onClick={
                       Number(userinfo.userID) === teamInfo.leader
