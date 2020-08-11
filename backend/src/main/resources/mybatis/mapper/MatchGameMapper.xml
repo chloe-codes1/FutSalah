@@ -7,24 +7,47 @@
 
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
-	<select id = "alloption"  resultType="match">
-	select * from matching 
+	<select id="alloption" resultType="match">
+		select m.date , m.time, m.location, m.isBooked, c.name from matching m, left outer join court c
 
-	where locationID LIKE CONCAT('%',#{locationID},'%')
-	and date LIKE CONCAT('%',#{date},'%')
-	and time LIKE CONCAT('%',#{time},'%')
-	and isBooked LIKE CONCAT('%',#{isBooked},'%')
-	and stadium LIKE CONCAT('%',#{stadium},'%')
+		<where>
+			<if test="locationID !=null ">
+				locationID LIKE CONCAT('%',#{locationID},'%')
+			</if>
+			<if test="date !=null ">
+				and date LIKE CONCAT('%',#{date},'%')
+			</if>
+			<if test="time !=null ">
+				and time LIKE CONCAT('%',#{time},'%')
+			</if>
+			<if test="isBooked !=null ">
+				and isBooked LIKE CONCAT('%',#{isBooked},'%')
+			</if>
+			<if test="courtID !=null ">
+				and courtID LIKE CONCAT('%',#{courtID},'%')
+			</if>
+		</where>
 	</select>
-	
-	
-	<!-- 검색 조건중  위치, 날짜 맞는 내용 찾기 -->
 
-	<select id = "simpleoption"  resultType="simple">
-	select * from matching 
-	where locationID LIKE CONCAT('%',#{locationID},'%')
-	and date LIKE CONCAT('%',#{date},'%')
+
+	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
+
+	<select id="simpleoption" resultType="simple">
+		select * from matching
+		where locationID LIKE CONCAT('%',#{locationID},'%')
+		and date LIKE
+		CONCAT('%',#{date},'%')
 	</select>
-	
+
+
+	<!-- 검색한 조건 없으면 매칭 등록 -->
+	<insert id="insertmatch" parameterType="match">
+
+
+	</insert>
+
+
+
+
 
 </mapper>

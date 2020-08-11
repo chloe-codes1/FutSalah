@@ -114,10 +114,10 @@
 	</update>
 
 	<!-- 포메이션 삭제 -->
-	<delete id="deleteformation" parameterType="int">
+	<delete id="deleteformation" parameterType="deleteform">
 		delete from formation
 		where
-		userID=#{userID}
+		teamID= #{teamID} and formCode=#{formCode}
 	</delete>
 
 	<!-- 포메이션 리스트출력 -->
