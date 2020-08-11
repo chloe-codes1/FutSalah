@@ -455,6 +455,7 @@ export default function ProfilePage(props) {
                   size="sm"
                   onClick={() => {
                     console.log("가입 신청!!");
+                    requestJoin();
                   }}
                 >
                   가입 신청 하기
@@ -749,9 +750,8 @@ export default function ProfilePage(props) {
                               <TableCell align="center" colSpan="4">
                                 <h3>
                                   <strong>
-                                    &lt;{teamInfo.wins}승 {teamInfo.defeats}패{" "}
-                                    {teamInfo.draws}
-                                    무&gt;
+                                    &lt;{teamInfo.wins}승 {teamInfo.draws}무{" "}
+                                    {teamInfo.defeats}패 &gt;
                                   </strong>
                                 </h3>
                               </TableCell>

@@ -100,7 +100,7 @@ const teamInfoStyle = {
     width: "50px",
     height: "50px",
     margin: "auto 0 auto 5%",
-    border: "4px solid black",
+    // border: "4px solid black",
   },
   formation: {
     minHeight: "500px",
