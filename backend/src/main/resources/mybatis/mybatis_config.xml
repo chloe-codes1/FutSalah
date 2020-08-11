@@ -29,5 +29,6 @@
 		<mapper resource="mybatis/mapper/LocationMapper.xml"/>
 		<mapper resource="mybatis/mapper/MatchGameMapper.xml"/>
 		<mapper resource="mybatis/mapper/RequestMapper.xml"/>
+		<mapper resource="mybatis/mapper/CourtMapper.xml"/>
 	</mappers>
 </configuration>
