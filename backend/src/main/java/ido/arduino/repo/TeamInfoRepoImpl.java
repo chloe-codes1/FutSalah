@@ -102,17 +102,17 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	}
 
 	@Override
-	public List<Formation> selectformation() {
+	public List<Formation> selectformation(int teamID) {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"selectformation");
+		return template.selectList(ns+"selectformation", teamID);
 	}
 
 	
 	//----------------result game---------------------------
 	@Override
-	public List<ResultDto> resultscore() {
+	public List<ResultDto> resultscore(int teamID) {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"resultscore");
+		return template.selectList(ns+"resultscore",teamID);
 	}
 
 

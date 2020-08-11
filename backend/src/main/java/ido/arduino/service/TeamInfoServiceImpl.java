@@ -155,8 +155,8 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public List<Formation> selectformation() {
-		return tRepo.selectformation();
+	public List<Formation> selectformation(int teamID) {
+		return tRepo.selectformation(teamID);
 
 	
 	}
@@ -165,9 +165,9 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	//----------------result game---------------------------
 
 	@Override
-	public List<ResultDto> resultscore() {
+	public List<ResultDto> resultscore(int teamID) {
 		// TODO Auto-generated method stub
-		return tRepo.resultscore();
+		return tRepo.resultscore(teamID);
 	}
 
 

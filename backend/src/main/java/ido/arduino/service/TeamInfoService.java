@@ -54,9 +54,9 @@ public interface TeamInfoService {
 	int insertformation(Formation form);
 	int updateformation(Formation form);
 	int deleteformation(int userID);
-	List<Formation> selectformation(); 
+	List<Formation> selectformation(int teamID); 
 	
 	//----------------result game---------------------------
-	List<ResultDto> resultscore(); 
+	List<ResultDto> resultscore(int teamID); 
 
 }
