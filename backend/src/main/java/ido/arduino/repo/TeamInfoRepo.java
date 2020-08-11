@@ -37,11 +37,11 @@ public interface TeamInfoRepo {
 	int insertformation(Formation form);
 	int updateformation(Formation form);
 	int deleteformation(int userID);
-	public List<Formation> selectformation();
+	public List<Formation> selectformation(int teamID);
 
 	
 	//----------------result game---------------------------
-	public List<ResultDto> resultscore();
+	public List<ResultDto> resultscore(int teamID);
 	
 
 

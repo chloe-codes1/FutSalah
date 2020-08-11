@@ -342,24 +342,24 @@ public class TeamInfoController {
 	}
 
 	@ApiOperation(value = "포메이션 정보 반환한다.", response = List.class)
-	@GetMapping("/team/formation")
-	public ResponseEntity<List<Formation>> selectformation() throws Exception {
+	@GetMapping("/team/formation/{teamID}")
+	public ResponseEntity<List<Formation>> selectformation(@PathVariable int teamID) throws Exception {
 		logger.debug("selectformation - 호출");
 		System.out.println("호오오오추우울...........................................................");
 
-		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
+		return new ResponseEntity<List<Formation>>(tService.selectformation(teamID), HttpStatus.OK);
 	}
 	
 	
 	
 	//----------------result game---------------------------
 	@ApiOperation(value = "게임 결과 정보 반환한다.", response = List.class)
-	@GetMapping("/team/result")
-	public ResponseEntity<List<ResultDto>> resultscore() throws Exception {
+	@GetMapping("/team/result/{teamID}")
+	public ResponseEntity<List<ResultDto>> resultscore(@PathVariable int teamID) throws Exception {
 		logger.debug("resultscore - 호출");
 		System.out.println("resultscore호추추루룰...........................................................");
 
-		return new ResponseEntity<List<ResultDto>>(tService.resultscore(), HttpStatus.OK);
+		return new ResponseEntity<List<ResultDto>>(tService.resultscore(teamID), HttpStatus.OK);
 	}
 	
 	
