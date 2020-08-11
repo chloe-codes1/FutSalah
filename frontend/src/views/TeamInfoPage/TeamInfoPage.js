@@ -45,7 +45,7 @@ import teamImage from "assets/img/basicTeamImg1.jpg";
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
 
-// table
+// table style
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.main,
@@ -87,60 +87,19 @@ export default function ProfilePage(props) {
   const modal = modalStyles();
   const { ...rest } = props;
 
-  const handleDropZone = () => {
-    setDropZone(true);
-  };
-  const handleDropZoneClose = () => {
-    setDropZone(false);
-  };
-
   const [dropZone, setDropZone] = useState(false);
   // const params = new URLSearchParams(paramsString);
   // const id = params.get("id");
-
-  // 테스트 데이터
-  // 팀 전적
-  const testRecord = [
-    {
-      resultid: 1,
-      homeScore: 2,
-      awayScore: 1,
-      homeTeamName: "팀동휘",
-      awayTeamName: "Japan",
-    },
-    {
-      resultid: 2,
-      homeScore: 2,
-      awayScore: 5,
-      homeTeamName: "China",
-      awayTeamName: "팀동휘",
-    },
-    {
-      resultid: 3,
-      homeScore: 1,
-      awayScore: 1,
-      homeTeamName: "팀동휘",
-      awayTeamName: "USA",
-    },
-  ];
 
   // 팀 정보
   const TeamId = rest.match.params.id;
   const { userinfo } = useContext(UserContext);
   const [teamList, setTeamList] = useState([]); // 팀원 목록
-  const [record, setRecord] = useState(testRecord); // 경기전적 목록
-  const [requestList, setRequestList] = useState([]); // 경기전적 목록
+  const [record, setRecord] = useState([]); // 경기전적 목록
+  const [requestList, setRequestList] = useState([]); // 팀원 신청 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
-
-  const [playerPos1, setPlayerPos1] = useState([
-    // {
-    //   userID: 7436,
-    //   name: "salah",
-    //   position: "Ala",
-    //   idx: 6,
-    // },
-  ]); // 포메이션 정보 (5:5)
-
+  const [loading, setLoading] = useState(false); // 로딩 여부
+  const [playerPos1, setPlayerPos1] = useState([]); // 포메이션 정보 (5:5)
   const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보 (6:6)
 
   const [modifyOpen, setModifyOpen] = useState(false); // 팀 정보 창
@@ -150,123 +109,22 @@ export default function ProfilePage(props) {
   const [openedJoinPopoverId, setOpenedJoinPopoverId] = useState(null); // 신청 유저 팝오버 인덱스
   const [openedDescPopoverId, setOpenedDescPopoverId] = useState(null); // 팀 설명 오픈 여부
 
-  // 팀 정보 변경
-  const modifyTeamInfo = (info) => {
-    setTeamInfo(info);
-    console.log(info); // 변경된 팀정보 출력
-    axios({
-      method: "put",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
-      data: info,
-    })
-      .then((res) => {
-        console.log("update success");
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
+  const handleDropZone = () => {
+    setDropZone(true);
   };
 
-  const modifyTeamList = (user) => {
-    setTeamList(teamList.concat(user));
+  const handleDropZoneClose = () => {
+    setDropZone(false);
   };
 
-  // 선수 방출
-  const removeTeamList = (id) => {
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member`,
-      data: {
-        teamID: teamInfo.teamID,
-        userID: id,
-      },
-    })
-      .then(() => {
-        console.log("remove member success");
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
-
-    setTeamList(teamList.filter((tl) => tl.userID !== id));
-  };
-
-  // 포메이션 선수 제거 (5:5)
-  const removePlayer1 = (idx) => {
-    console.log(idx);
-    setPlayerPos1(playerPos1.filter((pp) => pp.idx !== idx));
-  };
-
-  // 포메이션 선수 제거 (6:6)
-  const removePlayer2 = (idx) => {
-    setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
-  };
-
-  // 팀 가입 신청
-  const requestJoin = () => {
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join`,
-      data: {
-        teamID: teamInfo.teamID,
-        userID: userinfo.userID,
-      },
-    })
-      .then(() => {
-        console.log("success");
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
-  };
-
-  // 팀 가입 신청 수락
-  const acceptJoin = (id) => {
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/approve`,
-      data: {
-        teamID: teamInfo.teamID,
-        userID: id,
-      },
-    })
-      .then(() => {
-        console.log("success");
-        setRequestList(requestList.filter((rl) => rl.userID !== id));
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
-  };
-
-  // 팀 가입 신청 거절
-  const rejectJoin = (id) => {
-    // 가입 신청에서 빼기
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/refuse`,
-      data: {
-        teamID: teamInfo.teamID,
-        userID: id,
-      },
-    })
-      .then(() => {
-        console.log("success");
-        setRequestList(requestList.filter((rl) => rl.userID !== id));
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
-  };
-
-  useEffect(() => {
-    // 팀 정보 가져오기
+  // 팀 정보 가져오기
+  const getTeamInfo = async () => {
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
     })
       .then((res) => {
-        console.log("success");
+        // console.log("success");
         let profileURL = res.data.profileURL;
         if (profileURL) {
           teamInfo.profileURL =
@@ -287,25 +145,26 @@ export default function ProfilePage(props) {
           method: "get",
           url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/${res.data.locationID}`,
         }).then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setTeamInfo((prevState) => ({
             ...prevState,
             region: res.data.sido + " " + res.data.gu,
           }));
-          console.log(teamInfo);
         });
       })
       .catch((e) => {
         console.log("error", e);
       });
+  };
 
-    // 팀원 목록 가져오기
+  // 팀원 목록 가져오기
+  const getTeamList = () => {
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member/${TeamId}`,
     })
       .then((res) => {
-        console.log("팀원 정보 success");
+        // console.log("팀원 정보 success");
         res.data.map((member) => {
           if (member.profileURL !== null) {
             if (member.profileURL.indexOf("http") === -1) {
@@ -314,40 +173,230 @@ export default function ProfilePage(props) {
             }
           }
         });
-        console.log(res.data);
+        // console.log(res.data);
         setTeamList(res.data);
       })
       .catch((e) => {
         console.log("error", e);
       });
+  };
 
-    // 가입 신청 목록 가져오기
+  // 경기 전적 가져오기
+  const getRecord = () => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/team/join/${TeamId}`,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/result/${TeamId}`,
     })
       .then((res) => {
-        console.log("신청목록 success");
         console.log(res.data);
+        setRecord(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 가입 신청 목록 가져오기
+  const getRequestList = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/${TeamId}`,
+    })
+      .then((res) => {
+        console.log(res.data);
+        res.data.map((member) => {
+          if (member.profileURL !== null) {
+            if (member.profileURL.indexOf("http") === -1) {
+              member.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
+            }
+          }
+        });
         setRequestList(res.data);
       })
       .catch((e) => {
         console.log("error", e);
       });
+  };
 
-    // // 포메이션 정보 가져오기
-    // axios({
-    //   method: "get",
-    //   url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation`,
-    // })
-    //   .then((res) => {
-    //     console.log("포메이션 success");
-    //     console.log(res.data);
-    //       setPlayerPos1(res.data);
-    //   })
-    //   .catch((e) => {
-    //     console.log("error", e);
-    //   });
+  // 포메이션 정보 가져오기
+  const getFormation = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation/${TeamId}`,
+    })
+      .then((res) => {
+        console.log("포메이션 success");
+        setPlayerPos1(res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 팀 정보 변경
+  const modifyTeamInfo = (info) => {
+    setTeamInfo(info);
+    // console.log(info); // 변경된 팀정보 출력
+    axios({
+      method: "put",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
+      data: info,
+    })
+      .then((res) => {
+        // console.log("update success");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 팀원 추가
+  const modifyTeamList = (user) => {
+    setTeamList(teamList.concat(user));
+  };
+
+  // 선수 방출
+  const removeTeamList = (id) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member`,
+      data: {
+        teamID: teamInfo.teamID,
+        userID: id,
+      },
+    })
+      .then(() => {
+        // console.log("remove member success");
+      })
+      .catch((e) => {
+        // console.log("error", e);
+      });
+
+    setTeamList(teamList.filter((tl) => tl.userID !== id));
+  };
+
+  // 포메이션 선수 제거 (5:5)
+  const removePlayer1 = (idx) => {
+    setPlayerPos1(playerPos1.filter((pp) => pp.idx !== idx));
+  };
+
+  // 포메이션 선수 제거 (6:6)
+  const removePlayer2 = (idx) => {
+    setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
+  };
+
+  // 포메이션 저장
+  const storeFormation = (formCode) => {
+    axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation`,
+      data: {
+        teamID: teamInfo.teamID,
+        formCode,
+      },
+    })
+      .then(() => {
+        console.log("delete formation success");
+        let playerPos;
+        if (formCode === 5) playerPos = playerPos1;
+        else if (formCode == 6) playerPos = playerPos2;
+        playerPos.map((pp) => {
+          axios({
+            method: "post",
+            url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation`,
+            data: {
+              formCode,
+              grid: pp.grid,
+              teamID: TeamId,
+              userID: userinfo.userID,
+            },
+          })
+            .then(() => {
+              console.log("insert formation success");
+            })
+            .catch((e) => {
+              console.log("error", e);
+            });
+        });
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 팀 가입 신청
+  const requestJoin = () => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join`,
+      data: {
+        teamID: teamInfo.teamID,
+        userID: userinfo.userID,
+      },
+    })
+      .then(() => {
+        // console.log("success");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 팀 가입 신청 수락
+  const acceptJoin = (id) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/approve`,
+      data: {
+        userID: id,
+        teamID: teamInfo.teamID,
+      },
+    })
+      .then(() => {
+        // console.log("success");
+        setRequestList(requestList.filter((rl) => rl.userID !== id));
+        getTeamList();
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 팀 가입 신청 거절
+  const rejectJoin = (id) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/join/refuse`,
+      data: {
+        userID: id,
+        teamID: teamInfo.teamID,
+      },
+    })
+      .then(() => {
+        // console.log("success");
+        setRequestList(requestList.filter((rl) => rl.userID !== id));
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  useEffect(() => {
+    // 팀 정보 가져오기
+    getTeamInfo();
+
+    // 팀원 목록 가져오기
+    getTeamList();
+
+    // 경기 전적 정보 가져오기
+    getRecord();
+
+    // 가입 신청 목록 가져오기
+    getRequestList();
+
+    // 포메이션 정보 가져오기
+    getFormation();
   }, []);
 
   return (
@@ -372,7 +421,6 @@ export default function ProfilePage(props) {
       <div className={classes.container}>
         <DndProvider backend={HTML5Backend}>
           <GridContainer
-            xs={12}
             justify="center"
             style={{
               backgroundColor: "rgba( 0, 0, 0, 0.6 )",
@@ -388,8 +436,9 @@ export default function ProfilePage(props) {
                   src={teamInfo.profileURL}
                   alt="team"
                   onClick={
-                    Number(userinfo.userID) === teamInfo.leader &&
-                    handleDropZone
+                    Number(userinfo.userID) === teamInfo.leader
+                      ? handleDropZone
+                      : () => {}
                   }
                   style={{ cursor: "pointer" }}
                 />
@@ -399,12 +448,14 @@ export default function ProfilePage(props) {
                   margin: "auto 2%",
                 }}
               >
-                {/* 지역은 나중에 받아오기 */}
                 <span>{teamInfo.region}</span>
                 <div
                   onClick={(e) => {
                     setAnchorEl(e.target);
                     setOpenedDescPopoverId(true);
+                  }}
+                  style={{
+                    cursor: "pointer",
                   }}
                 >
                   <h1>
@@ -454,8 +505,8 @@ export default function ProfilePage(props) {
                   className={classes.modifyButton}
                   size="sm"
                   onClick={() => {
-                    console.log("가입 신청!!");
                     requestJoin();
+                    alert("가입 신청이 성공적으로 이루어졌습니다!");
                   }}
                 >
                   가입 신청 하기
@@ -481,7 +532,24 @@ export default function ProfilePage(props) {
                         }}
                         justify="space-evenly"
                       >
-                        <GridItem xs={12} style={{ height: "60px" }}></GridItem>
+                        <GridItem
+                          xs={12}
+                          style={{
+                            height: "60px",
+                          }}
+                        >
+                          {Number(userinfo.userID) === teamInfo.leader && (
+                            <div
+                              style={{
+                                marginTop: "25px",
+                                textAlign: "center",
+                                fontSize: 12,
+                              }}
+                            >
+                              Tip. 선수를 드래그해서 배치해보세요.
+                            </div>
+                          )}
+                        </GridItem>
                         <GridItem
                           xs={12}
                           style={{
@@ -507,13 +575,12 @@ export default function ProfilePage(props) {
                                 round
                                 color="success"
                                 onClick={() => {
-                                  // 포메이션 저장 함수넣기
-                                  console.log(playerPos1);
+                                  storeFormation(5);
                                 }}
                                 style={{
-                                  marginTop: "20px",
+                                  marginTop: "10px",
                                   width: "100%",
-                                  height: "40px",
+                                  height: "35px",
                                 }}
                               >
                                 <strong>
@@ -538,7 +605,19 @@ export default function ProfilePage(props) {
                         }}
                         justify="space-evenly"
                       >
-                        <GridItem xs={12} style={{ height: "60px" }}></GridItem>
+                        <GridItem xs={12} style={{ height: "60px" }}>
+                          {Number(userinfo.userID) === teamInfo.leader && (
+                            <div
+                              style={{
+                                marginTop: "25px",
+                                textAlign: "center",
+                                fontSize: 12,
+                              }}
+                            >
+                              Tip. 선수를 드래그해서 배치해보세요.
+                            </div>
+                          )}
+                        </GridItem>
                         <GridItem
                           xs={12}
                           style={{
@@ -564,13 +643,12 @@ export default function ProfilePage(props) {
                                 round
                                 color="success"
                                 onClick={() => {
-                                  // 포메이션 저장 함수넣기
-                                  console.log(playerPos2);
+                                  storeFormation(6);
                                 }}
                                 style={{
-                                  marginTop: "20px",
+                                  marginTop: "10px",
                                   width: "100%",
-                                  height: "40px",
+                                  height: "35px",
                                 }}
                               >
                                 <strong>
@@ -622,7 +700,7 @@ export default function ProfilePage(props) {
                                     player={{
                                       name: t.name,
                                       position: t.position,
-                                      userid: t.userID,
+                                      userID: t.userID,
                                     }}
                                   >
                                     <TableRow>
@@ -664,7 +742,12 @@ export default function ProfilePage(props) {
                                             <Button
                                               size="sm"
                                               onClick={() => {
-                                                console.log(t.name + "방출");
+                                                // Confirm(
+                                                //   "정말 이 선수를 방출하시겠습니까?"
+                                                // ) &&
+                                                //   console.log(
+                                                //     t.name + " 방출~"
+                                                //   );
                                                 removeTeamList(t.userID);
                                               }}
                                               style={{
@@ -771,7 +854,11 @@ export default function ProfilePage(props) {
                             {record.map((result, index) => (
                               <TableRow key={index}>
                                 <TableCell align="center">
-                                  {result.homeTeamName}
+                                  {result.homeTeam === teamInfo.name ? (
+                                    <strong>{result.homeTeam}</strong>
+                                  ) : (
+                                    result.homeTeam
+                                  )}
                                 </TableCell>
                                 <TableCell align="center">
                                   {result.homeScore}
@@ -780,7 +867,11 @@ export default function ProfilePage(props) {
                                   {result.awayScore}
                                 </TableCell>
                                 <TableCell align="center">
-                                  {result.awayTeamName}
+                                  {result.awayTeam === teamInfo.name ? (
+                                    <strong>{result.awayTeam}</strong>
+                                  ) : (
+                                    result.awayTeam
+                                  )}
                                 </TableCell>
                               </TableRow>
                             ))}
