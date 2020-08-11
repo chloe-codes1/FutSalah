@@ -4,6 +4,7 @@ import java.util.List;
 
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
+import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.TeamLeaderDTO;
@@ -52,8 +53,10 @@ public interface TeamInfoService {
 	
 	int insertformation(Formation form);
 	int updateformation(Formation form);
-	int deleteformation(int grid);
+	int deleteformation(int userID);
 	List<Formation> selectformation(); 
 	
+	//----------------result game---------------------------
+	List<ResultDto> resultscore(); 
 
 }

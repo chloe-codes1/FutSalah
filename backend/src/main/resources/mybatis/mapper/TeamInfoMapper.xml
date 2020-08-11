@@ -4,18 +4,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ido.arduino.mapper.TeamInfoDto">
 
-	<!-- create team  -->
+	<!-- create team -->
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
 		insert into team ( name,
 		description,profileURL,leader, code)
-		values (#{name},#{description}, #{profileURL},#{leader}, #{code})
+		values (#{name},#{description},
+		#{profileURL},#{leader}, #{code})
 	</insert>
-	
+
 	<!-- 팀 수정 -->
 	<update id="update" parameterType="teaminfo">
 		update team
-		set name=#{name}, description=#{description}, locationID=#{locationID}
+		set name=#{name},
+		description=#{description}, locationID=#{locationID}
 		,profileURL=#{profileURL}
 		where teamID=#{teamID}
 	</update>
@@ -26,21 +28,23 @@
 		teamID=#{teamID}
 	</delete>
 
-	
+
 	<!--myteam -->
 	<!-- 팀생성한 것중 가장 최근 것 선택 -->
-	<select id="selectlast"  resultType="int">
-		select last_insert_id()	
+	<select id="selectlast" resultType="int">
+		select last_insert_id()
 	</select>
-	
+
 	<!-- 목록에 추가하기 -->
 	<update id="updatemy" parameterType="teaminfo">
-		update team set leader= #{leader}
+		update team set leader=
+		#{leader}
 	</update>
-	
+
 	<!-- 목록에 추가하기 -->
 	<insert id="insertmy" parameterType="userteamconn">
-		insert into userteamconn (userID,teamID)
+		insert into userteamconn
+		(userID,teamID)
 		values (#{userID},#{teamID})
 	</insert>
 
@@ -52,7 +56,8 @@
 		team.description, team.profileURL, team.teamID, team.leader
 		from team
 		inner join userteamconn on team.teamID = userteamconn.teamID
-		inner join user on userteamconn.userID=user.userID
+		inner join
+		user on userteamconn.userID=user.userID
 		where user.userID=#{userID};
 	</select>
 
@@ -61,68 +66,99 @@
 		delete from userteamconn
 		where userID=#{userID} and teamID=#{teamID};
 	</delete>
-	
-	
 
-	
+
+
+
 	<!-- find team -->
 	<!-- 팀찾기페이지- 목록에 띄우는 것 -->
 	<select id="selectAll" resultType="teamsimple">
 		select team.name, team.wins,
 		team.draws, team.defeats, team.profileURL , team.teamID
-		from team 
+		from team
 	</select>
-	
 
 
-	
+
+
 	<!-- team info -->
 	<!-- 팀정보 팀이름, 팀설명, 팀장id, 팀원 정보 목록, -->
 	<select id="selectAllteam" resultType="myteam">
 		select team.name,
 		team.description, team.profileURL, team.teamID
 		from team
-		inner join userteamconn on team.teamID = userteamconn.teamID
-		inner join user on userteamconn.userID=user.userID
+		inner join
+		userteamconn on team.teamID = userteamconn.teamID
+		inner join user on
+		userteamconn.userID=user.userID
 		where user.userID=#{userID};
 	</select>
-	
-	
+
+
 	<!-- formation -->
-	<!--포메이션  -->
+	<!--포메이션 -->
 	<insert id="insertformation" parameterType="formation">
-		insert into formation (userID,teamID, formCode,grid)
-		values (#{userID},#{teamID},#{formCode} ,#{grid})
+		insert into formation
+		(userID,teamID, formCode,grid)
+		values (#{userID},#{teamID},#{formCode}
+		,#{grid})
 	</insert>
-	
+
 	<!-- 포메이션 수정 -->
 	<update id="updateformation" parameterType="formation">
 		update formation
-		set formCode=#{formCode}, userID=#{userID}, grid=#{grid}
-		where teamID=#{teamID}
+		set
+		grid=#{grid}
+		where teamID=#{teamID} and formCode=#{formCode} and
+		userID=#{userID}
 	</update>
 
 	<!-- 포메이션 삭제 -->
 	<delete id="deleteformation" parameterType="int">
-		delete from formation where
-		grid=#{grid}
+		delete from formation
+		where
+		userID=#{userID}
 	</delete>
-	
+
 	<!-- 포메이션 리스트출력 -->
-	<select id = "selectformation"  resultType="formation" >
-		select * from formation
+	<select id="selectformation" resultType="formation">
+		select
+		userID, grid from formation
 		where teamID =#{teamID}
 	</select>
 
-	
+
 	<!-- 경기전적 출력 -->
-	<select id="resultscore" resultType="result">
-	select result.homeScore, result.awayScore from result, team
-	inner join team on matching.homeTeamID = team.teamID
-	inner join team on matching.awayTeamID = team.teamID
+	<select id="resultscore" resultType="result" parameterType="int">
+
+		select
+		c.hometeam,
+		c.awayteam,
+		c.homeScore,
+		c.awayScore
+		from (
+		select
+		matching.homeTeamID,
+		t1.name as hometeam,
+		matching.awayTeamID,
+		t2.name as awayteam,
+		result.homeScore,
+		result.awayScore
+		from result ,
+		team as t1,
+		team as t2 ,
+		matching
+		where result.matchID = matching.matchID
+		and matching.homeTeamID = t1.teamID
+		and matching.awayTeamID = t2.teamID) c
+		where homeTeamID = #{teamID} or awayTeamID = #{teamID};
+
+
 	</select>
-	
-	
-	<!-- 나한테 요청온 팀 보이기 -->
-	
+
+
+
+
+
+
 </mapper>

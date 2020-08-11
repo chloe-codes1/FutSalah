@@ -10,12 +10,22 @@ const boardStyle = {
 
 const squareStyle = { width: "20%", height: "20%" };
 
-export const FormationBoard = ({ canMove, movePlayer, renderPiece }) => {
-  function renderSquare(i) {
+export const FormationBoard = ({
+  canMove,
+  movePlayer,
+  renderPiece,
+  movable,
+}) => {
+  function renderSquare(i, movable) {
     return (
       <div key={i} style={squareStyle}>
-        <FormationSquare canMove={canMove} movePlayer={movePlayer} posNum={i}>
-          {renderPiece(i)}
+        <FormationSquare
+          movable={movable}
+          canMove={canMove}
+          movePlayer={movePlayer}
+          posNum={i}
+        >
+          {renderPiece(i, movable)}
         </FormationSquare>
       </div>
     );
@@ -23,7 +33,7 @@ export const FormationBoard = ({ canMove, movePlayer, renderPiece }) => {
 
   const squares = [];
   for (let i = 1; i < 26; i += 1) {
-    squares.push(renderSquare(i));
+    squares.push(renderSquare(i, movable));
   }
   return <div style={boardStyle}>{squares}</div>;
 };

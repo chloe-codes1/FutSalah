@@ -1,5 +1,7 @@
 package ido.arduino.dto;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Result {
-	
-	private int resultID;
-	private int matchID;
-	private int homeScore;
-	private int awayScore;
+public class MatchSimpleDto {
+
+	private Date date ;
+	private int locationID;
 	
 }
+

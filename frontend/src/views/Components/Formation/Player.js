@@ -8,9 +8,8 @@ import styles from "assets/jss/material-kit-react/views/componentsSections/Playe
 
 const useStyles = makeStyles(styles);
 
-export const Player = ({ player, inField, children }) => {
+export const Player = ({ player, inField, children, movable }) => {
   const classes = useStyles();
-
   const [{ isDragging }, drag, preview] = useDrag({
     item: { type: "position", player },
     collect: (monitor) => ({
@@ -40,7 +39,7 @@ export const Player = ({ player, inField, children }) => {
   return inField ? (
     <>
       <div
-        ref={drag}
+        ref={movable ? drag : null}
         className={selectBGcolor(player.position)}
         style={{
           textAlign: "center",
@@ -63,7 +62,7 @@ export const Player = ({ player, inField, children }) => {
   ) : (
     <>
       <DragPreviewImage connect={preview} src={playerPreview} />
-      <div ref={drag} className={classes.player}>
+      <div ref={movable ? drag : null} className={classes.player}>
         {children}
       </div>
     </>

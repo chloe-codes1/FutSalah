@@ -8,7 +8,12 @@ import styles from "assets/jss/material-kit-react/views/componentsSections/Forma
 
 const useStyles = makeStyles(styles);
 
-export default function Formation({ playerPos, setPlayerPos, memberNum }) {
+export default function Formation({
+  playerPos,
+  setPlayerPos,
+  memberNum,
+  movable,
+}) {
   const classes = useStyles();
   const movePlayer = (goalIdx, player) => {
     for (let i = 0; i < playerPos.length; i++) {
@@ -39,10 +44,10 @@ export default function Formation({ playerPos, setPlayerPos, memberNum }) {
     return true;
   };
 
-  const renderPiece = (idx) => {
+  const renderPiece = (idx, movable) => {
     for (let i = 0; i < playerPos.length; i++) {
       if (playerPos[i].idx === idx) {
-        return <Player player={playerPos[i]} inField />;
+        return <Player movable={movable} player={playerPos[i]} inField />;
       }
     }
     return null;
@@ -56,6 +61,7 @@ export default function Formation({ playerPos, setPlayerPos, memberNum }) {
         }}
       >
         <FormationBoard
+          movable={movable}
           canMove={canMove}
           movePlayer={movePlayer}
           renderPiece={renderPiece}
@@ -67,8 +73,13 @@ export default function Formation({ playerPos, setPlayerPos, memberNum }) {
           height: "17%",
         }}
       >
-        <FormationSquare canMove={canMove} movePlayer={movePlayer} posNum={0}>
-          {renderPiece(0)}
+        <FormationSquare
+          movable={movable}
+          canMove={canMove}
+          movePlayer={movePlayer}
+          posNum={0}
+        >
+          {renderPiece(0, movable)}
         </FormationSquare>
       </div>
     </div>

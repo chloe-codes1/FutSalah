@@ -88,15 +88,19 @@ const teamInfoStyle = {
     height: "40px",
   },
   table: {
-    width: "100%",
+    maxWidth: "100%",
     backgroundColor: "white",
+    color: "white",
+    height: "350px",
+    overflow: "auto",
+    borderRadius: "5px",
   },
   memberImg: {
     borderRadius: "70%",
     width: "50px",
     height: "50px",
     margin: "auto 0 auto 5%",
-    border: "4px solid black",
+    // border: "4px solid black",
   },
   formation: {
     minHeight: "500px",

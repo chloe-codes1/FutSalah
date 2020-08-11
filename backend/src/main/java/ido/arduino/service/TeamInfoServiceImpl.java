@@ -10,6 +10,7 @@ import ido.arduino.dao.TeamMapper;
 import ido.arduino.dto.Formation;
 
 import ido.arduino.dto.MyTeamDto;
+import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.TeamLeaderDTO;
@@ -149,8 +150,8 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public int deleteformation(int grid) {
-		return tRepo.deleteformation(grid);
+	public int deleteformation(int userID) {
+		return tRepo.deleteformation(userID);
 	}
 
 	@Override
@@ -158,6 +159,15 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		return tRepo.selectformation();
 
 	
+	}
+	
+	
+	//----------------result game---------------------------
+
+	@Override
+	public List<ResultDto> resultscore() {
+		// TODO Auto-generated method stub
+		return tRepo.resultscore();
 	}
 
 

@@ -17,5 +17,5 @@ public class TeamInfoSimpleDto {
 	private String name;
 	private int teamID;
 
-
+	
 }
