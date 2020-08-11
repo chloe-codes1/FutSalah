@@ -26,38 +26,25 @@ const useStyles = makeStyles(styles);
 // -> backend에서 전달받은 ID가 기존회원인지 판단하여 front로 전달(기존회원이 아닐때 user create) -> front는 기존회원이 아닐때 추가정보 dialog를 호출 ->
 // -> 추가정보를 입력받아 backend에 전달 -> backend는 정보를 전달받아 user update
 const initialState = {
-  user: {
+  admin: {
     ID: "",
-    password: "",
     name: "",
-    stadium: "",
+    stadiumID: "",
   },
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case "INIT_USER":
+    case "INIT_ADMIN":
       return {
         ...state,
-        user: {
-          ...state.user,
-          ID: action.getId,
-          password: action.getPassword,
-          name: action.getName,
-          stadium: action.getStadium,
+        admin: {
+          ...state.admin,
+          ID: action.adminID,
+          name: action.name,
+          stadiumID: action.stadiumID,
         },
       };
-    case "CHANGE_INPUT":
-      console.log(action.name + " " + action.value);
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          [action.name]: action.value,
-        },
-      };
-    case "CREATE_USER":
-      return {};
     default:
       return state;
   }
@@ -84,17 +71,12 @@ export default function HeaderLinks(props) {
     setAddInfoOpen(false);
   };
 
-  const initUser = useCallback((getId, getPassword, getName, getStadium) => {
-    // console.log(getId);
-    // console.log(getEmail);
-    // console.log(getName);
-    // console.log(getImageURL);
+  const initAdmin = useCallback((adminID, name, stadiumID) => {
     dispatch({
-      type: "INIT_USER",
-      getId,
-      getPassword,
-      getName,
-      getStadium,
+      type: "INIT_ADMIN",
+      adminID,
+      name,
+      stadiumID,
     });
   }, []);
   const onChange = useCallback((e) => {
@@ -189,7 +171,11 @@ export default function HeaderLinks(props) {
             </Link>
           </Button>
         )}
-        <AdminLoginDialog open={loginOpen} onClose={loginClickClose} />
+        <AdminLoginDialog
+          open={loginOpen}
+          onClose={loginClickClose}
+          initAdmin={initAdmin}
+        />
       </ListItem>
     </List>
   );

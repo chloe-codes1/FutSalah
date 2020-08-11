@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 function AdminLoginDialog(props) {
   const classes = useStyles();
 
-  const { open, onClose, addInfo, initUser, loggedUser } = props;
+  const { open, onClose, initAdmin, loggedUser } = props;
 
   const [adminId, setAdminId] = useState("");
   const [password, setPassword] = useState("");
@@ -44,9 +44,10 @@ function AdminLoginDialog(props) {
     onClose();
   };
 
-  const responseAdmin = (res) => {
-    console.log(res);
-    history.push("/Admin/1");
+  const responseAdmin = () => {
+    console.log(adminId);
+    console.log(password);
+
     // initUser(adminId, "", "", "");
     // axios({
     //   method: "post",
@@ -57,11 +58,12 @@ function AdminLoginDialog(props) {
     // }).then((e) => {
     //   console.log(e.data);
     //   // context 값 변경
-    //   loggedUser(
+    //   initAdmin(
     //     res.profile.id, // 입력받은 Admin Id
     //     e.data.name, // db에 저장되어 있는 관리자 이름
     //     "admin", // 로그인 종류 (google, kakao, admin)
     //     e.data.profileURL // db에 저장되어 있는 프로필 사진
+    // history.push("/Admin/1");
     //   );
     //   onClose();
     // });

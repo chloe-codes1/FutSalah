@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
+import QRreader from "components/QR/QRreader";
 
 import Button from "components/CustomButtons/Button.js";
 import Footer from "components/Footer/Footer.js";
@@ -18,7 +19,7 @@ import UserContext from "../../contexts/UserContext";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/AdminPage.js";
+import styles from "assets/jss/material-kit-react/views/AdminMatchInfoPage.js";
 
 const useStyles = makeStyles(styles);
 
@@ -133,8 +134,8 @@ export default function AdminInfo(props) {
               </List>
             </GridItem>
             <GridItem xs={12} className={classes.arriveInfoContainer}>
-              <GridItem xs={4} className={classes.arriveInfo}>
-                <h2>도착 정보</h2>
+              <GridItem xs={4} className={classes.qrReaderContainer}>
+                <QRreader />
               </GridItem>
               <GridItem xs={8} className={classes.arriveContents}>
                 <GridItem xs={12} className={classes.arriveContent}>
