@@ -20,25 +20,27 @@ import {
 } from "@material-ui/pickers";
 import Button from "components/CustomButtons/Button.js";
 
+import MatchRegisterDialog from "components/Dialog/MatchRegisterDialog.js";
+
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 360,
+    minWidth: 300,
   },
   selectEmpty: {
     marginTop: theme.spacing(1),
   },
   dateTime: {
-    width: 360,
+    width: 300,
     margin: theme.spacing(1),
   },
   radioButton: {
     padding: "0 50px 0 50px",
   },
   searchButton: {
-    width: 360,
+    width: 300,
     // margin: "0 0 10px 0",
     margin: theme.spacing(1),
   },
@@ -48,8 +50,8 @@ const gu = [];
 
 const initialState = {
   search: {
-    location: "",
-    date: "",
+    locationID: "",
+    date: new Date(),
     time: "",
     type: "",
     isBook: "0",
@@ -78,7 +80,24 @@ function MatchSearch() {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSido, setSelectedSido] = useState("");
+  const [selectedGu, setSelectedGu] = useState([]);
   const [state, searchDispatch] = useReducer(reducer, initialState);
+  const [register, setOpenRegister] = useState(false);
+  const [area, setArea] = useState();
+  const handleRegister = () => {
+    console.log(state.search);
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` + state.search.locationID,
+    }).then((e) => {
+      console.log(e.data);
+      setArea(e.data.sido + " " + e.data.gu);
+    });
+    setOpenRegister(true);
+  };
+  const handleCloseRegister = () => {
+    setOpenRegister(false);
+  };
   //console.log(state);
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -94,6 +113,14 @@ function MatchSearch() {
   const handleSidoChange = (event) => {
     //console.log(event.target.value + " " + "선택");
     setSelectedSido(event.target.value);
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
+      data: { sido: event.target.value },
+    }).then((e) => {
+      console.log(e.data);
+      setSelectedGu([...e.data]);
+    });
   };
   const onChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -144,14 +171,22 @@ function MatchSearch() {
         <Grid item>
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label">구/군</InputLabel>
-            <Select labelId="demo-simple-select-label" id="demo-simple-select">
-              {gu.length > 0 &&
-                gu.map((loc, index) => {
-                  return <MenuItem value={loc.locationID}>{loc.gu}</MenuItem>;
+            <Select
+              value={state.search.locationID}
+              name="locationID"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              onChange={onChange}
+            >
+              {selectedGu.length > 0 &&
+                selectedGu.map((loc, index) => {
+                  return (
+                    <MenuItem key={index} value={loc.locationID}>
+                      {loc.gu}
+                    </MenuItem>
+                  );
                 })}
-              {gu.length === 0 && (
-                <MenuItem value="">시/도를 먼저 선택</MenuItem>
-              )}
+              {selectedGu.length === 0 && <MenuItem value="">시/도를 먼저 선택</MenuItem>}
             </Select>
           </FormControl>
         </Grid>
@@ -248,11 +283,7 @@ function MatchSearch() {
                   />
                 </Grid>
                 <Grid item>
-                  <FormControlLabel
-                    control={<Radio value="0" />}
-                    label="무"
-                    labelPlacement="end"
-                  />
+                  <FormControlLabel control={<Radio value="0" />} label="무" labelPlacement="end" />
                 </Grid>
               </Grid>
             </RadioGroup>
@@ -276,13 +307,19 @@ function MatchSearch() {
             className={classes.searchButton}
             variant="contained"
             color="success"
-            onClick={registMatching}
+            onClick={handleRegister}
           >
             <i className="fas fa-plus" />
             매칭 등록
           </Button>
         </Grid>
       </Grid>
+      <MatchRegisterDialog
+        open={register}
+        onClose={handleCloseRegister}
+        info={state.search}
+        area={area}
+      />
     </>
   );
 }
