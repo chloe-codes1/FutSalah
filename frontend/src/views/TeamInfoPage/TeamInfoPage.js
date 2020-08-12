@@ -253,7 +253,7 @@ export default function ProfilePage(props) {
     })
       .then(async (res) => {
         // console.log("포메이션 success");
-        // console.log(res.data);
+        console.log(res.data);
         const list1 = [];
         const list2 = [];
 
@@ -262,11 +262,15 @@ export default function ProfilePage(props) {
             list1.push({
               userID: pos.userID,
               grid: pos.grid,
+              name: pos.name,
+              position: pos.position,
             });
           else if (Number(pos.formCode) === 6)
             list2.push({
               userID: pos.userID,
               grid: pos.grid,
+              name: pos.name,
+              position: pos.position,
             });
         });
 
@@ -331,13 +335,13 @@ export default function ProfilePage(props) {
   };
 
   // 포메이션 선수 제거 (5:5)
-  const removePlayer1 = (idx) => {
-    setPlayerPos1(playerPos1.filter((pp) => pp.idx !== idx));
+  const removePlayer1 = (grid) => {
+    setPlayerPos1(playerPos1.filter((pp) => pp.grid !== grid));
   };
 
   // 포메이션 선수 제거 (6:6)
-  const removePlayer2 = (idx) => {
-    setPlayerPos2(playerPos2.filter((pp) => pp.idx !== idx));
+  const removePlayer2 = (grid) => {
+    setPlayerPos2(playerPos2.filter((pp) => pp.grid !== grid));
   };
 
   // 포메이션 저장
@@ -567,30 +571,34 @@ export default function ProfilePage(props) {
                   </Popover>
                 </div>
                 {/* 가입 신청 버튼, QR 코드 버튼 */}
-                {teamList.find((t) => t.userID === Number(userinfo.userID)) ===
-                undefined ? (
-                  <Button
-                    color="info"
-                    className={classes.modifyButton}
-                    size="sm"
-                    onClick={() => {
-                      if (window.confirm("이 팀에 가입신청을 하시겠습니까?")) {
-                        requestJoin();
-                      }
-                    }}
-                  >
-                    가입 신청 하기
-                  </Button>
-                ) : (
-                  <Button
-                    color="info"
-                    className={classes.modifyButton}
-                    size="sm"
-                    onClick={handleQRcodeZone}
-                  >
-                    QR코드
-                  </Button>
-                )}
+                {userinfo.logged &&
+                  (teamList.find(
+                    (t) => t.userID === Number(userinfo.userID)
+                  ) === undefined ? (
+                    <Button
+                      color="info"
+                      className={classes.modifyButton}
+                      size="sm"
+                      onClick={() => {
+                        if (
+                          window.confirm("이 팀에 가입신청을 하시겠습니까?")
+                        ) {
+                          requestJoin();
+                        }
+                      }}
+                    >
+                      가입 신청 하기
+                    </Button>
+                  ) : (
+                    <Button
+                      color="info"
+                      className={classes.modifyButton}
+                      size="sm"
+                      onClick={handleQRcodeZone}
+                    >
+                      QR코드
+                    </Button>
+                  ))}
                 {/* 팀 정보 변경 버튼 */}
                 {Number(userinfo.userID) === teamInfo.leader && (
                   <Button

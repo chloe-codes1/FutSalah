@@ -122,9 +122,9 @@
 
 	<!-- 포메이션 리스트출력 -->
 	<select id="selectformation" resultType="formation">
-		select
-		* from formation
-		where teamID =#{teamID}
+		select f.*, u.position,
+      u.name from formation f, user u
+      where f.userID= u.userID and f.teamID =#{teamID}
 	</select>
 
 
