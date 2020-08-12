@@ -71,6 +71,10 @@ const SearchTeamPageStyle = {
     height: "auto",
     overflow: "hidden",
   },
+  formControl: {
+    margin: "2px",
+    minWidth: 120,
+  },
   ...imagesStyles,
 };
 
