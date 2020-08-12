@@ -39,7 +39,11 @@
 	</select>
 
 
-	
+	<!-- 검색한 조건 없으면 매칭 등록 -->
+	<insert id="insertmatch" parameterType="match">
+		insert into matching(homeTeamID,locationID,date,time,formCode,isBooked) 
+		values (#{homeTeamID},#{locationID},#{date},#{time},#{formCode},#{isBooked});
+	</insert>
 
 
 	<!-- 나에게 온 매칭 정보 -->
