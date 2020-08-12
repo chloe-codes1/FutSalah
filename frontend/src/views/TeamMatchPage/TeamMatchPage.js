@@ -13,7 +13,6 @@ import Icon from "@material-ui/core/Icon";
 import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
 //import Dropdown from "components/CustomDropdown/CustomDropdown.js";
-import UserContext from "../../contexts/UserContext.js";
 import axios from "axios";
 
 import classNames from "classnames";
@@ -25,6 +24,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import MatchSearch from "./MatchSearch.js";
 import MatchCard from "./MatchCard.js";
+import UserContext from "contexts/UserContext.js";
+
 import NavPills from "components/NavPills/NavPills.js";
 import SwipeableViews from "react-swipeable-views";
 import AppBar from "@material-ui/core/AppBar";
@@ -147,6 +148,20 @@ const useStyles = makeStyles(styles);
 function TeamMatchPage() {
   const classes = useStyles();
   const [matchingList, setMatchingList] = useState(initialState);
+  const [myteam, setMyteam] = useState([]);
+  const { userinfo } = useContext(UserContext);
+  useEffect(() => {
+    if (userinfo.logged) {
+      axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+        data: { socialID: userinfo.socialID },
+      }).then((e) => {
+        console.log(e.data);
+        setMyteam(e.data);
+      });
+    }
+  });
   return (
     <div>
       <Header
@@ -155,12 +170,11 @@ function TeamMatchPage() {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 400,
+          height: 200,
           color: "white",
         }}
       />
-
-      <Parallax small image={require("assets/img/teammatch.jpg")}>
+      <Parallax small filter image={require("assets/img/teammatch.jpg")}>
         <div className={classes.container}>
           <GridContainer>
             <GridItem xs={12}>
@@ -188,15 +202,15 @@ function TeamMatchPage() {
             matchingList.map((match, index) => {
               if ((index + 1) % 3 === 0) {
                 return (
-                  <Grid container justify="center" spacing={3}>
+                  <Grid key={index} container justify="center" spacing={3}>
                     <Grid item>
-                      <MatchCard match={matchingList[index - 2]} />
+                      <MatchCard key={index - 2} match={matchingList[index - 2]} />
                     </Grid>
                     <Grid item>
-                      <MatchCard match={matchingList[index - 1]} />
+                      <MatchCard key={index - 1} match={matchingList[index - 1]} />
                     </Grid>
                     <Grid item>
-                      <MatchCard match={matchingList[index]} />
+                      <MatchCard key={index} match={matchingList[index]} />
                     </Grid>
                   </Grid>
                 );
