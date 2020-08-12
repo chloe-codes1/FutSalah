@@ -324,6 +324,7 @@ export default function ProfilePage(props) {
     })
       .then(() => {
         // console.log("remove member success");
+        getFormation();
       })
       .catch((e) => {
         // console.log("error", e);

@@ -105,4 +105,9 @@
 		UPDATE team SET leader = #{userID} WHERE teamID = #{teamID}
 	</update>
 
+	<!--팀원 방출시 포메이션 삭제 -->
+   <delete id="deleteformation2" parameterType="map">
+      delete from formation
+      where teamID= #{teamID} and userID =#{userID};
+   </delete>
 </mapper>
