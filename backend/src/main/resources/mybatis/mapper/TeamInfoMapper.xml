@@ -124,7 +124,8 @@
 	<select id="selectformation" resultType="formation">
 		select f.*, u.position,
 		u.name from formation f, user u
-		where f.userID= u.userID and f.teamID =#{teamID}
+		where f.userID= u.userID and f.teamID
+		=#{teamID}
 	</select>
 
 

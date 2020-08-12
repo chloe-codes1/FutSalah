@@ -118,7 +118,17 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	
 	@Override
 	public int deleteCrew(int teamID, int userID) {
-		return teamMapper.deleteCrew(teamID, userID);
+		
+
+		int result = teamMapper.deleteformation2(teamID, userID);
+		int result2 =teamMapper.deleteCrew(teamID, userID);
+		if(result==1 &&result2==1) {
+			return 1;
+		}
+		else {
+			throw new RuntimeException();
+		}
+		
 	}
 
 	@Override
