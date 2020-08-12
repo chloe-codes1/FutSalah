@@ -339,11 +339,12 @@ public class TeamInfoController {
 	@DeleteMapping("/team/formation/{teamID}/{formCode}")
 	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int teamID, @PathVariable int formCode) {
 		ResponseEntity<Map<String, Object>> entity = null;
+		
 		try {
 			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
 			tService.deleteformation(form);
 			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
-		//	int result = tService.deleteformation(teamID);
+			int result = 	tService.deleteformation(form);
 			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);

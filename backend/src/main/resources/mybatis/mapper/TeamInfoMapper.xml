@@ -122,9 +122,9 @@
 
 	<!-- 포메이션 리스트출력 -->
 	<select id="selectformation" resultType="formation">
-		select
-		userID, grid from formation
-		where teamID =#{teamID}
+		select f.*, u.position,
+		u.name from formation f, user u
+		where f.userID= u.userID and f.teamID =#{teamID}
 	</select>
 
 
@@ -141,7 +141,8 @@
 		matching.homeTeamID,
 		t1.name as hometeam,
 		matching.awayTeamID,
-		t2.name as awayteam,
+		t2.name as
+		awayteam,
 		result.homeScore,
 		result.awayScore
 		from result ,
@@ -149,7 +150,8 @@
 		team as t2 ,
 		matching
 		where result.matchID = matching.matchID
-		and matching.homeTeamID = t1.teamID
+		and
+		matching.homeTeamID = t1.teamID
 		and matching.awayTeamID = t2.teamID) c
 		where homeTeamID = #{teamID} or awayTeamID = #{teamID};
 
