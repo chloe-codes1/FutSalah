@@ -24,13 +24,11 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Autowired
 	TeamInfoRepo tRepo;
-	
+
 	@Autowired
 	TeamMapper teamMapper;
 
-	
-	
-	//----------------create team---------------------------
+	// ----------------create team---------------------------
 	@Override
 	public int insert(TeamInfoDto info) {
 		int result = tRepo.insert(info);
@@ -45,6 +43,7 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public int checkIfExists(String name) {
 		return teamMapper.checkIfExists(name);
 	}
+
 	@Override
 	public int update(TeamInfoDto info) {
 		return tRepo.update(info);
@@ -55,7 +54,7 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		return tRepo.delete(teamID);
 	}
 
-	//----------------myteam---------------------------
+	// ----------------myteam---------------------------
 	@Override
 	public List<MyTeamDto> selectAllmyteam(int id) {
 		return tRepo.selectAllmyteam(id);
@@ -72,40 +71,39 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		// TODO Auto-generated method stub
 		return tRepo.insertmy(uteam);
 	}
-	
 
-	
-	//----------------find team---------------------------
+	// ----------------find team---------------------------
 	@Override
 	public List<TeamInfoSimpleDto> selectAll() {
 		return tRepo.selectAll();
 	}
-	
-	//----------------team info---------------------------
+
+	// ----------------team info---------------------------
 	@Override
 	public List<UserDTO> getAllCrewInfo(int teamID) {
 		return teamMapper.getAllCrewInfo(teamID);
 	}
+
 	@Override
 	public TeamLeaderDTO getTeamLeaderInfo(int teamID) {
 		return teamMapper.getTeamLeaderInfo(teamID);
 	}
-	
+
 	@Override
 	public List<TeamLocationDTO> searchTeamByName(String name) {
 		return teamMapper.searchTeamByName(name);
 	}
-	
+
 	@Override
 	public List<TeamLocationDTO> searchTeamByLocation(String gu) {
 		return teamMapper.searchTeamByLocation(gu);
 	}
-	
+
 	@Override
 	public List<TeamLocationDTO> searchTeamByBoth(String name, String gu) {
 		return teamMapper.searchTeamByBoth(name, gu);
 	}
-	
+
 	@Override
 	public int getNextTeamId() {
 		return teamMapper.getNextTeamId();
@@ -115,29 +113,36 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public TeamInfoDto getTeamInfo(int teamID) {
 		return teamMapper.getTeamInfo(teamID);
 	}
-	
+
 	@Override
 	public int deleteCrew(int teamID, int userID) {
-		return teamMapper.deleteCrew(teamID, userID);
+		int result = teamMapper.deleteformation2(teamID, userID);
+		System.out.println(result);
+		int result2 = teamMapper.deleteCrew(teamID, userID);
+		if (result == 1 && result2 == 1) {
+			return 1;
+		} else {
+			throw new RuntimeException();
+		}
+
 	}
 
 	@Override
 	public int getNumberOfCrews(int teamID) {
 		return teamMapper.getNumberOfCrews(teamID);
 	}
-	
+
 	@Override
 	public int getNextLeader(int userID, int teamID) {
 		return teamMapper.getNextLeader(userID, teamID);
 	}
-	
+
 	@Override
 	public int updateLeader(int userID, int teamID) {
 		return teamMapper.updateLeader(userID, teamID);
 	}
-	
-	
-	//----------------formation---------------------------
+
+	// ----------------formation---------------------------
 
 	@Override
 	public int insertformation(Formation form) {
@@ -158,17 +163,14 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public List<Formation> selectformation(int teamID) {
 		return tRepo.selectformation(teamID);
 
-	
 	}
-	
-	
-	//----------------result game---------------------------
+
+	// ----------------result game---------------------------
 
 	@Override
 	public List<ResultDto> resultscore(int teamID) {
 		// TODO Auto-generated method stub
 		return tRepo.resultscore(teamID);
 	}
-
 
 }

@@ -4,12 +4,12 @@ import { Overlay } from "./Overlay";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
-import benchImg from "assets/img/bench.PNG";
+import benchImg from "assets/img/bench.png";
 
 export const FormationBench = ({ removePlayer }) => {
   const [{ isOver }, drop] = useDrop({
     accept: "position",
-    drop: (item) => removePlayer(item.player.idx),
+    drop: (item) => removePlayer(item.player.grid),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
