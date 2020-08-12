@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -43,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MatchCard({ match }) {
   const classes = useStyles();
-
+  const onClick = useCallback(() => {
+    alert("hello!!!!");
+  });
   return (
     <Card className={classes.root}>
       {match.matchState === 1 && (
@@ -55,7 +57,7 @@ export default function MatchCard({ match }) {
       {match.matchState === 3 && (
         <CardHeader avatar={<img src={matchEnd} />} title={match.name} />
       )}
-      <CardActionArea>
+      <CardActionArea onClick={onClick}>
         {match.teamImg === 1 && (
           <CardMedia
             className={classes.media}
@@ -100,9 +102,6 @@ export default function MatchCard({ match }) {
           )}
         </CardContent>
       </CardActionArea>
-      <CardActions disableSpacing>
-        <Button>더보기</Button>
-      </CardActions>
     </Card>
   );
 }

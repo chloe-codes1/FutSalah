@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -25,40 +25,41 @@ import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 240,
+    minWidth: 360,
   },
   selectEmpty: {
     marginTop: theme.spacing(1),
   },
   dateTime: {
-    width: 240,
+    width: 360,
     margin: theme.spacing(1),
   },
   radioButton: {
     padding: "0 50px 0 50px",
   },
   searchButton: {
-    width: 480,
-    margin: "0 0 10px 0",
+    width: 360,
+    // margin: "0 0 10px 0",
+    margin: theme.spacing(1),
   },
 }));
 
-const location = [];
+const gu = [];
 
 const initialState = {
   search: {
-    sido: "",
-    gu: "",
+    location: "",
     date: "",
     time: "",
     type: "",
-    stadium: false,
+    isBook: "0",
   },
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "SELECT":
+      //console.log(action.name + " " + action.value);
       return {
         ...state,
         search: {
@@ -75,15 +76,40 @@ const reducer = (state, action) => {
 
 function MatchSearch() {
   const classes = useStyles();
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSido, setSelectedSido] = useState("");
+  const [state, searchDispatch] = useReducer(reducer, initialState);
+  //console.log(state);
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    const name = "date";
+    const value = date;
+    searchDispatch({
+      type: "SELECT",
+      name,
+      value,
+    });
   };
+  //console.log(selectedDate);
   const handleSidoChange = (event) => {
-    console.log(event.target.value);
+    //console.log(event.target.value + " " + "선택");
     setSelectedSido(event.target.value);
   };
+  const onChange = useCallback((e) => {
+    const { name, value } = e.target;
+    console.log(name + " " + value);
+    searchDispatch({
+      type: "SELECT",
+      name,
+      value,
+    });
+  }, []);
+  const searchMatching = useCallback(() => {
+    console.log(state.search);
+  });
+  const registMatching = useCallback(() => {
+    console.log(state.search);
+  });
   return (
     <>
       <Grid container justify="center" spacing={1}>
@@ -119,9 +145,13 @@ function MatchSearch() {
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label">구/군</InputLabel>
             <Select labelId="demo-simple-select-label" id="demo-simple-select">
-              <MenuItem value={10}>일산동구</MenuItem>
-              <MenuItem value={20}>처인구</MenuItem>
-              <MenuItem value={30}>수지구</MenuItem>
+              {gu.length > 0 &&
+                gu.map((loc, index) => {
+                  return <MenuItem value={loc.locationID}>{loc.gu}</MenuItem>;
+                })}
+              {gu.length === 0 && (
+                <MenuItem value="">시/도를 먼저 선택</MenuItem>
+              )}
             </Select>
           </FormControl>
         </Grid>
@@ -147,8 +177,14 @@ function MatchSearch() {
           <Grid item>
             <FormControl className={classes.formControl}>
               <InputLabel id="demo-simple-select-label">시간</InputLabel>
-              <Select labelId="demo-simple-select-label" id="demo-simple-select">
-                <MenuItem value={0}>00:00</MenuItem>
+              <Select
+                name="time"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={state.search.time}
+                onChange={onChange}
+              >
+                <MenuItem value={24}>00:00</MenuItem>
                 <MenuItem value={1}>01:00</MenuItem>
                 <MenuItem value={2}>02:00</MenuItem>
                 <MenuItem value={3}>03:00</MenuItem>
@@ -181,30 +217,39 @@ function MatchSearch() {
         <Grid item>
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label">경기방식</InputLabel>
-            <Select labelId="demo-simple-select-label" id="demo-simple-select">
-              <MenuItem value={55}>5 : 5</MenuItem>
-              <MenuItem value={66}>6 : 6</MenuItem>
+            <Select
+              name="type"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={state.search.type}
+              onChange={onChange}
+            >
+              <MenuItem value={5}>5 : 5</MenuItem>
+              <MenuItem value={6}>6 : 6</MenuItem>
             </Select>
           </FormControl>
         </Grid>
         <Grid item>
           <FormControl className={classes.formControl} component="fieldset">
             <FormLabel component="legend">경기장 예약 유/무</FormLabel>
-            <RadioGroup aria-label="stadium" name="stadium">
+            <RadioGroup
+              value={state.search.isBook}
+              aria-label="isBook"
+              name="isBook"
+              onChange={onChange}
+            >
               <Grid container justify="center">
                 <Grid item>
                   <FormControlLabel
                     className={classes.radioButton}
-                    value="true"
-                    control={<Radio />}
+                    control={<Radio value="1" />}
                     label="유"
                     labelPlacement="end"
                   />
                 </Grid>
                 <Grid item>
                   <FormControlLabel
-                    value="false"
-                    control={<Radio />}
+                    control={<Radio value="0" />}
                     label="무"
                     labelPlacement="end"
                   />
@@ -216,9 +261,25 @@ function MatchSearch() {
       </Grid>
       <Grid container justify="center">
         <Grid item>
-          <Button className={classes.searchButton} variant="contained" color="info">
+          <Button
+            className={classes.searchButton}
+            variant="contained"
+            color="info"
+            onClick={searchMatching}
+          >
             <i className="fas fa-search" />
             매칭 검색
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            className={classes.searchButton}
+            variant="contained"
+            color="success"
+            onClick={registMatching}
+          >
+            <i className="fas fa-plus" />
+            매칭 등록
           </Button>
         </Grid>
       </Grid>

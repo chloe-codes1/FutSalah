@@ -18,14 +18,20 @@ import axios from "axios";
 
 import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import MatchSearch from "./MatchSearch.js";
 import MatchCard from "./MatchCard.js";
-
+import NavPills from "components/NavPills/NavPills.js";
+import SwipeableViews from "react-swipeable-views";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 const initialState = [
   {
     name: "일산풋볼",
@@ -154,48 +160,49 @@ function TeamMatchPage() {
         }}
       />
 
-      <Parallax small filter image={require("assets/img/teammatch.jpg")}>
+      <Parallax small image={require("assets/img/teammatch.jpg")}>
         <div className={classes.container}>
           <GridContainer>
             <GridItem xs={12}>
               <h1 className={classes.title}>팀 매칭</h1>
-              <h4>팀에게 딱 맞는 매칭 상대를 검색해보세요.</h4>
+              <h4>원하는 상대를 찾아보세요.</h4>
               <br />
             </GridItem>
           </GridContainer>
         </div>
       </Parallax>
+
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
           <MatchSearch />
-        </div>
-        <Divider />
-        <br />
-        {matchingList.length === 0 && (
-          <Grid container justify="center">
-            <Grid item>
-              <h5>현재 매칭중인 팀이 존재하지 않습니다.</h5>
+          <Divider />
+          <br />
+          {matchingList.length === 0 && (
+            <Grid container justify="center">
+              <Grid item>
+                <h5>현재 매칭중인 팀이 존재하지 않습니다.</h5>
+              </Grid>
             </Grid>
-          </Grid>
-        )}
-        {!(matchingList.length === 0) &&
-          matchingList.map((match, index) => {
-            if ((index + 1) % 3 === 0) {
-              return (
-                <Grid container justify="center" spacing={3}>
-                  <Grid item>
-                    <MatchCard match={matchingList[index - 2]} />
+          )}
+          {!(matchingList.length === 0) &&
+            matchingList.map((match, index) => {
+              if ((index + 1) % 3 === 0) {
+                return (
+                  <Grid container justify="center" spacing={3}>
+                    <Grid item>
+                      <MatchCard match={matchingList[index - 2]} />
+                    </Grid>
+                    <Grid item>
+                      <MatchCard match={matchingList[index - 1]} />
+                    </Grid>
+                    <Grid item>
+                      <MatchCard match={matchingList[index]} />
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <MatchCard match={matchingList[index - 1]} />
-                  </Grid>
-                  <Grid item>
-                    <MatchCard match={matchingList[index]} />
-                  </Grid>
-                </Grid>
-              );
-            }
-          })}
+                );
+              }
+            })}
+        </div>
       </div>
       <Footer />
     </div>
