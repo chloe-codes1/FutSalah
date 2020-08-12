@@ -2,6 +2,7 @@ package ido.arduino.service;
 
 import java.util.List;
 
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.ResultDto;
@@ -53,10 +54,10 @@ public interface TeamInfoService {
 	
 	int insertformation(Formation form);
 	int updateformation(Formation form);
-	int deleteformation(int userID);
-	List<Formation> selectformation(); 
+	int deleteformation(DeleteFormationDto form);
+	List<Formation> selectformation(int teamID); 
 	
 	//----------------result game---------------------------
-	List<ResultDto> resultscore(); 
+	List<ResultDto> resultscore(int teamID); 
 
 }

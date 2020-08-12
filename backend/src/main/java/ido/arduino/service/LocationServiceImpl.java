@@ -23,5 +23,10 @@ public class LocationServiceImpl implements LocationService{
 	public List<LocationDto> getAllLocationInfo() {
 		return locationMapper.getAllLocationInfo();
 	}
+
+	@Override
+	public List<LocationDto> getLocationBySido(String sido) {
+		return locationMapper.getLocationBySido(sido);
+	}
 	
 }

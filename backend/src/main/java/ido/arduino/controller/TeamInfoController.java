@@ -37,6 +37,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.RequestDTO;
@@ -179,6 +180,13 @@ public class TeamInfoController {
 	public @ResponseBody int requestToJoin(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
+		int isRequested = rService.checkIfRequested(userID, teamID);
+		
+		// 중복 신청 막기
+		if (isRequested == 1) {
+			return 2;
+		}
+		
 		rService.insert(userID, teamID);
 		UserDTO requestFrom = uService.findByUserID(userID);
 		TeamLeaderDTO targetTeam = tService.getTeamLeaderInfo(teamID);
@@ -301,6 +309,7 @@ public class TeamInfoController {
 		ResponseEntity<Map<String, Object>> entity = null;
 
 		try {
+			
 			TeamInfoDto team = tService.getTeamInfo(form.getTeamID());
 			int result = tService.insertformation(form);
 			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
@@ -327,14 +336,15 @@ public class TeamInfoController {
 
 	// 팀 정보 삭제
 	@ApiOperation(value = "포메이션 정보 삭제.", response = String.class)
-	@DeleteMapping("/team/formation/{userID}")
-	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int userID) {
+	@DeleteMapping("/team/formation/{teamID}/{formCode}")
+	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int teamID, @PathVariable int formCode) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-
+			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
+			tService.deleteformation(form);
 			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
-			int result = tService.deleteformation(userID);
-			entity = handleSuccess(userID + "가 삭제되었습니다.");
+		//	int result = tService.deleteformation(teamID);
+			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
@@ -342,24 +352,25 @@ public class TeamInfoController {
 	}
 
 	@ApiOperation(value = "포메이션 정보 반환한다.", response = List.class)
-	@GetMapping("/team/formation")
-	public ResponseEntity<List<Formation>> selectformation() throws Exception {
+	@GetMapping("/team/formation/{teamID}")
+	public ResponseEntity<List<Formation>> selectformation(@PathVariable int teamID) throws Exception {
 		logger.debug("selectformation - 호출");
 		System.out.println("호오오오추우울...........................................................");
 
-		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
+		return new ResponseEntity<List<Formation>>(tService.selectformation(teamID), HttpStatus.OK);
 	}
 	
 	
 	
 	//----------------result game---------------------------
+	// 경기전적
 	@ApiOperation(value = "게임 결과 정보 반환한다.", response = List.class)
-	@GetMapping("/team/result")
-	public ResponseEntity<List<ResultDto>> resultscore() throws Exception {
+	@GetMapping("/team/result/{teamID}")
+	public ResponseEntity<List<ResultDto>> resultscore(@PathVariable int teamID) throws Exception {
 		logger.debug("resultscore - 호출");
 		System.out.println("resultscore호추추루룰...........................................................");
 
-		return new ResponseEntity<List<ResultDto>>(tService.resultscore(), HttpStatus.OK);
+		return new ResponseEntity<List<ResultDto>>(tService.resultscore(teamID), HttpStatus.OK);
 	}
 	
 	

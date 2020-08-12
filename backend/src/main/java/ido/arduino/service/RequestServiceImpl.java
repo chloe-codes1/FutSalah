@@ -34,4 +34,9 @@ public class RequestServiceImpl implements RequestService {
 		return requestMapper.delete(resultID);
 	}
 
+	@Override
+	public int checkIfRequested(int userID, int teamID) {
+		return requestMapper.checkIfRequested(userID, teamID);
+	}
+
 }
