@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
-import Button from "components/CustomButtons/Button.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -11,12 +10,10 @@ import GridItem from "components/Grid/GridItem.js";
 // core components
 import AdminHeader from "components/Header/AdminHeader.js";
 import AdminHeaderLinks from "components/Header/AdminHeaderLinks.js";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
-import UserContext from "../../contexts/UserContext";
+import AdminUserContext from "../../contexts/AdminUserContext";
 
 // @material-ui/core components
 import {
@@ -62,10 +59,18 @@ const StyledTableRow = withStyles((theme: Theme) =>
 )(TableRow);
 
 export default function AdminInfo(props) {
-  const { userinfo, userDispatch } = useContext(UserContext);
+  const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
   const classes = useStyles();
   const history = useHistory();
   const { ...rest } = props;
+
+  // component mount시 login보다 매치 가져오기가 먼저 일어남
+  // 따로 먼저 adminuserinfo.stadiumID를 가져와야 함
+  const [adminuser, setAdminUser] = useState({
+    adminID: 0,
+    name: "",
+    stadiumID: 0,
+  });
 
   const testMatchInfo = [
     {
@@ -86,9 +91,9 @@ export default function AdminInfo(props) {
   const date = dateInfo.getDate();
 
   const loadMatchInfo = async () => {
-    axios({
+    await axios({
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/1`,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/${adminuser.stadiumID}`,
     })
       .then((res) => {
         console.log(res.data);
@@ -101,6 +106,8 @@ export default function AdminInfo(props) {
   };
 
   useEffect(() => {
+    const stadiumID = window.sessionStorage.getItem("stadiumID");
+    adminuser.stadiumID = stadiumID;
     loadMatchInfo();
   }, []);
 
@@ -127,7 +134,7 @@ export default function AdminInfo(props) {
             <GridItem xs={12}>
               <h1>경기 목록</h1>
 
-              <h3>고양풋살센터</h3>
+              <h3>{adminuserinfo.name}</h3>
 
               <h4>
                 {year}-{month + 1}-{date}
