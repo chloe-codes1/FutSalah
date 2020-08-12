@@ -89,6 +89,7 @@ export default function ProfilePage(props) {
   const { ...rest } = props;
 
   const [dropZone, setDropZone] = useState(false);
+  const [QRcodeZone, setQRcodeZone] = useState(false);
   // const params = new URLSearchParams(paramsString);
   // const id = params.get("id");
 
@@ -116,6 +117,14 @@ export default function ProfilePage(props) {
 
   const handleDropZoneClose = () => {
     setDropZone(false);
+  };
+
+  const handleQRcodeZone = () => {
+    setQRcodeZone(true);
+  };
+
+  const handleQRcodeZoneClose = () => {
+    setQRcodeZone(false);
   };
 
   // 팀 정보 가져오기
@@ -242,10 +251,27 @@ export default function ProfilePage(props) {
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation/${TeamId}`,
     })
-      .then((res) => {
-        console.log("포메이션 success");
-        console.log(res.data);
-        setPlayerPos1(res.data);
+      .then(async (res) => {
+        // console.log("포메이션 success");
+        // console.log(res.data);
+        const list1 = [];
+        const list2 = [];
+
+        await res.data.map((pos) => {
+          if (Number(pos.formCode) === 5)
+            list1.push({
+              userID: pos.userID,
+              grid: pos.grid,
+            });
+          else if (Number(pos.formCode) === 6)
+            list2.push({
+              userID: pos.userID,
+              grid: pos.grid,
+            });
+        });
+
+        setPlayerPos1(list1);
+        setPlayerPos2(list2);
       })
       .catch((e) => {
         console.log("error", e);
@@ -259,7 +285,6 @@ export default function ProfilePage(props) {
     setLoading(true);
 
     setTeamInfo(info);
-    console.log(info); // 변경된 팀정보 출력
     await axios({
       method: "put",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/${TeamId}`,
@@ -267,6 +292,7 @@ export default function ProfilePage(props) {
     })
       .then((res) => {
         // console.log("update success");
+        alert("성공적으로 팀정보를 변경하였습니다!");
       })
       .catch((e) => {
         console.log("error", e);
@@ -320,7 +346,7 @@ export default function ProfilePage(props) {
 
     await axios({
       method: "delete",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation/${teamInfo.teamID}/${formCode}`,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation/${TeamId}/${formCode}`,
     })
       .then(() => {
         console.log("delete formation success");
@@ -328,6 +354,7 @@ export default function ProfilePage(props) {
         if (formCode === 5) playerPos = playerPos1;
         else if (formCode == 6) playerPos = playerPos2;
         playerPos.map((pp) => {
+          console.log(pp);
           axios({
             method: "post",
             url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/formation`,
@@ -335,7 +362,7 @@ export default function ProfilePage(props) {
               formCode,
               grid: pp.grid,
               teamID: TeamId,
-              userID: userinfo.userID,
+              userID: pp.userID,
             },
           })
             .then(() => {
@@ -438,10 +465,6 @@ export default function ProfilePage(props) {
     getFormation();
   }, []);
 
-  useEffect(() => {
-    console.log(teamInfo);
-  }, [teamInfo]);
-
   return (
     <div
       style={{
@@ -543,6 +566,31 @@ export default function ProfilePage(props) {
                     </p>
                   </Popover>
                 </div>
+                {/* 가입 신청 버튼, QR 코드 버튼 */}
+                {teamList.find((t) => t.userID === Number(userinfo.userID)) ===
+                undefined ? (
+                  <Button
+                    color="info"
+                    className={classes.modifyButton}
+                    size="sm"
+                    onClick={() => {
+                      if (window.confirm("이 팀에 가입신청을 하시겠습니까?")) {
+                        requestJoin();
+                      }
+                    }}
+                  >
+                    가입 신청 하기
+                  </Button>
+                ) : (
+                  <Button
+                    color="info"
+                    className={classes.modifyButton}
+                    size="sm"
+                    onClick={handleQRcodeZone}
+                  >
+                    QR코드
+                  </Button>
+                )}
                 {/* 팀 정보 변경 버튼 */}
                 {Number(userinfo.userID) === teamInfo.leader && (
                   <Button
@@ -554,19 +602,6 @@ export default function ProfilePage(props) {
                     }}
                   >
                     수정
-                  </Button>
-                )}
-                {teamList.find((t) => t.userID === Number(userinfo.userID)) ===
-                  undefined && (
-                  <Button
-                    color="info"
-                    className={classes.modifyButton}
-                    size="sm"
-                    onClick={() => {
-                      requestJoin();
-                    }}
-                  >
-                    가입 신청 하기
                   </Button>
                 )}
               </GridItem>
@@ -633,6 +668,7 @@ export default function ProfilePage(props) {
                                   color="success"
                                   onClick={() => {
                                     storeFormation(5);
+                                    alert("포메이션이 저장되었습니다!");
                                   }}
                                   style={{
                                     marginTop: "10px",
@@ -701,6 +737,7 @@ export default function ProfilePage(props) {
                                   color="success"
                                   onClick={() => {
                                     storeFormation(6);
+                                    alert("포메이션이 저장되었습니다!");
                                   }}
                                   style={{
                                     marginTop: "10px",
@@ -799,13 +836,13 @@ export default function ProfilePage(props) {
                                               <Button
                                                 size="sm"
                                                 onClick={() => {
-                                                  // Confirm(
-                                                  //   "정말 이 선수를 방출하시겠습니까?"
-                                                  // ) &&
-                                                  //   console.log(
-                                                  //     t.name + " 방출~"
-                                                  //   );
-                                                  removeTeamList(t.userID);
+                                                  if (
+                                                    window.confirm(
+                                                      "정말 이 선수를 방출하시겠습니까?"
+                                                    )
+                                                  ) {
+                                                    removeTeamList(t.userID);
+                                                  }
                                                 }}
                                                 style={{
                                                   maxWidth: "3vw",
@@ -1043,10 +1080,18 @@ export default function ProfilePage(props) {
                                           style={{
                                             maxWidth: "3vw",
                                           }}
-                                          onClick={() => {
-                                            // 신청 승락
-                                            acceptJoin(r.userID, r.name);
-                                          }}
+                                          onClick={
+                                            // 신청 승낙
+                                            () => {
+                                              if (
+                                                window.confirm(
+                                                  "정말 이 신청을 승낙하시겠습니까?"
+                                                )
+                                              ) {
+                                                acceptJoin(r.userID, r.name);
+                                              }
+                                            }
+                                          }
                                         >
                                           <AddIcon />
                                         </Button>
@@ -1056,10 +1101,18 @@ export default function ProfilePage(props) {
                                           style={{
                                             maxWidth: "3vw",
                                           }}
-                                          onClick={() => {
+                                          onClick={
                                             // 신청 거절
-                                            rejectJoin(r.userID, r.name);
-                                          }}
+                                            () => {
+                                              if (
+                                                window.confirm(
+                                                  "정말 이 신청을 거절하시겠습니까?"
+                                                )
+                                              ) {
+                                                rejectJoin(r.userID, r.name);
+                                              }
+                                            }
+                                          }
                                         >
                                           <RemoveIcon />
                                         </Button>
@@ -1128,6 +1181,35 @@ export default function ProfilePage(props) {
               style={{ marginTop: "10px", marginBottom: "15px" }}
             >
               당신의 팀을 나타내는 사진을 업로드 하세요!
+            </Typography>
+          </div>
+        </Fade>
+      </Modal>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={modal.modal}
+        open={QRcodeZone}
+        onClose={handleQRcodeZoneClose}
+        closeAfterTransition
+      >
+        <Fade in={QRcodeZone}>
+          <div className={modal.paper} align="center">
+            <Grid mt={5}>
+              {/* 여기에 qr코드 */}
+              <div
+                style={{
+                  backgroundColor: "black",
+                  width: "100px",
+                  height: "100px",
+                }}
+              ></div>
+            </Grid>
+            <Typography
+              id="transition-modal-title"
+              style={{ marginTop: "10px", marginBottom: "15px" }}
+            >
+              팀정보 QR코드
             </Typography>
           </div>
         </Fade>

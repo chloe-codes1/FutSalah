@@ -4,6 +4,7 @@ const PlayerStyle = {
     margin: "auto",
     cursor: "pointer",
     fontSize: 12,
+    backgroundColor: "white",
   },
   all: {
     padding: 0,

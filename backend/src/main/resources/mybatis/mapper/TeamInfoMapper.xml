@@ -123,7 +123,7 @@
 	<!-- 포메이션 리스트출력 -->
 	<select id="selectformation" resultType="formation">
 		select
-		userID, grid from formation
+		* from formation
 		where teamID =#{teamID}
 	</select>
 
