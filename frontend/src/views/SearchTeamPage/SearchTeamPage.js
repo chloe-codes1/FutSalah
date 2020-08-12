@@ -49,6 +49,25 @@ export default function SearchTeamPage(props) {
     searchAll();
   }, []);
 
+  // 지역 목록 불러오기
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
+    })
+      .then((res) => {
+        const list = [];
+        res.data.map((location) => {
+          if (list.find((sido) => sido === location.sido) === undefined)
+            list.push(location.sido);
+        });
+        setSidoList(list);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  }, []);
+
   // 전체 페이지 수 1로 고정
   const totalPage = 1;
 
@@ -103,32 +122,25 @@ export default function SearchTeamPage(props) {
     setGu(event.target.value);
   };
 
-  // 지역 목록 불러오기
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
-    })
-      .then((res) => {
-        const list = [];
-        res.data.map((location) => {
-          if (list.find((sido) => sido === location.sido) === undefined)
-            list.push(location.sido);
-        });
-        setSidoList(list);
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
-  }, []);
-
-  // 팀 전체 검색
+  // 팀 전체 목록 가져오기
   const searchAll = () => {
     axios
       .get(`${process.env.REACT_APP_SERVER_BASE_URL}/api/team`)
-      .then((response) => {
-        console.log(response.data);
-        setTeamList(response.data);
+      .then(async (res) => {
+        await res.data.map((teamInfo) => {
+          if (teamInfo.profileURL) {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL + "/" + teamInfo.profileURL;
+          } else {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL +
+              "/team-default-" +
+              Math.ceil(Math.random(1, 8)) +
+              ".png";
+          }
+        });
+
+        setTeamList(res.data);
       })
       .catch(() => {
         console.log("악 실패");
@@ -145,8 +157,20 @@ export default function SearchTeamPage(props) {
         gu: gu,
       },
     })
-      .then((res) => {
-        console.log("search by name success");
+      .then(async (res) => {
+        // console.log("search by name success");
+        await res.data.map((teamInfo) => {
+          if (teamInfo.profileURL) {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL + "/" + teamInfo.profileURL;
+          } else {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL +
+              "/team-default-" +
+              Math.ceil(Math.random(1, 8)) +
+              ".png";
+          }
+        });
         setTeamList(res.data);
       })
       .catch((e) => {
@@ -290,7 +314,7 @@ export default function SearchTeamPage(props) {
                           }}
                         >
                           <img
-                            src={teamImage}
+                            src={t.profileURL}
                             alt="..."
                             style={{
                               borderRadius: "70%",
