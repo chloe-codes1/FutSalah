@@ -35,9 +35,9 @@ export default function SearchTeamPage(props) {
   const { ...rest } = props;
 
   const [pageNum, setPageNum] = useState(1);
-  const [sido, setSido] = useState("");
+  const [sido, setSido] = useState("전체");
   const [gu, setGu] = useState("");
-  const [sidoList, setSidoList] = useState([]);
+  const [sidoList, setSidoList] = useState(["전체"]);
   const [guList, setGuList] = useState([]);
 
   const [searchWord, setSearchWord] = useState("");
@@ -89,12 +89,10 @@ export default function SearchTeamPage(props) {
       .then((res) => {
         const list = [];
         res.data.map((location) => {
-          list.push({
-            id: location.locationID,
-            gu: location.gu,
-          });
+          list.push(location.gu);
         });
         setGuList(list);
+        setGu("");
       })
       .catch((e) => {
         console.log("error", e);
@@ -137,11 +135,15 @@ export default function SearchTeamPage(props) {
       });
   };
 
-  // 팀이름으로 검색
-  const searchByName = () => {
+  // 조건 검색
+  const searchByCondition = (condition) => {
     axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/search/${searchWord}`,
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/search/${condition}`,
+      data: {
+        name: searchWord,
+        gu: gu,
+      },
     })
       .then((res) => {
         console.log("search by name success");
@@ -150,6 +152,24 @@ export default function SearchTeamPage(props) {
       .catch((e) => {
         console.log("error", e);
       });
+  };
+
+  // 검색
+  const search = () => {
+    let condition;
+
+    if (sido === "전체") {
+      // 이름으로만 검색
+      searchByCondition("name");
+    } else if (gu !== "") {
+      if (searchWord === "") {
+        searchByCondition("location");
+      } else {
+        searchByCondition("both");
+      }
+    } else {
+      alert("지역을 끝까지 선택해주세요!");
+    }
   };
 
   return (
@@ -182,31 +202,33 @@ export default function SearchTeamPage(props) {
           >
             <div
               style={{
-                backgroundColor: "rgba(255, 255, 255, 0.5)",
-                // borderRadius: "10px",
                 display: "flex",
                 alignItems: "center",
                 position: "relative",
               }}
             >
               <FormControl className={classes.formControl}>
-                <InputLabel id="sido">시도</InputLabel>
                 <Select
                   labelId="sido"
                   id="sido-select"
                   value={sido}
                   onChange={sidoChange}
+                  inputProps={{
+                    classes: {
+                      icon: "white",
+                    },
+                  }}
                 >
                   <MenuItem disabled value="">
                     <em>시도</em>
                   </MenuItem>
+                  <MenuItem value="전체">전체</MenuItem>
                   {sidoList.map((s) => (
                     <MenuItem value={s}>{s}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
               <FormControl className={classes.formControl}>
-                <InputLabel id="gu">시군구</InputLabel>
                 <Select
                   labelId="gu"
                   id="gu-select"
@@ -217,7 +239,7 @@ export default function SearchTeamPage(props) {
                     <em>시군구</em>
                   </MenuItem>
                   {guList.map((g) => (
-                    <MenuItem value={g.gu}>{g.gu}</MenuItem>
+                    <MenuItem value={g}>{g}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -234,8 +256,7 @@ export default function SearchTeamPage(props) {
                 size="sm"
                 style={{ marginLeft: "10px" }}
                 onClick={() => {
-                  if (searchWord === "") searchAll();
-                  else searchByName();
+                  search();
                 }}
               >
                 검색
@@ -271,15 +292,6 @@ export default function SearchTeamPage(props) {
                           <img
                             src={teamImage}
                             alt="..."
-                            // className={
-                            //   classes.imgRaised +
-                            //   " " +
-                            //   classes.img +
-                            //   " " +
-                            //   classes.imgRoundedCircle +
-                            //   " " +
-                            //   classes.imgFluid
-                            // }
                             style={{
                               borderRadius: "70%",
                               position: "absolute",
@@ -319,22 +331,22 @@ export default function SearchTeamPage(props) {
               )
             )}
           </GridList>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: "2",
-            position: "relative",
-            margin: "20vh auto",
-          }}
-        >
-          <Paginations
-            pages={makePagination(parseInt(pageNum / 11))}
-            color="info"
-            selected={pageNum}
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: "2",
+              position: "relative",
+              margin: "20vh auto",
+            }}
+          >
+            <Paginations
+              pages={makePagination(parseInt(pageNum / 11))}
+              color="info"
+              selected={pageNum}
+            />
+          </div>
         </div>
       </div>
       <Footer />

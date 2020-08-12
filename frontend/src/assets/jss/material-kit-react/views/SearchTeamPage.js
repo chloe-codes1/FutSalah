@@ -8,7 +8,7 @@ const SearchTeamPageStyle = {
     top: "120px",
     position: "relative",
     color: "#FFFFFF",
-    // backgroundColor: "rgba(0, 0, 0, 0.5)",
+    // backgroundColor: "rgba(255, 255, 255, 0.5)",
     ...container,
   },
   main: {
@@ -74,6 +74,9 @@ const SearchTeamPageStyle = {
   formControl: {
     margin: "2px",
     minWidth: 120,
+    "&:hover": {
+      borderColor: "white",
+    },
   },
   ...imagesStyles,
 };
