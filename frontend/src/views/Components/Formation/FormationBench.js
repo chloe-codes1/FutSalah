@@ -9,7 +9,7 @@ import benchImg from "assets/img/bench.PNG";
 export const FormationBench = ({ removePlayer }) => {
   const [{ isOver }, drop] = useDrop({
     accept: "position",
-    drop: (item) => removePlayer(item.player.idx),
+    drop: (item) => removePlayer(item.player.grid),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
