@@ -9,6 +9,8 @@ public interface MatchGameRepo {
 	
 	
 	public List<MatchDto> alloption();
-	public List<MatchSimpleDto> simpleoption();
+	public List<MatchDto> simpleoption();
+	int insertmatch(MatchDto match);
+
 
 }

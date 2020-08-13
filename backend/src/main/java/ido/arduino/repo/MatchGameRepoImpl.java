@@ -14,7 +14,6 @@ import ido.arduino.dto.MatchSimpleDto;
 public class MatchGameRepoImpl implements MatchGameRepo{
 	
 	private static String ns = "ido.arduino.mapper.MatchDto.";
-	private static String ns2 = "ido.arduino.mapper.MatchSimpleDto.";
 
 	@Autowired
 	SqlSessionTemplate template;
@@ -26,9 +25,16 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 	}
 
 	@Override
-	public List<MatchSimpleDto> simpleoption() {
+	public List<MatchDto> simpleoption() {
 		// TODO Auto-generated method stub
-		return template.selectList(ns2+"simpleioption");
+		return template.selectList(ns+"simpleoption");
 	}
+	
+	@Override
+	public int insertmatch(MatchDto match) {
+		// TODO Auto-generated method stub
+		return template.insert(ns+"insertmatch", match);
+	}
+
 
 }
