@@ -16,6 +16,7 @@
 		WHERE userID = #{userID}
 	</update>
 	
+	<!-- 회원 프로파일 사진 업로드 -->
 	<update id="uploadProfileImage" parameterType="map">
 		UPDATE user SET profileURL=#{uniqueFileName} WHERE userID=#{userID}
 	</update>
@@ -31,13 +32,17 @@
 	</select>
 	
 	<!-- userID로 User 찾기 -->
-	
+	<select id="findByUserID" parameterType="int" resultType="UserDTO">
+	  	SELECT*FROM user WHERE userID=#{userID}
+	</select>
 	
 	<!-- Search users by name -->
 	<select id="searchUsersByName" parameterType="String" resultType="UserDTO">
 		SELECT * FROM user WHERE name LIKE CONCAT('%',#{name},'%')
 	</select>
-
 	
-
+	<!-- email 중복 검사 -->
+	<select id="checkIfEmailExists" parameterType="String" resultType="int">
+		SELECT COUNT(email) FROM user WHERE email=#{email} 
+	</select>
 </mapper>

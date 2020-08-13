@@ -28,7 +28,7 @@ export default function Admin(props) {
       <Parallax
         filter
         image={require("assets/img/liveMatchbg.png")}
-        style={{ alignItems: "stretch" }}
+        style={({ alignItems: "stretch" }, { justifyContent: "center" })}
       ></Parallax>
       <Footer />
     </div>
