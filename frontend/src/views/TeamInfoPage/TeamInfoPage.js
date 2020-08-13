@@ -41,7 +41,7 @@ import axios from "axios";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
 import teamInfobg from "assets/img/teamInfobg.jpg";
-import teamImage from "assets/img/basicTeamImg1.jpg";
+import tempImage from "assets/img/basicTeamImg1.jpg";
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
@@ -100,6 +100,7 @@ export default function ProfilePage(props) {
   const [record, setRecord] = useState([]); // 경기전적 목록
   const [requestList, setRequestList] = useState([]); // 팀원 신청 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
+  const [teamImage, setTeamImage] = useState(""); // 팀 이미지
   const [loading, setLoading] = useState(true); // 로딩 여부
   const [playerPos1, setPlayerPos1] = useState([]); // 포메이션 정보 (5:5)
   const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보 (6:6)
@@ -138,20 +139,18 @@ export default function ProfilePage(props) {
       .then((res) => {
         // console.log("success");
         let profileURL = res.data.profileURL;
+
         if (profileURL) {
-          teamInfo.profileURL =
-            process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
+          setTeamImage(process.env.REACT_APP_S3_BASE_URL + "/" + profileURL);
         } else {
-          teamInfo.profileURL =
+          setTeamImage(
             process.env.REACT_APP_S3_BASE_URL +
-            "/team-default-" +
-            Math.ceil(Math.random(1, 8)) +
-            ".png";
+              "/team-default-" +
+              Math.ceil(Math.random(1, 8)) +
+              ".png"
+          );
         }
-        setTeamInfo({
-          ...res.data,
-          profileURL: teamInfo.profileURL,
-        });
+        setTeamInfo(res.data);
         // 지역 정보 가져오기
         axios({
           method: "get",
@@ -513,11 +512,7 @@ export default function ProfilePage(props) {
                 <Tooltip title="팀 대표 사진 변경하기" interactive>
                   <img
                     className={classes.logo}
-                    src={
-                      teamInfo.profileURL === null
-                        ? teamImage
-                        : teamInfo.profileURL
-                    }
+                    src={teamImage}
                     alt="team"
                     onClick={
                       Number(userinfo.userID) === teamInfo.leader
@@ -816,7 +811,7 @@ export default function ProfilePage(props) {
                                             className={classes.memberImg}
                                             src={
                                               t.profileURL === null
-                                                ? teamImage
+                                                ? tempImage
                                                 : t.profileURL
                                             }
                                           />
