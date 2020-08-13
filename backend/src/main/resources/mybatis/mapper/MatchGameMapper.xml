@@ -13,13 +13,12 @@
 		left outer join court c on m.courtID = c.courtID
 		left outer
 		join location l on m.locationID = l.locationID
-		<where>
+		where
 			l.gu LIKE CONCAT('%',#{gu},'%')
 			and m.date LIKE CONCAT('%',#{date},'%')
 			and m.time=#{time}
 			and m.isBooked =#{isBooked}
 			and m.formCode = #{formCode}
-		</where>
 	</select>
 
 

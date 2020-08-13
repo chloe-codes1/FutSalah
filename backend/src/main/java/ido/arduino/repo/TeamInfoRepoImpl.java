@@ -72,6 +72,12 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	}
 
 	@Override
+	public int deletemyteam(UserTeamConnDto uteam) {
+		// TODO Auto-generated method stub
+		return template.delete(ns+"deletemyteam",uteam);
+	}
+
+	@Override
 	public int selectlast() {
 
 		// TODO Auto-generated method stub
@@ -115,5 +121,6 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 		return template.selectList(ns+"resultscore",teamID);
 	}
 
+	
 
 }

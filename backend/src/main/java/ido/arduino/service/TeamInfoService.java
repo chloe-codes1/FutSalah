@@ -25,6 +25,7 @@ public interface TeamInfoService {
 	//----------------myteam---------------------------
 	int insertmy(UserTeamConnDto uteam);
 	int updatemy(UserDTO userID);
+	int deletemyteam(UserTeamConnDto uteam);
 	List<MyTeamDto> selectAllmyteam(int id); // 나의 팀 목록
 	
 	//----------------findteam---------------------------
