@@ -91,6 +91,9 @@ public class BackendApplication {
 	}
 
 	public static void test1() throws JSchException {
+		String homeTeam = "team1";
+		String awayTeam = "team2";
+		
 		String name = "pi";
 		String host = "192.168.219.109";
 		int port = 22;
@@ -124,7 +127,7 @@ public class BackendApplication {
 			ChannelExec channelExec = (ChannelExec) channel;
 			System.out.println("==> Connected to " + host);
 
-			channelExec.setCommand("python3 /home/pi/Desktop/goal.py");
+			channelExec.setCommand("python3 /home/pi/Desktop/goal.py " + homeTeam + " " + awayTeam);
 
 			channelExec.connect();
 			System.out.println("==> Connected to " + host);
