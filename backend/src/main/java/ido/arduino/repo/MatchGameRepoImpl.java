@@ -14,7 +14,7 @@ import ido.arduino.dto.MatchRequestSimpleDto;
 @Repository
 public class MatchGameRepoImpl implements MatchGameRepo{
 	
-	private static String ns = "ido.arduino.mapper.MatchRequestDto.";
+	private static String ns = "ido.arduino.mapper.MatchGameMapper.";
 
 	@Autowired
 	SqlSessionTemplate template;
