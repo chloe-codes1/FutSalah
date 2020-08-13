@@ -6,9 +6,9 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-  ListItemIcon,
 } from "@material-ui/core";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 
@@ -19,11 +19,11 @@ import Header from "components/Header/Header.js";
 //import GridContainer from "components/Grid/GridContainer.js";
 //import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import Icon from "@material-ui/core/Icon";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
+import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import UserContext from "../../contexts/UserContext.js";
 import axios from "axios";
 import classNames from "classnames";
@@ -32,16 +32,28 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
+const imageStyles = makeStyles(()=>({
+  logo: {
+    borderRadius: "70%",
+    width: "65px",
+    height: "65x",
+    margin: "auto 0 auto 5%",
+  }
+}));
+
 
 function MyTeamPage(props) {
   const { userinfo } = useContext(UserContext);
   const [myTeam, setMyTeam] = useState([]);
+  const imageClass = imageStyles();
   useEffect(() => {
     refreshTeam();
   }, []);
   const classes = useStyles();
   const [createTeam, setCreateTeam] = useState(false);
   const [existTeam, setExistTeam] = useState(false);
+  const profileImage = process.env.REACT_APP_S3_BASE_URL;
+  const defaultPath = "/team-default-1.png";
   const createTeamClick = () => {
     setCreateTeam(true);
   };
@@ -59,6 +71,7 @@ function MyTeamPage(props) {
     })
       .then((res) => {
         console.log("my team list call success");
+        console.log(res.data)
         if (res.data.length > 0) {
           setExistTeam(true);
           setMyTeam(res.data);
@@ -128,8 +141,12 @@ function MyTeamPage(props) {
                     <>
                       <ListItem key={index} button>
                         <ListItemAvatar>
-                          <Avatar>logo</Avatar>
-                        </ListItemAvatar>
+                        {team.profileURL ?
+                          <img src={profileImage+"/"+team.profileURL} className={imageClass.logo}/>
+                         :
+                         <img src={profileImage + defaultPath} className={imageClass.logo}/>
+                        }
+                          </ListItemAvatar>
                         <ListItemIcon>
                           {team.leader === userinfo.userID && (
                             <StarsRoundedIcon />

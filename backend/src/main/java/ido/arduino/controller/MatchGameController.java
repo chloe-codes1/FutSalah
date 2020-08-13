@@ -27,7 +27,6 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api")
-
 public class MatchGameController {
 	private static final Logger logger = LoggerFactory.getLogger(MatchGameController.class);
 	private static final String SUCCESS = "success";
