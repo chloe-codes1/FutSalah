@@ -76,7 +76,7 @@ const reducer = (state, action) => {
   }
 };
 
-function MatchSearch() {
+function MatchSearch({ myteam, setMatchingList }) {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSido, setSelectedSido] = useState("");
@@ -131,8 +131,26 @@ function MatchSearch() {
       value,
     });
   }, []);
-  const searchMatching = useCallback(() => {
+  const handleSearch = useCallback(() => {
     console.log(state.search);
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
+      params: {
+        date:
+          state.search.date.getFullYear() +
+          "-" +
+          (state.search.date.getMonth() + 1) +
+          "-" +
+          state.search.date.getDate(),
+        formCode: state.search.type,
+        isBooked: state.search.isBook,
+        locationID: state.search.locationID,
+        time: state.search.time,
+      },
+    }).then(() => {
+      console.log("search success");
+    });
   });
   const registMatching = useCallback(() => {
     console.log(state.search);
@@ -296,7 +314,7 @@ function MatchSearch() {
             className={classes.searchButton}
             variant="contained"
             color="info"
-            onClick={searchMatching}
+            onClick={handleSearch}
           >
             <i className="fas fa-search" />
             매칭 검색
@@ -319,6 +337,7 @@ function MatchSearch() {
         onClose={handleCloseRegister}
         info={state.search}
         area={area}
+        myteam={myteam}
       />
     </>
   );

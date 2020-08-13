@@ -33,123 +33,14 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-const initialState = [
-  {
-    name: "일산풋볼",
-    matchDay: "2020-08-12 20:00",
-    matchType: "5:5",
-    location: "경기도 고양시",
-    teamImg: 3,
-    matchState: 1,
-    stadium: true,
-  },
-  {
-    name: "멀티캠퍼스",
-    matchDay: "2020-08-13 10:00",
-    matchType: "5:5",
-    location: "서울특별시 강남구",
-    teamImg: 2,
-    matchState: 1,
-    stadium: true,
-  },
-  {
-    name: "싸피풋살",
-    matchDay: "2020-08-14 15:00",
-    matchType: "5:5",
-    location: "서울특별시 강남구",
-    teamImg: 1,
-    matchState: 1,
-    stadium: false,
-  },
-  {
-    name: "고양덕양",
-    matchDay: "2020-08-15 17:00",
-    matchType: "6:6",
-    location: "경기도 고양시",
-    teamImg: 2,
-    matchState: 1,
-    stadium: true,
-  },
-  {
-    name: "bootcamp",
-    matchDay: "2020-08-11 20:00",
-    matchType: "5:5",
-    location: "경기도 수원시",
-    teamImg: 3,
-    matchState: 2,
-    stadium: true,
-  },
-  {
-    name: "ReactJS",
-    matchDay: "2020-08-13 18:00",
-    matchType: "5:5",
-    location: "서울특별시 강남구",
-    teamImg: 2,
-    matchState: 2,
-    stadium: true,
-  },
-  {
-    name: "VueJS",
-    matchDay: "2020-08-14 15:00",
-    matchType: "5:5",
-    location: "서울특별시 강남구",
-    teamImg: 1,
-    matchState: 2,
-    stadium: false,
-  },
-  {
-    name: "신분당선",
-    matchDay: "2020-08-15 17:00",
-    matchType: "6:6",
-    location: "경기도 성남시",
-    teamImg: 2,
-    matchState: 2,
-    stadium: true,
-  },
-  {
-    name: "교대역",
-    matchDay: "2020-07-13 20:00",
-    matchType: "6:6",
-    location: "서울특별시 서초구",
-    teamImg: 3,
-    matchState: 3,
-    stadium: true,
-  },
-  {
-    name: "용인시청",
-    matchDay: "2020-07-14 22:00",
-    matchType: "5:5",
-    location: "경기도 용인시",
-    teamImg: 2,
-    matchState: 3,
-    stadium: true,
-  },
-  {
-    name: "12층",
-    matchDay: "2020-07-21 15:00",
-    matchType: "5:5",
-    location: "서울특별시 강남구",
-    teamImg: 1,
-    matchState: 3,
-    stadium: false,
-  },
-  {
-    name: "버거킹",
-    matchDay: "2020-08-03 17:00",
-    matchType: "6:6",
-    location: "경기도 수원시",
-    teamImg: 2,
-    matchState: 3,
-    stadium: true,
-  },
-];
 
 const useStyles = makeStyles(styles);
 function TeamMatchPage() {
   const classes = useStyles();
-  const [matchingList, setMatchingList] = useState(initialState);
+  const [matchingList, setMatchingList] = useState([]);
   const [myteam, setMyteam] = useState([]);
   const { userinfo } = useContext(UserContext);
+  console.log(matchingList.length);
   useEffect(() => {
     if (userinfo.logged) {
       axios({
@@ -161,7 +52,7 @@ function TeamMatchPage() {
         setMyteam(e.data);
       });
     }
-  });
+  }, []);
   return (
     <div>
       <Header
@@ -188,34 +79,26 @@ function TeamMatchPage() {
 
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
-          <MatchSearch />
+          <MatchSearch myteam={myteam} setMatchingList={setMatchingList} />
           <Divider />
           <br />
-          {matchingList.length === 0 && (
-            <Grid container justify="center">
+          <Grid container justify="center" spacing={3}>
+            {matchingList.length === 0 && (
               <Grid item>
-                <h5>현재 매칭중인 팀이 존재하지 않습니다.</h5>
+                <Typography variant="h6" color="textPrimary">
+                  현재 등록된 매칭이 존재하지 않습니다.
+                </Typography>
               </Grid>
-            </Grid>
-          )}
-          {!(matchingList.length === 0) &&
-            matchingList.map((match, index) => {
-              if ((index + 1) % 3 === 0) {
+            )}
+            {!(matchingList.length === 0) &&
+              matchingList.map((match, index) => {
                 return (
-                  <Grid key={index} container justify="center" spacing={3}>
-                    <Grid item>
-                      <MatchCard key={index - 2} match={matchingList[index - 2]} />
-                    </Grid>
-                    <Grid item>
-                      <MatchCard key={index - 1} match={matchingList[index - 1]} />
-                    </Grid>
-                    <Grid item>
-                      <MatchCard key={index} match={matchingList[index]} />
-                    </Grid>
+                  <Grid item>
+                    <MatchCard key={index} match={match} />
                   </Grid>
                 );
-              }
-            })}
+              })}
+          </Grid>
         </div>
       </div>
       <Footer />
