@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class MatchRequestSimpleDto {
 	
 	private Date date ;
-	private String gu; // 경기 지역 구 
+	private int locationID; // 경기 지역 구 
 
 }
