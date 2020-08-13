@@ -242,20 +242,21 @@ public class TeamInfoController {
 
 	// 팀 검색 by 1) name 2) location 3) both
 	@ApiOperation(value = "팀 검색 by 1) name 2) location 3) both", response = List.class)
-	@PostMapping("/team/search/{condition}")
-	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition,
+	@PostMapping("/team/search/{condition}/{page}")
+	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition, @PathVariable int page,
 			@RequestBody Map<String, String> data) {
+		page = (page-1)*6;
 		List<TeamLocationDTO> list = new ArrayList<>();
 		if (condition.equals("name")) {
 			String name = data.get("name");
-			list = tService.searchTeamByName(name);
+			list = tService.searchTeamByName(name,page);
 		} else if (condition.equals("location")) {
 			String gu = data.get("gu");
-			list = tService.searchTeamByLocation(gu);
+			list = tService.searchTeamByLocation(gu,page);
 		} else if (condition.equals("both")) {
 			String name = data.get("name");
 			String gu = data.get("gu");
-			list = tService.searchTeamByBoth(name, gu);
+			list = tService.searchTeamByBoth(name, gu, page);
 		}
 		return list;
 	}
@@ -272,23 +273,6 @@ public class TeamInfoController {
 		System.out.println("check.............................");
 
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
-	}
-	
-	// 나의 팀 나가기
-	@ApiOperation(value = "나의 팀 나가기.", response = String.class)
-	@DeleteMapping("/team/my/{teamID}/{userID}")
-	public ResponseEntity<Map<String, Object>> deletemyteam(@PathVariable int teamID,@PathVariable int userID ) {
-		ResponseEntity<Map<String, Object>> entity = null;
-		try {
-			UserTeamConnDto utc = new UserTeamConnDto(teamID, userID);
-			tService.deletemyteam(utc);
-			System.out.println("deletemyteam 호출 삭제에에에에ㅔ --------------");
-			int result = 	tService.deletemyteam(utc);
-			entity = handleSuccess(teamID + "가 삭제되었습니다.");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
-		}
-		return entity;
 	}
 
 	// ----------------team info---------------------------
@@ -354,12 +338,11 @@ public class TeamInfoController {
 	@DeleteMapping("/team/formation/{teamID}/{formCode}")
 	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int teamID, @PathVariable int formCode) {
 		ResponseEntity<Map<String, Object>> entity = null;
-		
 		try {
 			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
 			tService.deleteformation(form);
 			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
-			int result = 	tService.deleteformation(form);
+			// int result = tService.deleteformation(teamID);
 			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
