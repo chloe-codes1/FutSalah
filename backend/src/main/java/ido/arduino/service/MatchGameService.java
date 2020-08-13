@@ -14,6 +14,6 @@ public interface MatchGameService {
 
 	
 	List<MatchDto> alloption();
-	List<MatchDto> simpleoption();
-	int insertmatch(MatchDto match);
+	List<MatchSimpleDto> simpleoption();
+
 }
