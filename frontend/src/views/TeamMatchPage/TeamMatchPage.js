@@ -25,6 +25,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import MatchSearch from "./MatchSearch.js";
 import MatchCard from "./MatchCard.js";
+import ReceivedMatch from "./ReceivedMatch.js";
+import SentMatch from "./SentMatch.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import SwipeableViews from "react-swipeable-views";
 import Typography from "@material-ui/core/Typography";
@@ -216,12 +218,16 @@ function TeamMatchPage() {
               ),
             },
             {
-              tabName: "매칭 등록",
-              tabContent: <p className={classes.textCenter}>등록 목록</p>,
+              tabName: "받은 신청",
+              tabContent: <ReceivedMatch />,
             },
             {
-              tabName: "매칭 신청 관리",
-              tabContent: <p className={classes.textCenter}>신청 관리</p>,
+              tabName: "보낸 신청",
+              tabContent: <SentMatch />,
+            },
+            {
+              tabName: "예정된 매치",
+              tabContent: <p className={classes.textCenter}>예정된 매치</p>,
             },
           ]}
         />
