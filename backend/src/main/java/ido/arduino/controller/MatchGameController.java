@@ -49,11 +49,12 @@ public class MatchGameController {
 	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer="List")
 	@GetMapping("/match")
 	public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date,@RequestParam int time,@RequestParam int isBooked,
-			@RequestParam String gu,
+			@RequestParam int locationID,
 			@RequestParam int formCode) throws Exception {
 		
+		
 		logger.debug("alloption - 호출");
-		MatchRequestDto matchrequest = new MatchRequestDto(date,time, isBooked,gu,formCode);
+		MatchRequestDto matchrequest = new MatchRequestDto(date,time, isBooked,locationID,formCode);
 		System.out.println("alloption호추추루룰...............................................");
 
 
@@ -63,11 +64,11 @@ public class MatchGameController {
 	
 	@ApiOperation(value = "일부 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer="List")
 	@GetMapping("/match2")
-	public ResponseEntity<List<MatchDto>> simpleoption(@RequestParam Date date,@RequestParam String gu ) throws Exception {
+	public ResponseEntity<List<MatchDto>> simpleoption(@RequestParam Date date,@RequestParam int locationID ) throws Exception {
 		logger.debug("simpleoption - 호출");
 		System.out.println("simpleoption 호추추루룰...........................................................");
 
-		MatchRequestSimpleDto matchrequest = new MatchRequestSimpleDto(date,gu);
+		MatchRequestSimpleDto matchrequest = new MatchRequestSimpleDto(date,locationID);
 		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(matchrequest), HttpStatus.OK);
 	}
 
