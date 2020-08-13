@@ -1,7 +1,7 @@
 import { container } from "assets/jss/material-kit-react.js";
 import { defaultFont } from "assets/jss/material-kit-react.js";
 
-const AdminMatchInfoStyle = {
+const AdminStyle = {
   container: {
     ...container,
     paddingTop: 100,
@@ -73,15 +73,5 @@ const AdminMatchInfoStyle = {
     padding: "0",
     margin: "0",
   },
-  qrReaderContainer: {
-    width: "25%",
-    height: "25%",
-  },
-  bottomButtonSet: {
-    justifyContent: "center",
-  },
-  bottomButton: {
-    margin: "5px",
-  },
 };
-export default AdminMatchInfoStyle;
+export default AdminStyle;

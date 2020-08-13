@@ -67,7 +67,15 @@ export default function AdminInfo(props) {
   const [arriveTimeInfo, setArriveTimeInfo] = useState(testArriveTimeInfo);
 
   // 이 경기장, 오늘 매치 리스트의 몇번째 경기인가?
-  const matchNo = match.params.id;
+  const initialMatchNo = Number(match.params.id);
+  // Prev, Next 버튼을 위해 matchNo를 State로 만듬
+  const [matchNo, setMatchNo] = useState(initialMatchNo);
+  console.log(matchNo);
+  // Prev, Next 매치 존재 여부
+  const [sizeOfMatch, setSizeOfMatch] = useState(0);
+  const [isPrevMatchExists, setIsPrevMatchExists] = useState(true);
+  const [isNextMatchExists, setIsNextMatchExists] = useState(true);
+  console.log(isPrevMatchExists, isNextMatchExists);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -76,13 +84,15 @@ export default function AdminInfo(props) {
   const date = dateInfo.getDate();
 
   // Match API 받아오기
-  const loadMatchInfo = async () => {
+  const loadMatchInfo = async (m) => {
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/${adminuser.stadiumID}`,
     })
       .then((res) => {
-        setMatchInfo(res.data[matchNo - 1]);
+        setSizeOfMatch(res.data.length);
+        setMatchInfo(res.data[m - 1]);
+        // matchNo가 1번이면 0번째 불러옴!
       })
       .catch((e) => {
         console.log("error", e);
@@ -92,11 +102,45 @@ export default function AdminInfo(props) {
   useEffect(() => {
     const stadiumID = window.sessionStorage.getItem("stadiumID");
     adminuser.stadiumID = stadiumID;
-    loadMatchInfo();
+    loadMatchInfo(matchNo);
+    adjacentMatch();
+    console.log("새로고침!");
   }, []);
 
   const toAdminInfo = () => {
     history.push(`/Admin/${adminuserinfo.stadiumID}`);
+  };
+
+  const toPrevMatch = async () => {
+    if (isPrevMatchExists) {
+      setMatchNo(matchNo - 1);
+      // 이안에선 matchNo가 아직 안바뀐 상태...
+      history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo - 1}`);
+      loadMatchInfo(matchNo - 1);
+    }
+  };
+
+  const toNextMatch = async () => {
+    if (isNextMatchExists) {
+      setMatchNo(matchNo + 1);
+      console.log(matchNo);
+      // 이안에선 matchNo가 아직 안바뀐 상태...
+      history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo + 1}`);
+      loadMatchInfo(matchNo + 1);
+    }
+  };
+
+  const adjacentMatch = () => {
+    if (matchNo >= 2) {
+      setIsPrevMatchExists(true);
+      if (matchNo < sizeOfMatch) {
+        setIsNextMatchExists(true);
+      } else {
+        setIsNextMatchExists(false);
+      }
+    } else {
+      setIsPrevMatchExists(false);
+    }
   };
 
   return (
@@ -173,9 +217,34 @@ export default function AdminInfo(props) {
               </GridItem>
             </GridItem>
           </GridContainer>
-          <Button size="sm" color="warning" onClick={toAdminInfo}>
-            목록으로
-          </Button>
+          <GridContainer className={classes.bottomButtonSet}>
+            <Button
+              size="sm"
+              color="primary"
+              onClick={toPrevMatch}
+              className={classes.bottomButton}
+            >
+              이전 경기
+            </Button>
+
+            <Button
+              size="sm"
+              color="warning"
+              onClick={toAdminInfo}
+              className={classes.bottomButton}
+            >
+              목록으로
+            </Button>
+
+            <Button
+              size="sm"
+              color="secondary"
+              onClick={toNextMatch}
+              className={classes.bottomButton}
+            >
+              다음 경기
+            </Button>
+          </GridContainer>
         </div>
       </Parallax>
       <Footer />

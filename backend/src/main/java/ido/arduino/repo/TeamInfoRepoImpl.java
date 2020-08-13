@@ -70,6 +70,12 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 		return template.update(ns + "updatemy", userID);
 
 	}
+	@Override
+	public int deletemyteam(UserTeamConnDto uteam) {
+		// TODO Auto-generated method stub
+		return template.delete(ns+"deletemyteam",uteam);
+	}
+
 
 	@Override
 	public int selectlast() {
