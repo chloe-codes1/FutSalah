@@ -65,5 +65,4 @@ public class MatchGameController {
 		resultMap.put("data", e.getMessage());
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
 }
