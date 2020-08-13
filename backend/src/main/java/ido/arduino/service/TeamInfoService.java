@@ -2,6 +2,7 @@ package ido.arduino.service;
 
 import java.util.List;
 
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.ResultDto;
@@ -24,6 +25,7 @@ public interface TeamInfoService {
 	//----------------myteam---------------------------
 	int insertmy(UserTeamConnDto uteam);
 	int updatemy(UserDTO userID);
+	int deletemyteam(UserTeamConnDto uteam);
 	List<MyTeamDto> selectAllmyteam(int id); // 나의 팀 목록
 	
 	//----------------findteam---------------------------
@@ -43,9 +45,9 @@ public interface TeamInfoService {
 	
 	
 	//----------------search team------------------------
-	List<TeamLocationDTO> searchTeamByName(String name);
-	List<TeamLocationDTO> searchTeamByLocation(String gu);
-	List<TeamLocationDTO> searchTeamByBoth(String name,String gu);
+	List<TeamLocationDTO> searchTeamByName(String name, int page);
+	List<TeamLocationDTO> searchTeamByLocation(String gu, int page);
+	List<TeamLocationDTO> searchTeamByBoth(String name,String gu, int page);
 
 
 	
@@ -53,10 +55,10 @@ public interface TeamInfoService {
 	
 	int insertformation(Formation form);
 	int updateformation(Formation form);
-	int deleteformation(int userID);
-	List<Formation> selectformation(); 
+	int deleteformation(DeleteFormationDto form);
+	List<Formation> selectformation(int teamID); 
 	
 	//----------------result game---------------------------
-	List<ResultDto> resultscore(); 
+	List<ResultDto> resultscore(int teamID); 
 
 }

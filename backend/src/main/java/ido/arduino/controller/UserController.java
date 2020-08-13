@@ -50,6 +50,7 @@ public class UserController {
 			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
 		}
 		System.out.println("current user?" + loggedUser);
+		
 		return loggedUser;
 	}
 

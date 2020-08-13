@@ -10,4 +10,5 @@ import ido.arduino.dto.LocationDto;
 public interface LocationMapper {
 	LocationDto getLocationInfo (int locationID);
 	List<LocationDto> getAllLocationInfo();
+	List<LocationDto> getLocationBySido(String sido);
 }

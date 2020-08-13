@@ -37,6 +37,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.MyTeamDto;
 import ido.arduino.dto.RequestDTO;
@@ -78,7 +79,7 @@ public class TeamInfoController {
 
 	@Autowired
 	RequestService rService;
-	
+
 	@Autowired
 	JavaMailSender javaMailSender;
 
@@ -100,7 +101,6 @@ public class TeamInfoController {
 		int teamID = data.get("teamID");
 		return tService.insertmy(new UserTeamConnDto(userID, teamID));
 	}
-
 
 	// 팀 생성하기
 	@ApiOperation(value = "새로운 팀 정보 등록.", response = String.class)
@@ -179,6 +179,13 @@ public class TeamInfoController {
 	public @ResponseBody int requestToJoin(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
+		int isRequested = rService.checkIfRequested(userID, teamID);
+
+		// 중복 신청 막기
+		if (isRequested == 1) {
+			return 2;
+		}
+
 		rService.insert(userID, teamID);
 		UserDTO requestFrom = uService.findByUserID(userID);
 		TeamLeaderDTO targetTeam = tService.getTeamLeaderInfo(teamID);
@@ -186,14 +193,14 @@ public class TeamInfoController {
 		emailService.setJavaMailSender(javaMailSender);
 		return emailService.requestToJoinMail(requestFrom, targetTeam);
 	}
-	
+
 	// 팀 가입 요청 수락
 	@PostMapping("/team/join/approve")
 	public @ResponseBody int approveToJoin(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
 		RequestDTO currentRequest = rService.getRequest(teamID, userID);
-		int requestID =currentRequest.getRequestID();
+		int requestID = currentRequest.getRequestID();
 		rService.delete(requestID);
 		tService.insertmy(new UserTeamConnDto(userID, teamID));
 		TeamInfoDto targetTeam = tService.getTeamInfo(teamID);
@@ -201,28 +208,27 @@ public class TeamInfoController {
 		emailService.setJavaMailSender(javaMailSender);
 		return emailService.approvedToJoinMail(currentRequest, targetTeam);
 	}
-	
+
 	// 팀 가입 요청 거절
 	@PostMapping("/team/join/refuse")
 	public @ResponseBody int refuseToJoin(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
 		RequestDTO currentRequest = rService.getRequest(teamID, userID);
-		int requestID =currentRequest.getRequestID();
+		int requestID = currentRequest.getRequestID();
 		TeamInfoDto targetTeam = tService.getTeamInfo(teamID);
 		rService.delete(requestID);
 		EmailServiceImpl emailService = new EmailServiceImpl();
 		emailService.setJavaMailSender(javaMailSender);
 		return emailService.refusedToJoinMail(currentRequest, targetTeam);
 	}
-	
+
 	// 해당 팀의 가입 요청 목록 가져오기
 	@GetMapping("/team/join/{teamID}")
-	public @ResponseBody List<RequestDTO> getAllRequests (@PathVariable int teamID){
+	public @ResponseBody List<RequestDTO> getAllRequests(@PathVariable int teamID) {
 		return rService.getAllRequests(teamID);
 	}
-	
-	
+
 	// ----------------find team---------------------------
 
 	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
@@ -234,25 +240,26 @@ public class TeamInfoController {
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
 
-	// 팀 검색 by 1) name 2) location 3) both	
+	// 팀 검색 by 1) name 2) location 3) both
 	@ApiOperation(value = "팀 검색 by 1) name 2) location 3) both", response = List.class)
-	@PostMapping("/team/search/{condition}")
-	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition,@RequestBody Map<String, String> data ) {
+	@PostMapping("/team/search/{condition}/{page}")
+	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition, @PathVariable int page,
+			@RequestBody Map<String, String> data) {
+		page = (page-1)*6;
 		List<TeamLocationDTO> list = new ArrayList<>();
 		if (condition.equals("name")) {
 			String name = data.get("name");
-			list = tService.searchTeamByName(name);
-		}else if (condition.equals("location")) {
+			list = tService.searchTeamByName(name,page);
+		} else if (condition.equals("location")) {
 			String gu = data.get("gu");
-			list = tService.searchTeamByLocation(gu);
-		}else if (condition.equals("both")) {
+			list = tService.searchTeamByLocation(gu,page);
+		} else if (condition.equals("both")) {
 			String name = data.get("name");
 			String gu = data.get("gu");
-			list = tService.searchTeamByBoth(name, gu);
+			list = tService.searchTeamByBoth(name, gu, page);
 		}
 		return list;
 	}
-	
 
 	// ----------------my team---------------------------
 	// 나의 팀 목록에서 확인하기
@@ -267,6 +274,24 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
+
+	
+	// 나의 팀 나가기
+		@ApiOperation(value = "나의 팀 나가기.", response = String.class)
+		@DeleteMapping("/team/my/{teamID}/{userID}")
+		public ResponseEntity<Map<String, Object>> deletemyteam(@PathVariable int teamID,@PathVariable int userID ) {
+			ResponseEntity<Map<String, Object>> entity = null;
+			try {
+				UserTeamConnDto utc = new UserTeamConnDto(teamID, userID);
+				tService.deletemyteam(utc);
+				System.out.println("deletemyteam 호출 삭제에에에에ㅔ --------------");
+				int result = 	tService.deletemyteam(utc);
+				entity = handleSuccess(teamID + "가 삭제되었습니다.");
+			} catch (RuntimeException e) {
+				entity = handleException(e);
+			}
+			return entity;
+		}
 
 	// ----------------team info---------------------------
 
@@ -301,6 +326,7 @@ public class TeamInfoController {
 		ResponseEntity<Map<String, Object>> entity = null;
 
 		try {
+
 			TeamInfoDto team = tService.getTeamInfo(form.getTeamID());
 			int result = tService.insertformation(form);
 			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
@@ -327,14 +353,15 @@ public class TeamInfoController {
 
 	// 팀 정보 삭제
 	@ApiOperation(value = "포메이션 정보 삭제.", response = String.class)
-	@DeleteMapping("/team/formation/{userID}")
-	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int userID) {
+	@DeleteMapping("/team/formation/{teamID}/{formCode}")
+	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int teamID, @PathVariable int formCode) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-
+			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
+			tService.deleteformation(form);
 			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
-			int result = tService.deleteformation(userID);
-			entity = handleSuccess(userID + "가 삭제되었습니다.");
+			// int result = tService.deleteformation(teamID);
+			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
 		}
@@ -342,28 +369,24 @@ public class TeamInfoController {
 	}
 
 	@ApiOperation(value = "포메이션 정보 반환한다.", response = List.class)
-	@GetMapping("/team/formation")
-	public ResponseEntity<List<Formation>> selectformation() throws Exception {
+	@GetMapping("/team/formation/{teamID}")
+	public ResponseEntity<List<Formation>> selectformation(@PathVariable int teamID) throws Exception {
 		logger.debug("selectformation - 호출");
 		System.out.println("호오오오추우울...........................................................");
 
-		return new ResponseEntity<List<Formation>>(tService.selectformation(), HttpStatus.OK);
+		return new ResponseEntity<List<Formation>>(tService.selectformation(teamID), HttpStatus.OK);
 	}
-	
-	
-	
-	//----------------result game---------------------------
+
+	// ----------------result game---------------------------
+	// 경기전적
 	@ApiOperation(value = "게임 결과 정보 반환한다.", response = List.class)
-	@GetMapping("/team/result")
-	public ResponseEntity<List<ResultDto>> resultscore() throws Exception {
+	@GetMapping("/team/result/{teamID}")
+	public ResponseEntity<List<ResultDto>> resultscore(@PathVariable int teamID) throws Exception {
 		logger.debug("resultscore - 호출");
 		System.out.println("resultscore호추추루룰...........................................................");
 
-		return new ResponseEntity<List<ResultDto>>(tService.resultscore(), HttpStatus.OK);
+		return new ResponseEntity<List<ResultDto>>(tService.resultscore(teamID), HttpStatus.OK);
 	}
-	
-	
-	
 
 	// ----------------QR코드 생성---------------------------
 	// QR코드 생성
@@ -374,8 +397,8 @@ public class TeamInfoController {
 		MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor, qrLightColor); // 진한색, 연한색
 		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
 
-//		File file = new File("c:\\qrtest.jpg");        // 파일의 이름을 설정한다
-//        ImageIO.write(qrImage, "jpg", file);             // write메소드를 이용해 파일을 만든다
+		// File file = new File("c:\\qrtest.jpg"); // 파일의 이름을 설정한다
+		// ImageIO.write(qrImage, "jpg", file); // write메소드를 이용해 파일을 만든다
 
 		String title = "QR" + text;
 		File temp = File.createTempFile(title, ".png");

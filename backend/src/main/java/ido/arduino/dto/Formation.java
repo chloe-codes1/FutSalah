@@ -14,5 +14,6 @@ public class Formation {
 	private int teamID;
 	private int formCode;
 	private int grid;
-
+	private String name;
+	private String position;
 }

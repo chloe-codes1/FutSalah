@@ -15,38 +15,38 @@ export default function Formation({
   movable,
 }) {
   const classes = useStyles();
-  const movePlayer = (goalIdx, player) => {
+  const movePlayer = (goalGrid, player) => {
     for (let i = 0; i < playerPos.length; i++) {
-      if (player.idx === playerPos[i].idx) {
-        // i번째 선수의 idx를 goalIdx로 변경
+      if (player.grid === playerPos[i].grid) {
+        // i번째 선수의 grid goalGrid로 변경
         const nextPlayerPos = [...playerPos];
 
         nextPlayerPos[i] = {
           ...playerPos[i],
-          idx: goalIdx,
+          grid: goalGrid,
         };
         setPlayerPos(nextPlayerPos);
         return;
       }
     }
     if (
-      playerPos.find((element) => element.userid === player.userid) ===
+      playerPos.find((element) => element.userID === player.userID) ===
         undefined &&
       playerPos.length < memberNum
     )
-      setPlayerPos([...playerPos, Object.assign(player, { idx: goalIdx })]);
+      setPlayerPos([...playerPos, Object.assign(player, { grid: goalGrid })]);
   };
 
-  const canMove = (idx) => {
+  const canMove = (grid) => {
     for (let i = 0; i < playerPos.length; i++) {
-      if (idx === playerPos[i].idx) return false;
+      if (grid === playerPos[i].grid) return false;
     }
     return true;
   };
 
-  const renderPiece = (idx, movable) => {
+  const renderPiece = (grid, movable) => {
     for (let i = 0; i < playerPos.length; i++) {
-      if (playerPos[i].idx === idx) {
+      if (playerPos[i].grid === grid) {
         return <Player movable={movable} player={playerPos[i]} inField />;
       }
     }

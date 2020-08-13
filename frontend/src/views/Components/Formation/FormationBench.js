@@ -1,11 +1,13 @@
-import React from "react";
-import { useDrop } from "react-dnd";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Overlay } from "./Overlay";
+import React from "react";
+import benchImg from "assets/img/bench.PNG";
+import { useDrop } from "react-dnd";
 
 export const FormationBench = ({ removePlayer }) => {
   const [{ isOver }, drop] = useDrop({
     accept: "position",
-    drop: (item) => removePlayer(item.player.idx),
+    drop: (item) => removePlayer(item.player.grid),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -18,21 +20,12 @@ export const FormationBench = ({ removePlayer }) => {
         position: "relative",
         width: "100%",
         height: "100%",
-        backgroundColor: "gray",
+        backgroundColor: "transparent",
+        backgroundImage: `url(${benchImg})`,
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
       }}
     >
-      <div
-        style={{
-          fontSize: 18,
-          width: "100%",
-          height: "100%",
-          textAlign: "center",
-        }}
-      >
-        <strong>벤치</strong>
-        <br />
-        <span style={{ fontSize: 5 }}>선수를 빼려면 여기에 드롭</span>
-      </div>
       {isOver && <Overlay color="crimson" />}
     </div>
   );

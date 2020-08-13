@@ -23,6 +23,11 @@ import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
 // import teamImage from "assets/img/basicTeamImg.jpg";
 import teamImage from "assets/img/basicTeamImg1.jpg";
 
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+
 const useStyles = makeStyles(styles);
 
 export default function SearchTeamPage(props) {
@@ -30,7 +35,11 @@ export default function SearchTeamPage(props) {
   const { ...rest } = props;
 
   const [pageNum, setPageNum] = useState(1);
-  const [region, setRegion] = useState("전체");
+  const [sido, setSido] = useState("전체");
+  const [gu, setGu] = useState("");
+  const [sidoList, setSidoList] = useState(["전체"]);
+  const [guList, setGuList] = useState([]);
+
   const [searchWord, setSearchWord] = useState("");
   const [teamList, setTeamList] = useState([]);
 
@@ -38,6 +47,25 @@ export default function SearchTeamPage(props) {
     // 전체 데이터 받아오기
     // 나중에 페이징되는 데이터 받기로 변경하기
     searchAll();
+  }, []);
+
+  // 지역 목록 불러오기
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
+    })
+      .then((res) => {
+        const list = [];
+        res.data.map((location) => {
+          if (list.find((sido) => sido === location.sido) === undefined)
+            list.push(location.sido);
+        });
+        setSidoList(list);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   }, []);
 
   // 전체 페이지 수 1로 고정
@@ -67,32 +95,105 @@ export default function SearchTeamPage(props) {
     if (pageNum !== totalPage) setPageNum(pageNum + 1);
   };
 
-  // 팀 전체 검색
+  const sidoChange = (event) => {
+    // 시도 이름으로 구, locationID 불러오기
+    setSido(event.target.value);
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
+      data: {
+        sido: event.target.value,
+      },
+    })
+      .then((res) => {
+        const list = [];
+        res.data.map((location) => {
+          list.push(location.gu);
+        });
+        setGuList(list);
+        setGu("");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  const guChange = (event) => {
+    setGu(event.target.value);
+  };
+
+  // 팀 전체 목록 가져오기
   const searchAll = () => {
     axios
       .get(`${process.env.REACT_APP_SERVER_BASE_URL}/api/team`)
-      .then((response) => {
-        console.log(response.data);
-        setTeamList(response.data);
+      .then(async (res) => {
+        await res.data.map((teamInfo) => {
+          if (teamInfo.profileURL) {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL + "/" + teamInfo.profileURL;
+          } else {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL +
+              "/team-default-" +
+              Math.ceil(Math.random(1, 8)) +
+              ".png";
+          }
+        });
+
+        setTeamList(res.data);
       })
       .catch(() => {
         console.log("악 실패");
       });
   };
 
-  // 팀이름으로 검색
-  const searchByName = () => {
+  // 조건 검색
+  const searchByCondition = (condition) => {
     axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/search/${searchWord}`,
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/search/${condition}`,
+      data: {
+        name: searchWord,
+        gu: gu,
+      },
     })
-      .then((res) => {
-        console.log("search by name success");
+      .then(async (res) => {
+        // console.log("search by name success");
+        await res.data.map((teamInfo) => {
+          if (teamInfo.profileURL) {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL + "/" + teamInfo.profileURL;
+          } else {
+            teamInfo.profileURL =
+              process.env.REACT_APP_S3_BASE_URL +
+              "/team-default-" +
+              Math.ceil(Math.random(1, 8)) +
+              ".png";
+          }
+        });
         setTeamList(res.data);
       })
       .catch((e) => {
         console.log("error", e);
       });
+  };
+
+  // 검색
+  const search = () => {
+    let condition;
+
+    if (sido === "전체") {
+      // 이름으로만 검색
+      searchByCondition("name");
+    } else if (gu !== "") {
+      if (searchWord === "") {
+        searchByCondition("location");
+      } else {
+        searchByCondition("both");
+      }
+    } else {
+      alert("지역을 끝까지 선택해주세요!");
+    }
   };
 
   return (
@@ -120,53 +221,71 @@ export default function SearchTeamPage(props) {
         <div className={classes.container}>
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              position: "relative",
               zIndex: "2",
             }}
           >
-            <CustomDropdown
-              buttonText={region}
-              dropdownHeader="지역 목록"
-              buttonProps={{
-                className: classes.navLink,
-                color: "transparent",
-              }}
-              dropdownList={[
-                "전체",
-                "서울",
-                "경기",
-                "인천",
-                "강원",
-                "충청",
-                "전라",
-                "경상",
-                "제주",
-              ]}
-              setValue={(value) => {
-                setRegion(value);
-              }}
-            ></CustomDropdown>
-            <input
-              type="text"
-              style={{ lineHeight: "30px" }}
-              value={searchWord}
-              onChange={(e) => {
-                setSearchWord(e.target.value);
-              }}
-            />
-            <Button
-              color="info"
-              size="sm"
-              style={{ marginLeft: "10px" }}
-              onClick={() => {
-                if (searchWord === "") searchAll();
-                else searchByName();
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                position: "relative",
               }}
             >
-              검색
-            </Button>
+              <FormControl className={classes.formControl}>
+                <Select
+                  labelId="sido"
+                  id="sido-select"
+                  value={sido}
+                  onChange={sidoChange}
+                  inputProps={{
+                    classes: {
+                      icon: "white",
+                    },
+                  }}
+                >
+                  <MenuItem disabled value="">
+                    <em>시도</em>
+                  </MenuItem>
+                  <MenuItem value="전체">전체</MenuItem>
+                  {sidoList.map((s) => (
+                    <MenuItem value={s}>{s}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl className={classes.formControl}>
+                <Select
+                  labelId="gu"
+                  id="gu-select"
+                  value={gu}
+                  onChange={guChange}
+                >
+                  <MenuItem disabled value="">
+                    <em>시군구</em>
+                  </MenuItem>
+                  {guList.map((g) => (
+                    <MenuItem value={g}>{g}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <input
+                type="text"
+                style={{ lineHeight: "30px" }}
+                value={searchWord}
+                onChange={(e) => {
+                  setSearchWord(e.target.value);
+                }}
+              />
+              <Button
+                color="info"
+                size="sm"
+                style={{ marginLeft: "10px" }}
+                onClick={() => {
+                  search();
+                }}
+              >
+                검색
+              </Button>
+            </div>
           </div>
           <GridList spacing={15} cellHeight="auto" cols={3}>
             {teamList.map((t) =>
@@ -195,17 +314,8 @@ export default function SearchTeamPage(props) {
                           }}
                         >
                           <img
-                            src={teamImage}
+                            src={t.profileURL}
                             alt="..."
-                            // className={
-                            //   classes.imgRaised +
-                            //   " " +
-                            //   classes.img +
-                            //   " " +
-                            //   classes.imgRoundedCircle +
-                            //   " " +
-                            //   classes.imgFluid
-                            // }
                             style={{
                               borderRadius: "70%",
                               position: "absolute",
@@ -245,22 +355,22 @@ export default function SearchTeamPage(props) {
               )
             )}
           </GridList>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: "2",
-            position: "relative",
-            margin: "20vh auto",
-          }}
-        >
-          <Paginations
-            pages={makePagination(parseInt(pageNum / 11))}
-            color="info"
-            selected={pageNum}
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: "2",
+              position: "relative",
+              margin: "20vh auto",
+            }}
+          >
+            <Paginations
+              pages={makePagination(parseInt(pageNum / 11))}
+              color="info"
+              selected={pageNum}
+            />
+          </div>
         </div>
       </div>
       <Footer />

@@ -6,7 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.Formation;
 import ido.arduino.dto.LocationDto;
 
@@ -70,6 +70,12 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 		return template.update(ns + "updatemy", userID);
 
 	}
+	@Override
+	public int deletemyteam(UserTeamConnDto uteam) {
+		// TODO Auto-generated method stub
+		return template.delete(ns+"deletemyteam",uteam);
+	}
+
 
 	@Override
 	public int selectlast() {
@@ -96,23 +102,23 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	}
 
 	@Override
-	public int deleteformation(int userID) {
+	public int deleteformation(DeleteFormationDto form) {
 		// TODO Auto-generated method stub
-		return template.delete(ns + "deleteformation", userID);
+		return template.delete(ns + "deleteformation", form);
 	}
 
 	@Override
-	public List<Formation> selectformation() {
+	public List<Formation> selectformation(int teamID) {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"selectformation");
+		return template.selectList(ns+"selectformation", teamID);
 	}
 
 	
 	//----------------result game---------------------------
 	@Override
-	public List<ResultDto> resultscore() {
+	public List<ResultDto> resultscore(int teamID) {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"resultscore");
+		return template.selectList(ns+"resultscore",teamID);
 	}
 
 
