@@ -3,11 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="ido.arduino.mapper.MatchDto">
+<mapper namespace="ido.arduino.mapper.MatchRequestDto">
 
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
-	<select id="alloption" resultType="match">
+	<select id="alloption"  resultType="request">
 		select m.date , m.time, l.gu, m.isBooked,m.formCode, c.name from
 		matching m
 		left outer join court c on m.courtID = c.courtID
@@ -26,7 +26,7 @@
 
 	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
 
-	<select id="simpleoption" resultType="simple">
+	<select id="simpleoption" resultType="requestsimple">
 		select m.date , m.time,
 		l.gu, m.isBooked,m.formCode, c.name from matching m
 		left outer join
