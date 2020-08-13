@@ -10,4 +10,9 @@
 		WHERE m.state = 1 and m.courtID = #{stadium} and date = date_format(now(), '%Y-%m-%d') and m.homeTeamID = a.teamID and m.awayTeamID = b.teamID
 		order by m.time ASC
 	</select>
+	
+	<!-- locationID에 해당하는 구장들 정보 반환 -->
+	<select id="searchCourtByLocation" parameterType="int" resultType="CourtDTO">
+		select courtID, name from court where locationID=#{location}
+	</select>
 </mapper>
