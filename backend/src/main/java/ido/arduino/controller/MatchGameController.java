@@ -21,9 +21,9 @@ import ido.arduino.service.MatchGameService;
 import ido.arduino.service.TeamInfoService;
 import io.swagger.annotations.ApiOperation;
 
-
 @RestController
 @RequestMapping("/api")
+
 public class MatchGameController {
 	private static final Logger logger = LoggerFactory.getLogger(MatchGameController.class);
 	private static final String SUCCESS = "success";
@@ -95,5 +95,4 @@ public class MatchGameController {
 		resultMap.put("data", e.getMessage());
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
 }

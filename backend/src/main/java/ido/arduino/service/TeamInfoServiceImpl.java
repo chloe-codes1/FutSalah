@@ -124,6 +124,7 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	@Override
 	public int deleteCrew(int teamID, int userID) {
 		int result = teamMapper.deleteformation2(teamID, userID);
+
 		System.out.println(result);
 		int result2 = teamMapper.deleteCrew(teamID, userID);
 		if (result == 1 && result2 == 1) {
@@ -131,7 +132,6 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		} else {
 			throw new RuntimeException();
 		}
-
 	}
 
 	@Override
