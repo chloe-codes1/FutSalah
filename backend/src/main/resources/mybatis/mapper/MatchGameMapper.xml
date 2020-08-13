@@ -13,7 +13,7 @@
 		left outer join court c on m.courtID = c.courtID
 		left outer
 		join location l on m.locationID = l.locationID
-
+ 
 		where
 			l.locationID = #{locationID}
 			and m.date LIKE CONCAT('%',#{date},'%')
@@ -33,7 +33,8 @@
 		court c on m.courtID = c.courtID
 		left outer join location l on
 		m.locationID = l.locationID
-		where l.locationID = #{locationID}
+		where 
+		l.locationID = #{locationID}
 		and m.date LIKE CONCAT('%',#{date},'%')
 
 

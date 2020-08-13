@@ -52,6 +52,7 @@ public class MatchGameController {
 			@RequestParam int locationID,
 			@RequestParam int formCode) throws Exception {
 		
+		
 		logger.debug("alloption - 호출");
 		MatchRequestDto matchrequest = new MatchRequestDto(date,time, isBooked,locationID,formCode);
 		System.out.println("alloption호추추루룰...............................................");
