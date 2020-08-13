@@ -273,23 +273,6 @@ public class TeamInfoController {
 
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
-	
-	// 나의 팀 나가기
-	@ApiOperation(value = "나의 팀 나가기.", response = String.class)
-	@DeleteMapping("/team/my/{teamID}/{userID}")
-	public ResponseEntity<Map<String, Object>> deletemyteam(@PathVariable int teamID,@PathVariable int userID ) {
-		ResponseEntity<Map<String, Object>> entity = null;
-		try {
-			UserTeamConnDto utc = new UserTeamConnDto(teamID, userID);
-			tService.deletemyteam(utc);
-			System.out.println("deletemyteam 호출 삭제에에에에ㅔ --------------");
-			int result = 	tService.deletemyteam(utc);
-			entity = handleSuccess(teamID + "가 삭제되었습니다.");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
-		}
-		return entity;
-	}
 
 	// ----------------team info---------------------------
 
@@ -354,12 +337,11 @@ public class TeamInfoController {
 	@DeleteMapping("/team/formation/{teamID}/{formCode}")
 	public ResponseEntity<Map<String, Object>> deleteformation(@PathVariable int teamID, @PathVariable int formCode) {
 		ResponseEntity<Map<String, Object>> entity = null;
-		
 		try {
 			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
 			tService.deleteformation(form);
 			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
-			int result = 	tService.deleteformation(form);
+			// int result = tService.deleteformation(teamID);
 			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
