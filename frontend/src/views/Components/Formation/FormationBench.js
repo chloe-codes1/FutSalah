@@ -1,10 +1,8 @@
-import React from "react";
-import { useDrop } from "react-dnd";
-import { Overlay } from "./Overlay";
-
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-
-import benchImg from "assets/img/bench.png";
+import { Overlay } from "./Overlay";
+import React from "react";
+import benchImg from "assets/img/bench.PNG";
+import { useDrop } from "react-dnd";
 
 export const FormationBench = ({ removePlayer }) => {
   const [{ isOver }, drop] = useDrop({
