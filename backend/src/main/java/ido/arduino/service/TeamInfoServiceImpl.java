@@ -71,6 +71,13 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		// TODO Auto-generated method stub
 		return tRepo.insertmy(uteam);
 	}
+	
+	@Override
+	public int deletemyteam(UserTeamConnDto uteam) {
+		// TODO Auto-generated method stub
+		return tRepo.deletemyteam(uteam);
+	}
+
 
 	// ----------------find team---------------------------
 	@Override
