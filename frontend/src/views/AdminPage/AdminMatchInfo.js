@@ -22,6 +22,23 @@ import AdminUserContext from "../../contexts/AdminUserContext";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminMatchInfoPage.js";
 
+// Pusher
+// npm install pusher-js @react-native-community/netinfo
+import Pusher from 'pusher-js';
+
+// Pusher
+Pusher.logToConsole = true;
+
+var pusher = new Pusher('d497d1d45ba8c0d76122', {
+  cluster: 'ap3'
+});
+
+var channel = pusher.subscribe('channel');
+channel.bind('event', function (data) {
+  alert(JSON.stringify(data));
+});
+
+
 const useStyles = makeStyles(styles);
 
 export default function AdminInfo(props) {
@@ -98,6 +115,11 @@ export default function AdminInfo(props) {
   const toAdminInfo = () => {
     history.push(`/Admin/${adminuserinfo.stadiumID}`);
   };
+
+  var channel = pusher.subscribe('channel');
+  channel.bind('event', function (data) {
+    alert(JSON.stringify(data));
+  });
 
   return (
     <div>
