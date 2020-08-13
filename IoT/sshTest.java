@@ -1,40 +1,25 @@
-package ido.arduino;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-@ServletComponentScan
-@SpringBootApplication
-public class BackendApplication {
-	private static final String PROPERTIES = "classpath:/mysql.yml" + ",classpath:/aws.yml"
-			+ ",classpath:/application.properties";
+public class sshTest {
 
 	public static void main(String[] args) throws JSchException, InterruptedException {
-		System.setProperty("spring.config.location", PROPERTIES);
-		SpringApplication.run(BackendApplication.class, args);
 
-		// 경기 진행 중 프론트까지 연동해서 끝내면 싹 지우겠습니다! 그때까지 살려주세요..
-		
-		
 		// python 실행
 		test1();
 
 		System.out.println("Sleeping...");
 		Thread.sleep(10000);
 		System.out.println("Rerun...");
-		
+
 		// python 종료
 		test2();
-		
-		
-		
+
+
+
 	}
 
 	public static void test2() throws JSchException {
@@ -47,7 +32,7 @@ public class BackendApplication {
 		System.out.println("==> Connectiong to " + host);
 		Session session = null;
 		Channel channel = null;
-		
+
 		try {
 			// JSch 객체 생성
 			JSch jsch = new JSch();
@@ -71,14 +56,14 @@ public class BackendApplication {
 			// SSH용 채널 객체로 캐스팅
 			ChannelExec channelExec = (ChannelExec) channel;
 			System.out.println("==> Connected to " + host);
-			
-			
+
+
 			System.out.println("kill python3");
 			channelExec.setCommand("sudo killall python3");
 			channelExec.connect();
 
 		} catch(Exception e) {
-			
+
 		}
 		finally {
 			if (channel != null) {
