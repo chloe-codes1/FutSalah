@@ -47,29 +47,29 @@
 	</select>
 
 	<!-- 팀 검색 by name -->
-	<select id="searchTeamByName" parameterType="String"
+	<select id="searchTeamByName" parameterType="map"
 		resultType="TeamLocationDTO">
 		SELECT * FROM team
 		INNER JOIN location ON
 		location.locationID = team.locationID
-		WHERE team.name LIKE CONCAT('%', #{name},'%')
+		WHERE team.name LIKE CONCAT('%', #{name},'%') LIMIT #{page}, 6 
 	</select>
 
 
 	<!-- 팀 검색 by location -->
-	<select id="searchTeamByLocation" parameterType="String"
+	<select id="searchTeamByLocation" parameterType="map"
 		resultType="TeamLocationDTO">
 		SELECT * FROM team
 		INNER JOIN location ON
 		location.locationID = team.locationID
-		WHERE location.gu = #{gu}
+		WHERE location.gu = #{gu} LIMIT #{page}, 6
 	</select>
 
 	<!-- 팀 검색 by name & location -->
 	<select id="searchTeamByBoth" parameterType="map" resultType="TeamLocationDTO">
 		SELECT * FROM team
 		INNER JOIN location ON location.locationID = team.locationID
-		WHERE team.name LIKE CONCAT('%', #{name},'%') AND location.gu = #{gu}
+		WHERE team.name LIKE CONCAT('%', #{name},'%') AND location.gu = #{gu} LIMIT #{page}, 6
 	</select>
 
 	<!-- 현재 가장 큰 teamID 값 반환 -->
