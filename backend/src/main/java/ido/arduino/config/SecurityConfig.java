@@ -19,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/api/login", "/api/user", "/api/user/*", "/api/user/upload/*", "/api/user/check", "/api/team",
 			"/api/team/*", "/api/team/check/*", "/api/team/member/*", "/api/team/search/*", "/api/team/upload/*",
 			"/api/team/join/*", "/api/team/formation/*", "/api/team/formation/*/*", "/api/match/fsearch/*",
-			"/api/location", "/api/location/*", "/api/team/result/*", "/api/courtLogin","/api/match","/api/match2",
+			"/api/location", "/api/location/*", "/api/team/result/*", "/api/courtLogin",
 			// assets 허용
 			"assets/*" };
 

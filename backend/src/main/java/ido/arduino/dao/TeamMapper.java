@@ -30,7 +30,9 @@ public interface TeamMapper {
 	void uploadProfileImage(int teamID, String uniqueFileName);
 
 	int deleteCrew(int teamID, int userID);
+
 	int deleteformation2(int teamID, int userID);
+
 	int getNumberOfCrews(int teamID);
 
 	int getNextLeader(int userID, int teamID);

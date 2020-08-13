@@ -90,12 +90,6 @@
 		WHERE userID = #{userID} AND teamID = #{teamID}
 	</delete>
 	
-	<!--팀원 방출시 포메이션 삭제 -->
-	<delete id="deleteformation2" parameterType="map">
-		delete from formation
-		where teamID= #{teamID} and userID =#{userID};
-	</delete>
-	
 	<!-- 팀원 수 세기 -->
 	<select id="getNumberOfCrews" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM userteamconn WHERE teamID=#{teamID}
