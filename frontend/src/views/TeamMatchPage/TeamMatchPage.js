@@ -25,11 +25,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import MatchSearch from "./MatchSearch.js";
 import MatchCard from "./MatchCard.js";
-import NavPills from "components/NavPills/NavPills.js";
+import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import SwipeableViews from "react-swipeable-views";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 const initialState = [
@@ -155,7 +152,7 @@ function TeamMatchPage() {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 400,
+          height: 100,
           color: "white",
         }}
       />
@@ -172,37 +169,62 @@ function TeamMatchPage() {
         </div>
       </Parallax>
 
-      <div className={classNames(classes.main, classes.mainRaised)}>
-        <div className={classes.container}>
-          <MatchSearch />
-          <Divider />
-          <br />
-          {matchingList.length === 0 && (
-            <Grid container justify="center">
-              <Grid item>
-                <h5>현재 매칭중인 팀이 존재하지 않습니다.</h5>
-              </Grid>
-            </Grid>
-          )}
-          {!(matchingList.length === 0) &&
-            matchingList.map((match, index) => {
-              if ((index + 1) % 3 === 0) {
-                return (
-                  <Grid container justify="center" spacing={3}>
-                    <Grid item>
-                      <MatchCard match={matchingList[index - 2]} />
+      <div
+        className={classNames(classes.main, classes.mainRaised)}
+        style={{
+          width: "75%",
+          margin: "-100px auto 50px auto",
+        }}
+      >
+        <CustomTabs
+          plainTabs
+          headerColor="primary"
+          tabs={[
+            {
+              tabName: "매칭 검색",
+              tabContent: (
+                <div className={classes.container} style={{ height: "750px" }}>
+                  <MatchSearch />
+                  <Divider />
+                  <br />
+                  {matchingList.length === 0 && (
+                    <Grid container justify="center">
+                      <Grid item>
+                        <h5>현재 매칭중인 팀이 존재하지 않습니다.</h5>
+                      </Grid>
                     </Grid>
-                    <Grid item>
-                      <MatchCard match={matchingList[index - 1]} />
-                    </Grid>
-                    <Grid item>
-                      <MatchCard match={matchingList[index]} />
-                    </Grid>
-                  </Grid>
-                );
-              }
-            })}
-        </div>
+                  )}
+                  {!(matchingList.length === 0) &&
+                    matchingList.map((match, index) => {
+                      if ((index + 1) % 3 === 0) {
+                        return (
+                          <Grid container justify="center" spacing={3}>
+                            <Grid item>
+                              <MatchCard match={matchingList[index - 2]} />
+                            </Grid>
+                            <Grid item>
+                              <MatchCard match={matchingList[index - 1]} />
+                            </Grid>
+                            <Grid item>
+                              <MatchCard match={matchingList[index]} />
+                            </Grid>
+                          </Grid>
+                        );
+                      }
+                    })}
+                </div>
+              ),
+            },
+            {
+              tabName: "매칭 등록",
+              tabContent: <p className={classes.textCenter}>등록 목록</p>,
+            },
+            {
+              tabName: "매칭 신청 관리",
+              tabContent: <p className={classes.textCenter}>신청 관리</p>,
+            },
+          ]}
+        />
       </div>
       <Footer />
     </div>
