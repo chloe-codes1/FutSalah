@@ -19,11 +19,11 @@ public interface TeamMapper {
 
 	List<UserDTO> getAllCrewInfo(int teamID);
 
-	List<TeamLocationDTO> searchTeamByName(String name);
+	List<TeamLocationDTO> searchTeamByName(String name, int page);
 
-	List<TeamLocationDTO> searchTeamByLocation(String gu);
+	List<TeamLocationDTO> searchTeamByLocation(String gu, int page);
 
-	List<TeamLocationDTO> searchTeamByBoth(String name, String gu);
+	List<TeamLocationDTO> searchTeamByBoth(String name, String gu, int page);
 
 	int getNextTeamId();
 

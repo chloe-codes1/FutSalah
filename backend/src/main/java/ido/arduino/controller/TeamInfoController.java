@@ -242,20 +242,21 @@ public class TeamInfoController {
 
 	// 팀 검색 by 1) name 2) location 3) both
 	@ApiOperation(value = "팀 검색 by 1) name 2) location 3) both", response = List.class)
-	@PostMapping("/team/search/{condition}")
-	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition,
+	@PostMapping("/team/search/{condition}/{page}")
+	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition, @PathVariable int page,
 			@RequestBody Map<String, String> data) {
+		page = (page-1)*6;
 		List<TeamLocationDTO> list = new ArrayList<>();
 		if (condition.equals("name")) {
 			String name = data.get("name");
-			list = tService.searchTeamByName(name);
+			list = tService.searchTeamByName(name,page);
 		} else if (condition.equals("location")) {
 			String gu = data.get("gu");
-			list = tService.searchTeamByLocation(gu);
+			list = tService.searchTeamByLocation(gu,page);
 		} else if (condition.equals("both")) {
 			String name = data.get("name");
 			String gu = data.get("gu");
-			list = tService.searchTeamByBoth(name, gu);
+			list = tService.searchTeamByBoth(name, gu, page);
 		}
 		return list;
 	}

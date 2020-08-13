@@ -90,18 +90,18 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public List<TeamLocationDTO> searchTeamByName(String name) {
-		return teamMapper.searchTeamByName(name);
+	public List<TeamLocationDTO> searchTeamByName(String name , int page) {
+		return teamMapper.searchTeamByName(name, page);
 	}
 
 	@Override
-	public List<TeamLocationDTO> searchTeamByLocation(String gu) {
-		return teamMapper.searchTeamByLocation(gu);
+	public List<TeamLocationDTO> searchTeamByLocation(String gu, int page) {
+		return teamMapper.searchTeamByLocation(gu, page);
 	}
 
 	@Override
-	public List<TeamLocationDTO> searchTeamByBoth(String name, String gu) {
-		return teamMapper.searchTeamByBoth(name, gu);
+	public List<TeamLocationDTO> searchTeamByBoth(String name, String gu, int page) {
+		return teamMapper.searchTeamByBoth(name, gu, page);
 	}
 
 	@Override
