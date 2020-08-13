@@ -71,8 +71,7 @@
 		INNER JOIN location ON
 		location.locationID = t.locationID
 		WHERE
-		location.gu = #{gu} LIMIT
-		6
+		location.gu = #{gu} LIMIT 6
 		OFFSET #{page}
 	</select>
 

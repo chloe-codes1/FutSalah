@@ -7,14 +7,18 @@ import CardFooter from "components/Card/CardFooter.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Footer from "components/Footer/Footer.js";
+import FormControl from "@material-ui/core/FormControl";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridList from "@material-ui/core/GridList";
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
+import InputLabel from "@material-ui/core/InputLabel";
 import { Link } from "react-router-dom";
+import MenuItem from "@material-ui/core/MenuItem";
 import Paginations from "components/Pagination/Pagination.js";
+import Select from "@material-ui/core/Select";
 import axios from "axios";
 import bgImage from "assets/img/searchTeam-bg.jpg";
 // @material-ui/core components
@@ -22,11 +26,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
 // import teamImage from "assets/img/basicTeamImg.jpg";
 import teamImage from "assets/img/basicTeamImg1.jpg";
-
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles(styles);
 
@@ -390,7 +389,7 @@ export default function SearchTeamPage(props) {
             </div>
           ) : (
             <div className={classes.container}>
-              <h1>일치하는 검색 결과가 없습니다...</h1>
+              <h3 style={{textAlign: "center"}}>일치하는 검색 결과가 없습니다.</h3>
             </div>
           )}
         </div>
