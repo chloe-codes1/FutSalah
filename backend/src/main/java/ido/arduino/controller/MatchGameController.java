@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.TeamInfoDto;
@@ -19,6 +21,9 @@ import ido.arduino.service.MatchGameService;
 import ido.arduino.service.TeamInfoService;
 import io.swagger.annotations.ApiOperation;
 
+
+@RestController
+@RequestMapping("/api")
 public class MatchGameController {
 	private static final Logger logger = LoggerFactory.getLogger(MatchGameController.class);
 	private static final String SUCCESS = "success";
