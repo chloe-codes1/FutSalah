@@ -13,9 +13,9 @@
 		left outer join court c on m.courtID = c.courtID
 		left outer
 		join location l on m.locationID = l.locationID
-
+ 
 		where
-			l.gu LIKE CONCAT('%',#{gu},'%')
+			l.locationID = #{locationID}
 			and m.date LIKE CONCAT('%',#{date},'%')
 			and m.time=#{time}
 			and m.isBooked =#{isBooked}
@@ -33,7 +33,8 @@
 		court c on m.courtID = c.courtID
 		left outer join location l on
 		m.locationID = l.locationID
-		where l.gu LIKE CONCAT('%',#{gu},'%')
+		where 
+		l.locationID = #{locationID}
 		and m.date LIKE CONCAT('%',#{date},'%')
 
 
