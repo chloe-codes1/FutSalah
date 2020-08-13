@@ -123,8 +123,14 @@
 	<!-- 포메이션 리스트출력 -->
 	<select id="selectformation" resultType="formation">
 		select f.*, u.position,
+<<<<<<< HEAD
       u.name from formation f, user u
       where f.userID= u.userID and f.teamID =#{teamID}
+=======
+		u.name from formation f, user u
+		where f.userID= u.userID and f.teamID
+		=#{teamID}
+>>>>>>> 92873766381178c79bdb8b8745f38e8cbf4fcc70
 	</select>
 
 
@@ -141,7 +147,8 @@
 		matching.homeTeamID,
 		t1.name as hometeam,
 		matching.awayTeamID,
-		t2.name as awayteam,
+		t2.name as
+		awayteam,
 		result.homeScore,
 		result.awayScore
 		from result ,
@@ -149,7 +156,8 @@
 		team as t2 ,
 		matching
 		where result.matchID = matching.matchID
-		and matching.homeTeamID = t1.teamID
+		and
+		matching.homeTeamID = t1.teamID
 		and matching.awayTeamID = t2.teamID) c
 		where homeTeamID = #{teamID} or awayTeamID = #{teamID};
 

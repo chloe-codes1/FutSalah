@@ -24,9 +24,15 @@ public class MatchGameServiceImpl implements MatchGameService{
 	}
 
 	@Override
-	public List<MatchSimpleDto> simpleoption() {
+	public List<MatchDto> simpleoption() {
 		// TODO Auto-generated method stub
 		return mRepo.simpleoption();
+	}
+
+	@Override
+	public int insertmatch(MatchDto match) {
+		// TODO Auto-generated method stub
+		return mRepo.insertmatch(match);
 	}
 
 }
