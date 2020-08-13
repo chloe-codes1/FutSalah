@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ido.arduino.dto.MatchDto;
-import ido.arduino.dto.MatchSimpleDto;
+import ido.arduino.dto.MatchRequestDto;
+import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.repo.MatchGameRepo;
 
 @Service
@@ -18,15 +19,15 @@ public class MatchGameServiceImpl implements MatchGameService{
 	
 	
 	@Override
-	public List<MatchDto> alloption() {
+	public List<MatchDto> alloption(MatchRequestDto matchrequest) {
 		// TODO Auto-generated method stub
-		return mRepo.alloption();
+		return mRepo.alloption(matchrequest);
 	}
 
 	@Override
-	public List<MatchDto> simpleoption() {
+	public List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest) {
 		// TODO Auto-generated method stub
-		return mRepo.simpleoption();
+		return mRepo.simpleoption(matchrequest);
 	}
 
 	@Override

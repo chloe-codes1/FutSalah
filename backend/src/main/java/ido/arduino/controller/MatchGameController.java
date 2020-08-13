@@ -1,5 +1,6 @@
 package ido.arduino.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchRequestDto;
+import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.service.MatchGameService;
 import ido.arduino.service.TeamInfoService;
 import io.swagger.annotations.ApiOperation;
+
+@RestController
+@RequestMapping("/api")
 
 public class MatchGameController {
 	private static final Logger logger = LoggerFactory.getLogger(MatchGameController.class);
@@ -37,27 +46,33 @@ public class MatchGameController {
 	// ----------------Matching game waiting ---------------------------
 	
 	
-	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = List.class)
+	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer="List")
 	@GetMapping("/match")
-	public ResponseEntity<List<MatchDto>> alloption() throws Exception {
+	public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date,@RequestParam int time,@RequestParam int isBooked,
+			@RequestParam String gu,
+			@RequestParam int formCode) throws Exception {
+		
 		logger.debug("alloption - 호출");
-		System.out.println("alloption호추추루룰...........................................................");
+		MatchRequestDto matchrequest = new MatchRequestDto(date,time, isBooked,gu,formCode);
+		System.out.println("alloption호추추루룰...............................................");
 
-		return new ResponseEntity<List<MatchDto>>(mService.alloption(), HttpStatus.OK);
+
+		return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
 	}
 	
 	
-	@ApiOperation(value = "일부 조건에 맞는 결과를 반환한다", response = List.class)
+	@ApiOperation(value = "일부 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer="List")
 	@GetMapping("/match2")
-	public ResponseEntity<List<MatchDto>> simpleoption() throws Exception {
+	public ResponseEntity<List<MatchDto>> simpleoption(@RequestParam Date date,@RequestParam String gu ) throws Exception {
 		logger.debug("simpleoption - 호출");
 		System.out.println("simpleoption 호추추루룰...........................................................");
 
-		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(), HttpStatus.OK);
+		MatchRequestSimpleDto matchrequest = new MatchRequestSimpleDto(date,gu);
+		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(matchrequest), HttpStatus.OK);
 	}
 
 	
-	@ApiOperation(value = "매칭 조건을 등록한다  ", response = List.class)
+	@ApiOperation(value = "매칭 조건을 등록한다  ",  response = MatchDto.class, responseContainer="List")
 	@PostMapping("/match")
 	public ResponseEntity<Map<String, Object>> insertmatch(@RequestBody MatchDto match) {
 		ResponseEntity<Map<String, Object>> entity = null;
