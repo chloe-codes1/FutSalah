@@ -8,11 +8,11 @@
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
 	<select id="alloption"  resultType="request">
-		select m.date , m.time, l.gu, m.isBooked,m.formCode, c.name from
+		select m.*,t.name, l.gu, c.name from
 		matching m
 		left outer join court c on m.courtID = c.courtID
-		left outer
-		join location l on m.locationID = l.locationID
+		left outer join location l on m.locationID = l.locationID
+		left outer join team t on m.homeTeamID = t.teamID
  
 		where
 			l.locationID = #{locationID}
@@ -27,12 +27,10 @@
 	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
 
 	<select id="simpleoption" resultType="requestsimple">
-		select m.date , m.time,
-		l.gu, m.isBooked,m.formCode, c.name from matching m
-		left outer join
-		court c on m.courtID = c.courtID
-		left outer join location l on
-		m.locationID = l.locationID
+		select m.*,t.name, l.gu, c.name from matching m
+		left outer join court c on m.courtID = c.courtID
+		left outer join location l on m.locationID = l.locationID
+		left outer join team t on m.homeTeamID = t.teamID
 		where 
 		l.locationID = #{locationID}
 		and m.date LIKE CONCAT('%',#{date},'%')
@@ -49,19 +47,17 @@
 
 
 
-	<!-- 나에게 온 매칭 정보 -->
+	<!-- 나에게 온 매칭 정보( 내가 등록한 매칭 정보) -->
 	<select id="comematch" resultType="match">
+	select w.awayTeamID from waiting w 
+	where w.matchID = #{matchID}
 	</select>
 	
 	
-	<!-- 내가 신청목록에 올려둔 매칭 정보 -->
+	<!-- 내가 매칭 신청 요청한 매칭 정보 -->
 
 	<select id="mymatch" resultType="match">
-	select m.date , m.time, l.gu, m.isBooked,m.formCode, c.name from
-	matching m
-	left outer join court c on m.courtID = c.courtID
-	left outer join location l on m.locationID = l.locationID
-	where m.homteamID = 1
+	
 	
 	</select>
 	
