@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ido.arduino.dto.MatchDto;
@@ -32,15 +33,11 @@ public class MatchGameController {
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 
-	
-
 	@Autowired
 	MatchGameService mService;
 	
 	@Autowired
 	TeamInfoService tService;
-
-	
 
 	// ----------------Matching game waiting ---------------------------
 	
@@ -88,6 +85,25 @@ public class MatchGameController {
 
 		return entity;
 	}
+	
+	// 매칭 신청
+	@PostMapping("/waiting")
+	public @ResponseBody int registerForGame(@RequestBody Map<String, Integer> data) {
+		int matchID = data.get("matchID");
+		int teamID = data.get("teamID");
+		
+//		int matchRegisteredTeamID = 
+		
+		int isRegistered = mService.checkIfRegistered(matchID, teamID);
+		// waiting list 중복검사
+		if (isRegistered == 1) {
+			return 2;
+		}
+		return mService.registerForGame(matchID, teamID);
+		//  TODO: 매칭 신청 알림 email 발송
+	}
+	
+	
 
 	// ----------------예외처리---------------------------
 

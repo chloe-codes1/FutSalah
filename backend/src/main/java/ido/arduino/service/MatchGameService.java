@@ -12,12 +12,9 @@ import ido.arduino.repo.MatchGameRepo;
 
 public interface MatchGameService {
 	
-	
-
-	
 	List<MatchDto> alloption(MatchRequestDto matchrequest);
 	List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest);
 	int insertmatch(MatchDto match);
-
-
+	int registerForGame(int matchID, int teamID);
+	int checkIfRegistered(int matchID, int teamID);
 }
