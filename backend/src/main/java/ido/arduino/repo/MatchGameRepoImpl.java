@@ -53,7 +53,14 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		// TODO Auto-generated method stub
 		return template.delete(ns+"deletematch",matchID);
 	}
+
 	
+	//----------내가 요청한 매칭 리스트 (내팀이 요청한 매칭 정보)---------------
+	@Override
+	public List<MatchDto> requestmatch(int userID) {
+		// TODO Auto-generated method stub
+		return template.selectList(ns+"requestmatch",userID);
+	}
 	
 	
 

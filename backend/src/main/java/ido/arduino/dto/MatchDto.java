@@ -27,7 +27,9 @@ public class MatchDto {
 	private String sido; // 경기 지역 시도
 	private int formCode;
 	private String hometeam;//홈팀 이름 
+	private String awayteam;//상대팀 이름 
 	private String profileURL;// 팀 프로필 사진
+	private String awayprofileURL;// 상대팀 프로필 사진
 
 
 

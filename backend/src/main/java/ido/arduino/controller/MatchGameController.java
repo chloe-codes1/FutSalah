@@ -186,6 +186,19 @@ public class MatchGameController {
 		}
 		return entity;
 	}
+	
+	@ApiOperation(value = "내가 매칭 요청한 팀의 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer = "List")
+	@PostMapping("/match/requestmatch")
+	public ResponseEntity<List<MatchDto>> requestmatch(@RequestBody Map<String, Object> body) throws Exception {
+		System.out.println(body.toString());
+		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
+		int userId = user.getUserID();
+		logger.debug("requestmatch - 호출");
+		System.out.println("requestmatch ...............................");
+
+		return new ResponseEntity<List<MatchDto>>(mService.requestmatch(userId), HttpStatus.OK);
+	}
+	
 	// ----------------예외처리---------------------------
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
