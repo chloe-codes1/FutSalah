@@ -528,19 +528,21 @@ export default function TeamInfoPage(props) {
                   }}
                 >
                   <span>{teamInfo.region}</span>
-                  <div
-                    onClick={(e) => {
-                      setAnchorEl(e.target);
-                      setOpenedDescPopoverId(true);
-                    }}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    <h1>
-                      <strong>{teamInfo.name}</strong>
-                    </h1>
-                  </div>
+                  <Tooltip title="팀 설명 보기" interactive>
+                    <div
+                      onClick={(e) => {
+                        setAnchorEl(e.target);
+                        setOpenedDescPopoverId(true);
+                      }}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      <h1>
+                        <strong>{teamInfo.name}</strong>
+                      </h1>
+                    </div>
+                  </Tooltip>
                   <Popover
                     classes={{
                       paper: classes.popover,
@@ -565,9 +567,6 @@ export default function TeamInfoPage(props) {
                       {teamInfo.description}
                     </p>
                   </Popover>
-                  <span style={{ fontSize: 10 }}>
-                    팀, 팀원 이름을 눌러 상세정보 확인
-                  </span>
                 </div>
                 {/* 가입 신청 버튼, QR 코드 버튼 */}
                 {userinfo.logged &&
@@ -869,7 +868,7 @@ export default function TeamInfoPage(props) {
                                             )}
                                         </TableCell>
                                       </TableRow>
-                                      <TableRow>
+                                      <TableRow hover>
                                         <TableCell>
                                           <div
                                             onClick={(e) => {
