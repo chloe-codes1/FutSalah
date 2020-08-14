@@ -16,8 +16,8 @@ public interface MatchGameService {
 	
 
 	
-	List<MatchDto> alloption(MatchRequestDto matchrequest);
-	List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest);
+	List<MatchDto> alloption(MatchDto matchrequest);
+	List<MatchDto> simpleoption(MatchDto matchrequest);
 	int insertmatch(MatchDto match);
 
 	List<MatchDto> comematch(int userID);

@@ -7,9 +7,9 @@
 
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
-	<select id="alloption" resultType="request">
-		select m.*,t.name,
-		t.profileURL,l.gu, c.name from
+	<select id="alloption" resultType="match">
+		select m.*,t.name as homename,
+		t.profileURL ,l.gu, c.name from
 		matching m
 		left outer join court c on
 		m.courtID = c.courtID
@@ -29,7 +29,7 @@
 	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
 
 	<select id="simpleoption" resultType="requestsimple">
-		select m.*,t.name,
+		select m.*,t.name as homename,
 		t.profileURL,l.gu, c.name from
 		matching m
 		left outer join court c on

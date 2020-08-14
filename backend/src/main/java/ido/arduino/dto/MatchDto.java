@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class MatchDto {
+	
 	private int matchID ;
 	private int homeTeamID;
 	private int awayTeamID;
@@ -23,5 +24,30 @@ public class MatchDto {
 	private String name;//경기장 이름
 	private String gu; // 경기 지역 구 
 	private int formCode;
+	private String hometeam;//홈팀 이름 
+	private String profileURL;// 팀 프로필 사진
+	
+	
 
+	public MatchDto(Date date, int time, int isBooked, int locationID, int formCode) {
+		super();
+		this.date = date;
+		this.time = time;
+		this.isBooked = isBooked;
+		this.locationID = locationID;
+		this.formCode = formCode;
+	}
+
+
+
+	public MatchDto(Date date, int locationID) {
+		super();
+		this.date = date;
+		this.locationID = locationID;
+	}
+
+
+	
+
+	
 }

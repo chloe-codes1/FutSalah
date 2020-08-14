@@ -20,14 +20,14 @@ public class MatchGameServiceImpl implements MatchGameService{
 	
 	//----------전체 조건 만족하는 리스트 출력---------------
 	@Override
-	public List<MatchDto> alloption(MatchRequestDto matchrequest) {
+	public List<MatchDto> alloption(MatchDto matchrequest) {
 		// TODO Auto-generated method stub
 		return mRepo.alloption(matchrequest);
 	}
 
 	//----------일부 조건 만족하는 리스트 출력---------------
 	@Override
-	public List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest) {
+	public List<MatchDto> simpleoption(MatchDto matchrequest) {
 		// TODO Auto-generated method stub
 		return mRepo.simpleoption(matchrequest);
 	}

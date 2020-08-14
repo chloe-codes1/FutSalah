@@ -10,8 +10,8 @@ import ido.arduino.dto.MatchRequestSimpleDto;
 public interface MatchGameRepo {
 	
 	
-	public List<MatchDto> alloption(MatchRequestDto matchrequest);
-	public List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest);
+	public List<MatchDto> alloption(MatchDto matchrequest);
+	public List<MatchDto> simpleoption(MatchDto matchrequest);
 	int insertmatch(MatchDto match);
 	public List<MatchDto> comematch(int id);
 	int deletematch(int matchID);

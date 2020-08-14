@@ -19,11 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.MatchDto;
-import ido.arduino.dto.MatchRegisterDto;
-import ido.arduino.dto.MatchRequestDto;
-import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.UserDTO;
 import ido.arduino.service.MatchGameService;
@@ -55,7 +51,7 @@ public class MatchGameController {
 			@RequestParam int isBooked, @RequestParam int locationID, @RequestParam int formCode) throws Exception {
 
 		logger.debug("alloption - 호출");
-		MatchRequestDto matchrequest = new MatchRequestDto(date, time, isBooked, locationID, formCode);
+		MatchDto matchrequest = new MatchDto(date, time, isBooked, locationID, formCode);
 		System.out.println("alloption호추추루룰...............................................");
 
 		return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
@@ -68,7 +64,7 @@ public class MatchGameController {
 		logger.debug("simpleoption - 호출");
 		System.out.println("simpleoption 호추추루룰...........................................................");
 
-		MatchRequestSimpleDto matchrequest = new MatchRequestSimpleDto(date, locationID);
+		MatchDto matchrequest = new MatchDto(date, locationID);
 		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(matchrequest), HttpStatus.OK);
 	}
 
