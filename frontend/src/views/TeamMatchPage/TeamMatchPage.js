@@ -27,6 +27,7 @@ import MatchSearch from "./MatchSearch.js";
 import MatchCard from "./MatchCard.js";
 import ReceivedMatch from "./ReceivedMatch.js";
 import SentMatch from "./SentMatch.js";
+import UpcomingMatch from "./UpcomingMatch.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import SwipeableViews from "react-swipeable-views";
 import Typography from "@material-ui/core/Typography";
@@ -227,7 +228,7 @@ function TeamMatchPage() {
             },
             {
               tabName: "예정된 매치",
-              tabContent: <p className={classes.textCenter}>예정된 매치</p>,
+              tabContent: <UpcomingMatch />,
             },
           ]}
         />
