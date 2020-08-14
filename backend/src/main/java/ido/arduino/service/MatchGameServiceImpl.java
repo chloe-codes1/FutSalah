@@ -47,4 +47,10 @@ public class MatchGameServiceImpl implements MatchGameService{
 		return mRepo.comematch(userID);
 	}
 
+	@Override
+	public int deletematch(int matchID) {
+		// TODO Auto-generated method stub
+		return mRepo.deletematch(matchID);
+	}
+
 }

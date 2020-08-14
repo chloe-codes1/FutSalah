@@ -47,6 +47,12 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		// TODO Auto-generated method stub
 		return template.selectList(ns+"comematch",userID);
 	}
+
+	@Override
+	public int deletematch(int matchID) {
+		// TODO Auto-generated method stub
+		return template.delete(ns+"deletematch",matchID);
+	}
 	
 	
 	

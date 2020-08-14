@@ -14,5 +14,6 @@ public interface MatchGameRepo {
 	public List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest);
 	int insertmatch(MatchDto match);
 	public List<MatchDto> comematch(int id);
+	int deletematch(int matchID);
 
 }

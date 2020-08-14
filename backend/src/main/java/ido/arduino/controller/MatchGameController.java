@@ -10,13 +10,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ido.arduino.dto.DeleteFormationDto;
 import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
@@ -35,50 +38,41 @@ public class MatchGameController {
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 
-	
-
 	@Autowired
 	MatchGameService mService;
-	
+
 	@Autowired
 	TeamInfoService tService;
-	
+
 	@Autowired
 	UserService uService;
 
-	
-
 	// ----------------Matching game search ---------------------------
-	
-	
-	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer="List")
-	@GetMapping("/match")
-	public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date,@RequestParam int time,@RequestParam int isBooked,
-			@RequestParam int locationID,
-			@RequestParam int formCode) throws Exception {
-		
-		
-		logger.debug("alloption - 호출");
-		MatchRequestDto matchrequest = new MatchRequestDto(date,time, isBooked,locationID,formCode);
-		System.out.println("alloption호추추루룰...............................................");
 
+	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
+	@GetMapping("/match")
+	public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date, @RequestParam int time,
+			@RequestParam int isBooked, @RequestParam int locationID, @RequestParam int formCode) throws Exception {
+
+		logger.debug("alloption - 호출");
+		MatchRequestDto matchrequest = new MatchRequestDto(date, time, isBooked, locationID, formCode);
+		System.out.println("alloption호추추루룰...............................................");
 
 		return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
 	}
-	
-	
-	@ApiOperation(value = "일부 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer="List")
+
+	@ApiOperation(value = "일부 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
 	@GetMapping("/match2")
-	public ResponseEntity<List<MatchDto>> simpleoption(@RequestParam Date date,@RequestParam int locationID ) throws Exception {
+	public ResponseEntity<List<MatchDto>> simpleoption(@RequestParam Date date, @RequestParam int locationID)
+			throws Exception {
 		logger.debug("simpleoption - 호출");
 		System.out.println("simpleoption 호추추루룰...........................................................");
 
-		MatchRequestSimpleDto matchrequest = new MatchRequestSimpleDto(date,locationID);
+		MatchRequestSimpleDto matchrequest = new MatchRequestSimpleDto(date, locationID);
 		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(matchrequest), HttpStatus.OK);
 	}
 
-	
-	@ApiOperation(value = "매칭 조건을 등록한다  ",  response = MatchDto.class, responseContainer="List")
+	@ApiOperation(value = "매칭 조건을 등록한다  ", response = MatchDto.class, responseContainer = "List")
 	@PostMapping("/match")
 	public ResponseEntity<Map<String, Object>> insertmatch(@RequestBody MatchDto match) {
 		ResponseEntity<Map<String, Object>> entity = null;
@@ -95,8 +89,8 @@ public class MatchGameController {
 		return entity;
 	}
 
-	//----------------Matching game waiting and state---------------------------
-	@ApiOperation(value = "내가 속한 모든 팀의 등록한 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer="List")
+	// ----------------Matching game waiting and state---------------------------
+	@ApiOperation(value = "내가 속한 모든 팀의 등록한 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer = "List")
 	@PostMapping("/match/mymatch")
 	public ResponseEntity<List<MatchDto>> comematch(@RequestBody Map<String, Object> body) throws Exception {
 		System.out.println(body.toString());
@@ -106,6 +100,21 @@ public class MatchGameController {
 		System.out.println("comematch ...............................");
 
 		return new ResponseEntity<List<MatchDto>>(mService.comematch(userId), HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "내가 속한 팀의 등록한 매칭정보 정보 삭제.", response = MatchDto.class, responseContainer = "List")
+	@DeleteMapping("/match/mymatch/{matchID}")
+	public ResponseEntity<Map<String, Object>> deletematch(@PathVariable int matchID) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+
+			System.out.println("deletematch.............................");
+			 int result = mService.deletematch(matchID);
+			entity = handleSuccess(matchID + "가 삭제되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
 	}
 	// ----------------예외처리---------------------------
 

@@ -21,5 +21,6 @@ public interface MatchGameService {
 	int insertmatch(MatchDto match);
 
 	List<MatchDto> comematch(int userID);
+	int deletematch(int matchID);
 
 }
