@@ -69,7 +69,6 @@ public class UserController {
 	// 회원 가입
 	@PostMapping("/user")
 	public @ResponseBody UserDTO createUser(@RequestBody UserDTO user) {
-		System.out.println("user??????????" + user);
 		int newlySignedUp = userService.insert(user);
 		if (newlySignedUp == 1) {
 			System.out.println("successfully created!");
@@ -82,7 +81,6 @@ public class UserController {
 	// 회원 정보 수정
 	@PutMapping("/user")
 	public @ResponseBody int updateUser(@RequestBody UserDTO user) {
-		System.out.println("user??????????" + user);
 		int updateResult = userService.update(user);
 		if (updateResult == 1) {
 			System.out.println("successfully updated!");

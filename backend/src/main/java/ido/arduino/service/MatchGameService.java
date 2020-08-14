@@ -19,5 +19,5 @@ public interface MatchGameService {
 	int checkIfRegistered(int matchID, int teamID);
 	List<MatchDto> comematch(int userID);
 	int deletematch(int matchID);
-
+	MatchDto getMatchInfo(int matchID);
 }

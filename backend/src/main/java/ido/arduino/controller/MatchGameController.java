@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,9 @@ import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.TeamInfoDto;
+import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserDTO;
+import ido.arduino.service.EmailServiceImpl;
 import ido.arduino.service.MatchGameService;
 import ido.arduino.service.TeamInfoService;
 import ido.arduino.service.UserService;
@@ -45,6 +48,9 @@ public class MatchGameController {
 
 	@Autowired
 	UserService uService;
+	
+	@Autowired
+	JavaMailSender javaMailSender;
 
 	// ----------------Matching game search ---------------------------
 
@@ -92,17 +98,25 @@ public class MatchGameController {
 	@PostMapping("/waiting")
 	public @ResponseBody int registerForGame(@RequestBody Map<String, Integer> data) {
 		int matchID = data.get("matchID");
-		int teamID = data.get("teamID");
+		int teamID = data.get("teamID"); // 신청팀
 		
-//		int matchRegisteredTeamID = 
+		int homeTeamID = mService.getMatchInfo(matchID).getHomeTeamID();
 		
+		// 자신의 팀에 매칭신청하는 오류 방지
+		if (teamID == homeTeamID) {
+			return 3;
+		}
 		int isRegistered = mService.checkIfRegistered(matchID, teamID);
 		// waiting list 중복검사
 		if (isRegistered == 1) {
 			return 2;
 		}
-		return mService.registerForGame(matchID, teamID);
-		//  TODO: 매칭 신청 알림 email 발송
+		mService.registerForGame(matchID, teamID);
+		TeamInfoDto requestTeam = tService.getTeamInfo(teamID);
+		TeamLeaderDTO targetTeam = tService.getTeamLeaderInfo(homeTeamID);
+		EmailServiceImpl emailService = new EmailServiceImpl();
+		emailService.setJavaMailSender(javaMailSender);
+		return emailService.registerForGameMail(requestTeam, targetTeam);
 	}
 	
 	

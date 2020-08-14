@@ -89,19 +89,5 @@
 		where w.awayTeamID = t.teamID and
 		w.matchID= #{matchID};
 	</select>
-	
-	<select id="">
-	SELECT*FROM matching WHERE matchID = #{matchID}
-	</select>
-
-	<!-- 매칭 신청하기 -->
-	<insert id="registerForGame" parameterType="map">
-		INSERT INTO waiting (matchID, awayTeamID) VALUES (#{matchID}, #{teamID})
-	</insert>
-	
-	<!-- 매칭 신청 중복검사 (waiting) -->
-	<select id="checkIfRegistered" parameterType="map" resultType="int">
-		 SELECT COUNT(*) FROM waiting WHERE matchID=#{matchID} AND awayTeamID=#{teamID}
-	</select>
 
 </mapper>

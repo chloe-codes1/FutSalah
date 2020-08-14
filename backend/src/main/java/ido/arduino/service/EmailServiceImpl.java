@@ -1,5 +1,7 @@
 package ido.arduino.service;
 
+import java.util.Optional;
+
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import ido.arduino.dto.RequestDTO;
 import ido.arduino.dto.TeamInfoDto;
-import ido.arduino.dto.TeamInfoSimpleDto;
 import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserDTO;
 
@@ -25,7 +26,7 @@ public class EmailServiceImpl {
 	}
 
 	@Async
-	// 가입 신청 알림 이메일
+	// 팀 가입 신청 알림 이메일
 	public int requestToJoinMail(UserDTO requestFrom, TeamLeaderDTO targetTeam) {
 		String title = "[Futsalah] 팀 가입 신청이 도착했습니다.";
 		try {
@@ -131,6 +132,62 @@ public class EmailServiceImpl {
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>새로운 팀 보러 가기</button></a>";
 			helper.setText(str, true);
 
+			emailSender.send(message);
+			return 1; // 성공
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0; // 실패
+		}
+	}
+	
+	@Async
+	// 매칭 신청 알림 이메일
+	public int registerForGameMail(TeamInfoDto requestTeam, TeamLeaderDTO targetTeam) {
+		String title = "[Futsalah] 매치 요청이 도착했습니다.";
+		try {
+			// 신청팀 정보
+			String requestorName = requestTeam.getName();
+			String requestorDescription = requestTeam.getDescription();
+			
+			Optional<Integer> maybeWins = Optional.ofNullable(requestTeam.getWins());
+			int requestorWins = maybeWins.orElse(0);
+			Optional<Integer> maybeDraws = Optional.ofNullable(requestTeam.getDraws());
+			int requestorDraws = maybeDraws.orElse(0);
+			Optional<Integer> maybeDefeats = Optional.ofNullable(requestTeam.getDefeats());
+			int requestorDefeats = maybeDefeats.orElse(0);
+			Optional<Integer> maybeMileage = Optional.ofNullable(requestTeam.getMileage());
+			int requestorMileage = maybeMileage.orElse(0);
+			
+			// 매칭 등록팀 리더 정보
+			String leaderName = targetTeam.getLeaderName();
+			String sendTo = targetTeam.getEmail();
+			String teamName = targetTeam.getTeamName();
+
+			MimeMessage message = emailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+			// 보낼 대상 설정
+			helper.setTo(sendTo);
+			// 메일 제목
+			helper.setSubject(title);
+			// 메일 내용 + 요청 보내는 유저 정보
+
+			String str = "<h2> 안녕하세요, " + leaderName + "님!</h2>" + "<h3>" + requestorName + "팀에서 " + teamName
+					+ "팀과의 매치를 요청하였습니다. </h3>" 
+					+ "<br/> <span style='font-weight: bold;'>요청팀 이름: </span>" + requestorName 
+					+ "<br/> <span style='font-weight: bold;'>팀 소개: </span>" + requestorDescription
+					+ "<br/> <span style='font-weight: bold;'>전적 (승/무/패): </span>" + requestorWins + " / " + requestorDraws + " / " + requestorDefeats
+					+ "<br/> <span style='font-weight: bold;'>신뢰도 마일리지: </span>" + requestorMileage 
+					//TODO: endpoint 확인 후 변경 필요
+					+ "<h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
+					+ BASE_URL + "/match'>"
+					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
+					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>요청 수락/거절 하러 가기</button></a>";
+			helper.setText(str, true);
+
+			System.out.println(str);
+			
+			// 보내기 !!
 			emailSender.send(message);
 			return 1; // 성공
 		} catch (Exception e) {
