@@ -9,12 +9,33 @@ import { Modal, Typography } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 
 export default function ReceivedMatch() {
-  const [requestList, setRequestList] = useState(false);
+  const [requestModal, setRequestModal] = useState(false);
+  const [requestList, setRequestList] = useState([
+    {
+      teamID: 3,
+      profileURL: "",
+      name: "풋살라",
+      wins: 3,
+      defeats: 4,
+      draws: 7,
+      reliablity: 8,
+    },
+    {
+      teamID: 4,
+      profileURL: "",
+      name: "풋게로",
+      wins: 6,
+      defeats: 5,
+      draws: 2,
+      reliablity: 5,
+    },
+  ]);
 
   const [receivedList, setReceivedList] = useState([
     // 테스트 데이터
     {
       matchID: 1,
+      teamID: 1,
       homeProfile: "",
       homeName: "FC 슛돌이",
       date: "2020-08-30",
@@ -25,6 +46,7 @@ export default function ReceivedMatch() {
     },
     {
       matchID: 2,
+      teamID: 2,
       homeProfile: "",
       homeName: "FC 슛순이",
       date: "2020-08-22",
@@ -35,12 +57,17 @@ export default function ReceivedMatch() {
     },
   ]);
 
-  const removeMatch = (id) => {
-    setReceivedList(receivedList.filter((rl) => rl.matchID !== id));
+  const handleRequestListOpen = () => {
+    // request list 받아오기
+    setRequestModal(true);
+  };
+  const handleRequestListClose = () => {
+    setRequestModal(false);
   };
 
-  const handleRequestListClose = () => {
-    setRequestList(false);
+  // 등록한 매칭 삭제
+  const removeMatch = (id) => {
+    setReceivedList(receivedList.filter((rl) => rl.matchID !== id));
   };
 
   return (
@@ -66,14 +93,16 @@ export default function ReceivedMatch() {
               } `}
             />
             <Button
+              small
               variant="contained"
               onClick={() => {
-                setRequestList(true);
+                handleRequestListOpen();
               }}
             >
               신청 관리
             </Button>
             <Button
+              small
               variant="contained"
               onClick={() => {
                 removeMatch(rl.matchID);
@@ -87,7 +116,7 @@ export default function ReceivedMatch() {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={requestList}
+        open={requestModal}
         onClose={handleRequestListClose}
         closeAfterTransition
         style={{
@@ -96,13 +125,13 @@ export default function ReceivedMatch() {
           justifyContent: "center",
         }}
       >
-        <Fade in={requestList}>
+        <Fade in={requestModal}>
           <div
             align="center"
             style={{
               backgroundColor: "white",
-              boxShadow: "5",
               borderRadius: "10px",
+              width: "35%",
             }}
           >
             <Typography
@@ -112,7 +141,7 @@ export default function ReceivedMatch() {
               이 매칭을 원하는 팀을 확인해보세요.
             </Typography>
             <List>
-              {receivedList.map((rl) => (
+              {requestList.map((rl) => (
                 <ListItem>
                   <ListItemAvatar>
                     {/* 팀 로고 넣기*/}
@@ -125,8 +154,8 @@ export default function ReceivedMatch() {
                     />
                   </ListItemAvatar>
                   <ListItemText
-                    primary="팀이름"
-                    secondary="0승 0패 0무 / 신뢰도 100"
+                    primary={`${rl.name}`}
+                    secondary={`${rl.wins}승 ${rl.defeats}패 ${rl.draws}무 / 신뢰도 ${rl.reliablity}`}
                   />
                   <Button
                     variant="contained"
