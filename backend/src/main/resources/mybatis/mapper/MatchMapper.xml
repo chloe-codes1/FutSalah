@@ -22,6 +22,15 @@
 		SELECT COUNT(*) FROM waiting WHERE matchID=#{matchID} AND
 		awayTeamID=#{teamID}
 	</select>
+	
+	<!-- 해당 매치의 모든 대기목록 삭제 -->
+	<delete id="deleteAllWaitings" parameterType="int">
+		DELETE FROM waiting WHERE matchID=#{matchID}
+	</delete>
 
+	<!-- 매칭 성사 시 mataching table 수정 -->
+	<update id="acceptMatchRequest" parameterType="map">
+		UPDATE matching SET awayTeamID=#{teamID}, state=1 WHERE matchID=#{matchID}
+	</update>
 </mapper>
 	

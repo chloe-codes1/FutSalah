@@ -9,4 +9,6 @@ public interface MatchMapper {
 	int registerForGame(int matchID, int teamID);
 	int checkIfRegistered(int matchID, int teamID);
 	MatchDto getMatchInfo(int matchID);
+	int deleteAllWaitings(int matchID);
+	int acceptMatchRequest(int teamID, int matchID);
 }

@@ -67,4 +67,14 @@ public class MatchGameServiceImpl implements MatchGameService {
 		return matchMapper.getMatchInfo(matchID);
 	}
 
+	@Override
+	public int deleteAllWaitings(int matchID) {
+		return matchMapper.deleteAllWaitings(matchID);
+	}
+
+	@Override
+	public int acceptMatchRequest(int teamID, int matchID) {
+		return matchMapper.acceptMatchRequest(teamID, matchID);
+	}
+
 }

@@ -21,13 +21,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import ido.arduino.dto.CourtDTO;
+import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserDTO;
+import ido.arduino.service.CourtService;
 import ido.arduino.service.EmailServiceImpl;
+import ido.arduino.service.LocationService;
 import ido.arduino.service.MatchGameService;
 import ido.arduino.service.TeamInfoService;
 import ido.arduino.service.UserService;
@@ -48,6 +52,12 @@ public class MatchGameController {
 
 	@Autowired
 	UserService uService;
+
+	@Autowired
+	LocationService lService;
+	
+	@Autowired
+	CourtService cService;
 	
 	@Autowired
 	JavaMailSender javaMailSender;
@@ -93,15 +103,15 @@ public class MatchGameController {
 
 		return entity;
 	}
-	
+
 	// 매칭 신청
 	@PostMapping("/waiting")
 	public @ResponseBody int registerForGame(@RequestBody Map<String, Integer> data) {
 		int matchID = data.get("matchID");
 		int teamID = data.get("teamID"); // 신청팀
-		
+
 		int homeTeamID = mService.getMatchInfo(matchID).getHomeTeamID();
-		
+
 		// 자신의 팀에 매칭신청하는 오류 방지
 		if (teamID == homeTeamID) {
 			return 3;
@@ -118,8 +128,25 @@ public class MatchGameController {
 		emailService.setJavaMailSender(javaMailSender);
 		return emailService.registerForGameMail(requestTeam, targetTeam);
 	}
-	
-	
+
+	// 매칭 수락
+	@PostMapping("/match/accept")
+	public @ResponseBody int acceptMatchRequest(@RequestBody Map<String, Integer> data) {
+		int teamID = data.get("teamID");
+		int matchID = data.get("matchID");
+		MatchDto matchInfo = mService.getMatchInfo(matchID);
+		System.out.println("matchInfo??" + matchInfo);
+		int homeTeamID = matchInfo.getHomeTeamID();
+		mService.deleteAllWaitings(matchID);
+		mService.acceptMatchRequest(homeTeamID, matchID);
+		TeamLeaderDTO requestTeam = tService.getTeamLeaderInfo(teamID);
+		TeamInfoDto targetTeam = tService.getTeamInfo(homeTeamID);
+		LocationDto location = lService.getLocationInfo(matchInfo.getLocationID());
+		CourtDTO court = cService.getCourtInfo(matchInfo.getCourtID());
+		EmailServiceImpl emailService = new EmailServiceImpl();
+		emailService.setJavaMailSender(javaMailSender);
+		return emailService.acceptMatchRequestMail(targetTeam, requestTeam, matchInfo, location, court);
+	}
 
 	// ----------------Matching game waiting and state---------------------------
 	@ApiOperation(value = "내가 속한 모든 팀의 등록한 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer = "List")
@@ -141,7 +168,7 @@ public class MatchGameController {
 		try {
 
 			System.out.println("deletematch.............................");
-			 int result = mService.deletematch(matchID);
+			int result = mService.deletematch(matchID);
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);

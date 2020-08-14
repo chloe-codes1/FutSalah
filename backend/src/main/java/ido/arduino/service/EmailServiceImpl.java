@@ -1,14 +1,20 @@
 package ido.arduino.service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import ido.arduino.dao.LocationMapper;
+import ido.arduino.dto.CourtDTO;
+import ido.arduino.dto.LocationDto;
+import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.RequestDTO;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
@@ -184,11 +190,62 @@ public class EmailServiceImpl {
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>요청 수락/거절 하러 가기</button></a>";
 			helper.setText(str, true);
-
-			System.out.println(str);
 			
 			// 보내기 !!
-			emailSender.send(message);
+//			emailSender.send(message);
+			System.out.println(str);
+			return 1; // 성공
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0; // 실패
+		}
+	}
+	
+	@Async
+	// 매치 신청 수락 알림 이메일
+	public int acceptMatchRequestMail(TeamInfoDto targetTeam, TeamLeaderDTO requestTeam, MatchDto matchInfo, LocationDto location, CourtDTO court) {
+		String title = "[Futsalah] 팀 가입 신청 결과가 도착했습니다.";
+		try {
+			// 신청팀 정보
+			String requestorName = requestTeam.getLeaderName();
+			String sendTo = requestTeam.getEmail();
+
+			// 대결팀 정보
+			int teamID = targetTeam.getTeamID();
+			String teamName = targetTeam.getName();
+			
+			// 대결 정보
+			Date date = matchInfo.getDate();
+			int time = matchInfo.getTime();
+			String sido = location.getSido();
+			String gu = location.getGu();
+			String courtName;
+			if (court != null) {
+				courtName = court.getName();
+			}else {
+				courtName = "구장 정보 없음";
+			}
+			
+			MimeMessage message = emailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+			helper.setTo(sendTo);
+			helper.setSubject(title);
+
+			String str = "<h2> 안녕하세요, " + requestorName + "님!</h2>" 
+					+ "<br/>요청하신 <span style='font-weight: bold;'>"+teamName+ "</span>팀과의 경기 신청이 수락되었습니다.<br/>" 
+					+ "<br/> <span style='font-weight: bold;'>일시: </span>" + date + time +"시" 
+					+ "<br/> <span style='font-weight: bold;'>장소: </span>" + sido+ " " +gu 
+					+ "<br/> <span style='font-weight: bold;'>구장 이름: </span>" + courtName 
+
+					+ "<h4>아래 버튼을 클릭하여 대결할 " + teamName + "팀 정보를 확인해보세요!</h4> <br/>" + "<a href='"
+					+ BASE_URL + "/teaminfo/" + teamID + "'>"
+					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
+					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>상대팀 보러 가기</button></a>";
+			helper.setText(str, true);
+
+			System.out.println(str);
+//			emailSender.send(message);
 			return 1; // 성공
 		} catch (Exception e) {
 			e.printStackTrace();

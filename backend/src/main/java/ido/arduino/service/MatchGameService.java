@@ -20,4 +20,6 @@ public interface MatchGameService {
 	List<MatchDto> comematch(int userID);
 	int deletematch(int matchID);
 	MatchDto getMatchInfo(int matchID);
+	int deleteAllWaitings(int matchID);
+	int acceptMatchRequest(int teamID, int matchID);
 }
