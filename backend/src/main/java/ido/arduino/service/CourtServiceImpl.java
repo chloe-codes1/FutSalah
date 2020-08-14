@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import ido.arduino.dao.CourtMapper;
 import ido.arduino.dto.CourtAdminDTO;
+import ido.arduino.dto.CourtDTO;
 
 @Service
 public class CourtServiceImpl implements CourtService {
@@ -24,5 +25,10 @@ public class CourtServiceImpl implements CourtService {
 	@Override
 	public CourtAdminDTO login(String id) {
 		return courtMapper.login(id);
+	}
+
+	@Override
+	public CourtDTO getCourtInfo(int courtID) {
+		return courtMapper.getCourtInfo(courtID);
 	}
 }
