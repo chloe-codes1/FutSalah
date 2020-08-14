@@ -27,10 +27,11 @@ import MatchCard from "./MatchCard.js";
 import UserContext from "contexts/UserContext.js";
 
 import NavPills from "components/NavPills/NavPills.js";
+import ReceivedMatch from "./ReceivedMatch.js";
+import SentMatch from "./SentMatch.js";
+import UpcomingMatch from "./UpcomingMatch.js";
+import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import SwipeableViews from "react-swipeable-views";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
@@ -61,7 +62,7 @@ function TeamMatchPage() {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 200,
+          height: 100,
           color: "white",
         }}
       />
@@ -76,30 +77,63 @@ function TeamMatchPage() {
           </GridContainer>
         </div>
       </Parallax>
-
-      <div className={classNames(classes.main, classes.mainRaised)}>
-        <div className={classes.container}>
-          <MatchSearch myteam={myteam} setMatchingList={setMatchingList} />
-          <Divider />
-          <br />
-          <Grid container justify="center" spacing={3}>
-            {matchingList.length === 0 && (
-              <Grid item>
-                <Typography variant="h6" color="textPrimary">
-                  현재 등록된 매칭이 존재하지 않습니다.
-                </Typography>
-              </Grid>
-            )}
-            {!(matchingList.length === 0) &&
-              matchingList.map((match, index) => {
-                return (
-                  <Grid item>
-                    <MatchCard key={index} match={match} />
+      <div
+        className={classNames(classes.main, classes.mainRaised)}
+        style={{
+          width: "75%",
+          margin: "-100px auto 50px auto",
+        }}
+      >
+        <CustomTabs
+          plainTabs
+          headerColor="info"
+          tabs={[
+            {
+              tabName: "매칭 검색",
+              tabContent: (
+                <div className={classes.container} style={{ height: "750px" }}>
+                  <MatchSearch
+                    myteam={myteam}
+                    setMatchingList={setMatchingList}
+                  />
+                  <Divider />
+                  <br />
+                  <Grid container justify="center" spacing={3}>
+                    {matchingList.length === 0 && (
+                      <Grid item>
+                        <Typography variant="h6" color="textPrimary">
+                          현재 등록된 매칭이 존재하지 않습니다.
+                        </Typography>
+                      </Grid>
+                    )}
+                    {!(matchingList.length === 0) &&
+                      matchingList.map((match, index) => {
+                        if ((index + 1) % 3 === 0) {
+                          return (
+                            <Grid item>
+                              <MatchCard key={index} match={match} />
+                            </Grid>
+                          );
+                        }
+                      })}
                   </Grid>
-                );
-              })}
-          </Grid>
-        </div>
+                </div>
+              ),
+            },
+            {
+              tabName: "받은 신청",
+              tabContent: <ReceivedMatch />,
+            },
+            {
+              tabName: "보낸 신청",
+              tabContent: <SentMatch />,
+            },
+            {
+              tabName: "예정된 매치",
+              tabContent: <UpcomingMatch />,
+            },
+          ]}
+        />
       </div>
       <Footer />
     </div>

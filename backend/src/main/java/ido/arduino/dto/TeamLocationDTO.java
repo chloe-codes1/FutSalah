@@ -27,4 +27,5 @@ public class TeamLocationDTO {
 	private int locationID;
 	private String sido;
 	private String gu;
+	private int total;
 }

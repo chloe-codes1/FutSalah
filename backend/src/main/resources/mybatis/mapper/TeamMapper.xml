@@ -47,29 +47,48 @@
 	</select>
 
 	<!-- 팀 검색 by name -->
-	<select id="searchTeamByName" parameterType="String"
+	<select id="searchTeamByName" parameterType="map"
 		resultType="TeamLocationDTO">
-		SELECT * FROM team
+		SELECT team.*, (SELECT COUNT(*) FROM team WHERE team.name
+		LIKE
+		CONCAT('%',#{name},'%')) as total
+		FROM team
 		INNER JOIN location ON
 		location.locationID = team.locationID
-		WHERE team.name LIKE CONCAT('%', #{name},'%')
+		WHERE team.name LIKE CONCAT('%',
+		#{name},'%') LIMIT 6 OFFSET #{page}
 	</select>
 
 
 	<!-- 팀 검색 by location -->
-	<select id="searchTeamByLocation" parameterType="String"
+	<select id="searchTeamByLocation" parameterType="map"
 		resultType="TeamLocationDTO">
-		SELECT * FROM team
+		SELECT t.*, (SELECT COUNT(*) FROM team INNER JOIN location
+		ON
+		location.locationID = team.locationID WHERE location.gu =
+		#{gu}) as total
+		FROM team as t
 		INNER JOIN location ON
-		location.locationID = team.locationID
-		WHERE location.gu = #{gu}
+		location.locationID = t.locationID
+		WHERE
+		location.gu = #{gu} LIMIT 6
+		OFFSET #{page}
 	</select>
 
 	<!-- 팀 검색 by name & location -->
-	<select id="searchTeamByBoth" parameterType="map" resultType="TeamLocationDTO">
-		SELECT * FROM team
-		INNER JOIN location ON location.locationID = team.locationID
-		WHERE team.name LIKE CONCAT('%', #{name},'%') AND location.gu = #{gu}
+	<select id="searchTeamByBoth" parameterType="map"
+		resultType="TeamLocationDTO">
+		SELECT team.*, (SELECT COUNT(*) FROM team INNER JOIN location ON
+location.locationID = team.locationID WHERE team.name
+		LIKE
+		CONCAT('%',#{name},'%') AND location.gu = #{gu}) as total
+		FROM team
+		INNER JOIN location ON
+		location.locationID = team.locationID
+		WHERE
+		team.name LIKE CONCAT('%', #{name},'%') AND location.gu = #{gu} LIMIT
+		6
+		OFFSET #{page}
 	</select>
 
 	<!-- 현재 가장 큰 teamID 값 반환 -->
@@ -89,25 +108,29 @@
 		DELETE FROM userteamconn
 		WHERE userID = #{userID} AND teamID = #{teamID}
 	</delete>
-	
+
 	<!-- 팀원 수 세기 -->
-	<select id="getNumberOfCrews" parameterType="int" resultType="int">
+	<select id="getNumberOfCrews" parameterType="int"
+		resultType="int">
 		SELECT COUNT(*) FROM userteamconn WHERE teamID=#{teamID}
 	</select>
-	
+
 	<!-- 다음 팀 리더 선정 -->
 	<select id="getNextLeader" parameterType="int" resultType="int">
-		SELECT userID FROM userteamconn WHERE teamID=#{teamID} AND NOT userID= #{userID} LIMIT 1
+		SELECT userID FROM userteamconn WHERE teamID=#{teamID} AND NOT userID=
+		#{userID} LIMIT 1
 	</select>
-	
+
 	<!-- 팀 리더 변겅 -->
 	<update id="updateLeader" parameterType="map">
-		UPDATE team SET leader = #{userID} WHERE teamID = #{teamID}
+		UPDATE team SET leader =
+		#{userID} WHERE teamID = #{teamID}
 	</update>
 
 	<!--팀원 방출시 포메이션 삭제 -->
-   <delete id="deleteformation2" parameterType="map">
-      delete from formation
-      where teamID= #{teamID} and userID =#{userID};
-   </delete>
+	<delete id="deleteformation2" parameterType="map">
+		delete from
+		formation
+		where teamID= #{teamID} and userID =#{userID};
+	</delete>
 </mapper>

@@ -25,6 +25,7 @@ public interface TeamInfoService {
 	//----------------myteam---------------------------
 	int insertmy(UserTeamConnDto uteam);
 	int updatemy(UserDTO userID);
+	int deletemyteam(UserTeamConnDto uteam);
 	List<MyTeamDto> selectAllmyteam(int id); // 나의 팀 목록
 	
 	//----------------findteam---------------------------
@@ -44,9 +45,9 @@ public interface TeamInfoService {
 	
 	
 	//----------------search team------------------------
-	List<TeamLocationDTO> searchTeamByName(String name);
-	List<TeamLocationDTO> searchTeamByLocation(String gu);
-	List<TeamLocationDTO> searchTeamByBoth(String name,String gu);
+	List<TeamLocationDTO> searchTeamByName(String name, int page);
+	List<TeamLocationDTO> searchTeamByLocation(String gu, int page);
+	List<TeamLocationDTO> searchTeamByBoth(String name,String gu, int page);
 
 
 	

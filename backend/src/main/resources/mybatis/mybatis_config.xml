@@ -17,8 +17,9 @@
 		<typeAlias type="ido.arduino.dto.UserTeamConnDto" alias="userteamconn"/>
 		<typeAlias type="ido.arduino.dto.Formation" alias="formation"/>
 		<typeAlias type="ido.arduino.dto.MatchDto" alias="match"/>
-		<typeAlias type="ido.arduino.dto.MatchSimpleDto" alias="simple"/>
 		<typeAlias type="ido.arduino.dto.ResultDto" alias="result"/>
+		<typeAlias type="ido.arduino.dto.MatchRequestDto" alias="request"/>
+		<typeAlias type="ido.arduino.dto.MatchRequestSimpleDto" alias="requestsimple"/>
 		<typeAlias type="ido.arduino.dto.DeleteFormationDto" alias="deleteform"/>
 	</typeAliases>
 	<mappers>
