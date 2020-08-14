@@ -70,7 +70,8 @@ function TeamMatchPage() {
         <div className={classes.container}>
           <GridContainer>
             <GridItem xs={12}>
-              <h1 className={classes.title}>팀 매칭</h1>
+              {/* <h1 className={classes.title}>팀 매칭</h1> */}
+              <Typography variant="h3">팀 매칭</Typography>
               <h4>원하는 상대를 찾아보세요.</h4>
               <br />
             </GridItem>
@@ -92,10 +93,7 @@ function TeamMatchPage() {
               tabName: "매칭 검색",
               tabContent: (
                 <div className={classes.container} style={{ height: "750px" }}>
-                  <MatchSearch
-                    myteam={myteam}
-                    setMatchingList={setMatchingList}
-                  />
+                  <MatchSearch myteam={myteam} setMatchingList={setMatchingList} />
                   <Divider />
                   <br />
                   <Grid container justify="center" spacing={3}>
@@ -108,13 +106,11 @@ function TeamMatchPage() {
                     )}
                     {!(matchingList.length === 0) &&
                       matchingList.map((match, index) => {
-                        if ((index + 1) % 3 === 0) {
-                          return (
-                            <Grid item>
-                              <MatchCard key={index} match={match} />
-                            </Grid>
-                          );
-                        }
+                        return (
+                          <Grid key={index} item>
+                            <MatchCard key={index} match={match} />
+                          </Grid>
+                        );
                       })}
                   </Grid>
                 </div>
