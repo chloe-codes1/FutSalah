@@ -13,6 +13,7 @@ import { Grid, Modal, Typography } from "@material-ui/core";
 
 import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import AddIcon from "@material-ui/icons/Add";
+import ChatIcon from "@material-ui/icons/Chat";
 import AddUserDialog from "components/Dialog/AddUserDialog";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
@@ -49,7 +50,7 @@ import tempImage from "assets/img/basicTeamImg1.jpg";
 // table style
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: "#4a7c59",
     color: theme.palette.common.white,
     padding: "5px 0",
   },
@@ -330,6 +331,8 @@ export default function TeamInfoPage(props) {
       });
 
     setTeamList(teamList.filter((tl) => tl.userID !== id));
+    setPlayerPos1(playerPos1.filter((pp) => pp.userID !== id));
+    setPlayerPos2(playerPos2.filter((pp) => pp.userID !== id));
 
     setLoading(false);
   };
@@ -483,7 +486,7 @@ export default function TeamInfoPage(props) {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 150,
+          height: 50,
           color: "white",
         }}
         {...rest}
@@ -502,7 +505,7 @@ export default function TeamInfoPage(props) {
             <GridContainer
               justify="center"
               style={{
-                backgroundColor: "rgba( 0, 0, 0, 0.6 )",
+                backgroundColor: "rgba( 0, 0, 0, 0.7 )",
                 borderRadius: "15px",
                 minHeight: "700px",
               }}
@@ -574,7 +577,7 @@ export default function TeamInfoPage(props) {
                     (t) => t.userID === Number(userinfo.userID)
                   ) === undefined ? (
                     <Button
-                      color="info"
+                      color="teamInfo"
                       className={classes.modifyButton}
                       size="sm"
                       onClick={() => {
@@ -589,7 +592,7 @@ export default function TeamInfoPage(props) {
                     </Button>
                   ) : (
                     <Button
-                      color="info"
+                      color="teamInfo"
                       className={classes.modifyButton}
                       size="sm"
                       onClick={handleQRcodeZone}
@@ -600,7 +603,7 @@ export default function TeamInfoPage(props) {
                 {/* 팀 정보 변경 버튼 */}
                 {Number(userinfo.userID) === teamInfo.leader && (
                   <Button
-                    color="info"
+                    color="teamInfo"
                     className={classes.modifyButton}
                     size="sm"
                     onClick={() => {
@@ -614,7 +617,7 @@ export default function TeamInfoPage(props) {
               {/* 포메이션 부분 */}
               <GridItem className={classes.formation} xs={10} md={5}>
                 <NavPills
-                  color="success"
+                  color="teamInfo"
                   horizontal={{
                     tabsGrid: { xs: 3, sm: 3, md: 3 },
                     contentGrid: { xs: 9, sm: 9, md: 9 },
@@ -670,8 +673,7 @@ export default function TeamInfoPage(props) {
                               </GridItem>
                               <GridItem xs={5}>
                                 <Button
-                                  round
-                                  color="success"
+                                  color="teamInfo"
                                   onClick={() => {
                                     storeFormation(5);
                                     alert("포메이션이 저장되었습니다!");
@@ -679,7 +681,7 @@ export default function TeamInfoPage(props) {
                                   style={{
                                     marginTop: "10px",
                                     width: "100%",
-                                    height: "35px",
+                                    height: "40px",
                                   }}
                                 >
                                   <strong>
@@ -695,7 +697,7 @@ export default function TeamInfoPage(props) {
                                     fontSize: 10,
                                   }}
                                 >
-                                  선수를 벤치에 드래그해서 뺼 수 있습니다.
+                                  Tip. 선수를 벤치에 드래그해서 뺼 수 있습니다.
                                 </div>
                               </GridItem>
                             </>
@@ -748,8 +750,7 @@ export default function TeamInfoPage(props) {
                               </GridItem>
                               <GridItem xs={5}>
                                 <Button
-                                  round
-                                  color="success"
+                                  color="teamInfo"
                                   onClick={() => {
                                     storeFormation(6);
                                     alert("포메이션이 저장되었습니다!");
@@ -757,7 +758,7 @@ export default function TeamInfoPage(props) {
                                   style={{
                                     marginTop: "10px",
                                     width: "100%",
-                                    height: "35px",
+                                    height: "40px",
                                   }}
                                 >
                                   <strong>
@@ -766,6 +767,15 @@ export default function TeamInfoPage(props) {
                                     저장
                                   </strong>
                                 </Button>
+                              </GridItem>
+                              <GridItem>
+                                <div
+                                  style={{
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  Tip. 선수를 벤치에 드래그해서 뺼 수 있습니다.
+                                </div>
                               </GridItem>
                             </>
                           )}
@@ -778,7 +788,7 @@ export default function TeamInfoPage(props) {
               {/* 팀원, 전적, 신청관리 */}
               <GridItem className={classes.management} xs={10} md={5}>
                 <NavPills
-                  color="success"
+                  color="teamInfo"
                   tabs={[
                     {
                       // 팀원목록
@@ -845,10 +855,26 @@ export default function TeamInfoPage(props) {
                                           align="center"
                                           width="30%"
                                         >
+                                          {/* 채팅 버튼 */}
+                                          {userinfo.logged &&
+                                            Number(userinfo.userID) !==
+                                              t.userID && (
+                                              <Button
+                                                color="teamInfo"
+                                                size="sm"
+                                                onClick={() => {}}
+                                                style={{
+                                                  maxWidth: "3vw",
+                                                }}
+                                              >
+                                                <ChatIcon />
+                                              </Button>
+                                            )}
                                           {Number(userinfo.userID) ===
                                             teamInfo.leader &&
                                             t.userID !== teamInfo.leader && (
                                               <Button
+                                                color="teamInfo"
                                                 size="sm"
                                                 onClick={() => {
                                                   if (
@@ -925,6 +951,7 @@ export default function TeamInfoPage(props) {
                           </TableContainer>
                           {Number(userinfo.userID) === teamInfo.leader && (
                             <Button
+                              color="teamInfo"
                               onClick={() => {
                                 setAddUserOpen(true);
                               }}

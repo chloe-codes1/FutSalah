@@ -169,6 +169,7 @@ function ModifyTeamInfoDialog(props) {
       </DialogContent>
       <DialogActions>
         <Button
+          color="teamInfo"
           onClick={() => {
             if (gu === "") alert("변경할 지역을 선택해주세요!");
             else {
@@ -181,7 +182,7 @@ function ModifyTeamInfoDialog(props) {
         >
           변경
         </Button>
-        <Button color="primary" onClick={handleClose}>
+        <Button color="teamInfo" onClick={handleClose}>
           나가기
         </Button>
       </DialogActions>
