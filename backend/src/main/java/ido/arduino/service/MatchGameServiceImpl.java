@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ido.arduino.dao.MatchGameMapper;
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.repo.MatchGameRepo;
@@ -21,15 +22,19 @@ public class MatchGameServiceImpl implements MatchGameService{
 	@Autowired
 	MatchGameMapper matchMapper;
 	
+	//----------전체 조건 만족하는 리스트 출력---------------
 	@Override
 	public List<MatchDto> alloption(MatchRequestDto matchrequest) {
 		return mRepo.alloption(matchrequest);
 	}
 
+	//----------일부 조건 만족하는 리스트 출력---------------
 	@Override
 	public List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest) {
 		return mRepo.simpleoption(matchrequest);
 	}
+	
+	//----------전체 조건 만족하는 리스트 없을 경우 등록---------------
 
 	@Override
 	public int insertmatch(MatchDto match) {
@@ -44,6 +49,17 @@ public class MatchGameServiceImpl implements MatchGameService{
 	@Override
 	public int checkIfRegistered(int matchID, int teamID) {
 		return matchMapper.checkIfRegistered(matchID, teamID);
+	//----------나에게 요청온 매칭 리스트 (내팀이 등록한 매칭 정보)---------------
+	@Override
+	public List<MatchDto> comematch(int userID) {
+		// TODO Auto-generated method stub
+		return mRepo.comematch(userID);
+	}
+
+	@Override
+	public int deletematch(int matchID) {
+		// TODO Auto-generated method stub
+		return mRepo.deletematch(matchID);
 	}
 
 }

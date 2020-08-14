@@ -3,20 +3,19 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="ido.arduino.mapper.MatchRequestDto">
+<mapper namespace="ido.arduino.mapper.MatchGameMapper">
 
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
 	<select id="alloption" resultType="request">
-		select m.date , m.time, l.gu,
-		m.isBooked,m.formCode, c.name from
+		select m.*,t.name,
+		t.profileURL,l.gu, c.name from
 		matching m
 		left outer join court c on
 		m.courtID = c.courtID
-		left outer
-		join location l on m.locationID =
+		left outer join location l on m.locationID =
 		l.locationID
-
+		left outer join team t on m.homeTeamID = t.teamID
 		where
 		l.locationID = #{locationID}
 		and m.date LIKE CONCAT('%',#{date},'%')
@@ -30,12 +29,14 @@
 	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
 
 	<select id="simpleoption" resultType="requestsimple">
-		select m.date , m.time,
-		l.gu, m.isBooked,m.formCode, c.name from matching m
-		left outer join
-		court c on m.courtID = c.courtID
-		left outer join location l on
-		m.locationID = l.locationID
+		select m.*,t.name,
+		t.profileURL,l.gu, c.name from
+		matching m
+		left outer join court c on
+		m.courtID = c.courtID
+		left outer join location l on m.locationID =
+		l.locationID
+		left outer join team t on m.homeTeamID = t.teamID
 		where
 		l.locationID = #{locationID}
 		and m.date LIKE CONCAT('%',#{date},'%')
@@ -47,21 +48,46 @@
 	<!-- 검색한 조건 없으면 매칭 등록 -->
 	<insert id="insertmatch" parameterType="match">
 		insert into
-		matching(homeTeamID,locationID,date,time,formCode,isBooked)
+		matching(homeTeamID,locationID,date,time,formCode,isBooked, state)
 		values
-		(#{homeTeamID},#{locationID},#{date},#{time},#{formCode},#{isBooked});
+		(#{homeTeamID},#{locationID},#{date},#{time},#{formCode},#{isBooked},0)
 	</insert>
 
 
 
-	<!-- 나에게 온 매칭 정보 -->
+	<!-- 나에게 온 매칭 정보( 내가 등록한 매칭 정보) -->
 	<select id="comematch" resultType="match">
+		select m.date, m.time, t.name, t.profileURL,l.gu, c.name from
+		matching m
+		left outer join court c on m.courtID = c.courtID
+		left outer join location l on m.locationID = l.locationID
+		left outer join team t on m.homeTeamID =t.teamID
+		inner join userteamconn ut on t.teamID = ut.teamID
+		inner join user u on ut.userID = u.userID
+		where m.state = 0 and u.userID =#{userID};
+		
 	</select>
 
 
-	<!-- 내가 신청목록에 올려둔 매칭 정보 -->
+	<!-- 내가 매칭 신청 요청한 매칭 정보 -->
 
 	<select id="mymatch" resultType="match">
+
+
+	</select>
+
+	<!-- 등록한 매칭 삭제 -->
+
+	<delete id="deletematch" parameterType="int">
+		delete from matching
+		where matchID = #{matchID}
+	</delete>
+
+	<!-- 매칭 대기 리스트 -->
+	<select id="waitmatch" resultType="wait">
+		select t.name from waiting w, team t
+		where w.awayTeamID = t.teamID and
+		w.matchID= #{matchID};
 	</select>
 	
 	<select id="">
