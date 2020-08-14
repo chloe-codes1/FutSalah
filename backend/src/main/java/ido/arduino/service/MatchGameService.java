@@ -20,6 +20,6 @@ public interface MatchGameService {
 	List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest);
 	int insertmatch(MatchDto match);
 
-	List<MatchRegisterDto> comematch();
+	List<MatchDto> comematch(int userID);
 
 }

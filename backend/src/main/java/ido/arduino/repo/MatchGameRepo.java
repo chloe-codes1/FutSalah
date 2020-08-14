@@ -13,6 +13,6 @@ public interface MatchGameRepo {
 	public List<MatchDto> alloption(MatchRequestDto matchrequest);
 	public List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest);
 	int insertmatch(MatchDto match);
-	public List<MatchRegisterDto> comematch();
+	public List<MatchDto> comematch(int id);
 
 }

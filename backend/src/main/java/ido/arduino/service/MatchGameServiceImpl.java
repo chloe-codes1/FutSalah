@@ -42,9 +42,9 @@ public class MatchGameServiceImpl implements MatchGameService{
 
 	//----------나에게 요청온 매칭 리스트 (내팀이 등록한 매칭 정보)---------------
 	@Override
-	public List<MatchRegisterDto> comematch() {
+	public List<MatchDto> comematch(int userID) {
 		// TODO Auto-generated method stub
-		return mRepo.comematch();
+		return mRepo.comematch(userID);
 	}
 
 }

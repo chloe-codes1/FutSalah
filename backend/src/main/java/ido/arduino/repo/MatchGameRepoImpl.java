@@ -43,9 +43,9 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 
 	//----------나에게 요청온 매칭 리스트 (내팀이 등록한 매칭 정보)---------------
 	@Override
-	public List<MatchRegisterDto> comematch() {
+	public List<MatchDto> comematch(int userID) {
 		// TODO Auto-generated method stub
-		return template.selectList(ns+"comematch");
+		return template.selectList(ns+"comematch",userID);
 	}
 	
 	

@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.TeamInfoDto;
+import ido.arduino.dto.UserDTO;
 import ido.arduino.service.MatchGameService;
 import ido.arduino.service.TeamInfoService;
+import ido.arduino.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -39,10 +42,13 @@ public class MatchGameController {
 	
 	@Autowired
 	TeamInfoService tService;
+	
+	@Autowired
+	UserService uService;
 
 	
 
-	// ----------------Matching game waiting ---------------------------
+	// ----------------Matching game search ---------------------------
 	
 	
 	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer="List")
@@ -89,6 +95,18 @@ public class MatchGameController {
 		return entity;
 	}
 
+	//----------------Matching game waiting and state---------------------------
+	@ApiOperation(value = "내가 속한 모든 팀의 등록한 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer="List")
+	@PostMapping("/match/mymatch")
+	public ResponseEntity<List<MatchDto>> comematch(@RequestBody Map<String, Object> body) throws Exception {
+		System.out.println(body.toString());
+		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
+		int userId = user.getUserID();
+		logger.debug("comematch - 호출");
+		System.out.println("comematch ...............................");
+
+		return new ResponseEntity<List<MatchDto>>(mService.comematch(userId), HttpStatus.OK);
+	}
 	// ----------------예외처리---------------------------
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
