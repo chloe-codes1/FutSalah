@@ -560,11 +560,14 @@ export default function ProfilePage(props) {
                       horizontal: "center",
                     }}
                   >
-                    <h5 className={classes.popoverHeader}>팀 설명</h5>
+                    <h3 className={classes.popoverHeader}>팀 설명</h3>
                     <p className={classes.popoverBody}>
                       {teamInfo.description}
                     </p>
                   </Popover>
+                  <span style={{ fontSize: 10 }}>
+                    팀, 팀원 이름을 눌러 상세정보 확인
+                  </span>
                 </div>
                 {/* 가입 신청 버튼, QR 코드 버튼 */}
                 {userinfo.logged &&
@@ -686,6 +689,15 @@ export default function ProfilePage(props) {
                                     저장
                                   </strong>
                                 </Button>
+                              </GridItem>
+                              <GridItem>
+                                <div
+                                  style={{
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  선수를 벤치에 드래그해서 뺼 수 있습니다.
+                                </div>
                               </GridItem>
                             </>
                           )}
