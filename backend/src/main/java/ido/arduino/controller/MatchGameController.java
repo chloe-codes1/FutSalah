@@ -24,11 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ido.arduino.dto.CourtDTO;
 import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MatchDto;
-import ido.arduino.dto.MatchRequestDto;
-import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserDTO;
+import ido.arduino.dto.WaitMatchDto;
 import ido.arduino.service.CourtService;
 import ido.arduino.service.EmailServiceImpl;
 import ido.arduino.service.LocationService;
@@ -70,7 +69,7 @@ public class MatchGameController {
 			@RequestParam int isBooked, @RequestParam int locationID, @RequestParam int formCode) throws Exception {
 
 		logger.debug("alloption - 호출");
-		MatchRequestDto matchrequest = new MatchRequestDto(date, time, isBooked, locationID, formCode);
+		MatchDto matchrequest = new MatchDto(date, time, isBooked, locationID, formCode);
 		System.out.println("alloption호추추루룰...............................................");
 
 		return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
@@ -83,7 +82,7 @@ public class MatchGameController {
 		logger.debug("simpleoption - 호출");
 		System.out.println("simpleoption 호추추루룰...........................................................");
 
-		MatchRequestSimpleDto matchrequest = new MatchRequestSimpleDto(date, locationID);
+		MatchDto matchrequest = new MatchDto(date, locationID);
 		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(matchrequest), HttpStatus.OK);
 	}
 
@@ -188,6 +187,50 @@ public class MatchGameController {
 		}
 		return entity;
 	}
+	
+	@ApiOperation(value = "내가 매칭 요청한 팀의 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer = "List")
+	@PostMapping("/match/requestmatch")
+	public ResponseEntity<List<MatchDto>> requestmatch(@RequestBody Map<String, Object> body) throws Exception {
+		System.out.println(body.toString());
+		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
+		int userId = user.getUserID();
+		logger.debug("requestmatch - 호출");
+		System.out.println("requestmatch ...............................");
+
+		return new ResponseEntity<List<MatchDto>>(mService.requestmatch(userId), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "내가 매칭 요청한 팀 요청 삭제.", response = WaitMatchDto.class, responseContainer = "List")
+	@DeleteMapping("/match/requestmatch/{matchID}/{teamID}")
+	public ResponseEntity<Map<String, Object>> requestdelete(@PathVariable int matchID, @PathVariable int teamID) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			
+			WaitMatchDto wait = new WaitMatchDto(matchID,teamID);
+			mService.requestdelete(wait);
+			System.out.println("requestdelete.............................");
+			//int result = mService.deletematch(matchID);
+			entity = handleSuccess(matchID + "가 삭제되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
+	
+	
+	@ApiOperation(value = "내가 속한 팀의 경기 일정 출력 ", response = MatchDto.class, responseContainer = "List")
+	@PostMapping("/match/schedule")
+	public ResponseEntity<List<MatchDto>> schedule(@RequestBody Map<String, Object> body) throws Exception {
+		System.out.println(body.toString());
+		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
+		int userId = user.getUserID();
+		logger.debug("requestmatch - 호출");
+		System.out.println("requestmatch ...............................");
+
+		return new ResponseEntity<List<MatchDto>>(mService.schedule(userId), HttpStatus.OK);
+	}
+	
+	
 	// ----------------예외처리---------------------------
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
