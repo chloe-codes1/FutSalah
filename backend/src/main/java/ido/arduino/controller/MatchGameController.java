@@ -27,6 +27,7 @@ import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserDTO;
+import ido.arduino.dto.WaitMatchDto;
 import ido.arduino.service.CourtService;
 import ido.arduino.service.EmailServiceImpl;
 import ido.arduino.service.LocationService;
@@ -199,6 +200,22 @@ public class MatchGameController {
 		return new ResponseEntity<List<MatchDto>>(mService.requestmatch(userId), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "내가 매칭 요청한 팀 요청 삭제.", response = WaitMatchDto.class, responseContainer = "List")
+	@DeleteMapping("/match/requestmatch/{matchID}/{teamID}")
+	public ResponseEntity<Map<String, Object>> requestdelete(@PathVariable int matchID, @PathVariable int teamID) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			
+			WaitMatchDto wait = new WaitMatchDto(matchID,teamID);
+			mService.requestdelete(wait);
+			System.out.println("requestdelete.............................");
+			//int result = mService.deletematch(matchID);
+			entity = handleSuccess(matchID + "가 삭제되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
+		}
+		return entity;
+	}
 	// ----------------예외처리---------------------------
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {

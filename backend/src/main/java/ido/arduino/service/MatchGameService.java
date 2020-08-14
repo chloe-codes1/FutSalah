@@ -9,6 +9,7 @@ import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
+import ido.arduino.dto.WaitMatchDto;
 
 public interface MatchGameService {
 	
@@ -39,4 +40,5 @@ public interface MatchGameService {
 	
 	// 내가 요청한 매칭 
 	List<MatchDto> requestmatch(int userID);
+	int requestdelete(WaitMatchDto wait);
 }

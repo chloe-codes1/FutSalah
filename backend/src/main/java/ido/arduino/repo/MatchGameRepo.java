@@ -6,6 +6,7 @@ import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
+import ido.arduino.dto.WaitMatchDto;
 
 public interface MatchGameRepo {
 	
@@ -16,5 +17,6 @@ public interface MatchGameRepo {
 	public List<MatchDto> comematch(int userID);
 	int deletematch(int matchID);
 	public List<MatchDto> requestmatch(int userID);
+	int requestdelete(WaitMatchDto wait);
 
 }

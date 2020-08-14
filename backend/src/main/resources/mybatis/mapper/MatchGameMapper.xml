@@ -93,7 +93,7 @@
 
 	</select>
 
-	<!-- 등록한 매칭 삭제 -->
+	<!--내가 등록한 매칭 삭제 -->
 
 	<delete id="deletematch" parameterType="int">
 		delete from matching
@@ -106,5 +106,12 @@
 		where w.awayTeamID = t.teamID and
 		w.matchID= #{matchID};
 	</select>
+	
+	
+	<!--내가 요청한 매칭 삭제 -->
+	<delete id="requestdelete" parameterType="int">
+	delete from waiting
+	where  awayTeamID = #{teamID} and matchID =#{matchID} 
+	</delete>
 
 </mapper>

@@ -10,6 +10,7 @@ import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
+import ido.arduino.dto.WaitMatchDto;
 
 
 @Repository
@@ -41,7 +42,7 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		return template.insert(ns+"insertmatch", match);
 	}
 
-	//----------나에게 요청온 매칭 리스트 (내팀이 등록한 매칭 정보)---------------
+	//----------나에게 요청온 매칭 리스트 (내팀이 등록한 매칭 정보) & 등록 삭제---------------
 	@Override
 	public List<MatchDto> comematch(int userID) {
 		// TODO Auto-generated method stub
@@ -55,11 +56,17 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 	}
 
 	
-	//----------내가 요청한 매칭 리스트 (내팀이 요청한 매칭 정보)---------------
+	//----------내가 요청한 매칭 리스트 (내팀이 요청한 매칭 정보) & 요청 삭제---------------
 	@Override
 	public List<MatchDto> requestmatch(int userID) {
 		// TODO Auto-generated method stub
 		return template.selectList(ns+"requestmatch",userID);
+	}
+
+	@Override
+	public int requestdelete(WaitMatchDto wait) {
+		// TODO Auto-generated method stub
+		return template.delete(ns+"requestdelete",wait);
 	}
 	
 	

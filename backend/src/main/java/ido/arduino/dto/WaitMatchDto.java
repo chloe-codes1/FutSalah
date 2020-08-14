@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WaitMatchDto {
 	private int matchID; 
-	private int awayTeamID;
+	private int teamID;
 	
 
 }
