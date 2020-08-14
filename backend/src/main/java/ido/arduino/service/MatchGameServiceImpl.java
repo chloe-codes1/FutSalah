@@ -77,4 +77,9 @@ public class MatchGameServiceImpl implements MatchGameService {
 		return matchMapper.acceptMatchRequest(teamID, matchID);
 	}
 
+	@Override
+	public int refuseMatchRequest(int matchID, int teamID) {
+		return matchMapper.refuseMatchRequest(matchID, teamID);
+	}
+
 }

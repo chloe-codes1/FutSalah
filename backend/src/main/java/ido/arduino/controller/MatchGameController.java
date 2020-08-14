@@ -135,7 +135,6 @@ public class MatchGameController {
 		int teamID = data.get("teamID");
 		int matchID = data.get("matchID");
 		MatchDto matchInfo = mService.getMatchInfo(matchID);
-		System.out.println("matchInfo??" + matchInfo);
 		int homeTeamID = matchInfo.getHomeTeamID();
 		mService.deleteAllWaitings(matchID);
 		mService.acceptMatchRequest(homeTeamID, matchID);
@@ -146,6 +145,20 @@ public class MatchGameController {
 		EmailServiceImpl emailService = new EmailServiceImpl();
 		emailService.setJavaMailSender(javaMailSender);
 		return emailService.acceptMatchRequestMail(targetTeam, requestTeam, matchInfo, location, court);
+	}
+	
+	// 매칭 거절
+	@PostMapping("/match/refuse")
+	public @ResponseBody int refuseMatchRequest(@RequestBody Map<String, Integer> data) {
+		int teamID = data.get("teamID");
+		int matchID = data.get("matchID");
+		int homeTeamID = mService.getMatchInfo(matchID).getHomeTeamID();
+		mService.refuseMatchRequest(matchID, teamID);
+		TeamLeaderDTO requestTeam = tService.getTeamLeaderInfo(teamID);
+		TeamInfoDto targetTeam = tService.getTeamInfo(homeTeamID);
+		EmailServiceImpl emailService = new EmailServiceImpl();
+		emailService.setJavaMailSender(javaMailSender);
+		return emailService.refuseMatchRequestMail(targetTeam, requestTeam);
 	}
 
 	// ----------------Matching game waiting and state---------------------------

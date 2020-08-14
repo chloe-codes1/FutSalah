@@ -11,4 +11,5 @@ public interface MatchMapper {
 	MatchDto getMatchInfo(int matchID);
 	int deleteAllWaitings(int matchID);
 	int acceptMatchRequest(int teamID, int matchID);
+	int refuseMatchRequest(int matchID, int teamID);
 }

@@ -32,5 +32,10 @@
 	<update id="acceptMatchRequest" parameterType="map">
 		UPDATE matching SET awayTeamID=#{teamID}, state=1 WHERE matchID=#{matchID}
 	</update>
+	
+	<!-- 매칭 거절 -->
+	<delete id="refuseMatchRequest" parameterType="map">
+		DELETE FROM waiting WHERE matchID=#{matchID} AND awayTeamID=#{teamID}
+	</delete>
 </mapper>
 	
