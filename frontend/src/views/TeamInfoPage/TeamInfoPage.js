@@ -83,7 +83,7 @@ const modalStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfilePage(props) {
+export default function TeamInfoPage(props) {
   const classes = useStyles();
   const modal = modalStyles();
   const { ...rest } = props;
