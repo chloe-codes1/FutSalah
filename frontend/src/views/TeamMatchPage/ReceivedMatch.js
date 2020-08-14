@@ -68,14 +68,25 @@ export default function ReceivedMatch({ userinfo }) {
 
   // 등록한 매칭 삭제
   const removeMatch = (id) => {
-    setReceivedList(receivedList.filter((rl) => rl.matchID !== id));
+    axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch/${id}`,
+    })
+      .then(() => {
+        setReceivedList(receivedList.filter((rl) => rl.matchID !== id));
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   return (
     <div style={{ height: "750px", overflow: "auto" }}>
       <List>
         {receivedList.length === 0 ? (
-          <div>등록된 매칭이 없습니다.</div>
+          <div>
+            <h3 style={{ textAlign: "center" }}>등록된 매칭이 없습니다.</h3>
+          </div>
         ) : (
           receivedList.map((rl) => (
             <ListItem>
@@ -103,6 +114,10 @@ export default function ReceivedMatch({ userinfo }) {
                 onClick={() => {
                   handleRequestListOpen();
                 }}
+                style={{
+                  width: "10%",
+                  backgroundColor: "#05b0c4",
+                }}
               >
                 신청 관리
               </Button>
@@ -110,7 +125,13 @@ export default function ReceivedMatch({ userinfo }) {
                 small
                 variant="contained"
                 onClick={() => {
-                  removeMatch(rl.matchID);
+                  if (window.confirm("이 매칭을 삭제하시겠습니까?")) {
+                    removeMatch(rl.matchID);
+                  }
+                }}
+                style={{
+                  width: "10%",
+                  backgroundColor: "#05b0c4",
                 }}
               >
                 삭제

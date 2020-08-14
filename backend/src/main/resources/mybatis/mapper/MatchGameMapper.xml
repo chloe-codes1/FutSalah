@@ -71,7 +71,6 @@
       user u on ut.userID = u.userID
       where m.state = 0 and u.userID
       =#{userID};
-
    </select>
 
 
