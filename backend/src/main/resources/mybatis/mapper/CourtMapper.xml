@@ -5,13 +5,19 @@
 
 <mapper namespace="ido.arduino.dao.CourtMapper">
 	<!-- Validation -->
-	<select id="checkValid" parameterType="String" resultType="String">
+	<select id="checkValid" parameterType="String"
+		resultType="String">
 		SELECT password FROM admin WHERE id = #{id}
 	</select>
-	
-	<select id="login" parameterType="String" resultType="CourtAdminDTO">
+
+	<select id="login" parameterType="String"
+		resultType="CourtAdminDTO">
 		SELECT adminID, id, stadiumID, name
 		FROM admin, court as c
 		WHERE id = #{id} and c.courtID = admin.stadiumID
+	</select>
+
+	<select id="getCourtInfo" parameterType="int" resultType="CourtDTO">
+		SELECT * FROM court WHERE courtID=#{courtID}
 	</select>
 </mapper>
