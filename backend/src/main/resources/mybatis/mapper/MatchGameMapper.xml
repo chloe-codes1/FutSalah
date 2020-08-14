@@ -21,7 +21,8 @@
 		and m.date LIKE CONCAT('%',#{date},'%')
 		and m.time=#{time}
 		and m.isBooked =#{isBooked}
-		and m.formCode = #{formCode}
+		and m.formCode =
+		#{formCode}
 
 	</select>
 
@@ -29,10 +30,12 @@
 	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
 
 	<select id="simpleoption" resultType="match">
-		select m.*,t.name as hometeam,
+		select m.*,t.name as
+		hometeam,
 		t.profileURL,l.gu, c.name from
 		matching m
-		left outer join court c on
+		left outer join court
+		c on
 		m.courtID = c.courtID
 		left outer join location l on m.locationID =
 		l.locationID
@@ -57,22 +60,34 @@
 
 	<!-- 나에게 온 매칭 정보( 내가 등록한 매칭 정보) -->
 	<select id="comematch" resultType="match">
-		select m.date, m.time, t.name as hometeam, t.profileURL,l.gu, c.name from
-		matching m
-		left outer join court c on m.courtID = c.courtID
-		left outer join location l on m.locationID = l.locationID
-		left outer join team t on m.homeTeamID =t.teamID
-		inner join userteamconn ut on t.teamID = ut.teamID
-		inner join user u on ut.userID = u.userID
-		where m.state = 1 and u.userID =#{userID};
-		
-	</select>
+      select m.*, t.name as hometeam,t.profileURL, l.sido, l.gu, c.name
+      from matching m
+      left outer join court c on m.courtID = c.courtID
+      left outer join location l on m.locationID = l.locationID
+      left outer join team t on m.homeTeamID =t.teamID
+      inner join userteamconn ut on t.teamID = ut.teamID
+      inner join user u on ut.userID = u.userID
+      where m.state = 0 and u.userID =#{userID};
+   </select>
+	
+
 
 
 	<!-- 내가 매칭 신청 요청한 매칭 정보 -->
 
 	<select id="mymatch" resultType="match">
-
+		select m.date, m.time, t.name as hometeam, m.awayTeamID, t.profileURL,l.gu, c.name from
+		matching m
+		left outer join court c on m.courtID = c.courtID
+		left outer join location l
+		on m.locationID = l.locationID
+		left outer join team t on m.homeTeamID
+		=t.teamID
+		inner join userteamconn ut on t.teamID = ut.teamID
+		inner join
+		user u on ut.userID = u.userID
+		where m.state = 1 and u.userID
+		=#{userID};
 
 	</select>
 
@@ -85,7 +100,8 @@
 
 	<!-- 매칭 대기 리스트 -->
 	<select id="waitmatch" resultType="wait">
-		select t.name from waiting w, team t
+		select t.name from waiting w,
+		team t
 		where w.awayTeamID = t.teamID and
 		w.matchID= #{matchID};
 	</select>
