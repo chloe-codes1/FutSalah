@@ -70,12 +70,13 @@ export default function AdminInfo(props) {
   const initialMatchNo = Number(match.params.id);
   // Prev, Next 버튼을 위해 matchNo를 State로 만듬
   const [matchNo, setMatchNo] = useState(initialMatchNo);
-  console.log(matchNo);
+  // console.log(`matchNo: ${matchNo}`);
   // Prev, Next 매치 존재 여부
   const [sizeOfMatch, setSizeOfMatch] = useState(0);
+  // console.log(`sizeOfMatch: ${sizeOfMatch}`);
   const [isPrevMatchExists, setIsPrevMatchExists] = useState(true);
   const [isNextMatchExists, setIsNextMatchExists] = useState(true);
-  console.log(isPrevMatchExists, isNextMatchExists);
+  // console.log(isPrevMatchExists, isNextMatchExists);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -103,7 +104,8 @@ export default function AdminInfo(props) {
     const stadiumID = window.sessionStorage.getItem("stadiumID");
     adminuser.stadiumID = stadiumID;
     loadMatchInfo(matchNo);
-    adjacentMatch();
+    // console.log(matchNo, sizeOfMatch);
+    setPrevNextMatchButton(matchNo, sizeOfMatch);
     console.log("새로고침!");
   }, []);
 
@@ -112,35 +114,46 @@ export default function AdminInfo(props) {
   };
 
   const toPrevMatch = async () => {
-    if (isPrevMatchExists) {
-      setMatchNo(matchNo - 1);
-      // 이안에선 matchNo가 아직 안바뀐 상태...
-      history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo - 1}`);
-      loadMatchInfo(matchNo - 1);
-    }
+    // if (isPrevMatchExists) {
+    setMatchNo(matchNo - 1);
+    // 이안에선 matchNo가 아직 안바뀐 상태...
+    history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo - 1}`);
+    loadMatchInfo(matchNo - 1);
+    setPrevNextMatchButton(matchNo - 1, sizeOfMatch);
+    // }
   };
 
   const toNextMatch = async () => {
-    if (isNextMatchExists) {
+    console.log(matchNo, sizeOfMatch);
+    if (matchNo === sizeOfMatch) {
+      alert("다음 경기가 존재하지 않습니다!");
+    } else {
       setMatchNo(matchNo + 1);
       console.log(matchNo);
       // 이안에선 matchNo가 아직 안바뀐 상태...
       history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo + 1}`);
       loadMatchInfo(matchNo + 1);
+      setPrevNextMatchButton(matchNo + 1, sizeOfMatch);
     }
   };
 
-  const adjacentMatch = () => {
-    if (matchNo >= 2) {
-      setIsPrevMatchExists(true);
-      if (matchNo < sizeOfMatch) {
-        setIsNextMatchExists(true);
-      } else {
+  const setPrevNextMatchButton = (m, s) => {
+    if (m === 1) {
+      setIsPrevMatchExists(false);
+      if (m === s) {
         setIsNextMatchExists(false);
+      } else {
+        setIsNextMatchExists(true);
       }
     } else {
-      setIsPrevMatchExists(false);
+      setIsPrevMatchExists(true);
+      if (m === s) {
+        setIsNextMatchExists(false);
+      } else {
+        setIsNextMatchExists(true);
+      }
     }
+    // console.log(isPrevMatchExists, isNextMatchExists);
   };
 
   return (
@@ -218,14 +231,16 @@ export default function AdminInfo(props) {
             </GridItem>
           </GridContainer>
           <GridContainer className={classes.bottomButtonSet}>
-            <Button
-              size="sm"
-              color="primary"
-              onClick={toPrevMatch}
-              className={classes.bottomButton}
-            >
-              이전 경기
-            </Button>
+            {isPrevMatchExists && (
+              <Button
+                size="sm"
+                color="primary"
+                onClick={toPrevMatch}
+                className={classes.bottomButton}
+              >
+                이전 경기
+              </Button>
+            )}
 
             <Button
               size="sm"
@@ -235,15 +250,16 @@ export default function AdminInfo(props) {
             >
               목록으로
             </Button>
-
-            <Button
-              size="sm"
-              color="secondary"
-              onClick={toNextMatch}
-              className={classes.bottomButton}
-            >
-              다음 경기
-            </Button>
+            {isNextMatchExists && (
+              <Button
+                size="sm"
+                color="secondary"
+                onClick={toNextMatch}
+                className={classes.bottomButton}
+              >
+                다음 경기
+              </Button>
+            )}
           </GridContainer>
         </div>
       </Parallax>

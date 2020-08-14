@@ -12,11 +12,11 @@ export default class Qrreader extends Component {
     this.handleScan = this.handleScan.bind(this);
   }
   handleScan(data) {
-    console.log("scaning...");
+    // console.log("scaning...");
     this.setState({
       result: data,
     });
-    console.log(data);
+    // console.log(data);
   }
   handleError(err) {
     console.error(err);
