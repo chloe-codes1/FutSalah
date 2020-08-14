@@ -31,6 +31,7 @@ public interface TeamInfoRepo {
 	int selectlast();	// 가장 최근 생성한 팀 
 	int insertmy(UserTeamConnDto uteam); //userteamconn에 목록 넣기 
 	int updatemy(UserDTO userID);
+	int deletemyteam(UserTeamConnDto uteam);
 	public List<MyTeamDto> selectAllmyteam(int id);
 	
 	
