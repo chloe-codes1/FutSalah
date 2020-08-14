@@ -216,6 +216,21 @@ public class MatchGameController {
 		}
 		return entity;
 	}
+	
+	
+	@ApiOperation(value = "내가 속한 팀의 경기 일정 출력 ", response = MatchDto.class, responseContainer = "List")
+	@PostMapping("/match/schedule")
+	public ResponseEntity<List<MatchDto>> schedule(@RequestBody Map<String, Object> body) throws Exception {
+		System.out.println(body.toString());
+		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
+		int userId = user.getUserID();
+		logger.debug("requestmatch - 호출");
+		System.out.println("requestmatch ...............................");
+
+		return new ResponseEntity<List<MatchDto>>(mService.schedule(userId), HttpStatus.OK);
+	}
+	
+	
 	// ----------------예외처리---------------------------
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {

@@ -97,4 +97,11 @@ public class MatchGameServiceImpl implements MatchGameService {
 		return mRepo.requestdelete(wait);
 	}
 
+	// ----------내가 속한 팀의 예정된 경기 일정 ---------------
+	@Override
+	public List<MatchDto> schedule(int userID) {
+		// TODO Auto-generated method stub
+		return mRepo.schedule(userID);
+	}
+
 }

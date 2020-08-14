@@ -41,4 +41,7 @@ public interface MatchGameService {
 	// 내가 요청한 매칭 
 	List<MatchDto> requestmatch(int userID);
 	int requestdelete(WaitMatchDto wait);
+	
+	// 내가 속한 팀의 예정된 경기리스트 
+	List<MatchDto> schedule(int userID);
 }

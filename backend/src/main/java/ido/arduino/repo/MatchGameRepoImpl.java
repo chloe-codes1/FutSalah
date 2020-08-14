@@ -68,6 +68,14 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		// TODO Auto-generated method stub
 		return template.delete(ns+"requestdelete",wait);
 	}
+
+	
+	//----------내가 속한 팀의 예정된 경기 일정 ---------------
+	@Override
+	public List<MatchDto> schedule(int userID) {
+		// TODO Auto-generated method stub
+		return template.selectList(ns+"schedule", userID);
+	}
 	
 	
 
