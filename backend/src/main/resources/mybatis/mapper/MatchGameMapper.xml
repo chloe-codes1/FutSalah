@@ -57,16 +57,23 @@
 
 	<!-- 나에게 온 매칭 정보( 내가 등록한 매칭 정보) -->
 	<select id="comematch" resultType="match">
-		select m.date, m.time, t.name, t.profileURL,l.gu, c.name from
-		matching m
-		left outer join court c on m.courtID = c.courtID
-		left outer join location l on m.locationID = l.locationID
-		left outer join team t on m.homeTeamID =t.teamID
-		inner join userteamconn ut on t.teamID = ut.teamID
-		inner join user u on ut.userID = u.userID
-		where m.state = 0 and u.userID =#{userID};
-		
-	</select>
+      select m.*, t.name as hometeam,t.profileURL, l.sido, l.gu, c.name
+	  from
+      matching m
+      left outer join
+      court c on m.courtID = c.courtID
+      left outer join location l on
+      m.locationID = l.locationID
+      left outer join team t on m.homeTeamID
+      =t.teamID
+      inner join userteamconn ut on t.teamID = ut.teamID
+      inner join
+      user u on ut.userID = u.userID
+      where m.state = 0 and u.userID
+      =#{userID};
+
+   </select>
+
 
 
 	<!-- 내가 매칭 신청 요청한 매칭 정보 -->

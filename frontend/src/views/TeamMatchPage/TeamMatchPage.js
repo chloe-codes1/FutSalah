@@ -122,7 +122,7 @@ function TeamMatchPage() {
             },
             {
               tabName: "받은 신청",
-              tabContent: <ReceivedMatch />,
+              tabContent: <ReceivedMatch userinfo={userinfo} />,
             },
             {
               tabName: "보낸 신청",

@@ -9,7 +9,7 @@
 	<insert id="insert" parameterType="teaminfo">
 		insert into team ( name,
 		description,profileURL,leader, code)
-		values (#{name},#{description},
+		values (#{name},#{description}, #{locationID},
 		#{profileURL},#{leader}, #{code})
 	</insert>
 
