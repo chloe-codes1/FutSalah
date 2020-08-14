@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.dao.MatchMapper">
+
+	<!-- 등록된 매치 정보 가져오기 -->
+	<select id="getMatchInfo" parameterType="int" resultType="MatchDTO">
+		SELECT*FROM matching WHERE matchID = #{matchID}
+	</select>
+
+	<!-- 매칭 신청하기 -->
+	<insert id="registerForGame" parameterType="map">
+		INSERT INTO waiting
+		(matchID, awayTeamID) VALUES (#{matchID}, #{teamID})
+	</insert>
+
+	<!-- 매칭 신청 중복검사 (waiting) -->
+	<select id="checkIfRegistered" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*) FROM waiting WHERE matchID=#{matchID} AND
+		awayTeamID=#{teamID}
+	</select>
+	
+	<!-- 해당 매치의 모든 대기목록 삭제 -->
+	<delete id="deleteAllWaitings" parameterType="int">
+		DELETE FROM waiting WHERE matchID=#{matchID}
+	</delete>
+
+	<!-- 매칭 성사 시 mataching table 수정 -->
+	<update id="acceptMatchRequest" parameterType="map">
+		UPDATE matching SET awayTeamID=#{teamID}, state=1 WHERE matchID=#{matchID}
+	</update>
+	
+	<!-- 매칭 거절 -->
+	<delete id="refuseMatchRequest" parameterType="map">
+		DELETE FROM waiting WHERE matchID=#{matchID} AND awayTeamID=#{teamID}
+	</delete>
+</mapper>
+	

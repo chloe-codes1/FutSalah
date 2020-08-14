@@ -118,7 +118,7 @@ location.locationID = team.locationID WHERE team.name
 	<!-- 다음 팀 리더 선정 -->
 	<select id="getNextLeader" parameterType="int" resultType="int">
 		SELECT userID FROM userteamconn WHERE teamID=#{teamID} AND NOT userID=
-		#{userID} LIMIT 1
+		#{userID} ORDER BY createdAt LIMIT 1
 	</select>
 
 	<!-- 팀 리더 변겅 -->
