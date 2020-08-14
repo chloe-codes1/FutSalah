@@ -27,6 +27,8 @@
 	</select>
 
 
+
+
 	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
 
 	<select id="simpleoption" resultType="match">
@@ -48,6 +50,7 @@
 	</select>
 
 
+
 	<!-- 검색한 조건 없으면 매칭 등록 -->
 	<insert id="insertmatch" parameterType="match">
 		insert into
@@ -55,6 +58,7 @@
 		values
 		(#{homeTeamID},#{locationID},#{date},#{time},#{formCode},#{isBooked},0)
 	</insert>
+
 
 
 
@@ -69,7 +73,6 @@
       inner join user u on ut.userID = u.userID
       where m.state = 0 and u.userID =#{userID};
    </select>
-	
 
 
 
@@ -100,11 +103,9 @@
 
 	<!-- 매칭 대기 리스트 -->
 	<select id="waitmatch" resultType="wait">
-		select t.name from waiting w,
-		team t
+		select t.name from waiting w, team t
 		where w.awayTeamID = t.teamID and
 		w.matchID= #{matchID};
 	</select>
-
 
 </mapper>

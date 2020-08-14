@@ -2,6 +2,8 @@ package ido.arduino.dto;
 
 import java.sql.Date;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +11,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Alias("MatchDTO")
 public class MatchDto {
-	
 	private int matchID ;
 	private int homeTeamID;
 	private int awayTeamID;
@@ -49,7 +50,8 @@ public class MatchDto {
 	}
 
 
-	
 
+	
+	
 	
 }

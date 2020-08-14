@@ -3,6 +3,7 @@ package ido.arduino.controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +100,7 @@ public class TeamInfoController {
 	public @ResponseBody int addCrewIntoTeam(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
-		return tService.insertmy(new UserTeamConnDto(userID, teamID));
+		return tService.insertmy(new UserTeamConnDto(userID, teamID, LocalDate.now()));
 	}
 
 	// 팀 생성하기
@@ -126,7 +127,7 @@ public class TeamInfoController {
 			System.out.println(">>>>>>>>>>>>>>>>>>>>" + code);
 			TeamInfoDto newTeam = TeamInfoDto.of(teamInfo, userId, code);
 			int lastTeamId = tService.insert(newTeam);
-			tService.insertmy(new UserTeamConnDto(userId, lastTeamId));
+			tService.insertmy(new UserTeamConnDto(userId, lastTeamId, LocalDate.now()));
 			entity = handleSuccess(newTeam.getClass() + "가 추가되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -202,7 +203,7 @@ public class TeamInfoController {
 		RequestDTO currentRequest = rService.getRequest(teamID, userID);
 		int requestID = currentRequest.getRequestID();
 		rService.delete(requestID);
-		tService.insertmy(new UserTeamConnDto(userID, teamID));
+		tService.insertmy(new UserTeamConnDto(userID, teamID,LocalDate.now()));
 		TeamInfoDto targetTeam = tService.getTeamInfo(teamID);
 		EmailServiceImpl emailService = new EmailServiceImpl();
 		emailService.setJavaMailSender(javaMailSender);
@@ -282,7 +283,7 @@ public class TeamInfoController {
 		public ResponseEntity<Map<String, Object>> deletemyteam(@PathVariable int teamID,@PathVariable int userID ) {
 			ResponseEntity<Map<String, Object>> entity = null;
 			try {
-				UserTeamConnDto utc = new UserTeamConnDto(teamID, userID);
+				UserTeamConnDto utc = new UserTeamConnDto(teamID, userID,LocalDate.now());
 				tService.deletemyteam(utc);
 				System.out.println("deletemyteam 호출 삭제에에에에ㅔ --------------");
 				int result = 	tService.deletemyteam(utc);
