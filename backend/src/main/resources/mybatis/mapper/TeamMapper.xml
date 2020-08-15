@@ -66,10 +66,12 @@
 		SELECT t.*, (SELECT COUNT(*) FROM team INNER JOIN location
 		ON
 		location.locationID = team.locationID WHERE location.gu =
-		#{gu}) as total
+		#{gu}) as
+		total
 		FROM team as t
 		INNER JOIN location ON
-		location.locationID = t.locationID
+		location.locationID =
+		t.locationID
 		WHERE
 		location.gu = #{gu} LIMIT 6
 		OFFSET #{page}
@@ -78,15 +80,18 @@
 	<!-- 팀 검색 by name & location -->
 	<select id="searchTeamByBoth" parameterType="map"
 		resultType="TeamLocationDTO">
-		SELECT team.*, (SELECT COUNT(*) FROM team INNER JOIN location ON
-location.locationID = team.locationID WHERE team.name
+		SELECT team.*, (SELECT COUNT(*) FROM team INNER JOIN
+		location ON
+		location.locationID = team.locationID WHERE team.name
 		LIKE
-		CONCAT('%',#{name},'%') AND location.gu = #{gu}) as total
+		CONCAT('%',#{name},'%') AND
+		location.gu = #{gu}) as total
 		FROM team
 		INNER JOIN location ON
 		location.locationID = team.locationID
 		WHERE
-		team.name LIKE CONCAT('%', #{name},'%') AND location.gu = #{gu} LIMIT
+		team.name LIKE CONCAT('%',
+		#{name},'%') AND location.gu = #{gu} LIMIT
 		6
 		OFFSET #{page}
 	</select>
@@ -133,4 +138,11 @@ location.locationID = team.locationID WHERE team.name
 		formation
 		where teamID= #{teamID} and userID =#{userID};
 	</delete>
+
+	<!-- 포메이션 존재 여부 검사 -->
+	<select id="checkIfFormationExists" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*) FROM formation WHERE teamID= #{teamID} and
+		userID = #{userID}
+	</select>
 </mapper>
