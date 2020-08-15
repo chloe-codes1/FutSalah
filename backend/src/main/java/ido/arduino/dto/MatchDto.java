@@ -16,7 +16,6 @@ public class MatchDto {
 	private int matchID;
 	private int homeTeamID;
 	private int awayTeamID;
-	private String homeTeam;
 	private Date date;
 	private int time;
 	private int isBooked;// 경기장 유무 1:경기장 있음,0: 경기장 없음

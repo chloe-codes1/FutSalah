@@ -126,11 +126,11 @@ function TeamMatchPage() {
             },
             {
               tabName: "보낸 신청",
-              tabContent: <SentMatch />,
+              tabContent: <SentMatch userinfo={userinfo} />,
             },
             {
               tabName: "예정된 매치",
-              tabContent: <UpcomingMatch />,
+              tabContent: <UpcomingMatch userinfo={userinfo} />,
             },
           ]}
         />

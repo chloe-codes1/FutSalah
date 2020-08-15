@@ -8,6 +8,8 @@ import Button from "components/CustomButtons/Button.js";
 import { Modal, Typography } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 
+import { Link } from "react-router-dom";
+
 import axios from "axios";
 
 export default function ReceivedMatch({ userinfo }) {
@@ -43,6 +45,7 @@ export default function ReceivedMatch({ userinfo }) {
       data: userinfo,
     })
       .then((res) => {
+        console.log(res.data);
         setReceivedList(
           res.data.map((r) => {
             if (r.profileURL) {
@@ -91,7 +94,6 @@ export default function ReceivedMatch({ userinfo }) {
           receivedList.map((rl) => (
             <ListItem>
               <ListItemAvatar>
-                {/* 팀 로고 넣기*/}
                 <img
                   src={rl.profileURL}
                   style={{
@@ -101,12 +103,33 @@ export default function ReceivedMatch({ userinfo }) {
                   }}
                 />
               </ListItemAvatar>
-              <ListItemText>{rl.homeTeam}</ListItemText>
+              <ListItemText
+                style={{
+                  width: "15%",
+                }}
+              >
+                <Link
+                  to={"/teaminfo/" + rl.homeTeamID}
+                  style={{ color: "black" }}
+                >
+                  {rl.hometeam}
+                </Link>
+              </ListItemText>
               <ListItemText
                 primary={`${rl.date} / ${rl.time}시`}
                 secondary={`${rl.sido} ${rl.gu} ${rl.name} / 예약여부:${
                   rl.isBooked ? "O" : "X"
                 } `}
+                style={{
+                  width: "30%",
+                }}
+              />
+              <ListItemText
+                primary="경기방식"
+                secondary={`${rl.formCode}:${rl.formCode}`}
+                style={{
+                  width: "15%",
+                }}
               />
               <Button
                 small
@@ -187,7 +210,15 @@ export default function ReceivedMatch({ userinfo }) {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      console.log("수락");
+                      if (
+                        window.confirm("이 팀의 매칭 신청을 수락하시겠습니까?")
+                      ) {
+                        alert("수락");
+                      }
+                    }}
+                    style={{
+                      width: "10%",
+                      backgroundColor: "#05b0c4",
                     }}
                   >
                     수락
@@ -195,7 +226,15 @@ export default function ReceivedMatch({ userinfo }) {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      console.log("거절");
+                      if (
+                        window.confirm("이 팀의 매칭 신청을 거절하시겠습니까?")
+                      ) {
+                        alert("거절");
+                      }
+                    }}
+                    style={{
+                      width: "10%",
+                      backgroundColor: "#05b0c4",
                     }}
                   >
                     거절
