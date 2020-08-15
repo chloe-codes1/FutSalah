@@ -170,6 +170,7 @@ export default function AdminInfo(props) {
               <ArriveInfo
                 homeTeamID={matchInfo.homeTeamID}
                 awayTeamID={matchInfo.awayTeamID}
+                matchhour={matchInfo.time}
               />
             </GridItem>
             <GridItem className={classes.bottomButtonSet}>
