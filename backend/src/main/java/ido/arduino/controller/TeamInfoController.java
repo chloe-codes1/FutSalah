@@ -108,7 +108,6 @@ public class TeamInfoController {
 	@PostMapping("/team")
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody TeamCreateRequest teamInfo) {
 		ResponseEntity<Map<String, Object>> entity = null;
-
 		int id = 0;
 		try {
 			// 생성 시 부여 받을 TeamID 값
