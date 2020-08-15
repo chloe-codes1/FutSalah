@@ -9,13 +9,8 @@ import AdminHeaderLinks from "components/Header/AdminHeaderLinks.js";
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
 
-import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/AdminPage.js";
-
 export default function Admin(props) {
   const { ...rest } = props;
-  const useStyles = makeStyles(styles);
-  const classes = useStyles();
 
   return (
     <div>
@@ -34,11 +29,7 @@ export default function Admin(props) {
         filter
         image={require("assets/img/liveMatchbg.png")}
         style={{ alignItems: "stretch" }}
-      >
-        <div className={classes.container}>
-          <h1>관리자 페이지</h1>
-        </div>
-      </Parallax>
+      ></Parallax>
       <Footer />
     </div>
   );

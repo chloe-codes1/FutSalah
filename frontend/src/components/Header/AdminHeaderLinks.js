@@ -102,7 +102,7 @@ export default function AdminHeaderLinks(props) {
       <ListItem className={classes.listItem}>
         {adminuserinfo.logged && (
           <ListItemText className={classes.listItemText}>
-            {adminuserinfo.name}
+            {adminuserinfo.name}님 환영합니다!
           </ListItemText>
         )}
       </ListItem>
