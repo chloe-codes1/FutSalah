@@ -8,9 +8,9 @@
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
 		insert into team ( name,
-		description,profileURL,leader, code)
+		description, profileURL,locationID, leader, code)
 		values (#{name},#{description},
-		#{profileURL},#{leader}, #{code})
+		#{profileURL}, #{locationID}, #{leader}, #{code})
 	</insert>
 
 	<!-- 팀 수정 -->
@@ -126,8 +126,7 @@
       u.name from formation f, user u
       where f.userID= u.userID and f.teamID =#{teamID}
 	</select>
-
-
+	
 	<!-- 경기전적 출력 -->
 	<select id="resultscore" resultType="result" parameterType="int">
 

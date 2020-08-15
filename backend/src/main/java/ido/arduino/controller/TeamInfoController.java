@@ -3,6 +3,7 @@ package ido.arduino.controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +100,7 @@ public class TeamInfoController {
 	public @ResponseBody int addCrewIntoTeam(@RequestBody Map<String, Integer> data) {
 		int userID = data.get("userID");
 		int teamID = data.get("teamID");
-		return tService.insertmy(new UserTeamConnDto(userID, teamID));
+		return tService.insertmy(new UserTeamConnDto(userID, teamID, LocalDate.now()));
 	}
 
 	// 팀 생성하기
@@ -107,7 +108,6 @@ public class TeamInfoController {
 	@PostMapping("/team")
 	public ResponseEntity<Map<String, Object>> insert(@RequestBody TeamCreateRequest teamInfo) {
 		ResponseEntity<Map<String, Object>> entity = null;
-
 		int id = 0;
 		try {
 			// 생성 시 부여 받을 TeamID 값
@@ -126,7 +126,7 @@ public class TeamInfoController {
 			System.out.println(">>>>>>>>>>>>>>>>>>>>" + code);
 			TeamInfoDto newTeam = TeamInfoDto.of(teamInfo, userId, code);
 			int lastTeamId = tService.insert(newTeam);
-			tService.insertmy(new UserTeamConnDto(userId, lastTeamId));
+			tService.insertmy(new UserTeamConnDto(userId, lastTeamId, LocalDate.now()));
 			entity = handleSuccess(newTeam.getClass() + "가 추가되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -202,7 +202,7 @@ public class TeamInfoController {
 		RequestDTO currentRequest = rService.getRequest(teamID, userID);
 		int requestID = currentRequest.getRequestID();
 		rService.delete(requestID);
-		tService.insertmy(new UserTeamConnDto(userID, teamID));
+		tService.insertmy(new UserTeamConnDto(userID, teamID, LocalDate.now()));
 		TeamInfoDto targetTeam = tService.getTeamInfo(teamID);
 		EmailServiceImpl emailService = new EmailServiceImpl();
 		emailService.setJavaMailSender(javaMailSender);
@@ -245,14 +245,14 @@ public class TeamInfoController {
 	@PostMapping("/team/search/{condition}/{page}")
 	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition, @PathVariable int page,
 			@RequestBody Map<String, String> data) {
-		page = (page-1)*6;
+		page = (page - 1) * 6;
 		List<TeamLocationDTO> list = new ArrayList<>();
 		if (condition.equals("name")) {
 			String name = data.get("name");
-			list = tService.searchTeamByName(name,page);
+			list = tService.searchTeamByName(name, page);
 		} else if (condition.equals("location")) {
 			String gu = data.get("gu");
-			list = tService.searchTeamByLocation(gu,page);
+			list = tService.searchTeamByLocation(gu, page);
 		} else if (condition.equals("both")) {
 			String name = data.get("name");
 			String gu = data.get("gu");
@@ -275,23 +275,41 @@ public class TeamInfoController {
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
 
-	
 	// 나의 팀 나가기
-		@ApiOperation(value = "나의 팀 나가기.", response = String.class)
-		@DeleteMapping("/team/my/{teamID}/{userID}")
-		public ResponseEntity<Map<String, Object>> deletemyteam(@PathVariable int teamID,@PathVariable int userID ) {
-			ResponseEntity<Map<String, Object>> entity = null;
-			try {
-				UserTeamConnDto utc = new UserTeamConnDto(teamID, userID);
-				tService.deletemyteam(utc);
-				System.out.println("deletemyteam 호출 삭제에에에에ㅔ --------------");
-				int result = 	tService.deletemyteam(utc);
-				entity = handleSuccess(teamID + "가 삭제되었습니다.");
-			} catch (RuntimeException e) {
-				entity = handleException(e);
+	@ApiOperation(value = "나의 팀 나가기.", response = Integer.class)
+	@DeleteMapping("/team/my")
+	public @ResponseBody int leaveMyTeam(@RequestBody Map<String, Integer> data) {
+		try {
+			int teamID = data.get("teamID");
+			int userID = data.get("userID");
+			TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
+			// 팀 리더 일 때
+			if (currentTeam.getLeader() == userID) {
+				System.out.println("리더입니당");
+				int numberOfCrews = tService.getNumberOfCrews(teamID);
+				// 자신을 제외한 팀원이 있을 경우
+				if (numberOfCrews > 1) {
+					// 한 사람을 선택해서
+					int nextLeaderID = tService.getNextLeader(userID, teamID);
+					// 리더로 지정하고
+					tService.updateLeader(nextLeaderID, teamID);
+					// userteamconn table에서 삭제한다
+					tService.deleteCrew(teamID, userID);
+				// 자신을 제외한 팀이 없을 경우
+				}else {
+					tService.delete(teamID);
+				}
+			// 자신이 팀리더 아니면,
+			}else {
+				// userteamconn table에서 바로 삭제한다
+				tService.deleteCrew(teamID, userID);
 			}
-			return entity;
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
 		}
+	}
 
 	// ----------------team info---------------------------
 
@@ -324,9 +342,7 @@ public class TeamInfoController {
 	@PostMapping("/team/formation")
 	public ResponseEntity<Map<String, Object>> insertformation(@RequestBody Formation form) {
 		ResponseEntity<Map<String, Object>> entity = null;
-
 		try {
-
 			TeamInfoDto team = tService.getTeamInfo(form.getTeamID());
 			int result = tService.insertformation(form);
 			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
