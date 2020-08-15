@@ -297,6 +297,7 @@ public class TeamInfoController {
 					tService.deleteCrew(teamID, userID);
 				// 자신을 제외한 팀이 없을 경우
 				}else {
+					tService.deleteCrew(teamID, userID);
 					tService.delete(teamID);
 				}
 			// 자신이 팀리더 아니면,
