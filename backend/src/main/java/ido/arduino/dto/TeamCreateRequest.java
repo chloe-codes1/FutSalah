@@ -10,4 +10,5 @@ public class TeamCreateRequest {
 	String description;
 	String code;
 	String name;
+	String locationID;
 }
