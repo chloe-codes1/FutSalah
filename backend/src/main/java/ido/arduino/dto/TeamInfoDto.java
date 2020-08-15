@@ -26,7 +26,7 @@ public class TeamInfoDto {
 	private int locationID;
 
 	public static TeamInfoDto of(TeamCreateRequest tcr, int userid, String code) {
-		TeamInfoDto tid = new TeamInfoDto(0, 0, 0, 0, 0, code, tcr.getDescription(), 0, "", tcr.getName(), userid, 0);
+		TeamInfoDto tid = new TeamInfoDto(0, 0, 0, 0, 0, code, tcr.getDescription(), 0, "", tcr.getName(), userid, tcr.getLocationID());
 
 		return tid;
 	}
