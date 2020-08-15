@@ -67,6 +67,7 @@ export default function SentMatch({ userinfo }) {
                     style={{
                       width: "50px",
                       height: "50px",
+                      borderRadius: "50%",
                     }}
                   />
                 ) : (
@@ -75,6 +76,7 @@ export default function SentMatch({ userinfo }) {
                       width: "50px",
                       height: "50px",
                       backgroundColor: "white",
+                      borderRadius: "50%",
                     }}
                   />
                 )}
@@ -105,9 +107,15 @@ export default function SentMatch({ userinfo }) {
               </ListItemText>
               <ListItemText
                 primary={`${sl.date} / ${sl.time}시`}
-                secondary={`${sl.sido} ${sl.gu} ${sl.name} 예약여부 ${
-                  sl.isBooked ? "O" : "X"
-                }`}
+                secondary={
+                  sl.name === null
+                    ? `${sl.sido} ${sl.gu} 경기장없음 / 예약여부:${
+                        sl.isBooked ? "O" : "X"
+                      }`
+                    : `${sl.sido} ${sl.gu} ${sl.name} / 예약여부:${
+                        sl.isBooked ? "O" : "X"
+                      } `
+                }
                 style={{
                   width: "30%",
                 }}

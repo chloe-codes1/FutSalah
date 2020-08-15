@@ -55,6 +55,7 @@ export default function UpcomingMatch({ userinfo }) {
                     style={{
                       width: "50px",
                       height: "50px",
+                      borderRadius: "50%",
                     }}
                   />
                 ) : (
@@ -63,6 +64,7 @@ export default function UpcomingMatch({ userinfo }) {
                       width: "50px",
                       height: "50px",
                       backgroundColor: "white",
+                      borderRadius: "50%",
                     }}
                   />
                 )}
@@ -105,6 +107,7 @@ export default function UpcomingMatch({ userinfo }) {
                     style={{
                       width: "50px",
                       height: "50px",
+                      borderRadius: "50%",
                     }}
                   />
                 ) : (
@@ -113,6 +116,7 @@ export default function UpcomingMatch({ userinfo }) {
                       width: "50px",
                       height: "50px",
                       backgroundColor: "white",
+                      borderRadius: "50%",
                     }}
                   />
                 )}

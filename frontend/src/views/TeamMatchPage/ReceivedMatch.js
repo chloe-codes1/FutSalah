@@ -94,14 +94,25 @@ export default function ReceivedMatch({ userinfo }) {
           receivedList.map((rl) => (
             <ListItem>
               <ListItemAvatar>
-                <img
-                  src={rl.profileURL}
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%",
-                  }}
-                />
+                {rl.profileURL ? (
+                  <img
+                    src={rl.profileURL}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      backgroundColor: "white",
+                      borderRadius: "50%",
+                    }}
+                  ></div>
+                )}
               </ListItemAvatar>
               <ListItemText
                 style={{
@@ -117,9 +128,15 @@ export default function ReceivedMatch({ userinfo }) {
               </ListItemText>
               <ListItemText
                 primary={`${rl.date} / ${rl.time}시`}
-                secondary={`${rl.sido} ${rl.gu} ${rl.name} / 예약여부:${
-                  rl.isBooked ? "O" : "X"
-                } `}
+                secondary={
+                  rl.name === null
+                    ? `${rl.sido} ${rl.gu} 경기장없음 / 예약여부:${
+                        rl.isBooked ? "O" : "X"
+                      }`
+                    : `${rl.sido} ${rl.gu} ${rl.name} / 예약여부:${
+                        rl.isBooked ? "O" : "X"
+                      } `
+                }
                 style={{
                   width: "30%",
                 }}
