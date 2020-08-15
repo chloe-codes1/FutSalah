@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -8,15 +7,12 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
-import { Button } from "@material-ui/core";
 
 import matchIng from "assets/img/match-ing.png";
-import matchEnd from "assets/img/match-end.png";
 import matchComplete from "assets/img/match-complete.png";
 
-import team1 from "assets/img/match-team1.png";
-import team2 from "assets/img/match-team2.png";
-import team3 from "assets/img/match-team3.png";
+import axios from "axios";
+
 import MatchApplyDialog from "components/Dialog/MatchApplyDialog";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,11 +38,33 @@ const useStyles = makeStyles((theme) => ({
   //   },
 }));
 
-export default function MatchCard({ match }) {
+export default function MatchCard({ match, myteam }) {
   console.log(match);
   const classes = useStyles();
   const [applyOpen, setApplyOpen] = useState(false);
+  const [homeTeam, setHomeTeam] = useState({
+    name: "",
+    wins: "",
+    defeats: "",
+    draws: "",
+    mileage: "",
+  });
+  const [courtList, setCourtList] = useState([]);
   const handleApply = useCallback(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` + match.homeTeamID,
+    }).then((e) => {
+      console.log(e.data);
+      setHomeTeam(e.data);
+    });
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + match.locationID,
+    }).then((e) => {
+      console.log(e.data);
+      setCourtList(e.data);
+    });
     setApplyOpen(true);
   });
   const handleClose = () => {
@@ -98,7 +116,15 @@ export default function MatchCard({ match }) {
           </CardContent>
         </CardActionArea>
       </Card>
-      <MatchApplyDialog info={match} open={applyOpen} onClose={handleClose} />
+      <MatchApplyDialog
+        myteam={myteam}
+        profileURL={profileURL}
+        info={match}
+        homeTeam={homeTeam}
+        open={applyOpen}
+        onClose={handleClose}
+        courtList={courtList}
+      />
     </>
   );
 }

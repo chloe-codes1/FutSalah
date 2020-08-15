@@ -108,7 +108,7 @@ function TeamMatchPage() {
                       matchingList.map((match, index) => {
                         return (
                           <Grid key={index} item>
-                            <MatchCard key={index} match={match} />
+                            <MatchCard myteam={myteam} key={index} match={match} />
                           </Grid>
                         );
                       })}
