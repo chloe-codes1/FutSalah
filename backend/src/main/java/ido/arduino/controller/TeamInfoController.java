@@ -276,24 +276,33 @@ public class TeamInfoController {
 	}
 
 	// 나의 팀 나가기
-	@ApiOperation(value = "나의 팀 나가기.", response = String.class)
+	@ApiOperation(value = "나의 팀 나가기.", response = Integer.class)
 	@DeleteMapping("/team/my")
-	public @ResponseBody int deletemyteam(@RequestBody Map<String, Integer> data) {
+	public @ResponseBody int leaveMyTeam(@RequestBody Map<String, Integer> data) {
 		try {
 			int teamID = data.get("teamID");
 			int userID = data.get("userID");
-			UserTeamConnDto utc = new UserTeamConnDto(teamID, userID, LocalDate.now());
 			TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
+			// 팀 리더 일 때
 			if (currentTeam.getLeader() == userID) {
+				System.out.println("리더입니당");
 				int numberOfCrews = tService.getNumberOfCrews(teamID);
+				// 자신을 제외한 팀원이 있을 경우
 				if (numberOfCrews > 1) {
 					// 한 사람을 선택해서
 					int nextLeaderID = tService.getNextLeader(userID, teamID);
 					// 리더로 지정하고
 					tService.updateLeader(nextLeaderID, teamID);
 					// userteamconn table에서 삭제한다
-					tService.deletemyteam(utc);
+					tService.deleteCrew(teamID, userID);
+				// 자신을 제외한 팀이 없을 경우
+				}else {
+					tService.delete(teamID);
 				}
+			// 자신이 팀리더 아니면,
+			}else {
+				// userteamconn table에서 바로 삭제한다
+				tService.deleteCrew(teamID, userID);
 			}
 			return 1;
 		} catch (Exception e) {
@@ -333,9 +342,7 @@ public class TeamInfoController {
 	@PostMapping("/team/formation")
 	public ResponseEntity<Map<String, Object>> insertformation(@RequestBody Formation form) {
 		ResponseEntity<Map<String, Object>> entity = null;
-
 		try {
-
 			TeamInfoDto team = tService.getTeamInfo(form.getTeamID());
 			int result = tService.insertformation(form);
 			entity = handleSuccess(form.getClass() + "가 수정되었습니다.");
