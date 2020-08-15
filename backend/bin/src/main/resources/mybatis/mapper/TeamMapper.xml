@@ -7,24 +7,9 @@
 	<!-- leader를 포함한 팀 전체 정보 by teamID -->
 	<select id="getTeamInfo" parameterType="int"
 		resultType="TeamInfoDTO">
-		SELECT * FROM
+		SELECT name, description, leader, wins, defeats, draws FROM
 		team WHERE teamID = #{teamID}
 	</select>
-
-	<!-- leader 상세 정보와 팀 정보 by teamID -->
-	<select id="getTeamLeaderInfo" parameterType="int"
-		resultType="TeamLeaderDTO">
-		SELECT user.userID, user.name as leaderName, user.email,
-		team.teamID,
-		team.name as teamName, team.description from user
-		INNER
-		JOIN userteamconn ON user.userID = userteamconn.userID
-		INNER JOIN team
-		on userteamconn.teamID = team.teamID
-		WHERE team.teamID = #{teamID} AND
-		user.userID = team.leader
-	</select>
-
 
 	<!-- 팀 이름 중복 검사 -->
 	<select id="checkIfExists" parameterType="String"
@@ -33,81 +18,22 @@
 	</select>
 
 	<!-- 팀원 정보 by teamID -->
-	<select id="getAllCrewInfo" parameterType="int"
-		resultType="UserDTO">
+	<select id="getAllCrewInfo" parameterType="int" resultType="UserDTO">
 		SELECT user.userID, user.name, user.position,
-		user.age,
-		user.height, user.weight, user.profileURL
+		user.age, user.height, user.weight, user.profileURL
 		FROM user
-		INNER JOIN
-		userteamconn ON user.userID = userteamconn.userID
-		INNER JOIN team on
-		userteamconn.teamID = team.teamID
+		INNER JOIN userteamconn ON user.userID = userteamconn.userID
+		INNER JOIN team on userteamconn.teamID = team.teamID
 		WHERE team.teamID = #{teamID}
 	</select>
-
-	<!-- 팀 검색 by name -->
-	<select id="searchTeamByName" parameterType="String"
-		resultType="TeamLocationDTO">
-		SELECT * FROM team
-		INNER JOIN location ON
-		location.locationID = team.locationID
-		WHERE team.name LIKE CONCAT('%', #{name},'%')
+	
+	<!-- 팀 이름으로 검색 -->
+	<select id="searchTeamByName" parameterType="String" resultType="TeamInfoDTO">
+		SELECT * FROM team WHERE name LIKE CONCAT('%', #{name},'%')
 	</select>
-
-
-	<!-- 팀 검색 by location -->
-	<select id="searchTeamByLocation" parameterType="String"
-		resultType="TeamLocationDTO">
-		SELECT * FROM team
-		INNER JOIN location ON
-		location.locationID = team.locationID
-		WHERE location.gu = #{gu}
-	</select>
-
-	<!-- 팀 검색 by name & location -->
-	<select id="searchTeamByBoth" parameterType="map" resultType="TeamLocationDTO">
-		SELECT * FROM team
-		INNER JOIN location ON location.locationID = team.locationID
-		WHERE team.name LIKE CONCAT('%', #{name},'%') AND location.gu = #{gu}
-	</select>
-
+	
 	<!-- 현재 가장 큰 teamID 값 반환 -->
 	<select id="getNextTeamId" resultType="int">
-		SELECT max(teamID) from
-		team;
+		SELECT max(teamID) from team;
 	</select>
-
-	<!-- 팀 프로파일 사진 업로드 -->
-	<update id="uploadProfileImage" parameterType="map">
-		UPDATE team SET
-		profileURL=#{uniqueFileName} WHERE teamID=#{teamID}
-	</update>
-
-	<!-- 팀원 방출 -->
-	<delete id="deleteCrew" parameterType="map">
-		DELETE FROM userteamconn
-		WHERE userID = #{userID} AND teamID = #{teamID}
-	</delete>
-	
-	<!-- 팀원 수 세기 -->
-	<select id="getNumberOfCrews" parameterType="int" resultType="int">
-		SELECT COUNT(*) FROM userteamconn WHERE teamID=#{teamID}
-	</select>
-	
-	<!-- 다음 팀 리더 선정 -->
-	<select id="getNextLeader" parameterType="int" resultType="int">
-		SELECT userID FROM userteamconn WHERE teamID=#{teamID} AND NOT userID= #{userID} LIMIT 1
-	</select>
-	
-	<!-- 팀 리더 변겅 -->
-	<update id="updateLeader" parameterType="map">
-		UPDATE team SET leader = #{userID} WHERE teamID = #{teamID}
-	</update>
-
-	<!--팀원 방출시 포메이션 삭제 -->
-   <delete id="deleteformation2" parameterType="map">
-      delete from formation
-      where teamID= #{teamID} and userID =#{userID};
-   </delete>
 </mapper>
