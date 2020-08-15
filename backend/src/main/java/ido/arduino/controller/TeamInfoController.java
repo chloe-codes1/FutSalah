@@ -279,9 +279,10 @@ public class TeamInfoController {
 	// 나의 팀 나가기
 	@ApiOperation(value = "나의 팀 나가기.", response = String.class)
 	@DeleteMapping("/team/my")
-	public ResponseEntity<Map<String, Object>> deletemyteam(@RequestBody Map<String, Integer> data) {
+	public @ResponseBody int deletemyteam(@RequestBody Map<String, Integer> data) {
 		try {
-			
+			int teamID = data.get("teamID");
+			int userID = data.get("userID");
 			UserTeamConnDto utc = new UserTeamConnDto(teamID, userID, LocalDate.now());
 			TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
 			if (currentTeam.getLeader() == userID) {
@@ -295,11 +296,11 @@ public class TeamInfoController {
 					tService.deletemyteam(utc);
 				}
 			}
-			entity = handleSuccess(teamID + "가 삭제되었습니다.");
-		} catch (RuntimeException e) {
-			entity = handleException(e);
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
 		}
-		return entity;
 	}
 
 	// ----------------team info---------------------------
