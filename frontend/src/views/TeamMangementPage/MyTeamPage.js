@@ -32,33 +32,51 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
-const imageStyles = makeStyles(()=>({
+const imageStyles = makeStyles(() => ({
   logo: {
     borderRadius: "70%",
     width: "65px",
     height: "65x",
     margin: "auto 0 auto 5%",
-  }
+  },
 }));
-
 
 function MyTeamPage(props) {
   const { userinfo } = useContext(UserContext);
   const [myTeam, setMyTeam] = useState([]);
   const imageClass = imageStyles();
+
   useEffect(() => {
     refreshTeam();
   }, []);
+
   const classes = useStyles();
   const [createTeam, setCreateTeam] = useState(false);
   const [existTeam, setExistTeam] = useState(false);
   const profileImage = process.env.REACT_APP_S3_BASE_URL;
   const defaultPath = "/team-default-1.png";
+
   const createTeamClick = () => {
     setCreateTeam(true);
   };
   const createTeamClose = () => {
     setCreateTeam(false);
+  };
+
+  const leaveTeam = (teamId) => {
+    console.log(teamId);
+    console.log(userinfo.userID);
+    axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my/${teamId}/${userinfo.userID}`,
+    })
+      .then(() => {
+        console.log("success to leave");
+        refreshTeam();
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   const refreshTeam = useCallback(() => {
@@ -71,7 +89,7 @@ function MyTeamPage(props) {
     })
       .then((res) => {
         console.log("my team list call success");
-        console.log(res.data)
+        console.log(res.data);
         if (res.data.length > 0) {
           setExistTeam(true);
           setMyTeam(res.data);
@@ -139,29 +157,56 @@ function MyTeamPage(props) {
                 myTeam.map((team, index) => {
                   return (
                     <>
-                      <ListItem key={index} button>
+                      <ListItem key={index}>
                         <ListItemAvatar>
-                        {team.profileURL ?
-                          <img src={profileImage+"/"+team.profileURL} className={imageClass.logo}/>
-                         :
-                         <img src={profileImage + defaultPath} className={imageClass.logo}/>
-                        }
-                          </ListItemAvatar>
-                        <ListItemIcon>
-                          {team.leader === userinfo.userID && (
-                            <StarsRoundedIcon />
+                          {team.profileURL ? (
+                            <img
+                              src={profileImage + "/" + team.profileURL}
+                              className={imageClass.logo}
+                            />
+                          ) : (
+                            <img
+                              src={profileImage + defaultPath}
+                              className={imageClass.logo}
+                            />
                           )}
-                        </ListItemIcon>
-                        <ListItemText primary={team.name} />
-                        <ListItemText primary={team.description} />
-                        <ListItemSecondaryAction>
+                        </ListItemAvatar>
+                        <ListItemIcon></ListItemIcon>
+                        <ListItemText
+                          style={{
+                            width: "25%",
+                          }}
+                        >
                           <Link
                             to={"/teaminfo/" + team.teamID}
-                            className={classes.link}
+                            style={{
+                              color: "black",
+                            }}
                           >
-                            <Button>팀 상세</Button>
+                            {team.leader === Number(userinfo.userID) && (
+                              <StarsRoundedIcon />
+                            )}
+                            {team.name}
                           </Link>
-                          <Button>팀 나가기</Button>
+                        </ListItemText>
+                        <ListItemText
+                          primary={team.description}
+                          style={{
+                            width: "50%",
+                          }}
+                        />
+                        <ListItemSecondaryAction
+                          style={{
+                            width: "15%",
+                          }}
+                        >
+                          <Button
+                            onClick={() => {
+                              leaveTeam(team.teamID);
+                            }}
+                          >
+                            팀 나가기
+                          </Button>
                         </ListItemSecondaryAction>
                       </ListItem>
                       <Divider />
