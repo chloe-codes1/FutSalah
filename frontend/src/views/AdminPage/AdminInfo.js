@@ -22,7 +22,7 @@ import {
   createStyles,
   makeStyles,
 } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/AdminPage.js";
+import styles from "assets/jss/material-kit-react/views/AdminInfoPage.js";
 
 import {
   Table,

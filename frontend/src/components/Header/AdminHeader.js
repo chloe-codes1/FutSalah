@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -23,8 +23,17 @@ const useStyles = makeStyles(styles);
 
 export default function AdminHeader(props) {
   const classes = useStyles();
+  const [adminuser, setAdminUser] = useState({
+    adminID: 0,
+    name: "",
+    stadiumID: 0,
+  });
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
   React.useEffect(() => {
+    const stadiumID = window.sessionStorage.getItem("stadiumID");
+    adminuser.stadiumID = stadiumID;
+
     if (props.changeColorOnScroll) {
       window.addEventListener("scroll", headerColorChange);
     }
@@ -64,12 +73,13 @@ export default function AdminHeader(props) {
     [classes.fixed]: fixed,
   });
   const brandComponent = (
-    <Link to={"/"} className={classes.link}>
+    <Link to={`/Admin/${adminuser.stadiumID}`} className={classes.link}>
       <Button className={classes.title}>
         <strong>{brand}</strong>
       </Button>
     </Link>
   );
+
   return (
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
