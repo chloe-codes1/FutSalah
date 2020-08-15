@@ -10,6 +10,7 @@ import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
+import ido.arduino.dto.WaitMatchDto;
 
 
 @Repository
@@ -22,14 +23,14 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 
 	//----------전체 조건 만족하는 리스트 출력---------------
 	@Override
-	public List<MatchDto> alloption(MatchRequestDto matchrequest) {
+	public List<MatchDto> alloption(MatchDto matchrequest) {
 		// TODO Auto-generated method stub
 		return template.selectList(ns+"alloption",matchrequest);
 	}
 
 	//----------일부 조건 만족하는 리스트 출력---------------
 	@Override
-	public List<MatchDto> simpleoption(MatchRequestSimpleDto matchrequest) {
+	public List<MatchDto> simpleoption(MatchDto matchrequest) {
 		// TODO Auto-generated method stub
 		return template.selectList(ns+"simpleoption", matchrequest);
 	}
@@ -41,7 +42,7 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		return template.insert(ns+"insertmatch", match);
 	}
 
-	//----------나에게 요청온 매칭 리스트 (내팀이 등록한 매칭 정보)---------------
+	//----------나에게 요청온 매칭 리스트 (내팀이 등록한 매칭 정보) & 등록 삭제---------------
 	@Override
 	public List<MatchDto> comematch(int userID) {
 		// TODO Auto-generated method stub
@@ -53,7 +54,28 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		// TODO Auto-generated method stub
 		return template.delete(ns+"deletematch",matchID);
 	}
+
 	
+	//----------내가 요청한 매칭 리스트 (내팀이 요청한 매칭 정보) & 요청 삭제---------------
+	@Override
+	public List<MatchDto> requestmatch(int userID) {
+		// TODO Auto-generated method stub
+		return template.selectList(ns+"requestmatch",userID);
+	}
+
+	@Override
+	public int requestdelete(WaitMatchDto wait) {
+		// TODO Auto-generated method stub
+		return template.delete(ns+"requestdelete",wait);
+	}
+
+	
+	//----------내가 속한 팀의 예정된 경기 일정 ---------------
+	@Override
+	public List<MatchDto> schedule(int userID) {
+		// TODO Auto-generated method stub
+		return template.selectList(ns+"schedule", userID);
+	}
 	
 	
 
