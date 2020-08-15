@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  Button,
   Dialog,
   DialogTitle,
   Grid,
@@ -12,6 +10,7 @@ import React, { useCallback, useReducer, useState, useEffect } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import Button from "components/CustomButtons/Button.js";
 
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -237,7 +236,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
       <Grid container justify="center">
         <List>
           <ListItem>
-            <Button variant="contained" color="primary" onClick={createTeam}>
+            <Button variant="contained" color="myTeam" onClick={createTeam}>
               생성
             </Button>
           </ListItem>

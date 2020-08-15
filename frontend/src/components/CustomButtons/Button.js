@@ -69,6 +69,7 @@ RegularButton.propTypes = {
     "github",
     "teamInfo",
     "darkTeamInfo",
+    "myTeam",
     "transparent",
   ]),
   size: PropTypes.oneOf(["sm", "lg"]),

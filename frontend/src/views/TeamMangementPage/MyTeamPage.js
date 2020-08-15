@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  Button,
   Divider,
   Grid,
   List,
@@ -14,6 +12,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 
 import CreateTeamDialog from "../../components/Dialog/CreateTeamDialog.js";
 import Footer from "components/Footer/Footer.js";
+import Button from "components/CustomButtons/Button.js";
 // component
 import Header from "components/Header/Header.js";
 //import GridContainer from "components/Grid/GridContainer.js";
@@ -133,7 +132,7 @@ function MyTeamPage(props) {
               <Grid item xs>
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="myTeam"
                   startIcon={<Icon className="fa fa-plus-circle" />}
                   onClick={createTeamClick}
                 >
@@ -203,6 +202,8 @@ function MyTeamPage(props) {
                           }}
                         >
                           <Button
+                            hover
+                            color="transparent"
                             onClick={() => {
                               if (
                                 window.confirm(
