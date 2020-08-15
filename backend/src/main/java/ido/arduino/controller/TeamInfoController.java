@@ -203,7 +203,7 @@ public class TeamInfoController {
 		RequestDTO currentRequest = rService.getRequest(teamID, userID);
 		int requestID = currentRequest.getRequestID();
 		rService.delete(requestID);
-		tService.insertmy(new UserTeamConnDto(userID, teamID,LocalDate.now()));
+		tService.insertmy(new UserTeamConnDto(userID, teamID, LocalDate.now()));
 		TeamInfoDto targetTeam = tService.getTeamInfo(teamID);
 		EmailServiceImpl emailService = new EmailServiceImpl();
 		emailService.setJavaMailSender(javaMailSender);
@@ -246,14 +246,14 @@ public class TeamInfoController {
 	@PostMapping("/team/search/{condition}/{page}")
 	public @ResponseBody List<TeamLocationDTO> searchTeam(@PathVariable String condition, @PathVariable int page,
 			@RequestBody Map<String, String> data) {
-		page = (page-1)*6;
+		page = (page - 1) * 6;
 		List<TeamLocationDTO> list = new ArrayList<>();
 		if (condition.equals("name")) {
 			String name = data.get("name");
-			list = tService.searchTeamByName(name,page);
+			list = tService.searchTeamByName(name, page);
 		} else if (condition.equals("location")) {
 			String gu = data.get("gu");
-			list = tService.searchTeamByLocation(gu,page);
+			list = tService.searchTeamByLocation(gu, page);
 		} else if (condition.equals("both")) {
 			String name = data.get("name");
 			String gu = data.get("gu");
@@ -276,23 +276,31 @@ public class TeamInfoController {
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
 
-	
 	// 나의 팀 나가기
-		@ApiOperation(value = "나의 팀 나가기.", response = String.class)
-		@DeleteMapping("/team/my/{teamID}/{userID}")
-		public ResponseEntity<Map<String, Object>> deletemyteam(@PathVariable int teamID,@PathVariable int userID ) {
-			ResponseEntity<Map<String, Object>> entity = null;
-			try {
-				UserTeamConnDto utc = new UserTeamConnDto(teamID, userID,LocalDate.now());
-				tService.deletemyteam(utc);
-				System.out.println("deletemyteam 호출 삭제에에에에ㅔ --------------");
-				int result = 	tService.deletemyteam(utc);
-				entity = handleSuccess(teamID + "가 삭제되었습니다.");
-			} catch (RuntimeException e) {
-				entity = handleException(e);
+	@ApiOperation(value = "나의 팀 나가기.", response = String.class)
+	@DeleteMapping("/team/my")
+	public ResponseEntity<Map<String, Object>> deletemyteam(@RequestBody Map<String, Integer> data) {
+		try {
+			
+			UserTeamConnDto utc = new UserTeamConnDto(teamID, userID, LocalDate.now());
+			TeamInfoDto currentTeam = tService.getTeamInfo(teamID);
+			if (currentTeam.getLeader() == userID) {
+				int numberOfCrews = tService.getNumberOfCrews(teamID);
+				if (numberOfCrews > 1) {
+					// 한 사람을 선택해서
+					int nextLeaderID = tService.getNextLeader(userID, teamID);
+					// 리더로 지정하고
+					tService.updateLeader(nextLeaderID, teamID);
+					// userteamconn table에서 삭제한다
+					tService.deletemyteam(utc);
+				}
 			}
-			return entity;
+			entity = handleSuccess(teamID + "가 삭제되었습니다.");
+		} catch (RuntimeException e) {
+			entity = handleException(e);
 		}
+		return entity;
+	}
 
 	// ----------------team info---------------------------
 
