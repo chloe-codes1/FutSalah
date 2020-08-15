@@ -126,8 +126,7 @@
       u.name from formation f, user u
       where f.userID= u.userID and f.teamID =#{teamID}
 	</select>
-
-
+	
 	<!-- 경기전적 출력 -->
 	<select id="resultscore" resultType="result" parameterType="int">
 

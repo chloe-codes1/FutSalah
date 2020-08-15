@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ido.arduino.dao.RankingMapper">
+	<select id="getBestTeams" resultType="TeamInfoDTO">
+		SELECT*FROM team ORDER BY points, reliability LIMIT 3
+	</select>
+	
+	<select id="getBestTeamsEachLocations" parameterType="int" resultType="TeamInfoDTO">
+		SELECT*FROM team WHERE locationID=#{locationID} ORDER BY points, reliability LIMIT 5
+	</select>
+</mapper>
