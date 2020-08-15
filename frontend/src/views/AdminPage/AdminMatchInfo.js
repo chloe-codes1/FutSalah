@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import QRreader from "components/QR/QRreader";
+import ArriveInfo from "./ArriveInfo.js";
 
 import Button from "components/CustomButtons/Button.js";
-import Footer from "components/Footer/Footer.js";
+
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 
@@ -55,16 +55,8 @@ export default function AdminInfo(props) {
     awayteamscore: 2,
   };
 
-  // QR code로 받을 것
-  const testArriveTimeInfo = {
-    id: 1,
-    hometeamarrivetime: "2020-08-03 17:58",
-    awayteamarrivetime: "2020-08-03 17:49",
-  };
-
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
   const [scoreInfo, setScoreInfo] = useState(testScoreInfo);
-  const [arriveTimeInfo, setArriveTimeInfo] = useState(testArriveTimeInfo);
 
   // 이 경기장, 오늘 매치 리스트의 몇번째 경기인가?
   const initialMatchNo = Number(match.params.id);
@@ -74,9 +66,6 @@ export default function AdminInfo(props) {
   // Prev, Next 매치 존재 여부
   const [sizeOfMatch, setSizeOfMatch] = useState(0);
   // console.log(`sizeOfMatch: ${sizeOfMatch}`);
-  const [isPrevMatchExists, setIsPrevMatchExists] = useState(true);
-  const [isNextMatchExists, setIsNextMatchExists] = useState(true);
-  // console.log(isPrevMatchExists, isNextMatchExists);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -105,7 +94,6 @@ export default function AdminInfo(props) {
     adminuser.stadiumID = stadiumID;
     loadMatchInfo(matchNo);
     // console.log(matchNo, sizeOfMatch);
-    setPrevNextMatchButton(matchNo, sizeOfMatch);
     console.log("새로고침!");
   }, []);
 
@@ -114,46 +102,18 @@ export default function AdminInfo(props) {
   };
 
   const toPrevMatch = async () => {
-    // if (isPrevMatchExists) {
     setMatchNo(matchNo - 1);
     // 이안에선 matchNo가 아직 안바뀐 상태...
     history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo - 1}`);
     loadMatchInfo(matchNo - 1);
-    setPrevNextMatchButton(matchNo - 1, sizeOfMatch);
-    // }
   };
 
   const toNextMatch = async () => {
-    console.log(matchNo, sizeOfMatch);
-    if (matchNo === sizeOfMatch) {
-      alert("다음 경기가 존재하지 않습니다!");
-    } else {
-      setMatchNo(matchNo + 1);
-      console.log(matchNo);
-      // 이안에선 matchNo가 아직 안바뀐 상태...
-      history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo + 1}`);
-      loadMatchInfo(matchNo + 1);
-      setPrevNextMatchButton(matchNo + 1, sizeOfMatch);
-    }
-  };
+    setMatchNo(matchNo + 1);
 
-  const setPrevNextMatchButton = (m, s) => {
-    if (m === 1) {
-      setIsPrevMatchExists(false);
-      if (m === s) {
-        setIsNextMatchExists(false);
-      } else {
-        setIsNextMatchExists(true);
-      }
-    } else {
-      setIsPrevMatchExists(true);
-      if (m === s) {
-        setIsNextMatchExists(false);
-      } else {
-        setIsNextMatchExists(true);
-      }
-    }
-    // console.log(isPrevMatchExists, isNextMatchExists);
+    // 이안에선 matchNo가 아직 안바뀐 상태...
+    history.push(`/Admin/${adminuserinfo.stadiumID}/match/${matchNo + 1}`);
+    loadMatchInfo(matchNo + 1);
   };
 
   return (
@@ -206,64 +166,46 @@ export default function AdminInfo(props) {
                 </ListItem>
               </List>
             </GridItem>
-            <GridItem xs={12} className={classes.arriveInfoContainer}>
-              <GridItem xs={4} className={classes.qrReaderContainer}>
-                <QRreader />
-              </GridItem>
-              <GridItem xs={8} className={classes.arriveContents}>
-                <GridItem xs={12} className={classes.arriveContent}>
-                  <GridItem xs={3} className={classes.arriveContentTeam}>
-                    <h3>Home</h3>
-                  </GridItem>
-                  <GridItem xs={9} className={classes.arriveContentTime}>
-                    <p>{arriveTimeInfo.hometeamarrivetime}</p>
-                  </GridItem>
-                </GridItem>
-                <GridItem xs={12} className={classes.arriveContent}>
-                  <GridItem xs={3} className={classes.arriveContentTeam}>
-                    <h3>Away</h3>
-                  </GridItem>
-                  <GridItem xs={9} className={classes.arriveContentTime}>
-                    <p>{arriveTimeInfo.awayteamarrivetime}</p>
-                  </GridItem>
-                </GridItem>
-              </GridItem>
+            <GridItem className={classes.arriveInfoContainer}>
+              <ArriveInfo
+                homeTeamID={matchInfo.homeTeamID}
+                awayTeamID={matchInfo.awayTeamID}
+              />
             </GridItem>
-          </GridContainer>
-          <GridContainer className={classes.bottomButtonSet}>
-            {isPrevMatchExists && (
-              <Button
-                size="sm"
-                color="primary"
-                onClick={toPrevMatch}
-                className={classes.bottomButton}
-              >
-                이전 경기
-              </Button>
-            )}
+            <GridItem className={classes.bottomButtonSet}>
+              {!(matchNo === 1) && (
+                <Button
+                  size="sm"
+                  color="primary"
+                  onClick={toPrevMatch}
+                  className={classes.bottomButton}
+                >
+                  이전 경기
+                </Button>
+              )}
 
-            <Button
-              size="sm"
-              color="warning"
-              onClick={toAdminInfo}
-              className={classes.bottomButton}
-            >
-              목록으로
-            </Button>
-            {isNextMatchExists && (
               <Button
                 size="sm"
-                color="secondary"
-                onClick={toNextMatch}
+                color="warning"
+                onClick={toAdminInfo}
                 className={classes.bottomButton}
               >
-                다음 경기
+                목록으로
               </Button>
-            )}
+              {!(matchNo === sizeOfMatch) && (
+                <Button
+                  size="sm"
+                  color="secondary"
+                  onClick={toNextMatch}
+                  className={classes.bottomButton}
+                >
+                  다음 경기
+                </Button>
+              )}
+            </GridItem>
           </GridContainer>
         </div>
       </Parallax>
-      <Footer />
     </div>
   );
 }
