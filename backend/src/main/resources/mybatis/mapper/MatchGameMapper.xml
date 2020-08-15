@@ -7,9 +7,9 @@
 
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
-	<select id="alloption" resultType="request">
-		select m.*,t.name,
-		t.profileURL,l.gu, c.name from
+	<select id="alloption" resultType="match">
+		select m.*,t.name as hometeam,
+		t.profileURL ,l.gu, c.name from
 		matching m
 		left outer join court c on
 		m.courtID = c.courtID
@@ -21,18 +21,23 @@
 		and m.date LIKE CONCAT('%',#{date},'%')
 		and m.time=#{time}
 		and m.isBooked =#{isBooked}
-		and m.formCode = #{formCode}
+		and m.formCode =
+		#{formCode}
 
 	</select>
 
 
+
+
 	<!-- 검색 조건중 위치, 날짜 맞는 내용 찾기 -->
 
-	<select id="simpleoption" resultType="requestsimple">
-		select m.*,t.name,
+	<select id="simpleoption" resultType="match">
+		select m.*,t.name as
+		hometeam,
 		t.profileURL,l.gu, c.name from
 		matching m
-		left outer join court c on
+		left outer join court
+		c on
 		m.courtID = c.courtID
 		left outer join location l on m.locationID =
 		l.locationID
@@ -43,6 +48,7 @@
 
 
 	</select>
+
 
 
 	<!-- 검색한 조건 없으면 매칭 등록 -->
@@ -55,34 +61,39 @@
 
 
 
+
 	<!-- 나에게 온 매칭 정보( 내가 등록한 매칭 정보) -->
 	<select id="comematch" resultType="match">
       select m.*, t.name as hometeam,t.profileURL, l.sido, l.gu, c.name
-	  from
-      matching m
-      left outer join
-      court c on m.courtID = c.courtID
-      left outer join location l on
-      m.locationID = l.locationID
-      left outer join team t on m.homeTeamID
-      =t.teamID
+      from matching m
+      left outer join court c on m.courtID = c.courtID
+      left outer join location l on m.locationID = l.locationID
+      left outer join team t on m.homeTeamID =t.teamID
       inner join userteamconn ut on t.teamID = ut.teamID
-      inner join
-      user u on ut.userID = u.userID
-      where m.state = 0 and u.userID
-      =#{userID};
+      inner join user u on ut.userID = u.userID
+      where m.state = 0 and u.userID =#{userID};
    </select>
 
 
 
 	<!-- 내가 매칭 신청 요청한 매칭 정보 -->
 
-	<select id="mymatch" resultType="match">
-
+	<select id="requestmatch" resultType="match">
+		select m.*, t.name as hometeam, t.profileURL,l.sido, l.gu, c.name, t2.name as awayteam, t2.profileURL as awayprofileURL 
+		from matching m
+		left outer join court c on m.courtID = c.courtID
+		left outer join location l on m.locationID = l.locationID
+		left outer join team t on m.homeTeamID=t.teamID
+		left outer join team t2 on m.awayTeamID=t2.teamID
+		inner join userteamconn ut on t2.teamID = ut.teamID
+		inner join
+		user u on ut.userID = u.userID
+		where m.state = 0 and u.userID
+		=#{userID};
 
 	</select>
 
-	<!-- 등록한 매칭 삭제 -->
+	<!--내가 등록한 매칭 삭제 -->
 
 	<delete id="deletematch" parameterType="int">
 		delete from matching
@@ -95,6 +106,27 @@
 		where w.awayTeamID = t.teamID and
 		w.matchID= #{matchID};
 	</select>
-
+	
+	
+	<!--내가 요청한 매칭 삭제 -->
+	<delete id="requestdelete" parameterType="int">
+	delete from waiting
+	where  awayTeamID = #{teamID} and matchID =#{matchID} 
+	</delete>
+	
+	<!-- 예정 된 경기 일정  -->
+	<select id="schedule" resultType="match">
+	select distinct m.matchID, m.homeTeamID, m.awayTeamID,m.date,m.time,m.isBooked,m.locationID,m.state,m.courtID,m.formCode, t.name as hometeam, t.profileURL,l.sido, l.gu, c.name, t2.name as awayteam, t2.profileURL as awayprofileURL 
+		from matching m
+		left outer join court c on m.courtID = c.courtID
+		left outer join location l on m.locationID = l.locationID
+		left outer join team t on m.homeTeamID=t.teamID
+		left outer join team t2 on m.awayTeamID=t2.teamID 
+		inner join userteamconn ut on t2.teamID = ut.teamID or t.teamID= ut.teamID
+		inner join user u on ut.userID = u.userID
+		
+		where m.state = 1 and u.userID=#{userID} 
+		
+	</select>
 
 </mapper>

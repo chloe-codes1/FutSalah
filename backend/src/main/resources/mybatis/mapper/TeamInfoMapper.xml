@@ -8,9 +8,9 @@
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
 		insert into team ( name,
-		description,profileURL,leader, code)
-		values (#{name},#{description}, #{locationID},
-		#{profileURL},#{leader}, #{code})
+		description,profileURL,leader, code, locationID)
+		values (#{name},#{description},
+		#{profileURL},#{leader}, #{code}, #{locationID})
 	</insert>
 
 	<!-- 팀 수정 -->

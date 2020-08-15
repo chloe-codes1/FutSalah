@@ -1,27 +1,25 @@
-import React, { useEffect, useState, useContext } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-
-import UserContext from "../../contexts/UserContext";
-
-import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import Formation from "views/Components/Formation/Formation";
-import Loading from "views/Components/Loading/Loading";
-import { FormationBench } from "views/Components/Formation/FormationBench";
 import { Grid, Modal, Typography } from "@material-ui/core";
+import React, { useContext, useEffect, useState } from "react";
+// @material-ui/core components
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
-import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import AddIcon from "@material-ui/icons/Add";
 import AddUserDialog from "components/Dialog/AddUserDialog";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
+import { DndProvider } from "react-dnd";
 import Dropzone from "../Dropzone/Dropzone";
 import Fade from "@material-ui/core/Fade";
+import Footer from "components/Footer/Footer.js";
+import Formation from "views/Components/Formation/Formation";
+import { FormationBench } from "views/Components/Formation/FormationBench";
+import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
+import { HTML5Backend } from "react-dnd-html5-backend";
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
+import Loading from "views/Components/Loading/Loading";
 // Dialogs
 import ModifyTeamInfoDialog from "components/Dialog/ModifyTeamInfoDialog";
 import NavPills from "components/NavPills/NavPills.js";
@@ -29,6 +27,7 @@ import Paginations from "components/Pagination/Pagination.js";
 import { Player } from "views/Components/Formation/Player";
 import Popover from "@material-ui/core/Popover";
 import RemoveIcon from "@material-ui/icons/Remove";
+import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -36,12 +35,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
+import UserContext from "../../contexts/UserContext";
 import axios from "axios";
-// @material-ui/core components
-import { withStyles, makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
-import teamInfobg from "assets/img/teamInfobg.jpg";
 import teamImage from "assets/img/basicTeamImg1.jpg";
+import teamInfobg from "assets/img/teamInfobg.jpg";
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
