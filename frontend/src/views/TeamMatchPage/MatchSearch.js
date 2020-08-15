@@ -148,8 +148,10 @@ function MatchSearch({ myteam, setMatchingList }) {
         locationID: state.search.locationID,
         time: state.search.time,
       },
-    }).then(() => {
+    }).then((e) => {
       console.log("search success");
+      console.log(e.data);
+      setMatchingList(e.data);
     });
   });
   const registMatching = useCallback(() => {

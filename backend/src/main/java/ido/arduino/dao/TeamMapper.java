@@ -32,6 +32,8 @@ public interface TeamMapper {
 	int deleteCrew(int teamID, int userID);
 
 	int deleteformation2(int teamID, int userID);
+	
+	int checkIfFormationExists(int teamID, int userID);
 
 	int getNumberOfCrews(int teamID);
 

@@ -1,6 +1,5 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -8,15 +7,13 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
-import { Button } from "@material-ui/core";
 
 import matchIng from "assets/img/match-ing.png";
-import matchEnd from "assets/img/match-end.png";
 import matchComplete from "assets/img/match-complete.png";
 
-import team1 from "assets/img/match-team1.png";
-import team2 from "assets/img/match-team2.png";
-import team3 from "assets/img/match-team3.png";
+import axios from "axios";
+
+import MatchApplyDialog from "components/Dialog/MatchApplyDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,67 +38,93 @@ const useStyles = makeStyles((theme) => ({
   //   },
 }));
 
-export default function MatchCard({ match }) {
+export default function MatchCard({ match, myteam }) {
+  console.log(match);
   const classes = useStyles();
-  const onClick = useCallback(() => {
-    alert("hello!!!!");
+  const [applyOpen, setApplyOpen] = useState(false);
+  const [homeTeam, setHomeTeam] = useState({
+    name: "",
+    wins: "",
+    defeats: "",
+    draws: "",
+    mileage: "",
   });
+  const [courtList, setCourtList] = useState([]);
+  const handleApply = useCallback(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` + match.homeTeamID,
+    }).then((e) => {
+      console.log(e.data);
+      setHomeTeam(e.data);
+    });
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + match.locationID,
+    }).then((e) => {
+      console.log(e.data);
+      setCourtList(e.data);
+    });
+    setApplyOpen(true);
+  });
+  const handleClose = () => {
+    setApplyOpen(false);
+  };
+  let profileURL = match.profileURL;
+  if (profileURL) {
+    profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
+  } else {
+    profileURL =
+      process.env.REACT_APP_S3_BASE_URL + "/team-default-" + Math.ceil(Math.random(1, 8)) + ".png";
+  }
+  console.log(profileURL);
   return (
-    <Card className={classes.root}>
-      {match.matchState === 1 && (
-        <CardHeader avatar={<img src={matchIng} />} title={match.name} />
-      )}
-      {match.matchState === 2 && (
-        <CardHeader avatar={<img src={matchComplete} />} title={match.name} />
-      )}
-      {match.matchState === 3 && (
-        <CardHeader avatar={<img src={matchEnd} />} title={match.name} />
-      )}
-      <CardActionArea onClick={onClick}>
-        {match.teamImg === 1 && (
-          <CardMedia
-            className={classes.media}
-            image={team1}
-            title="Paella dish"
-          />
+    <>
+      <Card className={classes.root}>
+        {match.state === 0 && <CardHeader avatar={<img src={matchIng} />} title={match.hometeam} />}
+        {match.state === 1 && (
+          <CardHeader avatar={<img src={matchComplete} />} title={match.hometeam} />
         )}
-        {match.teamImg === 2 && (
-          <CardMedia
-            className={classes.media}
-            image={team2}
-            title="Paella dish"
-          />
+        <CardActionArea onClick={handleApply}>
+          {/* {match.profileURL === null && (
+          <CardMedia className={classes.media} image={team1} title={match.hometeam} />
         )}
-        {match.teamImg === 3 && (
-          <CardMedia
-            className={classes.media}
-            image={team3}
-            title="Paella dish"
-          />
-        )}
-        <CardContent>
-          <Typography variant="h4">풋살 상대 구합니다.</Typography>
-          <Typography variant="h6" color="textPrimary" component="p">
-            경기방식 : {match.matchType}
-          </Typography>
-          <Typography variant="h6" color="textPrimary" component="p">
-            경기일시 : {match.matchDay}
-          </Typography>
-          <Typography variant="h6" color="textPrimary" component="p">
-            지역 : {match.location}
-          </Typography>
-          {match.stadium && (
-            <Typography variant="h6" color="textPrimary" component="p">
-              경기장 : 예약완료
+        {match.profileURL > 1 && (
+          <CardMedia className={classes.media} image={profileURL} title={match.hometeam} />
+        )} */}
+          <CardMedia className={classes.media} image={profileURL} title={match.hometeam} />
+          <CardContent>
+            <Typography variant="subtitle2" color="textPrimary" component="p">
+              경기방식 : {match.formCode}인 팀 매치
             </Typography>
-          )}
-          {!match.stadium && (
-            <Typography variant="h6" color="textPrimary" component="p">
-              경기장 : 미정
+            <Typography variant="subtitle2" color="textPrimary" component="p">
+              경기일시 : {match.date}
             </Typography>
-          )}
-        </CardContent>
-      </CardActionArea>
-    </Card>
+            <Typography variant="subtitle2" color="textPrimary" component="p">
+              지역 : {match.gu}
+            </Typography>
+            {match.isBooked === 1 && (
+              <Typography variant="subtitle2" color="textPrimary" component="p">
+                경기장 : {match.name}
+              </Typography>
+            )}
+            {match.isBooked === 0 && (
+              <Typography variant="subtitle2" color="textPrimary" component="p">
+                경기장 : 미정
+              </Typography>
+            )}
+          </CardContent>
+        </CardActionArea>
+      </Card>
+      <MatchApplyDialog
+        myteam={myteam}
+        profileURL={profileURL}
+        info={match}
+        homeTeam={homeTeam}
+        open={applyOpen}
+        onClose={handleClose}
+        courtList={courtList}
+      />
+    </>
   );
 }
