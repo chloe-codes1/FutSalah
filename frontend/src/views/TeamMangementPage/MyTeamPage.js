@@ -64,14 +64,16 @@ function MyTeamPage(props) {
   };
 
   const leaveTeam = (teamId) => {
-    console.log(teamId);
-    console.log(userinfo.userID);
     axios({
       method: "delete",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my/${teamId}/${userinfo.userID}`,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+      data: {
+        teamID: teamId,
+        userID: userinfo.userID,
+      },
     })
       .then(() => {
-        console.log("success to leave");
+        // console.log("success to leave");
         refreshTeam();
       })
       .catch((e) => {
@@ -202,7 +204,13 @@ function MyTeamPage(props) {
                         >
                           <Button
                             onClick={() => {
-                              leaveTeam(team.teamID);
+                              if (
+                                window.confirm(
+                                  team.name + " 팀을 나가겠습니까?"
+                                )
+                              ) {
+                                leaveTeam(team.teamID);
+                              }
                             }}
                           >
                             팀 나가기
