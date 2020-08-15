@@ -1113,6 +1113,7 @@ export default function TeamInfoPage(props) {
                                         align="center"
                                       >
                                         <Button
+                                          color="teamInfo"
                                           style={{
                                             maxWidth: "3vw",
                                           }}
@@ -1134,6 +1135,7 @@ export default function TeamInfoPage(props) {
                                       </StyledTableCell>
                                       <StyledTableCell align="center">
                                         <Button
+                                          color="teamInfo"
                                           style={{
                                             maxWidth: "3vw",
                                           }}
