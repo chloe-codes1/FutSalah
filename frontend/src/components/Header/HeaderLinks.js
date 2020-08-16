@@ -5,11 +5,11 @@ import { Avatar, ListItemText } from "@material-ui/core";
 import React, { useCallback, useContext, useReducer, useState } from "react";
 
 import AddInfoDialog from "../Dialog/AddInfoDialog";
+import Badge from "@material-ui/core/Badge";
 // core components
 import Button from "components/CustomButtons/Button.js";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
@@ -134,6 +134,7 @@ export default function HeaderLinks(props) {
     });
   }, []);
   const onRegister = useCallback(() => {
+
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
