@@ -42,18 +42,18 @@ function TeamMatchPage() {
   const [myteam, setMyteam] = useState([]);
   const { userinfo } = useContext(UserContext);
   console.log(matchingList.length);
-  useEffect(() => {
-    if (userinfo.logged) {
-      axios({
-        method: "post",
-        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
-        data: { socialID: userinfo.socialID },
-      }).then((e) => {
-        console.log(e.data);
-        setMyteam(e.data);
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (userinfo.logged) {
+  //     axios({
+  //       method: "post",
+  //       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+  //       data: { socialID: userinfo.socialID },
+  //     }).then((e) => {
+  //       console.log(e.data);
+  //       setMyteam(e.data);
+  //     });
+  //   }
+  // }, []);
   return (
     <div>
       <Header
@@ -93,7 +93,12 @@ function TeamMatchPage() {
               tabName: "매칭 검색",
               tabContent: (
                 <div className={classes.container} style={{ height: "750px" }}>
-                  <MatchSearch myteam={myteam} setMatchingList={setMatchingList} />
+                  <MatchSearch
+                    myteam={myteam}
+                    setMyteam={setMyteam}
+                    setMatchingList={setMatchingList}
+                    userinfo={userinfo}
+                  />
                   <Divider />
                   <br />
                   <Grid container justify="center" spacing={3}>
@@ -108,7 +113,13 @@ function TeamMatchPage() {
                       matchingList.map((match, index) => {
                         return (
                           <Grid key={index} item>
-                            <MatchCard myteam={myteam} key={index} match={match} />
+                            <MatchCard
+                              myteam={myteam}
+                              setMyteam={setMyteam}
+                              key={index}
+                              match={match}
+                              userinfo={userinfo}
+                            />
                           </Grid>
                         );
                       })}

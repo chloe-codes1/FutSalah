@@ -22,6 +22,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,9 +53,28 @@ const useStyles = makeStyles((theme) => ({
 
 function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, courtList }) {
   const classes = useStyles();
-  const [selectTeam, setSelectTeam] = useState("");
+  const [selectAway, setSelectAway] = useState("");
   const [selectCourt, setSelectCourt] = useState("");
-  console.log(homeTeam);
+  const handleApply = () => {
+    if (info.isBooked === 0 && selectCourt === "") {
+      alert("경기장을 선택하세요!!");
+      return;
+    }
+    if (selectAway === "") {
+      alert("팀을 선택하세요!!");
+      return;
+    }
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/waiting`,
+      data: {
+        matchID: info.matchID,
+        teamID: selectAway,
+      },
+    }).then(() => {
+      console.log("success");
+    });
+  };
   return (
     <div className={classes.root}>
       <Dialog open={open} onClose={onClose}>
@@ -91,10 +111,10 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
                   name="teamID"
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={selectTeam}
+                  value={selectAway}
                   onChange={(e) => {
-                    setSelectTeam(e.target.value);
-                    console.log(e.target.value);
+                    setSelectAway(e.target.value);
+                    // console.log(e.target.value);
                   }}
                 >
                   {myteam.length === 0 && <MenuItem value="">소속된 팀이 없습니다.</MenuItem>}
@@ -160,12 +180,12 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
         <DialogActions>
           <Grid container justify="center" spacing={1}>
             <Grid item>
-              <Button variant="contained" color="success">
+              <Button variant="contained" color="success" onClick={handleApply}>
                 신청
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="danger">
+              <Button variant="contained" color="danger" onClick={onClose}>
                 취소
               </Button>
             </Grid>

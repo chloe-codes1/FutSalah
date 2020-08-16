@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   //   },
 }));
 
-export default function MatchCard({ match, myteam }) {
+export default function MatchCard({ match, myteam, setMyteam, userinfo }) {
   console.log(match);
   const classes = useStyles();
   const [applyOpen, setApplyOpen] = useState(false);
@@ -49,21 +49,33 @@ export default function MatchCard({ match, myteam }) {
   });
   const [courtList, setCourtList] = useState([]);
   const handleApply = useCallback(() => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` + match.homeTeamID,
-    }).then((e) => {
-      console.log(e.data);
-      setHomeTeam(e.data);
-    });
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + match.locationID,
-    }).then((e) => {
-      console.log(e.data);
-      setCourtList(e.data);
-    });
-    setApplyOpen(true);
+    if (userinfo.logged) {
+      axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+        data: { socialID: userinfo.socialID },
+      }).then((e) => {
+        console.log(e.data);
+        setMyteam(e.data);
+      });
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` + match.homeTeamID,
+      }).then((e) => {
+        console.log(e.data);
+        setHomeTeam(e.data);
+      });
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + match.locationID,
+      }).then((e) => {
+        console.log(e.data);
+        setCourtList(e.data);
+      });
+      setApplyOpen(true);
+    } else {
+      alert("로그인 후 이용해주세요!");
+    }
   });
   const handleClose = () => {
     setApplyOpen(false);
