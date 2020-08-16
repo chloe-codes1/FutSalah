@@ -1,6 +1,6 @@
 // @material-ui/icons
 import { Apps, CloudDownload } from "@material-ui/icons";
-import { Avatar, ListItemText } from "@material-ui/core";
+import { Avatar, ListItemText, ListItemAvatar } from "@material-ui/core";
 /*eslint-disable*/
 import React, { useCallback, useContext, useReducer, useState } from "react";
 
@@ -14,6 +14,10 @@ import Badge from "@material-ui/core/Badge";
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 // dialog components
 import LoginDialog from "../Dialog/LoginDialog";
 import UserContext from "../../contexts/UserContext";
@@ -142,7 +146,13 @@ export default function HeaderLinks(props) {
       .then((e) => {
         console.log("success");
         alert("정보 저장이 완료되었습니다!");
-        loggedUser(user.socialID, e.data.userID, user.name, "social", e.data.profileURL);
+        loggedUser(
+          user.socialID,
+          e.data.userID,
+          user.name,
+          "social",
+          e.data.profileURL
+        );
         addInfoClose();
       })
       .catch((e) => {
@@ -168,14 +178,22 @@ export default function HeaderLinks(props) {
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         <Link to={"/searchteam"} className={classes.link}>
-          <Button color="transparent" target="_blank" className={classes.navLink}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
             팀 찾기
           </Button>
         </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
         <Link to={"/match"} className={classes.link}>
-          <Button color="transparent" target="_blank" className={classes.navLink}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
             팀 매칭
           </Button>
         </Link>
@@ -183,7 +201,11 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <Link to={"/myteam"} className={classes.link}>
           {userinfo.logged && (
-            <Button color="transparent" target="_blank" className={classes.navLink}>
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+            >
               나의 팀
             </Button>
           )}
@@ -192,37 +214,52 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <Link to={"/profile"} className={classes.link}>
           {userinfo.logged && (
-            <Button color="transparent" target="_blank" className={classes.navLink}>
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+            >
               회원정보
             </Button>
           )}
         </Link>
       </ListItem>
-      <ListItem className={classes.listItem}>
-        {userinfo.logged && (
-          <IconButton size="small" className={classes.buttonIcon}>
-            <Avatar className={classes.small} src={userinfo.profileURL} />
-            {/* <Avatar src={userinfo.profileURL} /> */}
-          </IconButton>
-          // <Badge
-          //   badgeContent={4}
-          //   color="secondary"
-          //   className={classes.badgeRoot}
-          // >
-          //   <IconButton size="small" className={classes.buttonIcon}>
-          //     <Avatar className={classes.small} src={userinfo.profileURL} />
-          //     {/* <Avatar src={userinfo.profileURL} /> */}
-          //   </IconButton>
-          // </Badge>
-        )}
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        {userinfo.logged && (
-          <ListItemText className={classes.listItemText}>
-            {userinfo.name}님 환영합니다!
-          </ListItemText>
-        )}
-      </ListItem>
+      {userinfo.logged && (
+        <ListItem className={classes.listItem}>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell align="center" className={classes.avatar} style={{}}>
+                  {/* <IconButton size="small" className={classes.buttonIcon}> */}
+                  {/* <ListItemAvatar> */}
+                  <Avatar className={classes.small} src={userinfo.profileURL} />
+                  {/* </ListItemAvatar> */}
+                  {/* </IconButton>
+          <Badge
+          badgeContent={4}
+          color="secondary"
+          className={classes.badgeRoot}
+          >
+        </Badge> */}
+                </TableCell>
+                <TableCell
+                  className={classes.user}
+                  align="center"
+                  style={{
+                    margin: "0 auto",
+                    padding: "0 auto",
+                    borderStyle: "none",
+                  }}
+                >
+                  {/* <ListItemText className={classes.listItemText}> */}
+                  {userinfo.name}님 환영합니다!
+                  {/* </ListItemText> */}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </ListItem>
+      )}
       <ListItem className={classes.listItem}>
         {!userinfo.logged && (
           <Button
