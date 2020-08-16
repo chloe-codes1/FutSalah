@@ -125,14 +125,14 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 		int formationExistence = teamMapper.checkIfFormationExists(teamID, userID);
 		int result;
-		if (formationExistence == 1) {
+		if (formationExistence > 0) {
 			result = teamMapper.deleteformation2(teamID, userID);
 		} else {
 			result = 1;
 		}
 		System.out.println(result);
 		int result2 = teamMapper.deleteCrew(teamID, userID);
-		if (result == 1 && result2 == 1) {
+		if (result >0 && result2 == 1) {
 			return 1;
 		} else {
 			throw new RuntimeException();
