@@ -14,8 +14,8 @@ deploy-to-server:
     - cd /home/ubuntu/s03p12a112/backend/target/
     - setsid nohup java -jar backend-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
     - cd /home/ubuntu/s03p12a112/frontend/
-    - npm install
-    - npm run build
+    - sudo npm install
+    - sudo npm run build
     - sudo service nginx restart
   after_script:
     - echo 'deployment is done'
