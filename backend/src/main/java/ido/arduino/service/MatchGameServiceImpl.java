@@ -83,6 +83,11 @@ public class MatchGameServiceImpl implements MatchGameService {
 		return matchMapper.refuseMatchRequest(matchID, teamID);
 	}
 
+	// 내가 등록한 매칭에 대한 상대팀 리스트  
+	@Override
+	public List<WaitMatchDto> waitmatch(int matchID) {
+		return mRepo.waitmatch(matchID);
+	}
 	
 	// ----------내가 요청한 매칭 리스트 (내팀이 요청한 매칭 정보) & 요청 삭제 ---------------
 	@Override
@@ -103,5 +108,7 @@ public class MatchGameServiceImpl implements MatchGameService {
 		// TODO Auto-generated method stub
 		return mRepo.schedule(userID);
 	}
+
+
 
 }
