@@ -100,9 +100,9 @@
 		where matchID = #{matchID}
 	</delete>
 
-	<!-- 매칭 대기 리스트 -->
+	<!-- 나에게 온 매칭 대기 리스트 -->
 	<select id="waitmatch" resultType="wait">
-		select t.name from waiting w, team t
+		select t.* from waiting w, team t
 		where w.awayTeamID = t.teamID and
 		w.matchID= #{matchID};
 	</select>
