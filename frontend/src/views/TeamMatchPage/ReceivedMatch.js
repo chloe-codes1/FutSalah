@@ -15,8 +15,8 @@ import axios from "axios";
 export default function ReceivedMatch({ userinfo }) {
   const [requestModal, setRequestModal] = useState(false);
   const [requestList, setRequestList] = useState([]);
-
   const [receivedList, setReceivedList] = useState([]);
+  const [selectedMatchID, setSelectedMatchID] = useState(0);
 
   // 처음 목록 받아오기
   useEffect(() => {
@@ -67,6 +67,7 @@ export default function ReceivedMatch({ userinfo }) {
 
   // 신청 관리 목록 받아오기
   const getRequestList = (matchID) => {
+    setSelectedMatchID(matchID);
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch/${matchID}`,
@@ -81,29 +82,31 @@ export default function ReceivedMatch({ userinfo }) {
   };
 
   // 신청 수락
-  const acceptRequest = (teamID, matchID) => {
+  const acceptRequest = (teamID) => {
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/accept`,
       data: {
         teamID,
-        matchID,
+        matchID: selectedMatchID,
       },
     })
-      .then(() => {})
+      .then(() => {
+        setRequestModal(false);
+      })
       .catch((e) => {
         console.log("error" + e);
       });
   };
 
   // 신청 거절
-  const refuseRequest = (teamID, matchID) => {
+  const refuseRequest = (teamID) => {
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/refuse`,
       data: {
         teamID,
-        matchID,
+        matchID: selectedMatchID,
       },
     })
       .then(() => {})
@@ -297,7 +300,7 @@ export default function ReceivedMatch({ userinfo }) {
                             "이 팀의 매칭 신청을 수락하시겠습니까?"
                           )
                         ) {
-                          acceptRequest(rl.teamID, rl.matchID);
+                          acceptRequest(rl.teamID);
                         }
                       }}
                       style={{
@@ -315,7 +318,7 @@ export default function ReceivedMatch({ userinfo }) {
                             "이 팀의 매칭 신청을 거절하시겠습니까?"
                           )
                         ) {
-                          refuseRequest(rl.teamID, rl.matchID);
+                          refuseRequest(rl.teamID);
                         }
                       }}
                       style={{
