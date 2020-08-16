@@ -26,10 +26,11 @@ function AddInfoDialog(props) {
     onClose();
   };
 
+
   // Validation
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: userInfo.email,
       height: '',
       weight: '',
     },
