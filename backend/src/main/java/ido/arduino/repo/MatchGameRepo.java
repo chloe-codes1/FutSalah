@@ -15,11 +15,20 @@ public interface MatchGameRepo {
 	public List<MatchDto> simpleoption(MatchDto matchrequest);
 	int insertmatch(MatchDto match);
 	
+	// 내가 등록한 요청 
 	public List<MatchDto> comematch(int userID);
 	int deletematch(int matchID);
+	// 내가 등록한 매칭에 대한 요청
+	public List<WaitMatchDto> waitmatch(int matchID);
 	
+	
+	// 요청한 매칭 삭제 
 	public List<MatchDto> requestmatch(int userID);
 	int requestdelete(WaitMatchDto wait);
 
+	// 예정된 경기 일정
 	public List<MatchDto> schedule(int userID);
+	
+	
+	
 }
