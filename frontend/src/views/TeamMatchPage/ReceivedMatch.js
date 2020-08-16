@@ -14,26 +14,7 @@ import axios from "axios";
 
 export default function ReceivedMatch({ userinfo }) {
   const [requestModal, setRequestModal] = useState(false);
-  const [requestList, setRequestList] = useState([
-    // {
-    //   teamID: 3,
-    //   profileURL: "",
-    //   name: "풋살라",
-    //   wins: 3,
-    //   defeats: 4,
-    //   draws: 7,
-    //   reliablity: 8,
-    // },
-    // {
-    //   teamID: 4,
-    //   profileURL: "",
-    //   name: "풋게로",
-    //   wins: 6,
-    //   defeats: 5,
-    //   draws: 2,
-    //   reliablity: 5,
-    // },
-  ]);
+  const [requestList, setRequestList] = useState([]);
 
   const [receivedList, setReceivedList] = useState([]);
 
@@ -91,8 +72,41 @@ export default function ReceivedMatch({ userinfo }) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch/${matchID}`,
     })
       .then((res) => {
+        console.log(res.data);
         setRequestList(res.data);
       })
+      .catch((e) => {
+        console.log("error" + e);
+      });
+  };
+
+  // 신청 수락
+  const acceptRequest = (teamID, matchID) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/accept`,
+      data: {
+        teamID,
+        matchID,
+      },
+    })
+      .then(() => {})
+      .catch((e) => {
+        console.log("error" + e);
+      });
+  };
+
+  // 신청 거절
+  const refuseRequest = (teamID, matchID) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/refuse`,
+      data: {
+        teamID,
+        matchID,
+      },
+    })
+      .then(() => {})
       .catch((e) => {
         console.log("error" + e);
       });
@@ -256,9 +270,19 @@ export default function ReceivedMatch({ userinfo }) {
                             width: "50px",
                             height: "50px",
                             backgroundColor: "white",
-                            borderRadius: "50%",
+                            border: "1px solid black",
+                            textAlign: "center",
                           }}
-                        ></div>
+                        >
+                          <div
+                            style={{
+                              fontSize: "10px",
+                              paddingTop: "12px",
+                            }}
+                          >
+                            No Logo
+                          </div>
+                        </div>
                       )}
                     </ListItemAvatar>
                     <ListItemText
@@ -273,7 +297,7 @@ export default function ReceivedMatch({ userinfo }) {
                             "이 팀의 매칭 신청을 수락하시겠습니까?"
                           )
                         ) {
-                          alert("수락");
+                          acceptRequest(rl.teamID, rl.matchID);
                         }
                       }}
                       style={{
@@ -291,7 +315,7 @@ export default function ReceivedMatch({ userinfo }) {
                             "이 팀의 매칭 신청을 거절하시겠습니까?"
                           )
                         ) {
-                          alert("거절");
+                          refuseRequest(rl.teamID, rl.matchID);
                         }
                       }}
                       style={{
