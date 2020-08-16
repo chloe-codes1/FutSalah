@@ -71,13 +71,12 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 		// TODO Auto-generated method stub
 		return tRepo.insertmy(uteam);
 	}
-	
+
 	@Override
 	public int deletemyteam(UserTeamConnDto uteam) {
 		// TODO Auto-generated method stub
 		return tRepo.deletemyteam(uteam);
 	}
-
 
 	// ----------------find team---------------------------
 	@Override
@@ -97,7 +96,7 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	}
 
 	@Override
-	public List<TeamLocationDTO> searchTeamByName(String name , int page) {
+	public List<TeamLocationDTO> searchTeamByName(String name, int page) {
 		return teamMapper.searchTeamByName(name, page);
 	}
 
@@ -123,11 +122,17 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Override
 	public int deleteCrew(int teamID, int userID) {
-		int result = teamMapper.deleteformation2(teamID, userID);
 
+		int formationExistence = teamMapper.checkIfFormationExists(teamID, userID);
+		int result;
+		if (formationExistence > 0) {
+			result = teamMapper.deleteformation2(teamID, userID);
+		} else {
+			result = 1;
+		}
 		System.out.println(result);
 		int result2 = teamMapper.deleteCrew(teamID, userID);
-		if (result == 1 && result2 == 1) {
+		if (result >0 && result2 == 1) {
 			return 1;
 		} else {
 			throw new RuntimeException();
@@ -170,6 +175,11 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 	public List<Formation> selectformation(int teamID) {
 		return tRepo.selectformation(teamID);
 
+	}
+
+	@Override
+	public int checkIfFormationExists(int teamID, int userID) {
+		return teamMapper.checkIfFormationExists(teamID, userID);
 	}
 
 	// ----------------result game---------------------------
