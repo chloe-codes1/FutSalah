@@ -202,7 +202,6 @@ function MyTeamPage(props) {
                           }}
                         >
                           <Button
-                            hover
                             color="transparent"
                             onClick={() => {
                               if (
@@ -212,6 +211,9 @@ function MyTeamPage(props) {
                               ) {
                                 leaveTeam(team.teamID);
                               }
+                            }}
+                            style={{
+                              width: "10%",
                             }}
                           >
                             팀 나가기

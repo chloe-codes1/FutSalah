@@ -34,7 +34,7 @@ const buttonStyle = {
     verticalAlign: "middle",
     touchAction: "manipulation",
     cursor: "pointer",
-    "&:hover,&:focus": {
+    "&:hover": {
       color: "#FFFFFF",
       backgroundColor: grayColor,
       boxShadow:

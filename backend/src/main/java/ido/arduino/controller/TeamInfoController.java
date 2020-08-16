@@ -295,13 +295,13 @@ public class TeamInfoController {
 					tService.updateLeader(nextLeaderID, teamID);
 					// userteamconn table에서 삭제한다
 					tService.deleteCrew(teamID, userID);
-				// 자신을 제외한 팀이 없을 경우
-				}else {
+					// 자신을 제외한 팀이 없을 경우
+				} else {
 					tService.deleteCrew(teamID, userID);
 					tService.delete(teamID);
 				}
-			// 자신이 팀리더 아니면,
-			}else {
+				// 자신이 팀리더 아니면,
+			} else {
 				// userteamconn table에서 바로 삭제한다
 				tService.deleteCrew(teamID, userID);
 			}
