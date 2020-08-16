@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -36,11 +35,11 @@ import {
 
 const useStyles = makeStyles(styles);
 
-const StyledTableCell = withStyles((theme: Theme) =>
+const StyledTableCell = withStyles((Theme) =>
   createStyles({
     head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      backgroundColor: Theme.palette.common.black,
+      color: Theme.palette.common.white,
     },
     body: {
       fontSize: 14,
@@ -48,11 +47,11 @@ const StyledTableCell = withStyles((theme: Theme) =>
   })
 )(TableCell);
 
-const StyledTableRow = withStyles((theme: Theme) =>
+const StyledTableRow = withStyles((Theme) =>
   createStyles({
     root: {
       "&:nth-of-type(odd)": {
-        backgroundColor: theme.palette.action.hover,
+        backgroundColor: Theme.palette.action.hover,
       },
     },
   })
@@ -61,7 +60,7 @@ const StyledTableRow = withStyles((theme: Theme) =>
 export default function AdminInfo(props) {
   const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
   const classes = useStyles();
-  const history = useHistory();
+
   const { ...rest } = props;
 
   // component mount시 login보다 매치 가져오기가 먼저 일어남

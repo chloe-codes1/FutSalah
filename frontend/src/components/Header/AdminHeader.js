@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useReducer, useCallback } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -18,22 +18,18 @@ import Drawer from "@material-ui/core/Drawer";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import styles from "assets/jss/material-kit-react/components/headerStyle.js";
+// dialog components
+import AdminUserContext from "../../contexts/AdminUserContext";
 
 const useStyles = makeStyles(styles);
 
 export default function AdminHeader(props) {
   const classes = useStyles();
-  const [adminuser, setAdminUser] = useState({
-    adminID: 0,
-    name: "",
-    stadiumID: 0,
-  });
+  const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
+  console.log(adminuserinfo);
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   React.useEffect(() => {
-    const stadiumID = window.sessionStorage.getItem("stadiumID");
-    adminuser.stadiumID = stadiumID;
-
     if (props.changeColorOnScroll) {
       window.addEventListener("scroll", headerColorChange);
     }
@@ -73,7 +69,7 @@ export default function AdminHeader(props) {
     [classes.fixed]: fixed,
   });
   const brandComponent = (
-    <Link to={`/Admin/${adminuser.stadiumID}`} className={classes.link}>
+    <Link to={"/Admin"} className={classes.link}>
       <Button className={classes.title}>
         <strong>{brand}</strong>
       </Button>
