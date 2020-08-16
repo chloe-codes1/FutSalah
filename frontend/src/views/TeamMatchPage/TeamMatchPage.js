@@ -93,7 +93,10 @@ function TeamMatchPage() {
               tabName: "매칭 검색",
               tabContent: (
                 <div className={classes.container} style={{ height: "750px" }}>
-                  <MatchSearch myteam={myteam} setMatchingList={setMatchingList} />
+                  <MatchSearch
+                    myteam={myteam}
+                    setMatchingList={setMatchingList}
+                  />
                   <Divider />
                   <br />
                   <Grid container justify="center" spacing={3}>
@@ -108,7 +111,11 @@ function TeamMatchPage() {
                       matchingList.map((match, index) => {
                         return (
                           <Grid key={index} item>
-                            <MatchCard myteam={myteam} key={index} match={match} />
+                            <MatchCard
+                              myteam={myteam}
+                              key={index}
+                              match={match}
+                            />
                           </Grid>
                         );
                       })}
@@ -118,15 +125,15 @@ function TeamMatchPage() {
             },
             {
               tabName: "받은 신청",
-              tabContent: <ReceivedMatch />,
+              tabContent: <ReceivedMatch userinfo={userinfo} />,
             },
             {
               tabName: "보낸 신청",
-              tabContent: <SentMatch />,
+              tabContent: <SentMatch userinfo={userinfo} />,
             },
             {
               tabName: "예정된 매치",
-              tabContent: <UpcomingMatch />,
+              tabContent: <UpcomingMatch userinfo={userinfo} />,
             },
           ]}
         />

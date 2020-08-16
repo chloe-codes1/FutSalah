@@ -96,7 +96,7 @@ function AddInfoDialog(props) {
             }}
           />
           <Button
-            color="info"
+            color="teamInfo"
             size="sm"
             style={{ marginLeft: "10px" }}
             onClick={() => {
@@ -158,7 +158,7 @@ function AddInfoDialog(props) {
           </TableContainer>
         </ListItem>
         <ListItem>
-          <Button color="primary" onClick={handleClose}>
+          <Button color="darkTeamInfo" onClick={handleClose}>
             나가기
           </Button>
         </ListItem>

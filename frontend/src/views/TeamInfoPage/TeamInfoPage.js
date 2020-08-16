@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import AddIcon from "@material-ui/icons/Add";
+import ChatIcon from "@material-ui/icons/Chat";
 import AddUserDialog from "components/Dialog/AddUserDialog";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
@@ -47,7 +48,7 @@ import teamInfobg from "assets/img/teamInfobg.jpg";
 // table style
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: "#4a7c59",
     color: theme.palette.common.white,
     padding: "5px 0",
   },
@@ -81,7 +82,7 @@ const modalStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfilePage(props) {
+export default function TeamInfoPage(props) {
   const classes = useStyles();
   const modal = modalStyles();
   const { ...rest } = props;
@@ -98,6 +99,7 @@ export default function ProfilePage(props) {
   const [record, setRecord] = useState([]); // 경기전적 목록
   const [requestList, setRequestList] = useState([]); // 팀원 신청 목록
   const [teamInfo, setTeamInfo] = useState({}); // 팀 정보
+  const [teamImage, setTeamImage] = useState(""); // 팀 이미지
   const [loading, setLoading] = useState(true); // 로딩 여부
   const [playerPos1, setPlayerPos1] = useState([]); // 포메이션 정보 (5:5)
   const [playerPos2, setPlayerPos2] = useState([]); // 포메이션 정보 (6:6)
@@ -136,20 +138,18 @@ export default function ProfilePage(props) {
       .then((res) => {
         // console.log("success");
         let profileURL = res.data.profileURL;
+
         if (profileURL) {
-          teamInfo.profileURL =
-            process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
+          setTeamImage(process.env.REACT_APP_S3_BASE_URL + "/" + profileURL);
         } else {
-          teamInfo.profileURL =
+          setTeamImage(
             process.env.REACT_APP_S3_BASE_URL +
-            "/team-default-" +
-            Math.ceil(Math.random(1, 8)) +
-            ".png";
+              "/team-default-" +
+              Math.ceil(Math.random(1, 8)) +
+              ".png"
+          );
         }
-        setTeamInfo({
-          ...res.data,
-          profileURL: teamInfo.profileURL,
-        });
+        setTeamInfo(res.data);
         // 지역 정보 가져오기
         axios({
           method: "get",
@@ -329,6 +329,8 @@ export default function ProfilePage(props) {
       });
 
     setTeamList(teamList.filter((tl) => tl.userID !== id));
+    setPlayerPos1(playerPos1.filter((pp) => pp.userID !== id));
+    setPlayerPos2(playerPos2.filter((pp) => pp.userID !== id));
 
     setLoading(false);
   };
@@ -482,7 +484,7 @@ export default function ProfilePage(props) {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 150,
+          height: 50,
           color: "white",
         }}
         {...rest}
@@ -501,7 +503,7 @@ export default function ProfilePage(props) {
             <GridContainer
               justify="center"
               style={{
-                backgroundColor: "rgba( 0, 0, 0, 0.6 )",
+                backgroundColor: "rgba( 0, 0, 0, 0.7 )",
                 borderRadius: "15px",
                 minHeight: "700px",
               }}
@@ -511,11 +513,7 @@ export default function ProfilePage(props) {
                 <Tooltip title="팀 대표 사진 변경하기" interactive>
                   <img
                     className={classes.logo}
-                    src={
-                      teamInfo.profileURL === null
-                        ? teamImage
-                        : teamInfo.profileURL
-                    }
+                    src={teamImage}
                     alt="team"
                     onClick={
                       Number(userinfo.userID) === teamInfo.leader
@@ -531,19 +529,21 @@ export default function ProfilePage(props) {
                   }}
                 >
                   <span>{teamInfo.region}</span>
-                  <div
-                    onClick={(e) => {
-                      setAnchorEl(e.target);
-                      setOpenedDescPopoverId(true);
-                    }}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    <h1>
-                      <strong>{teamInfo.name}</strong>
-                    </h1>
-                  </div>
+                  <Tooltip title="팀 설명 보기" interactive>
+                    <div
+                      onClick={(e) => {
+                        setAnchorEl(e.target);
+                        setOpenedDescPopoverId(true);
+                      }}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      <h1>
+                        <strong>{teamInfo.name}</strong>
+                      </h1>
+                    </div>
+                  </Tooltip>
                   <Popover
                     classes={{
                       paper: classes.popover,
@@ -563,7 +563,7 @@ export default function ProfilePage(props) {
                       horizontal: "center",
                     }}
                   >
-                    <h5 className={classes.popoverHeader}>팀 설명</h5>
+                    <h3 className={classes.popoverHeader}>팀 설명</h3>
                     <p className={classes.popoverBody}>
                       {teamInfo.description}
                     </p>
@@ -575,7 +575,7 @@ export default function ProfilePage(props) {
                     (t) => t.userID === Number(userinfo.userID)
                   ) === undefined ? (
                     <Button
-                      color="info"
+                      color="teamInfo"
                       className={classes.modifyButton}
                       size="sm"
                       onClick={() => {
@@ -590,7 +590,7 @@ export default function ProfilePage(props) {
                     </Button>
                   ) : (
                     <Button
-                      color="info"
+                      color="teamInfo"
                       className={classes.modifyButton}
                       size="sm"
                       onClick={handleQRcodeZone}
@@ -601,7 +601,7 @@ export default function ProfilePage(props) {
                 {/* 팀 정보 변경 버튼 */}
                 {Number(userinfo.userID) === teamInfo.leader && (
                   <Button
-                    color="info"
+                    color="teamInfo"
                     className={classes.modifyButton}
                     size="sm"
                     onClick={() => {
@@ -615,7 +615,7 @@ export default function ProfilePage(props) {
               {/* 포메이션 부분 */}
               <GridItem className={classes.formation} xs={10} md={5}>
                 <NavPills
-                  color="success"
+                  color="teamInfo"
                   horizontal={{
                     tabsGrid: { xs: 3, sm: 3, md: 3 },
                     contentGrid: { xs: 9, sm: 9, md: 9 },
@@ -671,8 +671,7 @@ export default function ProfilePage(props) {
                               </GridItem>
                               <GridItem xs={5}>
                                 <Button
-                                  round
-                                  color="success"
+                                  color="teamInfo"
                                   onClick={() => {
                                     storeFormation(5);
                                     alert("포메이션이 저장되었습니다!");
@@ -680,7 +679,7 @@ export default function ProfilePage(props) {
                                   style={{
                                     marginTop: "10px",
                                     width: "100%",
-                                    height: "35px",
+                                    height: "40px",
                                   }}
                                 >
                                   <strong>
@@ -689,6 +688,15 @@ export default function ProfilePage(props) {
                                     저장
                                   </strong>
                                 </Button>
+                              </GridItem>
+                              <GridItem>
+                                <div
+                                  style={{
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  Tip. 선수를 벤치에 드래그해서 뺼 수 있습니다.
+                                </div>
                               </GridItem>
                             </>
                           )}
@@ -740,8 +748,7 @@ export default function ProfilePage(props) {
                               </GridItem>
                               <GridItem xs={5}>
                                 <Button
-                                  round
-                                  color="success"
+                                  color="teamInfo"
                                   onClick={() => {
                                     storeFormation(6);
                                     alert("포메이션이 저장되었습니다!");
@@ -749,7 +756,7 @@ export default function ProfilePage(props) {
                                   style={{
                                     marginTop: "10px",
                                     width: "100%",
-                                    height: "35px",
+                                    height: "40px",
                                   }}
                                 >
                                   <strong>
@@ -758,6 +765,15 @@ export default function ProfilePage(props) {
                                     저장
                                   </strong>
                                 </Button>
+                              </GridItem>
+                              <GridItem>
+                                <div
+                                  style={{
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  Tip. 선수를 벤치에 드래그해서 뺼 수 있습니다.
+                                </div>
                               </GridItem>
                             </>
                           )}
@@ -770,7 +786,7 @@ export default function ProfilePage(props) {
               {/* 팀원, 전적, 신청관리 */}
               <GridItem className={classes.management} xs={10} md={5}>
                 <NavPills
-                  color="success"
+                  color="teamInfo"
                   tabs={[
                     {
                       // 팀원목록
@@ -812,11 +828,7 @@ export default function ProfilePage(props) {
                                         >
                                           <img
                                             className={classes.memberImg}
-                                            src={
-                                              t.profileURL === null
-                                                ? teamImage
-                                                : t.profileURL
-                                            }
+                                            src={t.profileURL}
                                           />
                                         </TableCell>
                                         <TableCell
@@ -837,10 +849,26 @@ export default function ProfilePage(props) {
                                           align="center"
                                           width="30%"
                                         >
+                                          {/* 채팅 버튼 */}
+                                          {userinfo.logged &&
+                                            Number(userinfo.userID) !==
+                                              t.userID && (
+                                              <Button
+                                                color="teamInfo"
+                                                size="sm"
+                                                onClick={() => {}}
+                                                style={{
+                                                  maxWidth: "3vw",
+                                                }}
+                                              >
+                                                <ChatIcon />
+                                              </Button>
+                                            )}
                                           {Number(userinfo.userID) ===
                                             teamInfo.leader &&
                                             t.userID !== teamInfo.leader && (
                                               <Button
+                                                color="teamInfo"
                                                 size="sm"
                                                 onClick={() => {
                                                   if (
@@ -860,7 +888,7 @@ export default function ProfilePage(props) {
                                             )}
                                         </TableCell>
                                       </TableRow>
-                                      <TableRow>
+                                      <TableRow hover>
                                         <TableCell>
                                           <div
                                             onClick={(e) => {
@@ -917,6 +945,7 @@ export default function ProfilePage(props) {
                           </TableContainer>
                           {Number(userinfo.userID) === teamInfo.leader && (
                             <Button
+                              color="teamInfo"
                               onClick={() => {
                                 setAddUserOpen(true);
                               }}
@@ -1084,6 +1113,7 @@ export default function ProfilePage(props) {
                                         align="center"
                                       >
                                         <Button
+                                          color="teamInfo"
                                           style={{
                                             maxWidth: "3vw",
                                           }}
@@ -1105,6 +1135,7 @@ export default function ProfilePage(props) {
                                       </StyledTableCell>
                                       <StyledTableCell align="center">
                                         <Button
+                                          color="teamInfo"
                                           style={{
                                             maxWidth: "3vw",
                                           }}

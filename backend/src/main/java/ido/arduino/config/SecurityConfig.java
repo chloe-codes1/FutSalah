@@ -17,10 +17,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/configuration/security", "/swagger-ui.html", "/webjars/**",
 			// 생성한 api url로 접근 허용하기
 			"/api/login", "/api/user", "/api/user/*", "/api/user/upload/*", "/api/user/check", "/api/team",
-			"/api/team/*", "/api/team/check/*", "/api/team/member/*", "/api/team/search/**", "/api/team/upload/*",
-			"/api/team/join/*", "/api/team/formation/*", "/api/team/formation/*/*", "/api/match/fsearch/*",
-			"/api/location", "/api/location/*", "/api/team/result/*", "/api/courtLogin", "/api/match/stadium/*",
-			"/api/match","/api/match2","/api/match/*","/api/match/*/*","/api/match/*/*/*",
+			"/api/team/*", "/api/team/my", "/api/team/check/*", "/api/team/member/*", "/api/team/search/**",
+			"/api/team/upload/*", "/api/team/join/*", "/api/team/formation/*", "/api/team/formation/*/*",
+			"/api/match/fsearch/*", "/api/location", "/api/location/*", "/api/team/result/*", "/api/courtLogin",
+			"/api/match/stadium/*", "/api/match", "/api/match2", "/api/match/*", "/api/match/*/*", "/api/match/*/*/*",
 			"/api/waiting", "/api/rank",
 			// assets 허용
 			"assets/*" };

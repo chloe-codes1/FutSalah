@@ -1,19 +1,16 @@
 import React, { useCallback, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
-import Typography from "@material-ui/core/Typography";
-
-import matchIng from "assets/img/match-ing.png";
-import matchComplete from "assets/img/match-complete.png";
-
-import axios from "axios";
-
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardMedia from "@material-ui/core/CardMedia";
 import MatchApplyDialog from "components/Dialog/MatchApplyDialog";
+import Typography from "@material-ui/core/Typography";
+import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+import matchComplete from "assets/img/match-complete.png";
+import matchIng from "assets/img/match-ing.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,20 +44,23 @@ export default function MatchCard({ match, myteam }) {
     wins: "",
     defeats: "",
     draws: "",
-    mileage: "",
+    reliability: "",
   });
   const [courtList, setCourtList] = useState([]);
   const handleApply = useCallback(() => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` + match.homeTeamID,
+      url:
+        `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` + match.homeTeamID,
     }).then((e) => {
       console.log(e.data);
       setHomeTeam(e.data);
     });
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + match.locationID,
+      url:
+        `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` +
+        match.locationID,
     }).then((e) => {
       console.log(e.data);
       setCourtList(e.data);
@@ -75,15 +75,23 @@ export default function MatchCard({ match, myteam }) {
     profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
   } else {
     profileURL =
-      process.env.REACT_APP_S3_BASE_URL + "/team-default-" + Math.ceil(Math.random(1, 8)) + ".png";
+      process.env.REACT_APP_S3_BASE_URL +
+      "/team-default-" +
+      Math.ceil(Math.random(1, 8)) +
+      ".png";
   }
   console.log(profileURL);
   return (
     <>
       <Card className={classes.root}>
-        {match.state === 0 && <CardHeader avatar={<img src={matchIng} />} title={match.hometeam} />}
+        {match.state === 0 && (
+          <CardHeader avatar={<img src={matchIng} />} title={match.hometeam} />
+        )}
         {match.state === 1 && (
-          <CardHeader avatar={<img src={matchComplete} />} title={match.hometeam} />
+          <CardHeader
+            avatar={<img src={matchComplete} />}
+            title={match.hometeam}
+          />
         )}
         <CardActionArea onClick={handleApply}>
           {/* {match.profileURL === null && (
@@ -92,7 +100,11 @@ export default function MatchCard({ match, myteam }) {
         {match.profileURL > 1 && (
           <CardMedia className={classes.media} image={profileURL} title={match.hometeam} />
         )} */}
-          <CardMedia className={classes.media} image={profileURL} title={match.hometeam} />
+          <CardMedia
+            className={classes.media}
+            image={profileURL}
+            title={match.hometeam}
+          />
           <CardContent>
             <Typography variant="subtitle2" color="textPrimary" component="p">
               경기방식 : {match.formCode}인 팀 매치

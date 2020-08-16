@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useContext, useReducer, useCallback } from "react";
+=======
+import React from "react";
+>>>>>>> 2052d15b28cfb88133a23cb9e0fdb708174e32f3
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -75,7 +79,6 @@ export default function AdminHeader(props) {
       </Button>
     </Link>
   );
-
   return (
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
