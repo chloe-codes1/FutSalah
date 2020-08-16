@@ -122,6 +122,7 @@ NavPills.propTypes = {
     "success",
     "info",
     "rose",
+    "teamInfo",
   ]),
   direction: PropTypes.string,
   horizontal: PropTypes.shape({
