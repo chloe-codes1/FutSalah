@@ -48,7 +48,11 @@ export default function Admin(props) {
         filter
         image={require("assets/img/liveMatchbg.png")}
         style={{ alignItems: "stretch" }}
-      ></Parallax>
+      >
+        <div className={classes.container}>
+          <h1>관리자 페이지</h1>
+        </div>
+      </Parallax>
       <Footer />
     </div>
   );
