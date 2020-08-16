@@ -85,7 +85,6 @@
 		inner join user u on ut.userID = u.userID
 		inner join matching m on w.matchID = m.matchID
 		where m.state = 0 and u.userID =#{userID};
-
 	</select>
 
 	<!--내가 등록한 매칭 삭제 -->
