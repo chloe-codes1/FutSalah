@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  Button,
   Dialog,
   DialogTitle,
   Grid,
@@ -8,7 +6,11 @@ import {
   ListItem,
   TextField,
 } from "@material-ui/core";
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useReducer, useState, useEffect } from "react";
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import Button from "components/CustomButtons/Button.js";
 
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,6 +23,7 @@ const initialState = {
     description: "",
     code: "",
     name: "",
+    locationID: null,
   },
 };
 
@@ -34,7 +37,17 @@ const reducer = (state, action) => {
           [action.name]: action.value,
         },
       };
-
+    case "INIT_INPUT":
+      return {
+        ...state,
+        team: {
+          socialID: "",
+          description: "",
+          code: "",
+          name: "",
+          locationID: null,
+        },
+      };
     default:
       return state;
   }
@@ -63,9 +76,14 @@ const useStyles = makeStyles((theme) => ({
 
 function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [guList, setGuList] = useState([]);
+  const [sidoList, setSidoList] = useState([]);
+  const [possible, setPossible] = useState(false); // 이름 중복 확인, 사용 가능 한지
+
   const { team } = state;
   const classes = useStyles();
   team.socialID = idData;
+
   const onChange = useCallback((e) => {
     const { name, value } = e.target;
     dispatch({
@@ -75,25 +93,99 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
     });
   }, []);
 
+  // 지역 목록 불러오기
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
+    })
+      .then((res) => {
+        const list = [];
+        res.data.map((location) => {
+          if (list.find((sido) => sido === location.sido) === undefined)
+            list.push(location.sido);
+        });
+        setSidoList(list);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  }, []);
+
   const createTeam = useCallback(() => {
-    
+    if (team.name === "") {
+      alert("팀명을 작성해주세요!");
+    } else if (team.locationID === null) {
+      alert("지역을 선택해주세요!");
+    } else if (team.description === "") {
+      alert("팀 설명을 작성해주세요!");
+    } else if (!possible) {
+      alert("팀 이름 중복확인을 진행해주세요!");
+    } else {
+      axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team`,
+        data: team,
+      })
+        .then(() => {
+          console.log("team create success!");
+          alert("팀 생성 완료!");
+          dispatch({
+            type: "INIT_INPUT",
+          });
+          onClose();
+          refreshTeam();
+        })
+        .catch(() => {
+          console.log("team create fail!");
+          alert("팀 생성 실패-잠시후 다시 시도해주세요");
+          onClose();
+        });
+    }
+  });
+
+  const checkTeamName = (name) => {
+    if (name === "") {
+      alert("이름을 입력해주세요!");
+    } else {
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/check/${name}`,
+      })
+        .then((res) => {
+          if (res.data) {
+            alert("이미 존재하는 이름입니다.");
+          } else {
+            alert("사용 가능한 이름입니다.");
+            setPossible(true);
+          }
+        })
+        .catch((e) => {
+          console.log("error" + e);
+        });
+    }
+  };
+
+  const sidoChange = (event) => {
+    // 시도 이름으로 구, locationID 불러오기
     axios({
       method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team`,
-      data: team,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
+      data: {
+        sido: event.target.value,
+      },
     })
-      .then(() => {
-        console.log("team create success!");
-        alert("팀 생성 완료!");
-        onClose();
-        refreshTeam();
+      .then((res) => {
+        const list = [];
+        res.data.map((location) => {
+          list.push(location);
+        });
+        setGuList(list);
       })
-      .catch(() => {
-        console.log("team create fail!");
-        alert("팀 생성 실패-잠시후 다시 시도해주세요");
-        onClose();
+      .catch((e) => {
+        console.log("error", e);
       });
-  });
+  };
 
   return (
     <Dialog fullWidth open={open} onClose={onClose}>
@@ -104,7 +196,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
         </Grid>
       </Grid> */}
 
-      <Grid container spacing={3}>
+      <Grid container>
         <Grid item xs></Grid>
         <Grid item xs={7}>
           <List className={classes.listRoot}>
@@ -113,17 +205,58 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
                 name="name"
                 fullWidth
                 label="팀명"
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e);
+                  setPossible(false);
+                }}
               />
+              <Button
+                color="myTeam"
+                onClick={() => {
+                  checkTeamName(team.name);
+                }}
+                style={{ width: "30%", padding: "0 auto" }}
+              >
+                이름 중복 확인
+              </Button>
             </ListItem>
-            <ListItem>
-              <TextField
-                name="code"
-                fullWidth
-                label="지역"
-                onChange={onChange}
-              />
-            </ListItem>
+            <FormControl style={{ width: "45%", padding: "0 16px" }}>
+              <Select
+                labelId="sido"
+                id="sido-select"
+                onChange={sidoChange}
+                inputProps={{
+                  classes: {
+                    icon: "white",
+                  },
+                }}
+              >
+                <MenuItem disabled value="">
+                  <em>시도</em>
+                </MenuItem>
+                {sidoList.map((s) => (
+                  <MenuItem value={s}>{s}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl style={{ width: "45%" }}>
+              <Select
+                name="locationID"
+                labelId="gu"
+                id="gu-select"
+                onChange={(e) => {
+                  onChange(e);
+                  // guChange(e);
+                }}
+              >
+                <MenuItem disabled value="">
+                  <em>시군구</em>
+                </MenuItem>
+                {guList.map((g) => (
+                  <MenuItem value={g.locationID}>{g.gu}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <ListItem>
               <TextField
                 name="description"
@@ -140,7 +273,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
       <Grid container justify="center">
         <List>
           <ListItem>
-            <Button variant="contained" color="primary" onClick={createTeam}>
+            <Button variant="contained" color="myTeam" onClick={createTeam}>
               생성
             </Button>
           </ListItem>

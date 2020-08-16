@@ -159,8 +159,8 @@ public class EmailServiceImpl {
 			int requestorDraws = maybeDraws.orElse(0);
 			Optional<Integer> maybeDefeats = Optional.ofNullable(requestTeam.getDefeats());
 			int requestorDefeats = maybeDefeats.orElse(0);
-			Optional<Integer> maybeMileage = Optional.ofNullable(requestTeam.getMileage());
-			int requestorMileage = maybeMileage.orElse(0);
+			Optional<Integer> maybeReliability = Optional.ofNullable(requestTeam.getReliability());
+			int requestorReliability = maybeReliability.orElse(0);
 			
 			// 매칭 등록팀 리더 정보
 			String leaderName = targetTeam.getLeaderName();
@@ -181,7 +181,7 @@ public class EmailServiceImpl {
 					+ "<br/> <span style='font-weight: bold;'>요청팀 이름: </span>" + requestorName 
 					+ "<br/> <span style='font-weight: bold;'>팀 소개: </span>" + requestorDescription
 					+ "<br/> <span style='font-weight: bold;'>전적 (승/무/패): </span>" + requestorWins + " / " + requestorDraws + " / " + requestorDefeats
-					+ "<br/> <span style='font-weight: bold;'>신뢰도 마일리지: </span>" + requestorMileage 
+					+ "<br/> <span style='font-weight: bold;'>신뢰도 마일리지: </span>" + requestorReliability
 					//TODO: endpoint 확인 후 변경 필요
 					+ "<h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/match'>"

@@ -120,6 +120,14 @@ const navPillsStyle = (theme) => ({
         "0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4)",
     },
   },
+  teamInfo: {
+    "&,&:hover": {
+      color: "#FFFFFF",
+      backgroundColor: "#8fc0a9",
+      boxShadow:
+        "0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4)",
+    },
+  },
   alignCenter: {
     alignItems: "center",
     justifyContent: "center",
