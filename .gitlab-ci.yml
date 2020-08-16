@@ -9,12 +9,13 @@ deploy-to-server:
     - cd /home/ubuntu/s03p12a112/
     - git pull origin master
     - cd backend
+    - kill $(lsof -t -i:8000)
     - sudo mvn package
     - cd /home/ubuntu/s03p12a112/backend/target/
-    - kill $(lsof -t -i:8000)
     - setsid nohup java -jar backend-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
     - cd /home/ubuntu/s03p12a112/frontend/
-    - sudo npm run build
+    - npm install
+    - npm run build
     - sudo service nginx restart
   after_script:
     - echo 'deployment is done'
