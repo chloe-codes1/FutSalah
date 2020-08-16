@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useContext, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Footer from "components/Footer/Footer.js";
 
 // core components
@@ -8,9 +8,28 @@ import AdminHeaderLinks from "components/Header/AdminHeaderLinks.js";
 
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
+import AdminUserContext from "../../contexts/AdminUserContext";
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/views/AdminPage.js";
 
 export default function Admin(props) {
   const { ...rest } = props;
+  const useStyles = makeStyles(styles);
+  const classes = useStyles();
+  const history = useHistory();
+
+  const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
+  console.log(adminuserinfo);
+
+  const redirectToMatchList = () => {
+    if (adminuserinfo.logged) {
+      history.push(`/Admin/${adminuserinfo.stadiumID}`);
+    }
+  };
+
+  useEffect(() => {
+    redirectToMatchList();
+  }, []);
 
   return (
     <div>
@@ -29,7 +48,11 @@ export default function Admin(props) {
         filter
         image={require("assets/img/liveMatchbg.png")}
         style={{ alignItems: "stretch" }}
-      ></Parallax>
+      >
+        <div className={classes.container}>
+          <h1>관리자 페이지</h1>
+        </div>
+      </Parallax>
       <Footer />
     </div>
   );

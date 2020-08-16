@@ -93,7 +93,10 @@ function TeamMatchPage() {
               tabName: "매칭 검색",
               tabContent: (
                 <div className={classes.container} style={{ height: "750px" }}>
-                  <MatchSearch myteam={myteam} setMatchingList={setMatchingList} />
+                  <MatchSearch
+                    myteam={myteam}
+                    setMatchingList={setMatchingList}
+                  />
                   <Divider />
                   <br />
                   <Grid container justify="center" spacing={3}>
@@ -108,7 +111,11 @@ function TeamMatchPage() {
                       matchingList.map((match, index) => {
                         return (
                           <Grid key={index} item>
-                            <MatchCard myteam={myteam} key={index} match={match} />
+                            <MatchCard
+                              myteam={myteam}
+                              key={index}
+                              match={match}
+                            />
                           </Grid>
                         );
                       })}
