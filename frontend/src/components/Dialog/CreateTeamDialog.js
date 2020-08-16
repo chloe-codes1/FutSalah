@@ -78,6 +78,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [guList, setGuList] = useState([]);
   const [sidoList, setSidoList] = useState([]);
+  const [possible, setPossible] = useState(false); // 이름 중복 확인, 사용 가능 한지
 
   const { team } = state;
   const classes = useStyles();
@@ -118,6 +119,8 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
       alert("지역을 선택해주세요!");
     } else if (team.description === "") {
       alert("팀 설명을 작성해주세요!");
+    } else if (!possible) {
+      alert("팀 이름 중복확인을 진행해주세요!");
     } else {
       axios({
         method: "post",
@@ -140,6 +143,28 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
         });
     }
   });
+
+  const checkTeamName = (name) => {
+    if (name === "") {
+      alert("이름을 입력해주세요!");
+    } else {
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/check/${name}`,
+      })
+        .then((res) => {
+          if (res.data) {
+            alert("이미 존재하는 이름입니다.");
+          } else {
+            alert("사용 가능한 이름입니다.");
+            setPossible(true);
+          }
+        })
+        .catch((e) => {
+          console.log("error" + e);
+        });
+    }
+  };
 
   const sidoChange = (event) => {
     // 시도 이름으로 구, locationID 불러오기
@@ -180,10 +205,22 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
                 name="name"
                 fullWidth
                 label="팀명"
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e);
+                  setPossible(false);
+                }}
               />
+              <Button
+                color="myTeam"
+                onClick={() => {
+                  checkTeamName(team.name);
+                }}
+                style={{ width: "30%", padding: "0 auto" }}
+              >
+                이름 중복 확인
+              </Button>
             </ListItem>
-            <FormControl style={{ width: "50%" }}>
+            <FormControl style={{ width: "45%", padding: "0 16px" }}>
               <Select
                 labelId="sido"
                 id="sido-select"
@@ -202,7 +239,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
                 ))}
               </Select>
             </FormControl>
-            <FormControl style={{ width: "50%" }}>
+            <FormControl style={{ width: "45%" }}>
               <Select
                 name="locationID"
                 labelId="gu"
