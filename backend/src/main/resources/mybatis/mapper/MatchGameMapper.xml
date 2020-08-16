@@ -54,9 +54,9 @@
 	<!-- 검색한 조건 없으면 매칭 등록 -->
 	<insert id="insertmatch" parameterType="match">
 		insert into
-		matching(homeTeamID,locationID,date,time,formCode,isBooked, state)
+		matching(homeTeamID,locationID,date,time,formCode,isBooked, state, courtID)
 		values
-		(#{homeTeamID},#{locationID},#{date},#{time},#{formCode},#{isBooked},0)
+		(#{homeTeamID},#{locationID},#{date},#{time},#{formCode},#{isBooked},0, #{courtID})
 	</insert>
 
 
