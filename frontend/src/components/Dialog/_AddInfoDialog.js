@@ -1,22 +1,21 @@
-import * as Yup from "yup";
+import React from "react";
 
+import { TextField } from "@material-ui/core";
+
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Datetime from "react-datetime";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import React from "react";
 import Select from "@material-ui/core/Select";
-import { TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
+import Datetime from "react-datetime";
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
-import { useFormik } from "formik";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles(styles);
 function AddInfoDialog(props) {
@@ -25,43 +24,6 @@ function AddInfoDialog(props) {
   const handleClose = () => {
     onClose();
   };
-
-  // Validation
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      height: '',
-      weight: '',
-    },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .required("이메일을 입력해주세요.")
-        .email("올바른 이메일 형식이 아닙니다"),
-      weight: Yup.number()
-        .moreThan(1, "입력하신 몸무게를 다시 확인해주세요.")
-        .lessThan(200, "입력하신 몸무게를 다시 확인해주세요.")
-        .positive()
-        .nullable(true)
-        .notRequired(),
-      height: Yup.number()
-        .moreThan(100, "입력하신 키를 다시 확인해주세요.")
-        .lessThan(300, "입력하신 키를 다시 확인해주세요.")
-        .positive()
-        .nullable(true)
-        .notRequired(),
-    }),
-    onSubmit: () => {},
-  });
-
-  const onSubmit = () =>{
-    formik.submitForm();
-    if (!formik.isValid || !formik.values.email) {
-      console.log("Caught in validation filter...!");
-      return;
-    }
-    
-
-  }
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -79,8 +41,8 @@ function AddInfoDialog(props) {
           label="이메일"
           type="email"
           fullWidth
-          value={formik.values.email}
-          onChange={formik.handleChange}
+          value={userInfo.email}
+          onChange={onChange}
         />
         <h3 className={classes.buttonTitle}>출생연도</h3>
         <Datetime
@@ -96,8 +58,8 @@ function AddInfoDialog(props) {
           id="height"
           label="키"
           fullWidth
-          value={formik.values.height}
-          onChange={formik.handleChange}
+          value={userInfo.height}
+          onChange={onChange}
         />
         <TextField
           name="weight"
@@ -105,8 +67,7 @@ function AddInfoDialog(props) {
           id="weight"
           label="몸무게"
           fullWidth
-          value={formik.values.weight}
-          onChange={formik.handleChange}
+          onChange={onChange}
         />
         <FormControl className={classes.formControl} fullWidth>
           <InputLabel id="demo-simple-select-autowidth-label">선호포지션</InputLabel>
