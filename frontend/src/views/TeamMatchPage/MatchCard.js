@@ -1,19 +1,17 @@
 import React, { useCallback, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
-import Typography from "@material-ui/core/Typography";
-
-import matchIng from "assets/img/match-ing.png";
-import matchComplete from "assets/img/match-complete.png";
-
-import axios from "axios";
-
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardMedia from "@material-ui/core/CardMedia";
 import MatchApplyDialog from "components/Dialog/MatchApplyDialog";
+import Typography from "@material-ui/core/Typography";
+import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+import matchComplete from "assets/img/match-complete.png";
+import matchIng from "assets/img/match-ing.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,7 +45,7 @@ export default function MatchCard({ match, myteam }) {
     wins: "",
     defeats: "",
     draws: "",
-    mileage: "",
+    reliability: "",
   });
   const [courtList, setCourtList] = useState([]);
   const handleApply = useCallback(() => {
