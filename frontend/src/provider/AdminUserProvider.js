@@ -26,7 +26,7 @@ const adminreducer = (state, action) => {
       window.sessionStorage.removeItem("adminID");
       window.sessionStorage.removeItem("name");
       window.sessionStorage.removeItem("stadiumID");
-      window.location.href = "/Admin";
+      window.location.href = "/";
       return {
         ...adminInitialState,
       };

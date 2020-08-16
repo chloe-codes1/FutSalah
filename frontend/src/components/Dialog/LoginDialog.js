@@ -116,7 +116,7 @@ function LoginDialog(props) {
           />
         </ListItem>
         <ListItem>
-          <Link to={"/Admin"}>관리자 로그인</Link>
+          <Link to={"/Admin"}>관리자 페이지</Link>
         </ListItem>
       </List>
     </Dialog>

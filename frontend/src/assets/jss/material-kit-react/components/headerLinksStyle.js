@@ -82,6 +82,25 @@ const headerLinksStyle = (theme) => ({
       },
     },
   },
+  user: {
+    color: "inherit",
+    padding: "0.9375rem",
+    fontWeight: "400",
+    fontSize: "12px",
+    textTransform: "uppercase",
+    borderRadius: "3px",
+    lineHeight: "20px",
+    textDecoration: "none",
+    margin: "0px",
+    display: "inline-flex",
+    [theme.breakpoints.down("sm")]: {
+      width: "calc(100% - 30px)",
+      marginLeft: "15px",
+      marginBottom: "8px",
+      marginTop: "8px",
+      textAlign: "left",
+    },
+  },
   notificationNavLink: {
     color: "inherit",
     padding: "0.9375rem",
@@ -129,7 +148,12 @@ const headerLinksStyle = (theme) => ({
     },
   },
   avatar: {
-    margin: "0 0 0 0",
+    margin: 0,
+    padding: "0 0 0 20px",
+    borderStyle: "none",
+    [theme.breakpoints.down("sm")]: {
+      margin: "0 0 0 30px",
+    },
   },
   small: {
     margin: "4px 0 4px 0",

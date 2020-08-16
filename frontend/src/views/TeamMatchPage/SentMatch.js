@@ -76,9 +76,19 @@ export default function SentMatch({ userinfo }) {
                       width: "50px",
                       height: "50px",
                       backgroundColor: "white",
-                      borderRadius: "50%",
+                      border: "1px solid black",
+                      textAlign: "center",
                     }}
-                  />
+                  >
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        paddingTop: "12px",
+                      }}
+                    >
+                      No Logo
+                    </div>
+                  </div>
                 )}
               </ListItemAvatar>
               <ListItemText

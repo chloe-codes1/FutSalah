@@ -1,0 +1,39 @@
+.arrive-info-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.arrive-contents {
+  position: relative;
+  display: inline-block;
+}
+
+.arrive-content {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.arrive-content-team {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.arrive-content-time {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.QR-reader-container {
+  display: inline-block;
+  width: 25%;
+  height: 25%;
+}

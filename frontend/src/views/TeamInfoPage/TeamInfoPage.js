@@ -39,8 +39,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
-import teamImage from "assets/img/basicTeamImg1.jpg";
-import teamInfobg from "assets/img/teamInfobg.jpg";
+import teamInfobg from "assets/img/teamInfobg2.jpg";
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";

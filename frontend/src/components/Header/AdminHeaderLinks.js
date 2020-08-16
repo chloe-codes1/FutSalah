@@ -22,9 +22,6 @@ import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js
 
 const useStyles = makeStyles(styles);
 
-// 첫 로그인(회원가입)일때 -> 1.구글 또는 카카오로 전달받은 ID를 backend로 전달
-// -> backend에서 전달받은 ID가 기존회원인지 판단하여 front로 전달(기존회원이 아닐때 user create) -> front는 기존회원이 아닐때 추가정보 dialog를 호출 ->
-// -> 추가정보를 입력받아 backend에 전달 -> backend는 정보를 전달받아 user update
 const adminInitialState = {
   admin: {
     adminID: "",
@@ -102,7 +99,7 @@ export default function AdminHeaderLinks(props) {
       <ListItem className={classes.listItem}>
         {adminuserinfo.logged && (
           <ListItemText className={classes.listItemText}>
-            {adminuserinfo.name}님 환영합니다!
+            {adminuserinfo.name}
           </ListItemText>
         )}
       </ListItem>
@@ -138,9 +135,7 @@ export default function AdminHeaderLinks(props) {
             }
             color="warning"
           >
-            <Link to={"/"} className={classes.link}>
-              Logout
-            </Link>
+            Logout
           </Button>
         )}
         <AdminLoginDialog

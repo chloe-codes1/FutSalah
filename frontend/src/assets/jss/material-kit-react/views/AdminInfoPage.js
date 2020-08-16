@@ -1,7 +1,7 @@
 import { container } from "assets/jss/material-kit-react.js";
 import { defaultFont } from "assets/jss/material-kit-react.js";
 
-const AdminMatchInfoStyle = {
+const AdminStyle = {
   container: {
     ...container,
     paddingTop: 100,
@@ -44,41 +44,34 @@ const AdminMatchInfoStyle = {
   },
   arriveInfoContainer: {
     position: "relative",
+    display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "0",
   },
-  // arriveInfo: {
-  //   position: "relative",
-  //   display: "inline-block",
-  // },
-  // arriveContents: {
-  //   position: "relative",
-  //   display: "inline-block",
-  // },
-  // arriveContent: {
-  //   position: "relative",
-  //   display: "inline-block",
-  //   padding: "0",
-  //   margin: "0",
-  // },
-  // arriveContentTeam: {
-  //   position: "relative",
-  //   display: "inline-block",
-  //   padding: "0",
-  //   margin: "0",
-  // },
-  // arriveContentTime: {
-  //   position: "relative",
-  //   display: "inline-block",
-  //   padding: "0",
-  //   margin: "0",
-  // },
-  bottomButtonSet: {
-    justifyContent: "center",
+  arriveInfo: {
+    position: "relative",
+    display: "inline-block",
   },
-  bottomButton: {
-    margin: "5px",
+  arriveContents: {
+    position: "relative",
+    display: "inline-block",
+  },
+  arriveContent: {
+    position: "relative",
+    display: "inline-block",
+    padding: "0",
+    margin: "0",
+  },
+  arriveContentTeam: {
+    position: "relative",
+    display: "inline-block",
+    padding: "0",
+    margin: "0",
+  },
+  arriveContentTime: {
+    position: "relative",
+    display: "inline-block",
+    padding: "0",
+    margin: "0",
   },
 };
-export default AdminMatchInfoStyle;
+export default AdminStyle;
