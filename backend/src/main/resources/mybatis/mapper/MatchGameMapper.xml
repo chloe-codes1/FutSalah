@@ -79,11 +79,14 @@
 	<!-- 내가 매칭 신청 요청한 매칭 정보 -->
 
 	<select id="requestmatch" resultType="match">
-		select m.* from waiting w
+		select m.*,t.name as awayteam,t.profileURL, l.sido, l.gu, c.name, t2.name as hometeam from waiting w
 		left outer join team t on w.awayTeamID=t.teamID
 		inner join userteamconn ut on t.teamID = ut.teamID
 		inner join user u on ut.userID = u.userID
 		inner join matching m on w.matchID = m.matchID
+		left outer join location l on m.locationID = l.locationID
+		inner join team t2 on m.homeTeamID = t2.teamID
+		left outer join court c on m.courtID = c.courtID
 		where m.state = 0 and u.userID =#{userID};
 	</select>
 
