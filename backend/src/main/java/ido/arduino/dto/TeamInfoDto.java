@@ -19,7 +19,7 @@ public class TeamInfoDto {
 	private int points;
 	private String code;
 	private String description;
-	private Integer mileage;
+	private Integer reliability;
 	private String profileURL;
 	private String name;
 	private int leader; // 팀을 생성한 userid
