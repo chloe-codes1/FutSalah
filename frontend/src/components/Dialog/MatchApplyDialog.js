@@ -72,7 +72,8 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
         teamID: selectAway,
       },
     }).then(() => {
-      console.log("success");
+      alert("신청완료!");
+      onClose();
     });
   };
   return (
