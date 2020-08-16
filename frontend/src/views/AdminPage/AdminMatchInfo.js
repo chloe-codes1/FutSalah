@@ -22,6 +22,17 @@ import AdminUserContext from "../../contexts/AdminUserContext";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminMatchInfoPage.js";
 
+// Pusher
+// npm install pusher-js @react-native-community/netinfo
+import Pusher from "pusher-js";
+
+// Pusher
+Pusher.logToConsole = true;
+
+var pusher = new Pusher("d497d1d45ba8c0d76122", {
+  cluster: "ap3",
+});
+
 const useStyles = makeStyles(styles);
 
 export default function AdminInfo(props) {
@@ -47,16 +58,11 @@ export default function AdminInfo(props) {
     awayTeamID: 22,
     awayName: "팀동휘",
   };
+  const [matchInfo, setMatchInfo] = useState(testMatchInfo);
 
   // Raspberry pi에서 받을 것
-  const testScoreInfo = {
-    id: 1,
-    hometeamscore: 1,
-    awayteamscore: 2,
-  };
-
-  const [matchInfo, setMatchInfo] = useState(testMatchInfo);
-  const [scoreInfo, setScoreInfo] = useState(testScoreInfo);
+  const [homeScore, setHomeScore] = useState(0);
+  const [awayScore, setAwayScore] = useState(0);
 
   // 이 경기장, 오늘 매치 리스트의 몇번째 경기인가?
   const initialMatchNo = Number(match.params.id);
@@ -96,6 +102,14 @@ export default function AdminInfo(props) {
     // console.log(matchNo, sizeOfMatch);
     console.log("새로고침!");
   }, []);
+
+  var channel = pusher.subscribe("channel");
+  channel.bind("event", function (data) {
+    // alert(JSON.stringify(data));
+    // console.log(data.homeScore);
+    setHomeScore(data.homeScore);
+    console.log(homeScore);
+  });
 
   const toAdminInfo = () => {
     history.push(`/Admin/${adminuserinfo.stadiumID}`);
@@ -152,7 +166,7 @@ export default function AdminInfo(props) {
                   </Button>
 
                   <h1>{matchInfo.homeName}</h1>
-                  <h1>{scoreInfo.hometeamscore}</h1>
+                  <h1>{homeScore}</h1>
                 </ListItem>
                 <ListItem className={classes.centerListItem}>
                   <h1>vs</h1>
@@ -162,7 +176,7 @@ export default function AdminInfo(props) {
                     Away
                   </Button>
                   <h1>{matchInfo.awayName}</h1>
-                  <h1>{scoreInfo.awayteamscore}</h1>
+                  <h1>{awayScore}</h1>
                 </ListItem>
               </List>
             </GridItem>

@@ -23,7 +23,7 @@ export default class ArriveInfo extends Component {
   }
 
   handleScan(data) {
-    console.log("scaning...");
+    // console.log("scaning...");
     const { homeTeamID, awayTeamID, matchhour } = this.props;
     if (homeTeamID === Number(data) && !this.state.ishometeamarrived) {
       // QR에서 찍은 결과와 homeTeamID가 같고, 처음 QR 찍은 경우만 실행
@@ -75,7 +75,7 @@ export default class ArriveInfo extends Component {
     this.setState({
       result: data,
     });
-    console.log(data);
+    // console.log(data);
   }
   handleError(err) {
     console.error(err);
