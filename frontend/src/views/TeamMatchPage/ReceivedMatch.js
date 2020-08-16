@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -8,7 +8,11 @@ import Button from "components/CustomButtons/Button.js";
 import { Modal, Typography } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 
-export default function ReceivedMatch() {
+import { Link } from "react-router-dom";
+
+import axios from "axios";
+
+export default function ReceivedMatch({ userinfo }) {
   const [requestModal, setRequestModal] = useState(false);
   const [requestList, setRequestList] = useState([
     {
@@ -31,31 +35,31 @@ export default function ReceivedMatch() {
     },
   ]);
 
-  const [receivedList, setReceivedList] = useState([
-    // 테스트 데이터
-    {
-      matchID: 1,
-      teamID: 1,
-      homeProfile: "",
-      homeName: "FC 슛돌이",
-      date: "2020-08-30",
-      time: "12",
-      location: "서울시 종로구",
-      court: "종로 풋살장",
-      isBooked: true,
-    },
-    {
-      matchID: 2,
-      teamID: 2,
-      homeProfile: "",
-      homeName: "FC 슛순이",
-      date: "2020-08-22",
-      time: "15",
-      location: "서울시 노원구",
-      court: "노원 풋살장",
-      isBooked: false,
-    },
-  ]);
+  const [receivedList, setReceivedList] = useState([]);
+
+  // 처음 목록 받아오기
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch`,
+      data: userinfo,
+    })
+      .then((res) => {
+        console.log(res.data);
+        setReceivedList(
+          res.data.map((r) => {
+            if (r.profileURL) {
+              r.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + r.profileURL;
+            }
+            return r;
+          })
+        );
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  }, []);
 
   const handleRequestListOpen = () => {
     // request list 받아오기
@@ -67,51 +71,114 @@ export default function ReceivedMatch() {
 
   // 등록한 매칭 삭제
   const removeMatch = (id) => {
-    setReceivedList(receivedList.filter((rl) => rl.matchID !== id));
+    axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch/${id}`,
+    })
+      .then(() => {
+        setReceivedList(receivedList.filter((rl) => rl.matchID !== id));
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   return (
     <div style={{ height: "750px", overflow: "auto" }}>
       <List>
-        {receivedList.map((rl) => (
-          <ListItem>
-            <ListItemAvatar>
-              {/* 팀 로고 넣기*/}
-              <div
+        {receivedList.length === 0 ? (
+          <div>
+            <h3 style={{ textAlign: "center" }}>등록된 매칭이 없습니다.</h3>
+          </div>
+        ) : (
+          receivedList.map((rl) => (
+            <ListItem>
+              <ListItemAvatar>
+                {rl.profileURL ? (
+                  <img
+                    src={rl.profileURL}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      backgroundColor: "white",
+                      borderRadius: "50%",
+                    }}
+                  ></div>
+                )}
+              </ListItemAvatar>
+              <ListItemText
                 style={{
-                  width: "50px",
-                  height: "50px",
-                  backgroundColor: "black",
+                  width: "15%",
+                }}
+              >
+                <Link
+                  to={"/teaminfo/" + rl.homeTeamID}
+                  style={{ color: "black" }}
+                >
+                  {rl.hometeam}
+                </Link>
+              </ListItemText>
+              <ListItemText
+                primary={`${rl.date} / ${rl.time}시`}
+                secondary={
+                  rl.name === null
+                    ? `${rl.sido} ${rl.gu} 경기장없음 / 예약여부:${
+                        rl.isBooked ? "O" : "X"
+                      }`
+                    : `${rl.sido} ${rl.gu} ${rl.name} / 예약여부:${
+                        rl.isBooked ? "O" : "X"
+                      } `
+                }
+                style={{
+                  width: "30%",
                 }}
               />
-            </ListItemAvatar>
-            <ListItemText>{rl.homeName}</ListItemText>
-            <ListItemText
-              primary={`${rl.date} / ${rl.time}시`}
-              secondary={`${rl.location} ${rl.court} 예약여부:${
-                rl.isBooked ? "O" : "X"
-              } `}
-            />
-            <Button
-              small
-              variant="contained"
-              onClick={() => {
-                handleRequestListOpen();
-              }}
-            >
-              신청 관리
-            </Button>
-            <Button
-              small
-              variant="contained"
-              onClick={() => {
-                removeMatch(rl.matchID);
-              }}
-            >
-              삭제
-            </Button>
-          </ListItem>
-        ))}
+              <ListItemText
+                primary="경기방식"
+                secondary={`${rl.formCode}:${rl.formCode}`}
+                style={{
+                  width: "15%",
+                }}
+              />
+              <Button
+                small
+                variant="contained"
+                onClick={() => {
+                  handleRequestListOpen();
+                }}
+                style={{
+                  width: "10%",
+                  backgroundColor: "#05b0c4",
+                }}
+              >
+                신청 관리
+              </Button>
+              <Button
+                small
+                variant="contained"
+                onClick={() => {
+                  if (window.confirm("이 매칭을 삭제하시겠습니까?")) {
+                    removeMatch(rl.matchID);
+                  }
+                }}
+                style={{
+                  width: "10%",
+                  backgroundColor: "#05b0c4",
+                }}
+              >
+                삭제
+              </Button>
+            </ListItem>
+          ))
+        )}
       </List>
       <Modal
         aria-labelledby="transition-modal-title"
@@ -160,7 +227,15 @@ export default function ReceivedMatch() {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      console.log("수락");
+                      if (
+                        window.confirm("이 팀의 매칭 신청을 수락하시겠습니까?")
+                      ) {
+                        alert("수락");
+                      }
+                    }}
+                    style={{
+                      width: "10%",
+                      backgroundColor: "#05b0c4",
                     }}
                   >
                     수락
@@ -168,7 +243,15 @@ export default function ReceivedMatch() {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      console.log("거절");
+                      if (
+                        window.confirm("이 팀의 매칭 신청을 거절하시겠습니까?")
+                      ) {
+                        alert("거절");
+                      }
+                    }}
+                    style={{
+                      width: "10%",
+                      backgroundColor: "#05b0c4",
                     }}
                   >
                     거절
