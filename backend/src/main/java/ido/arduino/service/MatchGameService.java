@@ -23,10 +23,12 @@ public interface MatchGameService {
 	
 	// 매칭 수락 및 거절
 	int checkIfRegistered(int matchID, int teamID);
-	int deletematch(int matchID);
 	
+	//내가 등록한 매칭 삭제 & 웨이팅 걸려있는 리스트 삭제 
+	int deletematch(int matchID);
 	// 내가 등록한 매칭 리스트 
 	List<MatchDto> comematch(int userID);
+	
 	// 내가 등록한 매칭에 대한 요청 리스트
 	public List<WaitMatchDto> waitmatch(int matchID);
 	

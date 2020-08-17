@@ -18,6 +18,7 @@ public interface MatchGameRepo {
 	// 내가 등록한 요청 
 	public List<MatchDto> comematch(int userID);
 	int deletematch(int matchID);
+	int deletewaitmatch(int matchID);
 	// 내가 등록한 매칭에 대한 요청
 	public List<WaitMatchDto> waitmatch(int matchID);
 	

@@ -54,9 +54,10 @@
 	<!-- 검색한 조건 없으면 매칭 등록 -->
 	<insert id="insertmatch" parameterType="match">
 		insert into
-		matching(homeTeamID,locationID,date,time,formCode,isBooked, state, courtID)
+		matching(homeTeamID,locationID,date,time,formCode,state, isBooked<if test="isBooked==1">,courtID</if>)
 		values
-		(#{homeTeamID},#{locationID},#{date},#{time},#{formCode},#{isBooked},0, #{courtID})
+		(#{homeTeamID},#{locationID},#{date},#{time},#{formCode},0,#{isBooked}<if test="isBooked==1"> ,#{courtID}</if>)
+		
 	</insert>
 
 
@@ -96,6 +97,12 @@
 		delete from matching
 		where matchID = #{matchID}
 	</delete>
+	
+	<!-- 내가 등록한 매칭을 삭제할 때 웨이팅 있는 매칭도 같이 삭제 -->
+	<delete id="deletewaitmatch" parameterType="int">
+		delete from waiting
+		where matchID = #{matchID}
+	</delete>
 
 	<!-- 나에게 온 매칭 대기 리스트 -->
 	<select id="waitmatch" resultType="wait">
@@ -129,7 +136,7 @@
 		inner join userteamconn ut on t2.teamID = ut.teamID or t.teamID= ut.teamID
 		inner join user u on ut.userID = u.userID
 
-		where m.state = 1 and u.userID=#{userID}
+		where m.state = 1 and u.userID=#{userID} and DATE(m.date) >= DATE(NOW())
 
 	</select>
 

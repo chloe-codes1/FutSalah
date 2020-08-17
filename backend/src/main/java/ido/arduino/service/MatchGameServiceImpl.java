@@ -60,7 +60,21 @@ public class MatchGameServiceImpl implements MatchGameService {
 
 	@Override
 	public int deletematch(int matchID) {
-		return mRepo.deletematch(matchID);
+		int result = mRepo.deletewaitmatch(matchID);
+		System.out.println("삭제 .............................");
+		if(result >=1) {
+			System.out.println("삭ㄴ제 .............................");
+			return mRepo.deletematch(matchID);
+		}
+		else if(result ==0){
+			System.out.println("그냥 삭제 .............................");
+			return mRepo.deletematch(matchID);
+		}
+		else {
+		
+			throw new RuntimeException();
+		}
+	
 	}
 
 	@Override

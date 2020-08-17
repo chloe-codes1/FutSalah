@@ -4,6 +4,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Button from "components/CustomButtons/Button.js";
+import Loading from "views/Components/Loading/Loading";
 
 import { Modal, Typography } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
@@ -13,6 +14,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function ReceivedMatch({ userinfo }) {
+  const [loading, setLoading] = useState(false);
   const [requestModal, setRequestModal] = useState(false);
   const [requestList, setRequestList] = useState([]);
   const [receivedList, setReceivedList] = useState([]);
@@ -53,6 +55,7 @@ export default function ReceivedMatch({ userinfo }) {
 
   // 등록한 매칭 삭제
   const removeMatch = (id) => {
+    setLoading(true);
     axios({
       method: "delete",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch/${id}`,
@@ -63,6 +66,7 @@ export default function ReceivedMatch({ userinfo }) {
       .catch((e) => {
         console.log("error", e);
       });
+    setLoading(false);
   };
 
   // 신청 관리 목록 받아오기
@@ -82,8 +86,9 @@ export default function ReceivedMatch({ userinfo }) {
   };
 
   // 신청 수락
-  const acceptRequest = (teamID) => {
-    axios({
+  const acceptRequest = async (teamID) => {
+    setLoading(true);
+    await axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/accept`,
       data: {
@@ -97,11 +102,13 @@ export default function ReceivedMatch({ userinfo }) {
       .catch((e) => {
         console.log("error" + e);
       });
+    setLoading(false);
   };
 
   // 신청 거절
-  const refuseRequest = (teamID) => {
-    axios({
+  const refuseRequest = async (teamID) => {
+    setLoading(true);
+    await axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/refuse`,
       data: {
@@ -109,10 +116,13 @@ export default function ReceivedMatch({ userinfo }) {
         matchID: selectedMatchID,
       },
     })
-      .then(() => {})
+      .then(() => {
+        getRequestList(selectedMatchID);
+      })
       .catch((e) => {
         console.log("error" + e);
       });
+    setLoading(false);
   };
 
   return (
@@ -249,89 +259,103 @@ export default function ReceivedMatch({ userinfo }) {
             >
               이 매칭을 원하는 팀을 확인해보세요.
             </Typography>
-            <List>
-              {requestList.length === 0 ? (
-                <div>
-                  <h3 style={{ textAlign: "center" }}>신청한 팀이 없습니다.</h3>
-                </div>
-              ) : (
-                requestList.map((rl) => (
-                  <ListItem>
-                    <ListItemAvatar>
-                      {rl.profileURL ? (
-                        <img
-                          src={rl.profileURL}
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderRadius: "50%",
-                          }}
-                        />
-                      ) : (
-                        <div
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            backgroundColor: "white",
-                            border: "1px solid black",
-                            textAlign: "center",
-                          }}
-                        >
+            {loading ? (
+              <div
+                style={{
+                  position: "left",
+                  margin: "auto",
+                  overflow: "hidden",
+                }}
+              >
+                <Loading />
+              </div>
+            ) : (
+              <List>
+                {requestList.length === 0 ? (
+                  <div>
+                    <h3 style={{ textAlign: "center" }}>
+                      신청한 팀이 없습니다.
+                    </h3>
+                  </div>
+                ) : (
+                  requestList.map((rl) => (
+                    <ListItem>
+                      <ListItemAvatar>
+                        {rl.profileURL ? (
+                          <img
+                            src={rl.profileURL}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                        ) : (
                           <div
                             style={{
-                              fontSize: "10px",
-                              paddingTop: "12px",
+                              width: "50px",
+                              height: "50px",
+                              backgroundColor: "white",
+                              border: "1px solid black",
+                              textAlign: "center",
                             }}
                           >
-                            No Logo
+                            <div
+                              style={{
+                                fontSize: "10px",
+                                paddingTop: "12px",
+                              }}
+                            >
+                              No Logo
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={`${rl.name}`}
-                      secondary={`${rl.wins}승 ${rl.defeats}패 ${rl.draws}무 / 신뢰도 ${rl.reliability}`}
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            "이 팀의 매칭 신청을 수락하시겠습니까?"
-                          )
-                        ) {
-                          acceptRequest(rl.teamID);
-                        }
-                      }}
-                      style={{
-                        width: "10%",
-                        backgroundColor: "#05b0c4",
-                      }}
-                    >
-                      수락
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            "이 팀의 매칭 신청을 거절하시겠습니까?"
-                          )
-                        ) {
-                          refuseRequest(rl.teamID);
-                        }
-                      }}
-                      style={{
-                        width: "10%",
-                        backgroundColor: "#05b0c4",
-                      }}
-                    >
-                      거절
-                    </Button>
-                  </ListItem>
-                ))
-              )}
-            </List>
+                        )}
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={`${rl.name}`}
+                        secondary={`${rl.wins}승 ${rl.defeats}패 ${rl.draws}무 / 신뢰도 ${rl.reliability}`}
+                      />
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "이 팀의 매칭 신청을 수락하시겠습니까?"
+                            )
+                          ) {
+                            acceptRequest(rl.teamID);
+                          }
+                        }}
+                        style={{
+                          width: "10%",
+                          backgroundColor: "#05b0c4",
+                        }}
+                      >
+                        수락
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "이 팀의 매칭 신청을 거절하시겠습니까?"
+                            )
+                          ) {
+                            refuseRequest(rl.teamID);
+                          }
+                        }}
+                        style={{
+                          width: "10%",
+                          backgroundColor: "#05b0c4",
+                        }}
+                      >
+                        거절
+                      </Button>
+                    </ListItem>
+                  ))
+                )}
+              </List>
+            )}
           </div>
         </Fade>
       </Modal>
