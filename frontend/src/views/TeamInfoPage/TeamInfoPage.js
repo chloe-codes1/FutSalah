@@ -509,7 +509,21 @@ export default function TeamInfoPage(props) {
             >
               {/* header 부분 */}
               <GridItem className={classes.title} xs={11}>
-                <Tooltip title="팀 대표 사진 변경하기" interactive>
+                {Number(userinfo.userID) === teamInfo.leader ? (
+                  <Tooltip title="팀 대표 사진 변경하기" interactive>
+                    <img
+                      className={classes.logo}
+                      src={teamImage}
+                      alt="team"
+                      onClick={
+                        Number(userinfo.userID) === teamInfo.leader
+                          ? handleDropZone
+                          : () => {}
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                ) : (
                   <img
                     className={classes.logo}
                     src={teamImage}
@@ -519,9 +533,8 @@ export default function TeamInfoPage(props) {
                         ? handleDropZone
                         : () => {}
                     }
-                    style={{ cursor: "pointer" }}
                   />
-                </Tooltip>
+                )}
                 <div
                   style={{
                     margin: "auto 2%",
