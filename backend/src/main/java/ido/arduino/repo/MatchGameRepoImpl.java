@@ -54,6 +54,12 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		// TODO Auto-generated method stub
 		return template.delete(ns+"deletematch",matchID);
 	}
+	
+	@Override
+	public int deletewaitmatch(int matchID) {
+		// TODO Auto-generated method stub
+		return template.delete(ns+"deletewaitmatch",matchID);
+	}
 
 	@Override
 	public List<WaitMatchDto> waitmatch(int matchID) {
@@ -82,6 +88,8 @@ public class MatchGameRepoImpl implements MatchGameRepo{
 		// TODO Auto-generated method stub
 		return template.selectList(ns+"schedule", userID);
 	}
+
+
 
 	
 	

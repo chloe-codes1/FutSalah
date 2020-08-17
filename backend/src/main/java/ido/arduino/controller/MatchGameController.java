@@ -181,7 +181,8 @@ public class MatchGameController {
 		try {
 
 			System.out.println("deletematch.............................");
-			int result = mService.deletematch(matchID);
+			mService.deletematch(matchID);
+			System.out.println("deletewaitmatch.............................");
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -208,9 +209,9 @@ public class MatchGameController {
 		try {
 			
 			WaitMatchDto wait = new WaitMatchDto(matchID,teamID);
-			mService.requestdelete(wait);
+			//mService.requestdelete(wait);
 			System.out.println("requestdelete.............................");
-			//int result = mService.deletematch(matchID);
+			int result = mService.deletematch(matchID);
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
