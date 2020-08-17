@@ -25,8 +25,11 @@ public interface MatchGameService {
 	int checkIfRegistered(int matchID, int teamID);
 	int deletematch(int matchID);
 	
-	// 나에게 온 매칭 요청 
+	// 내가 등록한 매칭 리스트 
 	List<MatchDto> comematch(int userID);
+	// 내가 등록한 매칭에 대한 요청 리스트
+	public List<WaitMatchDto> waitmatch(int matchID);
+	
 	
 	MatchDto getMatchInfo(int matchID);
 	
