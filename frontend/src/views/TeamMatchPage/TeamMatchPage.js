@@ -8,7 +8,6 @@ import Header from "components/Header/Header.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import Icon from "@material-ui/core/Icon";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
