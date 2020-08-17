@@ -3,7 +3,6 @@ import QrReader from "react-qr-reader";
 
 import GridItem from "components/Grid/GridItem.js";
 import "../../assets/css/ArriveInfo.css";
-import { string } from "prop-types";
 
 export default class ArriveInfo extends Component {
   constructor(props) {
@@ -23,15 +22,12 @@ export default class ArriveInfo extends Component {
   }
 
   handleScan(data) {
-    // console.log("scaning...");
     const { homeTeamID, awayTeamID, matchhour } = this.props;
     if (homeTeamID === Number(data) && !this.state.ishometeamarrived) {
-      // QR에서 찍은 결과와 homeTeamID가 같고, 처음 QR 찍은 경우만 실행
       console.log("홈팀 도착!");
       const homedateInfo = new Date();
       var homehour = String(homedateInfo.getHours());
       var homeminute = String(homedateInfo.getMinutes());
-      // 17시 '8'분 : 너무 안예뻐서 String으로 바꿔서 데이터 형태 수정
       if (homehour < 10) {
         homehour = "0" + homehour;
       }
@@ -42,7 +38,6 @@ export default class ArriveInfo extends Component {
         hometeamarrivetime: `${homehour}시 ${homeminute}분`,
         ishometeamarrived: true,
       });
-      // 6분부터 지각으로 처리
       if (Number(homehour) > matchhour && Number(homeminute) > 5) {
         this.setState({
           hometeamlateminute: homeminute,
@@ -75,7 +70,6 @@ export default class ArriveInfo extends Component {
     this.setState({
       result: data,
     });
-    // console.log(data);
   }
   handleError(err) {
     console.error(err);
@@ -86,7 +80,7 @@ export default class ArriveInfo extends Component {
         <GridItem xs={4} className="QR-reader-container">
           <QrReader
             delay={this.state.delay}
-            style={{ width: "100%" }}
+            style={{ width: "70%", margin: "auto" }}
             onError={this.handleError}
             onScan={this.handleScan}
           />
@@ -101,7 +95,7 @@ export default class ArriveInfo extends Component {
               <h3>Home</h3>
             </GridItem>
             <GridItem xs={9} className="arrive-content-time">
-              <h3>{this.state.hometeamarrivetime}</h3>
+              <h4>{this.state.hometeamarrivetime}</h4>
             </GridItem>
           </GridItem>
           <GridItem xs={12} className="arrive-content">
@@ -109,7 +103,7 @@ export default class ArriveInfo extends Component {
               <h3>Away</h3>
             </GridItem>
             <GridItem xs={9} className="arrive-content-time">
-              <h3>{this.state.awayteamarrivetime}</h3>
+              <h4>{this.state.awayteamarrivetime}</h4>
             </GridItem>
           </GridItem>
         </GridItem>

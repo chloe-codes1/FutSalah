@@ -9,6 +9,9 @@ const AdminMatchInfoStyle = {
     zIndex: 2,
     textAlign: "center",
   },
+  matchInfoContainer: {
+    marginBottom: 0,
+  },
   list: {
     ...defaultFont,
     fontSize: "14px",
@@ -46,34 +49,9 @@ const AdminMatchInfoStyle = {
     position: "relative",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: "0",
+    margin: "30px 0 0 0",
+    padding: "0",
   },
-  // arriveInfo: {
-  //   position: "relative",
-  //   display: "inline-block",
-  // },
-  // arriveContents: {
-  //   position: "relative",
-  //   display: "inline-block",
-  // },
-  // arriveContent: {
-  //   position: "relative",
-  //   display: "inline-block",
-  //   padding: "0",
-  //   margin: "0",
-  // },
-  // arriveContentTeam: {
-  //   position: "relative",
-  //   display: "inline-block",
-  //   padding: "0",
-  //   margin: "0",
-  // },
-  // arriveContentTime: {
-  //   position: "relative",
-  //   display: "inline-block",
-  //   padding: "0",
-  //   margin: "0",
-  // },
   bottomButtonSet: {
     justifyContent: "center",
   },

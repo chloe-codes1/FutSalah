@@ -37,6 +37,7 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
     "react-slick": "0.26.1",
+    "react-stopwatch": "^2.0.4",
     "react-swipeable-views": "0.13.9",
     "request": "^2.88.2",
     "yarn": "^1.22.4",
