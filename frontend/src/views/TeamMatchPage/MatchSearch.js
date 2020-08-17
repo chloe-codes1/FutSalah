@@ -52,7 +52,7 @@ const initialState = {
     date: new Date(),
     time: "",
     type: "",
-    isBook: "0",
+    isBook: "",
   },
 };
 
@@ -161,21 +161,37 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
   }, []);
   const handleSearch = useCallback(() => {
     console.log(state.search);
-
+    let searchData = { date: "1900-01-01", formCode: 99, isBooked: 9, locationID: 999, time: 25 };
+    if (state.search.date !== "") {
+      searchData.date =
+        state.search.date.getFullYear() +
+        "-" +
+        (state.search.date.getMonth() + 1) +
+        "-" +
+        state.search.date.getDate();
+    }
+    if (state.search.type !== "") {
+      searchData.formCode = state.search.type;
+    }
+    if (state.search.isBook !== "") {
+      searchData.isBooked = state.search.isBook;
+    }
+    if (state.search.locationID !== "") {
+      searchData.locationID = state.search.locationID;
+    }
+    if (state.search.time !== "") {
+      searchData.time = state.search.time;
+    }
+    console.log(searchData);
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
       params: {
-        date:
-          state.search.date.getFullYear() +
-          "-" +
-          (state.search.date.getMonth() + 1) +
-          "-" +
-          state.search.date.getDate(),
-        formCode: state.search.type,
-        isBooked: state.search.isBook,
-        locationID: state.search.locationID,
-        time: state.search.time,
+        date: searchData.date,
+        formCode: searchData.formCode,
+        isBooked: searchData.isBooked,
+        locationID: searchData.locationID,
+        time: searchData.time,
       },
     }).then((e) => {
       console.log("search success");
@@ -369,6 +385,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
         info={state.search}
         area={area}
         myteam={myteam}
+        selectedDate={selectedDate}
       />
     </>
   );

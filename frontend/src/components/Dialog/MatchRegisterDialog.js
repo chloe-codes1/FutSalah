@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MatchRegisterDialog({ open, onClose, info, area, myteam }) {
+function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }) {
   const classes = useStyles();
   console.log(myteam);
   const [selectTeam, setSelectTeam] = useState("");
@@ -100,8 +100,8 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam }) {
             지역 : {area}
           </Typography>
           <Typography variant="subtitle2" gutterBottom>
-            일시 : {info.date.getFullYear()}년 {info.date.getMonth() + 1}월 {info.date.getDate()}일{" "}
-            {info.time}시
+            일시 : {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월{" "}
+            {selectedDate.getDate()}일 {info.time}시
           </Typography>
           <Typography variant="subtitle2" gutterBottom>
             경기방식 : {info.type}인 팀 매치

@@ -42,18 +42,16 @@ function TeamMatchPage() {
   const [myteam, setMyteam] = useState([]);
   const { userinfo } = useContext(UserContext);
   console.log(matchingList.length);
-  // useEffect(() => {
-  //   if (userinfo.logged) {
-  //     axios({
-  //       method: "post",
-  //       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
-  //       data: { socialID: userinfo.socialID },
-  //     }).then((e) => {
-  //       console.log(e.data);
-  //       setMyteam(e.data);
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
+      params: { date: "1900-01-01", formCode: 99, isBooked: 9, locationID: 999, time: 25 },
+    }).then((e) => {
+      console.log(e.data);
+      setMatchingList(e.data);
+    });
+  }, []);
   return (
     <div>
       <Header
