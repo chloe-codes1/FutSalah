@@ -9,6 +9,9 @@
 .arrive-contents {
   position: relative;
   display: inline-block;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 10px;
 }
 
 .arrive-content {
@@ -34,6 +37,6 @@
 
 .QR-reader-container {
   display: inline-block;
-  width: 25%;
-  height: 25%;
+  width: 100%;
+  height: 100%;
 }

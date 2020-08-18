@@ -36,7 +36,6 @@ const adminreducer = (state, action) => {
 };
 
 const AdminUserProvider = ({ children }) => {
-  //Hook을 통한 state, setState를 정의합니다.
   const [adminuserinfo, adminUserDispatch] = useReducer(
     adminreducer,
     adminInitialState
