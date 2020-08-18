@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ido.arduino.dto.CourtDTO;
 import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchInfoDTO;
 import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
@@ -179,10 +180,18 @@ public class MatchGameController {
 	public ResponseEntity<Map<String, Object>> deletematch(@PathVariable int matchID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-
-			System.out.println("deletematch.............................");
+			int isWaitingExists = mService.checkIfWaitingExists(matchID);
+			if (isWaitingExists >= 1) {
+				MatchInfoDTO matchInfo = mService.getSimpleMatchInfo(matchID);
+				List<TeamLeaderDTO> waitingList = mService.getAllWaitingTeamsInfo(matchID);
+				waitingList.forEach( waiting -> {
+					System.out.println("waiting?"+waiting);
+					EmailServiceImpl emailService = new EmailServiceImpl();
+					emailService.setJavaMailSender(javaMailSender);
+					emailService.notifyMatchCancelledMail(matchInfo, waiting); });
+			}
+			mService.deleteWaiting(matchID);
 			mService.deletematch(matchID);
-			System.out.println("deletewaitmatch.............................");
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
