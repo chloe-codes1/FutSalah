@@ -49,7 +49,7 @@ const modalStyles = makeStyles((theme) => ({
 const validationStyle = makeStyles(() => ({
   message: {
     color: '#f03e3e',
-    fontSize: '0.6rem'
+    fontSize: '0.8rem'
   }
 }));
 

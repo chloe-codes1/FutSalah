@@ -91,7 +91,7 @@ export default function MatchCard({ match, myteam, setMyteam, userinfo }) {
     profileURL =
       process.env.REACT_APP_S3_BASE_URL +
       "/team-default-" +
-      Math.ceil(Math.random() * 8) +
+      Math.ceil(Math.random() * 20) +
       ".png";
   }
   console.log(profileURL);
