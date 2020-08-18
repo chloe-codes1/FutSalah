@@ -52,7 +52,7 @@ const initialState = {
     date: new Date(),
     time: "",
     type: "",
-    isBook: "",
+    isBook: "0",
   },
 };
 
@@ -98,7 +98,9 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
       }
       axios({
         method: "get",
-        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` + state.search.locationID,
+        url:
+          `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` +
+          state.search.locationID,
       }).then((e) => {
         console.log(e.data);
         setArea(e.data.sido + " " + e.data.gu);
@@ -161,7 +163,13 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
   }, []);
   const handleSearch = useCallback(() => {
     console.log(state.search);
-    let searchData = { date: "1900-01-01", formCode: 99, isBooked: 9, locationID: 999, time: 25 };
+    let searchData = {
+      date: "1900-01-01",
+      formCode: 99,
+      isBooked: 9,
+      locationID: 999,
+      time: 25,
+    };
     if (state.search.date !== "") {
       searchData.date =
         state.search.date.getFullYear() +
@@ -199,9 +207,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
       setMatchingList(e.data);
     });
   });
-  const registMatching = useCallback(() => {
-    console.log(state.search);
-  });
+
   return (
     <>
       <Grid container justify="center" spacing={1}>
@@ -251,7 +257,9 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
                     </MenuItem>
                   );
                 })}
-              {selectedGu.length === 0 && <MenuItem value="">시/도를 먼저 선택</MenuItem>}
+              {selectedGu.length === 0 && (
+                <MenuItem value="">시/도를 먼저 선택</MenuItem>
+              )}
             </Select>
           </FormControl>
         </Grid>
@@ -348,7 +356,11 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
                   />
                 </Grid>
                 <Grid item>
-                  <FormControlLabel control={<Radio value="0" />} label="무" labelPlacement="end" />
+                  <FormControlLabel
+                    control={<Radio value="0" />}
+                    label="무"
+                    labelPlacement="end"
+                  />
                 </Grid>
               </Grid>
             </RadioGroup>

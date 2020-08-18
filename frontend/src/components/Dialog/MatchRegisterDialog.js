@@ -38,17 +38,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }) {
+function MatchRegisterDialog({
+  open,
+  onClose,
+  info,
+  area,
+  myteam,
+  selectedDate,
+}) {
   const classes = useStyles();
   console.log(myteam);
   const [selectTeam, setSelectTeam] = useState("");
-  const [selectIsBook, setSelectIsBook] = useState("0");
+  const [selectIsBook, setSelectIsBook] = useState("1");
   const [selectCourt, setSelectCourt] = useState("");
   const [courtList, setCourtList] = useState([]);
   const handleIsBook = (e) => {
     axios({
       method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + info.locationID,
+      url:
+        `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` +
+        info.locationID,
     }).then((e) => {
       // console.log(e.data);
       setCourtList(e.data);
@@ -57,13 +66,6 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }
   };
 
   const onRegister = () => {
-    console.log(selectTeam);
-    console.log(info.locationID);
-    console.log(selectIsBook);
-    console.log(info.date);
-    console.log(selectCourt);
-    console.log(info.time);
-    console.log(info.type);
     if (selectIsBook === "1" && selectCourt === "") {
       alert("경기장을 선택해주세요!!");
       return;
@@ -95,13 +97,15 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }
         <img src={require("assets/img/match_register.jpg")} />
         <DialogTitle>매칭 등록</DialogTitle>
         <DialogContent>
-          <DialogContentText>원하는 매칭이 없으신가요? 직접 매칭을 등록해보세요!</DialogContentText>
+          <DialogContentText>
+            원하는 매칭이 없으신가요? 직접 매칭을 등록해보세요!
+          </DialogContentText>
           <Typography variant="subtitle2" gutterBottom>
             지역 : {area}
           </Typography>
           <Typography variant="subtitle2" gutterBottom>
-            일시 : {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월{" "}
-            {selectedDate.getDate()}일 {info.time}시
+            일시 : {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}
+            월 {selectedDate.getDate()}일 {info.time}시
           </Typography>
           <Typography variant="subtitle2" gutterBottom>
             경기방식 : {info.type}인 팀 매치
@@ -114,7 +118,7 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }
             </>
           )} */}
           <Grid container justify="center" spacing={1}>
-            <Grid item>
+            {/* <Grid item>
               <FormControl className={classes.formControl} component="fieldset">
                 <FormLabel component="legend">경기장 예약 유/무</FormLabel>
                 <RadioGroup
@@ -143,11 +147,13 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }
                   </Grid>
                 </RadioGroup>
               </FormControl>
-            </Grid>
+            </Grid> */}
             {selectIsBook === "1" && (
               <Grid item>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">경기장 선택</InputLabel>
+                  <InputLabel id="demo-simple-select-label">
+                    경기장 선택
+                  </InputLabel>
                   <Select
                     name="teamID"
                     labelId="demo-simple-select-label"
@@ -155,11 +161,12 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }
                     value={selectCourt}
                     onChange={(e) => {
                       setSelectCourt(e.target.value);
-                      console.log(e.target.value);
                     }}
                   >
                     {courtList.length === 0 && (
-                      <MenuItem value="">해당 지역에 경기장이 없습니다.</MenuItem>
+                      <MenuItem value="">
+                        해당 지역에 경기장이 없습니다.
+                      </MenuItem>
                     )}
                     {courtList.length > 0 &&
                       courtList.map((court, index) => {
@@ -186,7 +193,9 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }
                     console.log(e.target.value);
                   }}
                 >
-                  {myteam.length === 0 && <MenuItem value="">소속된 팀이 없습니다.</MenuItem>}
+                  {myteam.length === 0 && (
+                    <MenuItem value="">소속된 팀이 없습니다.</MenuItem>
+                  )}
                   {myteam.length > 0 &&
                     myteam.map((team, index) => {
                       return (

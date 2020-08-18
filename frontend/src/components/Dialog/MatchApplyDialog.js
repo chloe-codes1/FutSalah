@@ -18,10 +18,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
 import Loading from "views/Components/Loading/Loading";
 import axios from "axios";
 
@@ -74,6 +70,10 @@ function MatchApplyDialog({
       alert("팀을 선택하세요!!");
       return;
     }
+    if (selectAway === info.homeTeamID) {
+      alert("같은 팀간의 매칭은 불가합니다.");
+      return;
+    }
     setLoading(true);
     await axios({
       method: "post",
@@ -108,7 +108,9 @@ function MatchApplyDialog({
                 경기방식 : {info.formCode}인 팀 매치
               </DialogContentText>
               <DialogContentText>경기일시 : {info.date}</DialogContentText>
-              <DialogContentText>지역 : {info.gu}</DialogContentText>
+              <DialogContentText>
+                지역 : {info.sido} {info.gu}
+              </DialogContentText>
               {info.isBooked === 1 && (
                 <DialogContentText>경기장 : {info.name}</DialogContentText>
               )}
