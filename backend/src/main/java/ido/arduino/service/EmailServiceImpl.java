@@ -1,5 +1,6 @@
 package ido.arduino.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import ido.arduino.dto.CourtDTO;
 import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchInfoDTO;
 import ido.arduino.dto.RequestDTO;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
@@ -60,7 +62,7 @@ public class EmailServiceImpl {
 
 			String str = "<h2> 안녕하세요, " + leaderName + "님!</h2>" + "<h3>" + requestorName + "님께서 " + teamName
 					+ "팀 가입을 요청하였습니다. </h3>" + "<br/> 요청자 이름: " + requestorName + "<br/> Email: " + requestorEmail
-					+ "<br/> 포지션: " + requestorPosition + "<h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
+					+ "<br/> 포지션: " + requestorPosition + "<br/><h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/teaminfo/" + teamID + "'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>요청 수락/거절 하러 가기</button></a>";
@@ -96,7 +98,7 @@ public class EmailServiceImpl {
 
 			String str = "<h2> 안녕하세요, " + requestorName + "님!</h2>" 
 					+ "<br/>요청하신 <span style='font-weight: bold;'>"+teamName+ "</span>팀 가입 신청이 수락되었습니다.<br/>" 
-					+ "<h4>아래 버튼을 클릭하여 가입하신 " + teamName + "팀 정보를 확인해보세요!</h4> <br/>" + "<a href='"
+					+ "<br/><h4>아래 버튼을 클릭하여 가입하신 " + teamName + "팀 정보를 확인해보세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/teaminfo/" + teamID + "'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>새로 가입한 팀 보러 가기</button></a>";
@@ -130,7 +132,7 @@ public class EmailServiceImpl {
 
 			String str = "<h2> 안녕하세요, " + requestorName + "님!</h2>" 
 					+ "<br/>아쉽게도 <span style='font-weight: bold;'>"+teamName+ "</span>팀 가입 신청이 거절되었습니다.<br/>" 
-					+ "<h4>FutSalah의 다른 팀들에 가입 신청을 보내보세요!</h4> <br/>" + "<a href='"
+					+ "<br/><h4>FutSalah의 다른 팀들에 가입 신청을 보내보세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/searchteam'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>새로운 팀 보러 가기</button></a>";
@@ -183,7 +185,7 @@ public class EmailServiceImpl {
 					+ "<br/> <span style='font-weight: bold;'>전적 (승/무/패): </span>" + requestorWins + " / " + requestorDraws + " / " + requestorDefeats
 					+ "<br/> <span style='font-weight: bold;'>신뢰도 마일리지: </span>" + requestorReliability
 					//TODO: endpoint 확인 후 변경 필요
-					+ "<h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
+					+ "<br/><h4>아래의 버튼을 클릭하여 승인 요청을 확인해주세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/match'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>요청 수락/거절 하러 가기</button></a>";
@@ -235,7 +237,7 @@ public class EmailServiceImpl {
 					+ "<br/> <span style='font-weight: bold;'>장소: </span>" + sido+ " " +gu 
 					+ "<br/> <span style='font-weight: bold;'>구장 이름: </span>" + courtName 
 
-					+ "<h4>아래 버튼을 클릭하여 대결할 " + teamName + "팀 정보를 확인해보세요!</h4> <br/>" + "<a href='"
+					+ "<br/><h4>아래 버튼을 클릭하여 대결할 " + teamName + "팀 정보를 확인해보세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/teaminfo/" + teamID + "'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>상대팀 보러 가기</button></a>";
@@ -269,7 +271,50 @@ public class EmailServiceImpl {
 
 			String str = "<h2> 안녕하세요, " + requestorName + "팀의 리더 "+leaderName+ "님!</h2>" 
 					+ "<br/>아쉽게도 <span style='font-weight: bold;'>"+teamName+ "</span>팀과의 매치 요청이 거절되었습니다.<br/>" 
-					+ "<h4>FutSalah의 다른 팀들에 매치 신청을 보내보세요!</h4> <br/>" + "<a href='"
+					+ "<br/><h4>FutSalah의 다른 팀들에 매치 신청을 보내보세요!</h4> <br/>" + "<a href='"
+					+ BASE_URL + "/match'>"
+					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
+					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>매치 목록 보러 가기</button></a>";
+			helper.setText(str, true);
+			emailSender.send(message);
+			return 1; // 성공
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0; // 실패
+		}
+	}
+	
+	@Async
+	// 매치가 삭제됨을 알리는 이메일
+	public int notifyMatchCancelledMail(MatchInfoDTO matchInfo, TeamLeaderDTO requestTeam) {
+		String title = "[Futsalah] 매치 요청 결과가 도착했습니다.";
+		try {
+			// 신청팀 정보
+			String requestorName = requestTeam.getTeamName();
+			String leaderName = requestTeam.getLeaderName();
+			String sendTo = requestTeam.getEmail();
+			
+			System.out.println("email"+ sendTo);
+			// 신청한 매치 정보
+			String teamName = matchInfo.getName();
+			LocalDate date = matchInfo.getDate();
+			int time = matchInfo.getTime();
+			String sido = matchInfo.getSido();
+			String gu = matchInfo.getGu();
+
+			MimeMessage message = emailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+			helper.setTo(sendTo);
+			helper.setSubject(title);
+
+			String str = "<h2> 안녕하세요, " + requestorName + "팀의 리더 "+leaderName+ "님!</h2>" 
+					+ "<br/><br/>아쉽게도 신청하신 <span style='font-weight: bold;'>"+teamName+ "</span>팀과의 경기가 매치 등록 팀에 의해 삭제되었습니다.<br/>" 
+					+ "<br/>[ 삭제된 매치 상세 정보 ] "
+					+ "<br/><br/><span style='font-weight: bold;'>팀 이름: </span>" + teamName
+					+ "<br/><span style='font-weight: bold;'>일시: </span>" + date + " " + time + "시"
+					+ "<br/><span style='font-weight: bold;'>장소: </span>" + sido + gu
+					+ "<br/><br/><h4>FutSalah의 다른 팀들에 매치 신청을 보내보세요!</h4> <br/>" + "<a href='"
 					+ BASE_URL + "/match'>"
 					+ "<button type='button' style='width: 350px; height: 50px; background: #0fb930; color:#fff;text-align: center; line-height: 50px;font-weight: bold;"
 					+ "border-radius: 5px; border: 0; cursor: pointer; font-size: 1.2rem'>매치 목록 보러 가기</button></a>";
