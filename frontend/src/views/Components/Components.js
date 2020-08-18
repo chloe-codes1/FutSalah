@@ -11,9 +11,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
-import Parallax from "components/Parallax/Parallax.js";
 import Ranking from "views/Components/Ranking/Ranking.js";
-import Button from "components/CustomButtons/Button.js";
 
 import mainVideo from "assets/video/main.mp4";
 // sections for this page
@@ -33,10 +31,6 @@ export default function Components(props) {
         rightLinks={<HeaderLinks />}
         fixed
         color="dark"
-        // changeColorOnScroll={{
-        //   height: 0,
-        //   color: "black",
-        // }}
         {...rest}
       />
       <GridContainer

@@ -1,13 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import {
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemIcon,
-  ListItemText,
-} from "@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
+import { Link } from "react-router-dom";
+
 import GridList from "@material-ui/core/GridList";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -21,7 +15,9 @@ import three from "assets/img/ranking/three.png";
 import trophy1 from "assets/img/ranking/trophy1.png";
 import trophy2 from "assets/img/ranking/trophy2.png";
 import trophy3 from "assets/img/ranking/trophy3.png";
-import tempImg from "assets/img/match-team1.png";
+import nologo from "assets/img/nologo.png";
+
+import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/componentsSections/loadingStyle.js";
@@ -30,6 +26,30 @@ const useStyles = makeStyles(styles);
 
 export default function Ranking() {
   const classes = useStyles();
+  const [champions, setChampions] = useState([]);
+
+  // 지역 목록 불러오기
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/rank`,
+    })
+      .then((res) => {
+        setChampions(
+          res.data.map((r) => {
+            if (r.profileURL) {
+              r.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + r.profileURL;
+            }
+            return r;
+          })
+        );
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  }, []);
+
   return (
     <GridContainer
       style={{
@@ -44,6 +64,8 @@ export default function Ranking() {
         style={{
           width: "100%",
           marginBottom: 0,
+          paddingTop: "80px",
+          paddingLeft: "50px",
           padding: "auto",
         }}
       >
@@ -98,11 +120,18 @@ export default function Ranking() {
                 </CardHeader>
                 <CardBody className={classes.cardBody}>
                   <img
-                    src={tempImg}
+                    src={
+                      champions.length > 0 && champions[1].profileURL
+                        ? champions[1].profileURL
+                        : nologo
+                    }
                     alt="..."
                     style={{
                       zIndex: 0,
-                      borderRadius: "70%",
+                      borderRadius:
+                        champions.length > 0 &&
+                        champions[1].profileURL &&
+                        "70%",
                       width: "100%",
                       height: "100%",
                     }}
@@ -116,10 +145,17 @@ export default function Ranking() {
                       marginLeft: "70%",
                     }}
                   />
-                  <h5>
-                    <strong>팀이름</strong>
-                  </h5>
-                  <h5>200 points</h5>
+                  {champions.length > 0 && (
+                    <Link
+                      to={"/teaminfo/" + champions[1].teamID}
+                      style={{ color: "black" }}
+                    >
+                      <h5>
+                        <strong>{champions[1].name}</strong>
+                      </h5>
+                    </Link>
+                  )}
+                  <h5>{champions.length > 0 && champions[1].points} points</h5>
                 </CardBody>
               </Card>
             </GridItem>
@@ -156,11 +192,18 @@ export default function Ranking() {
                 </CardHeader>
                 <CardBody className={classes.cardBody}>
                   <img
-                    src={tempImg}
+                    src={
+                      champions.length > 0 && champions[0].profileURL
+                        ? champions[0].profileURL
+                        : nologo
+                    }
                     alt="..."
                     style={{
                       zIndex: 0,
-                      borderRadius: "70%",
+                      borderRadius:
+                        champions.length > 0 &&
+                        champions[0].profileURL &&
+                        "70%",
                       width: "100%",
                       height: "100%",
                     }}
@@ -174,10 +217,17 @@ export default function Ranking() {
                       marginLeft: "70%",
                     }}
                   />
-                  <h5>
-                    <strong>팀이름</strong>
-                  </h5>
-                  <h5>200 points</h5>
+                  {champions.length > 0 && (
+                    <Link
+                      to={"/teaminfo/" + champions[0].teamID}
+                      style={{ color: "black" }}
+                    >
+                      <h5>
+                        <strong>{champions[0].name}</strong>
+                      </h5>
+                    </Link>
+                  )}
+                  <h5>{champions.length > 0 && champions[0].points} points</h5>
                 </CardBody>
               </Card>
             </GridItem>
@@ -217,11 +267,18 @@ export default function Ranking() {
                 </CardHeader>
                 <CardBody className={classes.cardBody}>
                   <img
-                    src={tempImg}
+                    src={
+                      champions.length > 0 && champions[2].profileURL
+                        ? champions[2].profileURL
+                        : nologo
+                    }
                     alt="..."
                     style={{
                       zIndex: 0,
-                      borderRadius: "70%",
+                      borderRadius:
+                        champions.length > 0 &&
+                        champions[2].profileURL &&
+                        "70%",
                       width: "100%",
                       height: "100%",
                     }}
@@ -235,10 +292,17 @@ export default function Ranking() {
                       marginLeft: "70%",
                     }}
                   />
-                  <h5>
-                    <strong>팀이름</strong>
-                  </h5>
-                  <h5>200 points</h5>
+                  {champions.length > 0 && (
+                    <Link
+                      to={"/teaminfo/" + champions[2].teamID}
+                      style={{ color: "black" }}
+                    >
+                      <h5>
+                        <strong>{champions[2].name}</strong>
+                      </h5>
+                    </Link>
+                  )}
+                  <h5>{champions.length > 0 && champions[2].points} points</h5>
                 </CardBody>
               </Card>
             </GridItem>
