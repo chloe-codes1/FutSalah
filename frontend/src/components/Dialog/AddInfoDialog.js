@@ -146,10 +146,10 @@ function AddInfoDialog(props) {
             onChange={onChange}
           >
             <MenuItem value="all">ALL</MenuItem>
-            <MenuItem value="pivo">PIVO(공격수)</MenuItem>
-            <MenuItem value="ala">ALA(측면공격수)</MenuItem>
-            <MenuItem value="fixo">FIXO(수비수)</MenuItem>
-            <MenuItem value="goleiro">GOLEIRO(골키퍼)</MenuItem>
+            <MenuItem value="pivo">PIVO &nbsp; (공격수)</MenuItem>
+            <MenuItem value="ala">ALA &nbsp; (측면공격수)</MenuItem>
+            <MenuItem value="fixo">FIXO &nbsp; (수비수)</MenuItem>
+            <MenuItem value="goleiro">GOLEIRO &nbsp; (골키퍼)</MenuItem>
           </Select>
           <FormHelperText>
             풋살에서 선호하는 포지션을 선택해주세요.
