@@ -20,17 +20,25 @@ import styles from 'assets/jss/material-kit-react/views/profilePage.js';
 import { useFormik } from 'formik';
 
 const useStyles = makeStyles(styles);
+
+const validationStyle = makeStyles(() => ({
+  message: {
+    color: '#f03e3e',
+    fontSize: '0.7rem'
+  }
+}));
+
 function AddInfoDialog(props) {
   const { open, onClose, userInfo, onChange, onRegister, changeAge } = props;
   const classes = useStyles();
   const handleClose = () => {
     onClose();
   };
+  const validationClass = validationStyle();
 
   useEffect(() => {
     formik.values.email = userInfo.email
   }, [userInfo]);
-
 
   // Validation
   const formik = useFormik({
@@ -93,7 +101,7 @@ function AddInfoDialog(props) {
           onChange={formik.handleChange}
         />
         {formik.touched.email && formik.errors.email && (
-          <div className="invalid-feedback">{formik.errors.email}</div>
+          <div className={validationClass.message}>{formik.errors.email}</div>
         )}
         <h3 className={classes.buttonTitle}>출생연도</h3>
         <Datetime
@@ -113,7 +121,7 @@ function AddInfoDialog(props) {
           onChange={formik.handleChange}
         />
         {formik.touched.height && formik.errors.height && (
-          <div className="invalid-feedback">{formik.errors.height}</div>
+          <div className={validationClass.message}>{formik.errors.height}</div>
         )}
         <TextField
           name="weight"
@@ -125,7 +133,7 @@ function AddInfoDialog(props) {
           onChange={formik.handleChange}
         />
         {formik.touched.weight && formik.errors.weight && (
-          <div className="invalid-feedback">{formik.errors.weight}</div>
+          <div className={validationClass.message}>{formik.errors.weight}</div>
         )}
         <FormControl className={classes.formControl} fullWidth>
           <InputLabel id="demo-simple-select-autowidth-label">
