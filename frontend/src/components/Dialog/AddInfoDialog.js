@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 
+import React, { useEffect } from 'react';
+
 import Button from '@material-ui/core/Button';
 import Datetime from 'react-datetime';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,7 +13,6 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import React from 'react';
 import Select from '@material-ui/core/Select';
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,6 +26,10 @@ function AddInfoDialog(props) {
   const handleClose = () => {
     onClose();
   };
+
+  useEffect(() => {
+    formik.values.email = userInfo.email
+  }, [userInfo]);
 
 
   // Validation
