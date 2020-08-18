@@ -60,14 +60,18 @@ export default function MatchCard({ match, myteam, setMyteam, userinfo }) {
       });
       axios({
         method: "get",
-        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` + match.homeTeamID,
+        url:
+          `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/` +
+          match.homeTeamID,
       }).then((e) => {
         console.log(e.data);
         setHomeTeam(e.data);
       });
       axios({
         method: "get",
-        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + match.locationID,
+        url:
+          `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` +
+          match.locationID,
       }).then((e) => {
         console.log(e.data);
         setCourtList(e.data);
@@ -85,15 +89,23 @@ export default function MatchCard({ match, myteam, setMyteam, userinfo }) {
     profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
   } else {
     profileURL =
-      process.env.REACT_APP_S3_BASE_URL + "/team-default-" + Math.ceil(Math.random()*8) + ".png";
+      process.env.REACT_APP_S3_BASE_URL +
+      "/team-default-" +
+      Math.ceil(Math.random() * 8) +
+      ".png";
   }
   console.log(profileURL);
   return (
     <>
       <Card className={classes.root}>
-        {match.state === 0 && <CardHeader avatar={<img src={matchIng} />} title={match.hometeam} />}
+        {match.state === 0 && (
+          <CardHeader avatar={<img src={matchIng} />} title={match.hometeam} />
+        )}
         {match.state === 1 && (
-          <CardHeader avatar={<img src={matchComplete} />} title={match.hometeam} />
+          <CardHeader
+            avatar={<img src={matchComplete} />}
+            title={match.hometeam}
+          />
         )}
         <CardActionArea onClick={handleApply}>
           {/* {match.profileURL === null && (
@@ -102,16 +114,23 @@ export default function MatchCard({ match, myteam, setMyteam, userinfo }) {
         {match.profileURL > 1 && (
           <CardMedia className={classes.media} image={profileURL} title={match.hometeam} />
         )} */}
-          <CardMedia className={classes.media} image={profileURL} title={match.hometeam} />
+          <CardMedia
+            className={classes.media}
+            image={profileURL}
+            title={match.hometeam}
+          />
           <CardContent>
             <Typography variant="subtitle2" color="textPrimary" component="p">
               경기방식 : {match.formCode}인 팀 매치
             </Typography>
             <Typography variant="subtitle2" color="textPrimary" component="p">
-              경기일시 : {match.date}
+              경기일 : {match.date}
             </Typography>
             <Typography variant="subtitle2" color="textPrimary" component="p">
-              지역 : {match.gu}
+              시간 : {match.time}시
+            </Typography>
+            <Typography variant="subtitle2" color="textPrimary" component="p">
+              지역 : {match.sido} {match.gu}
             </Typography>
             {match.isBooked === 1 && (
               <Typography variant="subtitle2" color="textPrimary" component="p">
