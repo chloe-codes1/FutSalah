@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ido.arduino.dto.CourtDTO;
 import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchInfoDTO;
 import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
@@ -64,17 +65,20 @@ public class MatchGameController {
 
 	// ----------------Matching game search ---------------------------
 
-	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
-	@GetMapping("/match")
-	public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date, @RequestParam int time,
-			@RequestParam int isBooked, @RequestParam int locationID, @RequestParam int formCode) throws Exception {
 
-		logger.debug("alloption - 호출");
-		MatchDto matchrequest = new MatchDto(date, time, isBooked, locationID, formCode);
-		System.out.println("alloption호추추루룰...............................................");
+	   @ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
+	   @GetMapping("/match")
+	   public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date, @RequestParam int time,
+	         @RequestParam int isBooked, @RequestParam int locationID, @RequestParam int formCode) throws Exception {
+	      Date def = Date.valueOf("1900-01-01");
+	      logger.debug("alloption - 호출");
+	      if(date.equals(def)){
+	         date = null;
+	      }
+	      MatchDto matchrequest = new MatchDto(date, time, isBooked, locationID, formCode);      
 
-		return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
-	}
+	      return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
+	   }
 
 	@ApiOperation(value = "일부 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
 	@GetMapping("/match2")
@@ -179,10 +183,18 @@ public class MatchGameController {
 	public ResponseEntity<Map<String, Object>> deletematch(@PathVariable int matchID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-
-			System.out.println("deletematch.............................");
+			int isWaitingExists = mService.checkIfWaitingExists(matchID);
+			if (isWaitingExists >= 1) {
+				MatchInfoDTO matchInfo = mService.getSimpleMatchInfo(matchID);
+				List<TeamLeaderDTO> waitingList = mService.getAllWaitingTeamsInfo(matchID);
+				waitingList.forEach( waiting -> {
+					System.out.println("waiting?"+waiting);
+					EmailServiceImpl emailService = new EmailServiceImpl();
+					emailService.setJavaMailSender(javaMailSender);
+					emailService.notifyMatchCancelledMail(matchInfo, waiting); });
+			}
+			mService.deleteWaiting(matchID);
 			mService.deletematch(matchID);
-			System.out.println("deletewaitmatch.............................");
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -209,9 +221,9 @@ public class MatchGameController {
 		try {
 			
 			WaitMatchDto wait = new WaitMatchDto(matchID,teamID);
-			//mService.requestdelete(wait);
+			mService.requestdelete(wait);
 			System.out.println("requestdelete.............................");
-			int result = mService.deletematch(matchID);
+			//int result = mService.deletematch(matchID);
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);

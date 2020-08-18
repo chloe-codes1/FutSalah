@@ -6,9 +6,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchInfoDTO;
 import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
+import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.WaitMatchDto;
 
 public interface MatchGameService {
@@ -24,8 +26,12 @@ public interface MatchGameService {
 	// 매칭 수락 및 거절
 	int checkIfRegistered(int matchID, int teamID);
 	
-	//내가 등록한 매칭 삭제 & 웨이팅 걸려있는 리스트 삭제 
+	//내가 등록한 매칭 삭제 
 	int deletematch(int matchID);
+	
+	// 웨이팅 걸려있는 리스트 삭제 
+	int deleteWaiting(int matchID);
+	
 	// 내가 등록한 매칭 리스트 
 	List<MatchDto> comematch(int userID);
 	
@@ -34,6 +40,12 @@ public interface MatchGameService {
 	
 	
 	MatchDto getMatchInfo(int matchID);
+	
+	// 매치에 대기 신청한 팀들 정보 including leader info
+	List<TeamLeaderDTO> getAllWaitingTeamsInfo(int matchID);
+	
+	// 간단 매치 정보 가져오기
+	MatchInfoDTO getSimpleMatchInfo (int matchID);
 	
 	// 매칭 삭제 
 	int deleteAllWaitings(int matchID);
@@ -49,4 +61,7 @@ public interface MatchGameService {
 	
 	// 내가 속한 팀의 예정된 경기리스트 
 	List<MatchDto> schedule(int userID);
+	
+	// 매칭 신청 팀 수 확인
+	int checkIfWaitingExists(int matchID);
 }

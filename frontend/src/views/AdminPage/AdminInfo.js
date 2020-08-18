@@ -63,8 +63,6 @@ export default function AdminInfo(props) {
 
   const { ...rest } = props;
 
-  // component mount시 login보다 매치 가져오기가 먼저 일어남
-  // 따로 먼저 adminuserinfo.stadiumID를 가져와야 함
   const [adminuser, setAdminUser] = useState({
     adminID: 0,
     name: "",
@@ -131,13 +129,19 @@ export default function AdminInfo(props) {
         <div className={classes.container}>
           <GridContainer spacing={3}>
             <GridItem xs={12}>
-              <h1>경기 목록</h1>
-
-              <h3>{adminuserinfo.name}</h3>
-
-              <h4>
-                {year}-{month + 1}-{date}
-              </h4>
+              <GridItem xs={12}>
+                <h1>경기 목록</h1>
+              </GridItem>
+              <GridItem xs={6} className={classes.adminInfo}>
+                <h3 style={{ textAlign: "right", paddingRight: "20px" }}>
+                  {adminuserinfo.name}
+                </h3>
+              </GridItem>
+              <GridItem xs={6} className={classes.adminInfo}>
+                <h3 style={{ textAlign: "left", paddingLeft: "20px" }}>
+                  {year}-{month + 1}-{date}
+                </h3>
+              </GridItem>
             </GridItem>
           </GridContainer>
           <TableContainer component={Paper}>
@@ -153,7 +157,6 @@ export default function AdminInfo(props) {
               <TableBody>
                 {matchInfo.map((m, index) =>
                   m.matchID === undefined ? (
-                    // 데이터를 못 받아올 경우
                     <StyledTableRow key={testMatchInfo.matchID}>
                       <StyledTableCell component="th" scope="row">
                         {testMatchInfo.matchID}
@@ -167,7 +170,6 @@ export default function AdminInfo(props) {
                       </StyledTableCell>
                     </StyledTableRow>
                   ) : (
-                    // 데이터를 받아온 경우
                     <StyledTableRow key={index}>
                       <StyledTableCell component="th" scope="row">
                         {index + 1}

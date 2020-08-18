@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useCallback } from "react";
+import React, { useContext } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -26,7 +26,6 @@ const useStyles = makeStyles(styles);
 export default function AdminHeader(props) {
   const classes = useStyles();
   const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
-  console.log(adminuserinfo);
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   React.useEffect(() => {
@@ -68,25 +67,29 @@ export default function AdminHeader(props) {
     [classes.absolute]: absolute,
     [classes.fixed]: fixed,
   });
-  const brandComponent = (
+  const loggedBrandComponent = (
     <Link to={"/Admin"} className={classes.link}>
       <Button className={classes.title}>
         <strong>{brand}</strong>
       </Button>
     </Link>
   );
+
+  const notLoggedBrandComponent = (
+    <Link to={"/"} className={classes.link}>
+      <Button className={classes.title}>
+        <strong>{brand}</strong>
+      </Button>
+    </Link>
+  );
+
   return (
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
-        {leftLinks !== undefined ? brandComponent : null}
         <div className={classes.flex}>
-          {leftLinks !== undefined ? (
-            <Hidden smDown implementation="css">
-              {leftLinks}
-            </Hidden>
-          ) : (
-            brandComponent
-          )}
+          {adminuserinfo.logged
+            ? loggedBrandComponent
+            : notLoggedBrandComponent}
         </div>
         <Hidden smDown implementation="css">
           {rightLinks}
@@ -142,12 +145,6 @@ AdminHeader.propTypes = {
   brand: PropTypes.string,
   fixed: PropTypes.bool,
   absolute: PropTypes.bool,
-  // this will cause the sidebar to change the color from
-  // props.color (see above) to changeColorOnScroll.color
-  // when the window.pageYOffset is heigher or equal to
-  // changeColorOnScroll.height and then when it is smaller than
-  // changeColorOnScroll.height change it back to
-  // props.color (see above)
   changeColorOnScroll: PropTypes.shape({
     height: PropTypes.number.isRequired,
     color: PropTypes.oneOf([

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -88,10 +89,14 @@ export default function MatchCard({ match, myteam, setMyteam, userinfo }) {
     profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
   } else {
     profileURL =
+<<<<<<< HEAD
       process.env.REACT_APP_S3_BASE_URL +
       "/team-default-" +
       Math.ceil(Math.random(1, 8)) +
       ".png";
+=======
+      process.env.REACT_APP_S3_BASE_URL + "/team-default-" + Math.ceil(Math.random()*8) + ".png";
+>>>>>>> 6ffb568f663a6e64d3ec459c2a59121c2d8e6cc0
   }
   console.log(profileURL);
   return (

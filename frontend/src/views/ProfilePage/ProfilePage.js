@@ -498,7 +498,7 @@ export default function ProfilePage(props) {
                     스마트한 풋살 경기를 위한 최고의 플랫폼이 될 수 있도록
                     <br />
                     저희 FutSalah는 지속적으로 노력중입니다. <br />
-                    불편한점은 support@futsalah.com으로 알려주시면 <br />
+                    불편한점은 futsalah1@gmail.com으로 알려주시면 <br />
                     개선하고, 반영하겠습니다. <br />
                     <br />
                     FutSalah를 더 이상 사용하고 싶지 않다면, <br />

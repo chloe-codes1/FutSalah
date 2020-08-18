@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -57,16 +57,8 @@ function AdminLoginDialog(props) {
     }).then((e) => {
       console.log(e.data);
       if (e.data) {
-        initAdmin(
-          e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
-          e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
-          e.data.stadiumID // url에 표시할 구장 ID
-        );
-        loggedUser(
-          e.data.adminID, // Admin ID (Admin의 고유 ID : AutoIncrement)
-          e.data.name, // 로그인 버튼 옆에 표시할 Admin name(= 구장명)
-          e.data.stadiumID // url에 표시할 구장 ID
-        );
+        initAdmin(e.data.adminID, e.data.name, e.data.stadiumID);
+        loggedUser(e.data.adminID, e.data.name, e.data.stadiumID);
         history.push(`/Admin/${e.data.stadiumID}`);
         onClose();
       } else {
@@ -113,7 +105,6 @@ function AdminLoginDialog(props) {
           >
             Sign In
           </Button>
-          {/* 로그인이 된 경우 AdminInfo/:id 로 보내기 */}
         </ListItem>
       </List>
     </Dialog>
