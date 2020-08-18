@@ -39,8 +39,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
-import teamImage from "assets/img/basicTeamImg1.jpg";
-import teamInfobg from "assets/img/teamInfobg.jpg";
+import teamInfobg from "assets/img/teamInfobg2.jpg";
 
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
@@ -510,7 +509,21 @@ export default function TeamInfoPage(props) {
             >
               {/* header 부분 */}
               <GridItem className={classes.title} xs={11}>
-                <Tooltip title="팀 대표 사진 변경하기" interactive>
+                {Number(userinfo.userID) === teamInfo.leader ? (
+                  <Tooltip title="팀 대표 사진 변경하기" interactive>
+                    <img
+                      className={classes.logo}
+                      src={teamImage}
+                      alt="team"
+                      onClick={
+                        Number(userinfo.userID) === teamInfo.leader
+                          ? handleDropZone
+                          : () => {}
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                ) : (
                   <img
                     className={classes.logo}
                     src={teamImage}
@@ -520,9 +533,8 @@ export default function TeamInfoPage(props) {
                         ? handleDropZone
                         : () => {}
                     }
-                    style={{ cursor: "pointer" }}
                   />
-                </Tooltip>
+                )}
                 <div
                   style={{
                     margin: "auto 2%",

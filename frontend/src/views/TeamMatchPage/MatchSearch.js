@@ -46,8 +46,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const gu = [];
-
 const initialState = {
   search: {
     locationID: "",
@@ -76,7 +74,7 @@ const reducer = (state, action) => {
   }
 };
 
-function MatchSearch({ myteam, setMatchingList }) {
+function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSido, setSelectedSido] = useState("");
@@ -85,15 +83,38 @@ function MatchSearch({ myteam, setMatchingList }) {
   const [register, setOpenRegister] = useState(false);
   const [area, setArea] = useState();
   const handleRegister = () => {
-    console.log(state.search);
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` + state.search.locationID,
-    }).then((e) => {
-      console.log(e.data);
-      setArea(e.data.sido + " " + e.data.gu);
-    });
-    setOpenRegister(true);
+    if (userinfo.logged) {
+      if (state.search.locationID === "") {
+        alert("지역을 선택하세요.");
+        return;
+      }
+      if (state.search.time === "") {
+        alert("시간을 선택하세요.");
+        return;
+      }
+      if (state.search.type === "") {
+        alert("경기방식을 선택하세요.");
+        return;
+      }
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` + state.search.locationID,
+      }).then((e) => {
+        console.log(e.data);
+        setArea(e.data.sido + " " + e.data.gu);
+      });
+      axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+        data: { socialID: userinfo.socialID },
+      }).then((e) => {
+        console.log(e.data);
+        setMyteam(e.data);
+      });
+      setOpenRegister(true);
+    } else {
+      alert("로그인 후 이용해주세요.");
+    }
   };
   const handleCloseRegister = () => {
     setOpenRegister(false);
@@ -121,6 +142,13 @@ function MatchSearch({ myteam, setMatchingList }) {
       console.log(e.data);
       setSelectedGu([...e.data]);
     });
+    const name = "locationID";
+    const value = "";
+    searchDispatch({
+      type: "SELECT",
+      name,
+      value,
+    });
   };
   const onChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -133,6 +161,7 @@ function MatchSearch({ myteam, setMatchingList }) {
   }, []);
   const handleSearch = useCallback(() => {
     console.log(state.search);
+
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,

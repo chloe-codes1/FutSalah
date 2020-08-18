@@ -50,7 +50,7 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam }) {
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + info.locationID,
     }).then((e) => {
-      console.log(e.data);
+      // console.log(e.data);
       setCourtList(e.data);
     });
     setSelectIsBook(e.target.value);
@@ -64,6 +64,14 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam }) {
     console.log(selectCourt);
     console.log(info.time);
     console.log(info.type);
+    if (selectIsBook === "1" && selectCourt === "") {
+      alert("경기장을 선택해주세요!!");
+      return;
+    }
+    if (selectTeam === "") {
+      alert("팀을 선택해주세요!!");
+      return;
+    }
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
@@ -76,8 +84,9 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam }) {
         time: info.time,
         formCode: info.type,
       },
-    }).then((e) => {
-      console.log(e.data);
+    }).then(() => {
+      alert("등록되었습니다!");
+      onClose();
     });
   };
   return (
@@ -199,7 +208,7 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam }) {
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="danger">
+              <Button variant="contained" color="danger" onClick={onClose}>
                 취소
               </Button>
             </Grid>

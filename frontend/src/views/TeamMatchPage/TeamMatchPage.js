@@ -8,7 +8,6 @@ import Header from "components/Header/Header.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import Icon from "@material-ui/core/Icon";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
@@ -42,18 +41,18 @@ function TeamMatchPage() {
   const [myteam, setMyteam] = useState([]);
   const { userinfo } = useContext(UserContext);
   console.log(matchingList.length);
-  useEffect(() => {
-    if (userinfo.logged) {
-      axios({
-        method: "post",
-        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
-        data: { socialID: userinfo.socialID },
-      }).then((e) => {
-        console.log(e.data);
-        setMyteam(e.data);
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (userinfo.logged) {
+  //     axios({
+  //       method: "post",
+  //       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
+  //       data: { socialID: userinfo.socialID },
+  //     }).then((e) => {
+  //       console.log(e.data);
+  //       setMyteam(e.data);
+  //     });
+  //   }
+  // }, []);
   return (
     <div>
       <Header
@@ -95,7 +94,9 @@ function TeamMatchPage() {
                 <div className={classes.container} style={{ height: "750px" }}>
                   <MatchSearch
                     myteam={myteam}
+                    setMyteam={setMyteam}
                     setMatchingList={setMatchingList}
+                    userinfo={userinfo}
                   />
                   <Divider />
                   <br />
@@ -113,8 +114,10 @@ function TeamMatchPage() {
                           <Grid key={index} item>
                             <MatchCard
                               myteam={myteam}
+                              setMyteam={setMyteam}
                               key={index}
                               match={match}
+                              userinfo={userinfo}
                             />
                           </Grid>
                         );

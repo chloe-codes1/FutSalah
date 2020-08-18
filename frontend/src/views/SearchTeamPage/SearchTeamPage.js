@@ -27,10 +27,34 @@ import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
 // import teamImage from "assets/img/basicTeamImg.jpg";
 import teamImage from "assets/img/basicTeamImg1.jpg";
 
+const selectStyles = (theme) => ({
+  root: {
+    "& .MuiOutlinedInput-input": {
+      color: "white",
+    },
+    "& .MuiInputLabel-root": {
+      color: "white",
+    },
+    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "white",
+    },
+    "&:hover .MuiInputLabel-root": {
+      color: "skyblue",
+    },
+    "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "skyblue",
+    },
+  },
+  whiteColor: {
+    color: "white",
+  },
+});
 const useStyles = makeStyles(styles);
+const useselectStyles = makeStyles(selectStyles);
 
 export default function SearchTeamPage(props) {
   const classes = useStyles();
+  const selectClasses = useselectStyles();
   const { ...rest } = props;
 
   const [pageNum, setPageNum] = useState(1); // 현재 페이지 넘버
@@ -243,16 +267,23 @@ export default function SearchTeamPage(props) {
                 position: "relative",
               }}
             >
-              <FormControl className={classes.formControl}>
+              <FormControl
+                className={classes.formControl}
+                classes={{
+                  root: selectClasses.root,
+                }}
+              >
                 <Select
                   labelId="sido"
                   id="sido-select"
+                  variant="outlined"
                   value={sido}
                   onChange={sidoChange}
-                  inputProps={{
-                    classes: {
-                      icon: "white",
-                    },
+                  classes={{
+                    icon: selectClasses.whiteColor,
+                  }}
+                  style={{
+                    height: "40px",
                   }}
                 >
                   <MenuItem disabled value="">
@@ -264,12 +295,24 @@ export default function SearchTeamPage(props) {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl className={classes.formControl}>
+              <FormControl
+                className={classes.formControl}
+                classes={{
+                  root: selectClasses.root,
+                }}
+              >
                 <Select
                   labelId="gu"
                   id="gu-select"
+                  variant="outlined"
                   value={gu}
                   onChange={guChange}
+                  classes={{
+                    icon: selectClasses.whiteColor,
+                  }}
+                  style={{
+                    height: "40px",
+                  }}
                 >
                   <MenuItem disabled value="">
                     <em>시군구</em>
@@ -281,19 +324,19 @@ export default function SearchTeamPage(props) {
               </FormControl>
               <input
                 type="text"
-                style={{ lineHeight: "30px" }}
+                style={{ marginLeft: "10px", lineHeight: "40px" }}
                 value={word}
                 onChange={(e) => {
                   setWord(e.target.value);
                 }}
               />
               <Button
-                color="info"
+                color="success"
                 size="sm"
-                style={{ marginLeft: "10px" }}
                 onClick={() => {
                   search();
                 }}
+                style={{ marginLeft: "10px", height: "40px" }}
               >
                 검색
               </Button>
@@ -389,7 +432,9 @@ export default function SearchTeamPage(props) {
             </div>
           ) : (
             <div className={classes.container}>
-              <h3 style={{textAlign: "center"}}>일치하는 검색 결과가 없습니다.</h3>
+              <h3 style={{ textAlign: "center" }}>
+                일치하는 검색 결과가 없습니다.
+              </h3>
             </div>
           )}
         </div>

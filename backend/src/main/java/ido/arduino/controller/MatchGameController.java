@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ido.arduino.dto.CourtDTO;
 import ido.arduino.dto.LocationDto;
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchInfoDTO;
+import ido.arduino.dto.ResultDto;
 import ido.arduino.dto.TeamInfoDto;
 import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.UserDTO;
@@ -178,9 +180,18 @@ public class MatchGameController {
 	public ResponseEntity<Map<String, Object>> deletematch(@PathVariable int matchID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-
-			System.out.println("deletematch.............................");
-			int result = mService.deletematch(matchID);
+			int isWaitingExists = mService.checkIfWaitingExists(matchID);
+			if (isWaitingExists >= 1) {
+				MatchInfoDTO matchInfo = mService.getSimpleMatchInfo(matchID);
+				List<TeamLeaderDTO> waitingList = mService.getAllWaitingTeamsInfo(matchID);
+				waitingList.forEach( waiting -> {
+					System.out.println("waiting?"+waiting);
+					EmailServiceImpl emailService = new EmailServiceImpl();
+					emailService.setJavaMailSender(javaMailSender);
+					emailService.notifyMatchCancelledMail(matchInfo, waiting); });
+			}
+			mService.deleteWaiting(matchID);
+			mService.deletematch(matchID);
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -207,9 +218,9 @@ public class MatchGameController {
 		try {
 			
 			WaitMatchDto wait = new WaitMatchDto(matchID,teamID);
-			mService.requestdelete(wait);
+			//mService.requestdelete(wait);
 			System.out.println("requestdelete.............................");
-			//int result = mService.deletematch(matchID);
+			int result = mService.deletematch(matchID);
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -218,6 +229,19 @@ public class MatchGameController {
 	}
 	
 	
+	// ----------------내가 등록한 매칭에 대한 받은 신청 목록 ---------------------------
+	@ApiOperation(value = "내가 등록한 매칭에 대한 받은 신청 목록 ", response = MatchDto.class, responseContainer = "List")
+	@GetMapping("/match/mymatch/{matchID}")
+	public ResponseEntity<List<WaitMatchDto>> waitmatch(@PathVariable int matchID)
+			throws Exception {
+		logger.debug("waitmatch - 호출");
+		System.out.println("waitmatch 호추추루룰...........................................................");
+		return new ResponseEntity<List<WaitMatchDto>>(mService.waitmatch(matchID), HttpStatus.OK);
+	}
+	
+
+	
+	// ----------------Matching game schedule---------------------------
 	@ApiOperation(value = "내가 속한 팀의 경기 일정 출력 ", response = MatchDto.class, responseContainer = "List")
 	@PostMapping("/match/schedule")
 	public ResponseEntity<List<MatchDto>> schedule(@RequestBody Map<String, Object> body) throws Exception {
