@@ -4,10 +4,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import AddIcon from "@material-ui/icons/Add";
-import ChatIcon from "@material-ui/icons/Chat";
 import AddUserDialog from "components/Dialog/AddUserDialog";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
+import ChatIcon from "@material-ui/icons/Chat";
 import { DndProvider } from "react-dnd";
 import Dropzone from "../Dropzone/Dropzone";
 import Fade from "@material-ui/core/Fade";
@@ -144,7 +144,7 @@ export default function TeamInfoPage(props) {
           setTeamImage(
             process.env.REACT_APP_S3_BASE_URL +
               "/team-default-" +
-              Math.ceil(Math.random(1, 8)) +
+              Math.ceil(Math.random()*8) +
               ".png"
           );
         }

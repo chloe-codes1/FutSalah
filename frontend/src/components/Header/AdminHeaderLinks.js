@@ -1,22 +1,22 @@
-// @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
-import { Avatar, ListItemText } from "@material-ui/core";
+// @material-ui/core
+import {
+  Avatar,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core";
 /*eslint-disable*/
 import React, { useCallback, useContext, useReducer, useState } from "react";
 
-import AddInfoDialog from "../Dialog/AddInfoDialog";
 // core components
 import Button from "components/CustomButtons/Button.js";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
-// react components for routing our app without refresh
-import { Link } from "react-router-dom";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+
 // dialog components
 import AdminLoginDialog from "../Dialog/AdminLoginDialog";
+// context components
 import AdminUserContext from "../../contexts/AdminUserContext";
-import axios from "axios";
+// style components
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
@@ -66,7 +66,6 @@ export default function AdminHeaderLinks(props) {
   };
 
   const initAdmin = useCallback((adminID, name, stadiumID) => {
-    // console.log(adminID + " " + name);
     dispatch({
       type: "INIT_ADMIN",
       adminID,
@@ -114,16 +113,6 @@ export default function AdminHeaderLinks(props) {
             Login
           </Button>
         )}
-        {/* {!userinfo.logged && (
-          <Button
-            href="#pablo"
-            className={classes.ButtonNavLink}
-            onClick={(e) => e.preventDefault()}
-            color="info"
-          >
-            register
-          </Button>
-        )} */}
         {adminuserinfo.logged && (
           <Button
             href="#pablo"

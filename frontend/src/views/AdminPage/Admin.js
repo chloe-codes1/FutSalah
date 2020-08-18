@@ -2,13 +2,14 @@ import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Footer from "components/Footer/Footer.js";
 
-// core components
+// header components
 import AdminHeader from "components/Header/AdminHeader.js";
 import AdminHeaderLinks from "components/Header/AdminHeaderLinks.js";
 
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
 import AdminUserContext from "../../contexts/AdminUserContext";
+// style components
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminPage.js";
 

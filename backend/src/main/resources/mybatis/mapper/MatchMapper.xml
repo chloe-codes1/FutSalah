@@ -6,7 +6,8 @@
 <mapper namespace="ido.arduino.dao.MatchMapper">
 
 	<!-- 등록된 매치 정보 가져오기 -->
-	<select id="getMatchInfo" parameterType="int" resultType="MatchDTO">
+	<select id="getMatchInfo" parameterType="int"
+		resultType="MatchDTO">
 		SELECT*FROM matching WHERE matchID = #{matchID}
 	</select>
 
@@ -22,20 +23,53 @@
 		SELECT COUNT(*) FROM waiting WHERE matchID=#{matchID} AND
 		awayTeamID=#{teamID}
 	</select>
-	
+
 	<!-- 해당 매치의 모든 대기목록 삭제 -->
 	<delete id="deleteAllWaitings" parameterType="int">
-		DELETE FROM waiting WHERE matchID=#{matchID}
+		DELETE FROM waiting
+		WHERE matchID=#{matchID}
 	</delete>
 
 	<!-- 매칭 성사 시 mataching table 수정 -->
 	<update id="acceptMatchRequest" parameterType="map">
-		UPDATE matching SET awayTeamID=#{teamID}, state=1 WHERE matchID=#{matchID}
+		UPDATE matching
+		SET awayTeamID=#{teamID}, state=1 WHERE matchID=#{matchID}
 	</update>
-	
+
 	<!-- 매칭 거절 -->
 	<delete id="refuseMatchRequest" parameterType="map">
-		DELETE FROM waiting WHERE matchID=#{matchID} AND awayTeamID=#{teamID}
+		DELETE FROM
+		waiting WHERE matchID=#{matchID} AND awayTeamID=#{teamID}
 	</delete>
+
+	<!-- 매치에 대기 신청한 팀들 정보 including leader info -->
+	<select id="getAllWaitingTeamsInfo" parameterType="int"
+		resultType="TeamLeaderDTO">
+		SELECT user.userID, user.name as leaderName, user.email,
+		team.teamID
+		,team.name as teamName, team.description
+		FROM waiting
+		INNER
+		JOIN team ON waiting.awayTeamID = team.teamID
+		INNER JOIN user ON
+		team.leader = user.userID
+		WHERE matchID=#{matchID}
+	</select>
+
+	<!-- 간단 매치 정보 가져오기 -->
+	<select id="getSimpleMatchInfo" parameterType="int" resultType="MatchInfoDTO">
+		SELECT matching.date, matching.time, location.sido,
+		location.gu, team.teamID, team.name
+		FROM matching
+		INNER JOIN team ON matching.homeTeamID = team.teamID
+		INNER JOIN location ON matching.locationID = location.locationID
+		WHERE matchID=#{matchID}
+	</select>
+
+    <!-- 매칭 신청 팀 수 확인 -->
+    <select id="checkIfWaitingExists" parameterType="int" resultType="int">
+    	SELECT COUNT(*) FROM waiting where matchID=#{matchID}
+    </select>
+
 </mapper>
 	

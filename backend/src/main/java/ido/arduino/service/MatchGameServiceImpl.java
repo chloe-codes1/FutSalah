@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import ido.arduino.dao.MatchMapper;
 import ido.arduino.dto.MatchDto;
+import ido.arduino.dto.MatchInfoDTO;
 import ido.arduino.dto.MatchRegisterDto;
 import ido.arduino.dto.MatchRequestDto;
 import ido.arduino.dto.MatchRequestSimpleDto;
+import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.WaitMatchDto;
 import ido.arduino.repo.MatchGameRepo;
 
@@ -60,21 +62,12 @@ public class MatchGameServiceImpl implements MatchGameService {
 
 	@Override
 	public int deletematch(int matchID) {
-		int result = mRepo.deletewaitmatch(matchID);
-		System.out.println("삭제 .............................");
-		if(result >=1) {
-			System.out.println("삭ㄴ제 .............................");
-			return mRepo.deletematch(matchID);
-		}
-		else if(result ==0){
-			System.out.println("그냥 삭제 .............................");
-			return mRepo.deletematch(matchID);
-		}
-		else {
-		
-			throw new RuntimeException();
-		}
-	
+		return mRepo.deletematch(matchID);
+	}
+
+	@Override
+	public int deleteWaiting(int matchID) {
+		return mRepo.deletewaitmatch(matchID);
 	}
 
 	@Override
@@ -97,12 +90,12 @@ public class MatchGameServiceImpl implements MatchGameService {
 		return matchMapper.refuseMatchRequest(matchID, teamID);
 	}
 
-	// 내가 등록한 매칭에 대한 상대팀 리스트  
+	// 내가 등록한 매칭에 대한 상대팀 리스트
 	@Override
 	public List<WaitMatchDto> waitmatch(int matchID) {
 		return mRepo.waitmatch(matchID);
 	}
-	
+
 	// ----------내가 요청한 매칭 리스트 (내팀이 요청한 매칭 정보) & 요청 삭제 ---------------
 	@Override
 	public List<MatchDto> requestmatch(int userID) {
@@ -123,6 +116,19 @@ public class MatchGameServiceImpl implements MatchGameService {
 		return mRepo.schedule(userID);
 	}
 
+	@Override
+	public List<TeamLeaderDTO> getAllWaitingTeamsInfo(int matchID) {
+		return matchMapper.getAllWaitingTeamsInfo(matchID);
+	}
 
+	@Override
+	public MatchInfoDTO getSimpleMatchInfo(int matchID) {
+		return matchMapper.getSimpleMatchInfo(matchID);
+	}
+
+	@Override
+	public int checkIfWaitingExists(int matchID) {
+		return matchMapper.checkIfWaitingExists(matchID);
+	}
 
 }
