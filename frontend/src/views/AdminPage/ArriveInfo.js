@@ -10,12 +10,10 @@ export default class ArriveInfo extends Component {
     this.state = {
       delay: 1000,
       result: "No result",
-      hometeamarrivetime: "",
+      hometeamlatestatus: 0,
       ishometeamarrived: false,
-      hometeamlateminute: 0,
-      awayteamarrivetime: "",
+      awayteamlatestatus: 0,
       isawayteamarrived: false,
-      awayteamlateminute: 0,
     };
 
     this.handleScan = this.handleScan.bind(this);
@@ -38,11 +36,16 @@ export default class ArriveInfo extends Component {
         hometeamarrivetime: `${homehour}시 ${homeminute}분`,
         ishometeamarrived: true,
       });
-      if (Number(homehour) > matchhour && Number(homeminute) > 5) {
+      if (Number(homehour) >= matchhour && 0 < Number(homeminute) < 10) {
         this.setState({
-          hometeamlateminute: homeminute,
+          hometeamlatestatus: 1,
         });
-        console.log(`${this.state.hometeamlateminute}분 지각!`);
+        console.log(`약간 지각! (state: 1)`);
+      } else if (Number(homehour) >= matchhour && Number(homeminute) >= 10) {
+        this.setState({
+          hometeamlatestatus: 2,
+        });
+        console.log(`완전 지각! (state: 2)`);
       }
     }
     if (awayTeamID === Number(data) && !this.state.isawayteamarrived) {
@@ -60,11 +63,16 @@ export default class ArriveInfo extends Component {
         awayteamarrivetime: `${awayhour}시 ${awayminute}분`,
         isawayteamarrived: true,
       });
-      if (Number(awayhour) > matchhour && Number(awayminute) > 5) {
+      if (Number(awayhour) >= matchhour && 0 < Number(awayminute) < 10) {
         this.setState({
-          awayteamlateminute: awayminute,
+          awayteamlatestatus: 1,
         });
-        console.log(`${this.state.awayteamlateminute}분 지각!`);
+        console.log(`약간 지각! (state: 1)`);
+      } else if (Number(awayhour) >= matchhour && Number(awayminute) >= 10) {
+        this.setState({
+          awayteamlatestatus: 2,
+        });
+        console.log(`완전 지각! (state: 2)`);
       }
     }
     this.setState({
@@ -74,6 +82,7 @@ export default class ArriveInfo extends Component {
   handleError(err) {
     console.error(err);
   }
+
   render() {
     return (
       <GridItem xs={12} className="arrive-info-container">
@@ -91,18 +100,18 @@ export default class ArriveInfo extends Component {
             <h2>도착 정보</h2>
           </GridItem>
           <GridItem xs={12} className="arrive-content">
-            <GridItem xs={3} className="arrive-content-team">
-              <h3>Home</h3>
+            <GridItem xs={4} className="arrive-content-team">
+              <h3>{this.props.homeName}</h3>
             </GridItem>
-            <GridItem xs={9} className="arrive-content-time">
+            <GridItem xs={8} className="arrive-content-time">
               <h4>{this.state.hometeamarrivetime}</h4>
             </GridItem>
           </GridItem>
           <GridItem xs={12} className="arrive-content">
-            <GridItem xs={3} className="arrive-content-team">
-              <h3>Away</h3>
+            <GridItem xs={4} className="arrive-content-team">
+              <h3>{this.props.awayName}</h3>
             </GridItem>
-            <GridItem xs={9} className="arrive-content-time">
+            <GridItem xs={8} className="arrive-content-time">
               <h4>{this.state.awayteamarrivetime}</h4>
             </GridItem>
           </GridItem>

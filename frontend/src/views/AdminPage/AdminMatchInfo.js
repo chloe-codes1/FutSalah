@@ -108,6 +108,31 @@ export default function AdminInfo(props) {
     console.log(homeScore);
   });
 
+  // 경기 시작 버튼 누르면 홈팀이름, 원정팀이름, 홈팀지각여부, 원정팀지각여부 보내주기
+  const sendMatchInfo = (
+    homeName,
+    awayName,
+    hometeamlatestatus,
+    awayteamlatestatus
+  ) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
+      data: {
+        homeName: homeName,
+        awayName: awayName,
+        hometeamlatestatus: hometeamlatestatus,
+        awayteamlatestatus: awayteamlatestatus,
+      },
+    })
+      .then(() => {
+        console.log("경기 정보 전송 성공!");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
   const toAdminInfo = () => {
     history.push(`/Admin/${adminuserinfo.stadiumID}`);
   };
@@ -126,6 +151,7 @@ export default function AdminInfo(props) {
 
   const matchStart = () => {
     setIsMatchStarted(true);
+    sendMatchInfo();
   };
 
   const matchEnd = () => {
@@ -238,7 +264,9 @@ export default function AdminInfo(props) {
             <GridItem className={classes.arriveInfoContainer}>
               <ArriveInfo
                 homeTeamID={matchInfo.homeTeamID}
+                homeName={matchInfo.homeName}
                 awayTeamID={matchInfo.awayTeamID}
+                awayName={matchInfo.awayName}
                 matchhour={matchInfo.time}
               />
             </GridItem>
