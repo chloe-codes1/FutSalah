@@ -57,11 +57,11 @@ function AddInfoDialog(props) {
   const onSubmit = () => {
     formik.submitForm();
     console.log('formik.values??', formik.values);
-    if (!formik.isValid || !formik.values.email || !formik.values.height || !formik.values.weight) {
+    if (!formik.isValid || !formik.values.email ) {
       console.log('Caught in validation filter...');
       return;
     }
-    onRegister();
+    onRegister(formik);
   };
 
   return (

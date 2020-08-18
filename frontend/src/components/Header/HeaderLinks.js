@@ -1,6 +1,6 @@
 // @material-ui/icons
 import { Apps, CloudDownload } from "@material-ui/icons";
-import { Avatar, ListItemText, ListItemAvatar } from "@material-ui/core";
+import { Avatar, ListItemAvatar, ListItemText } from "@material-ui/core";
 /*eslint-disable*/
 import React, { useCallback, useContext, useReducer, useState } from "react";
 
@@ -14,12 +14,12 @@ import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
 // dialog components
 import LoginDialog from "../Dialog/LoginDialog";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
 import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -137,12 +137,20 @@ export default function HeaderLinks(props) {
       profileURL,
     });
   }, []);
-  const onRegister = useCallback(() => {
-
+  const onRegister = useCallback((formik) => {
+    const email = formik.values.email;
+    const weight = formik.values.weight;
+    const height = formik.values.height;
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
-      data: user,
+      data: {
+        ...user,
+        email : email,
+        weight: weight,
+        height: height
+
+      },
     })
       .then((e) => {
         console.log("success");
