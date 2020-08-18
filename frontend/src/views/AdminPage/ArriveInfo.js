@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import QrReader from "react-qr-reader";
 
 import GridItem from "components/Grid/GridItem.js";
@@ -10,9 +11,9 @@ export default class ArriveInfo extends Component {
     this.state = {
       delay: 1000,
       result: "No result",
-      hometeamlatestatus: 0,
+
       ishometeamarrived: false,
-      awayteamlatestatus: 0,
+
       isawayteamarrived: false,
     };
 
@@ -37,15 +38,9 @@ export default class ArriveInfo extends Component {
         ishometeamarrived: true,
       });
       if (Number(homehour) >= matchhour && 0 < Number(homeminute) < 10) {
-        this.setState({
-          hometeamlatestatus: 1,
-        });
-        console.log(`약간 지각! (state: 1)`);
+        this.props.setHomeTeamLateStatus(1);
       } else if (Number(homehour) >= matchhour && Number(homeminute) >= 10) {
-        this.setState({
-          hometeamlatestatus: 2,
-        });
-        console.log(`완전 지각! (state: 2)`);
+        this.props.setHomeTeamLateStatus(2);
       }
     }
     if (awayTeamID === Number(data) && !this.state.isawayteamarrived) {
@@ -64,15 +59,9 @@ export default class ArriveInfo extends Component {
         isawayteamarrived: true,
       });
       if (Number(awayhour) >= matchhour && 0 < Number(awayminute) < 10) {
-        this.setState({
-          awayteamlatestatus: 1,
-        });
-        console.log(`약간 지각! (state: 1)`);
+        this.props.setAwayTeamLateStatus(1);
       } else if (Number(awayhour) >= matchhour && Number(awayminute) >= 10) {
-        this.setState({
-          awayteamlatestatus: 2,
-        });
-        console.log(`완전 지각! (state: 2)`);
+        this.props.setAwayTeamLateStatus(2);
       }
     }
     this.setState({

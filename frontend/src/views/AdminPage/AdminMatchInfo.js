@@ -73,6 +73,10 @@ export default function AdminInfo(props) {
   // 매치 시작 여부
   const [isMatchStarted, setIsMatchStarted] = useState(false);
   const [isMatchFinished, setIsMatchFinished] = useState(false);
+  // 지각 여부
+  const [homeTeamLateStatus, setHomeTeamLateStatus] = useState(0);
+  const [awayTeamLateStatus, setAwayTeamLateStatus] = useState(0);
+  console.log(homeTeamLateStatus, awayTeamLateStatus);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -112,17 +116,17 @@ export default function AdminInfo(props) {
   const sendMatchInfo = (
     homeName,
     awayName,
-    hometeamlatestatus,
-    awayteamlatestatus
+    homeTeamLateStatus,
+    awayTeamLateStatus
   ) => {
     axios({
       method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/gameStart`,
       data: {
-        homeName: homeName,
-        awayName: awayName,
-        hometeamlatestatus: hometeamlatestatus,
-        awayteamlatestatus: awayteamlatestatus,
+        home: homeName,
+        away: awayName,
+        homeLate: homeTeamLateStatus,
+        awayLate: awayTeamLateStatus,
       },
     })
       .then(() => {
@@ -151,7 +155,12 @@ export default function AdminInfo(props) {
 
   const matchStart = () => {
     setIsMatchStarted(true);
-    sendMatchInfo();
+    sendMatchInfo(
+      matchInfo.homeName,
+      matchInfo.awayName,
+      homeTeamLateStatus,
+      awayTeamLateStatus
+    );
   };
 
   const matchEnd = () => {
@@ -268,6 +277,8 @@ export default function AdminInfo(props) {
                 awayTeamID={matchInfo.awayTeamID}
                 awayName={matchInfo.awayName}
                 matchhour={matchInfo.time}
+                setHomeTeamLateStatus={setHomeTeamLateStatus}
+                setAwayTeamLateStatus={setAwayTeamLateStatus}
               />
             </GridItem>
             <GridItem className={classes.bottomButtonSet}>
