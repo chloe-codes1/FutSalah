@@ -24,14 +24,14 @@ public class BackendApplication {
 		
 		
 		// python 실행
-		test1();
+		// test1();
 
 		System.out.println("Sleeping...");
 		Thread.sleep(10000);
 		System.out.println("Rerun...");
 		
 		// python 종료
-		test2();
+		// test2();
 		
 		
 		
@@ -40,7 +40,7 @@ public class BackendApplication {
 	public static void test2() throws JSchException {
 		String name = "pi";
 		// 라즈베리파이 ip
-		String host = "192.168.219.109";
+		String host = "192.168.0.9";
 		int port = 22;
 		String password = "root";
 
@@ -95,7 +95,7 @@ public class BackendApplication {
 		String awayTeam = "team2";
 		
 		String name = "pi";
-		String host = "192.168.219.109";
+		String host = "192.168.0.9";
 		int port = 22;
 		String password = "root";
 
