@@ -9,7 +9,6 @@
 
 	<!-- 검색 조건에 모두 맞는 내용 찾기 -->
 	<select id="alloption" resultType="match">
-		<![CDATA[
 		select m.*,t.name as hometeam,
 		t.profileURL, l.sido, l.gu, c.name from
 		matching m
@@ -26,13 +25,12 @@
 		<if test="formCode != 99">and m.formCode=#{formCode}</if>
 		<choose>
 			<when test="date == null">
-				and CURRENT_TIMESTAMP() < TIMESTAMP (DATE_ADD(m.date, INTERVAL m.time HOUR))
+					<![CDATA[ and CURRENT_TIMESTAMP() < TIMESTAMP (DATE_ADD(m.date, INTERVAL m.time HOUR)) 	]]>
 			</when>
 			<when test="date != null">
 				and m.date = #{date}
 			</when>
 		</choose>
-			]]>
 	</select>
 
 
