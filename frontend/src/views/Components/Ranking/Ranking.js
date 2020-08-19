@@ -1,31 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
-
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
+import { Button } from "@material-ui/core";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import { Link } from "react-router-dom";
+import Tooltip from "@material-ui/core/Tooltip";
+import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+import nologo from "assets/img/nologo.png";
+import styles from "assets/jss/material-kit-react/views/componentsSections/rankingStyle.js";
+import top from "assets/img/up-arrow.png";
 import trophy1 from "assets/img/ranking/trophy1.png";
 import trophy2 from "assets/img/ranking/trophy2.png";
 import trophy3 from "assets/img/ranking/trophy3.png";
-import nologo from "assets/img/nologo.png";
-
-import axios from "axios";
-
-import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/componentsSections/rankingStyle.js";
 
 const useStyles = makeStyles(styles);
 
+const buttonStyle = makeStyles(() => ({
+  top: {
+    position: 'fixed',
+    right: '2vw',
+    bottom: '3vh',
+    width: '30px'
+  }
+}));
+
 export default function Ranking() {
   const classes = useStyles();
+  const buttonClass = buttonStyle();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
   const [champions, setChampions] = useState([]); // 1,2,3위 팀 가져오기
+  const scrollToTop = () =>{
+    window.scrollTo(0, 0);
+  }
 
   useEffect(() => {
     // ranking 데이터 가져오기
@@ -322,6 +334,11 @@ export default function Ranking() {
           </GridListTile>
         </GridList>
       </GridItem>
+      <Tooltip title="상단으로 이동" interactive>
+      <Button className={buttonClass.top} onClick={scrollToTop}>
+        <img src={top} width="100%"/>
+      </Button>
+      </Tooltip>
     </GridContainer>
   );
 }
