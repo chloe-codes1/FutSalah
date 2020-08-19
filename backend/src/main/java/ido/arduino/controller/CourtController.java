@@ -156,6 +156,8 @@ public class CourtController {
 			result = "wins";
 			courtService.modifyRecord(name, result);
 		}
+		// Result 테이블에 갱신
+		courtService.insertResult(data);
 		
 		// 포인트 업데이트
 		String name = data.getHomeTeam();

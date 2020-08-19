@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import ido.arduino.dto.CourtAdminDTO;
 import ido.arduino.dto.CourtDTO;
+import ido.arduino.dto.ResultDto;
 
 @Mapper
 public interface CourtMapper {
@@ -15,4 +16,5 @@ public interface CourtMapper {
 	public void modifyDrawRecord(String name);
 	public void modifyDefeatRecord(String name);
 	public void modifyPoints(String name);
+	public void insertResult(ResultDto data);
 }

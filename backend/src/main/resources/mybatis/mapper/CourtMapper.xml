@@ -41,10 +41,15 @@
 		where name=#{name}
 	</select>
 	
-	
 	<!-- 승점 갱신 -->
 	<select id="modifyPoints" parameterType="String">
 		update team set points=wins*3+draws*1
 		where name=#{name}
 	</select>
+	
+	<!-- Result 테이블에 갱신 -->
+	<insert id="insertResult" parameterType="ResultDto">
+		insert into result (matchID, homeScore, awayScore)
+		values(#{matchID}, #{homeScore}, #{awayScore})
+	</insert>
 </mapper>
