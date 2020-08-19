@@ -372,7 +372,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
           <Button
             className={classes.searchButton}
             variant="contained"
-            color="info"
+            color="github"
             onClick={handleSearch}
           >
             <i className="fas fa-search" />
@@ -383,7 +383,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
           <Button
             className={classes.searchButton}
             variant="contained"
-            color="success"
+            color="danger"
             onClick={handleRegister}
           >
             <i className="fas fa-plus" />

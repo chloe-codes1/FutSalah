@@ -45,7 +45,13 @@ function TeamMatchPage() {
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
-      params: { date: "1900-01-01", formCode: 99, isBooked: 9, locationID: 999, time: 25 },
+      params: {
+        date: "1900-01-01",
+        formCode: 99,
+        isBooked: 9,
+        locationID: 999,
+        time: 25,
+      },
     }).then((e) => {
       console.log(e.data);
       setMatchingList(e.data);
@@ -84,7 +90,7 @@ function TeamMatchPage() {
       >
         <CustomTabs
           plainTabs
-          headerColor="info"
+          headerColor="dark"
           tabs={[
             {
               tabName: "매칭 검색",

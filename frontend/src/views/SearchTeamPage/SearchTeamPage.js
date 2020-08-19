@@ -5,7 +5,6 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Footer from "components/Footer/Footer.js";
 import FormControl from "@material-ui/core/FormControl";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -20,7 +19,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Paginations from "components/Pagination/Pagination.js";
 import Select from "@material-ui/core/Select";
 import axios from "axios";
-import bgImage from "assets/img/searchTeam-bg.jpg";
+import bgImage from "assets/img/searchTeam.jpg";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
@@ -39,10 +38,10 @@ const selectStyles = (theme) => ({
       borderColor: "white",
     },
     "&:hover .MuiInputLabel-root": {
-      color: "skyblue",
+      color: "black",
     },
     "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-      borderColor: "skyblue",
+      borderColor: "black",
     },
   },
   whiteColor: {
@@ -68,6 +67,7 @@ export default function SearchTeamPage(props) {
   const [searchGu, setSearchGu] = useState(""); // 검색할 시군구
   const [condition, setCondition] = useState(""); // 검색할 조건
   const [teamList, setTeamList] = useState([]); // 보여줄 팀리스트
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
 
   // 전체 목록 불러오기
   useEffect(() => {
@@ -98,6 +98,17 @@ export default function SearchTeamPage(props) {
     movePage();
   }, [pageNum]);
 
+  // 현재 창 너비,  구하기
+  useEffect(() => {
+    const handleResize = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
   const makePagination = (pageRow) => {
     const page = [{ text: "PREV", onClick: prePage }];
     for (let i = 1; i < 11; i++) {
@@ -119,7 +130,7 @@ export default function SearchTeamPage(props) {
   };
 
   const nextPage = () => {
-    if (pageNum !== totalPage) setPageNum(pageNum + 1);
+    if (pageNum < totalPage) setPageNum(pageNum + 1);
   };
 
   const sidoChange = (event) => {
@@ -168,7 +179,7 @@ export default function SearchTeamPage(props) {
             teamInfo.profileURL =
               process.env.REACT_APP_S3_BASE_URL +
               "/team-default-" +
-              Math.ceil(Math.random()*20) +
+              Math.ceil(Math.random() * 20) +
               ".png";
           }
         });
@@ -198,12 +209,14 @@ export default function SearchTeamPage(props) {
             teamInfo.profileURL =
               process.env.REACT_APP_S3_BASE_URL +
               "/team-default-" +
-              Math.ceil(Math.random()*20) +
+              Math.ceil(Math.random() * 20) +
               ".png";
           }
         });
         setTeamList(res.data);
-        setTotalPage(res.data.length > 0 ? (res.data[0].total - 1) / 6 + 1 : 0);
+        setTotalPage(
+          res.data.length > 0 ? Math.floor((res.data[0].total - 1) / 6) + 1 : 0
+        );
       })
       .catch((e) => {
         console.log("error", e);
@@ -241,7 +254,7 @@ export default function SearchTeamPage(props) {
         fixed
         changeColorOnScroll={{
           height: 50,
-          color: "white",
+          color: "dark",
         }}
         {...rest}
       />
@@ -257,16 +270,13 @@ export default function SearchTeamPage(props) {
         <div className={classes.container}>
           <div
             style={{
-              zIndex: "2",
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              position: "relative",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                position: "relative",
-              }}
-            >
+            <div className={classes.location}>
               <FormControl
                 className={classes.formControl}
                 classes={{
@@ -289,7 +299,7 @@ export default function SearchTeamPage(props) {
                   <MenuItem disabled value="">
                     <em>시도</em>
                   </MenuItem>
-                  <MenuItem value="전체">전체</MenuItem>
+                  <MenuItem value="전체">지역 전체</MenuItem>
                   {sidoList.map((s) => (
                     <MenuItem value={s}>{s}</MenuItem>
                   ))}
@@ -322,30 +332,34 @@ export default function SearchTeamPage(props) {
                   ))}
                 </Select>
               </FormControl>
-              <input
-                type="text"
-                style={{ marginLeft: "10px", lineHeight: "40px" }}
-                value={word}
-                onChange={(e) => {
-                  setWord(e.target.value);
-                }}
-              />
-              <Button
-                color="success"
-                size="sm"
-                onClick={() => {
-                  search();
-                }}
-                style={{ marginLeft: "10px", height: "40px" }}
-              >
-                검색
-              </Button>
             </div>
+            <input
+              type="text"
+              style={{ marginLeft: "10px", lineHeight: "35px" }}
+              value={word}
+              onChange={(e) => {
+                setWord(e.target.value);
+              }}
+            />
+            <Button
+              color="danger"
+              size="sm"
+              onClick={() => {
+                search();
+              }}
+              style={{ marginLeft: "10px", height: "40px" }}
+            >
+              검색
+            </Button>
           </div>
 
           {totalPage !== 0 ? (
             <div>
-              <GridList spacing={15} cellHeight="auto" cols={3}>
+              <GridList
+                spacing={15}
+                cellHeight="auto"
+                cols={innerWidth < 576 ? 1 : innerWidth < 992 ? 2 : 3}
+              >
                 {teamList.map((t) =>
                   t.name === undefined ? (
                     <GridContainer
@@ -365,6 +379,7 @@ export default function SearchTeamPage(props) {
                             <GridItem
                               style={{
                                 position: "relative",
+                                marginTop: "25%",
                                 paddingTop: "100%",
                                 overflow: "hidden",
                                 width: "100%",
@@ -402,8 +417,8 @@ export default function SearchTeamPage(props) {
                           </CardBody>
                           <CardFooter className={classes.cardFooter}>
                             <Link to={`/teaminfo/${t.teamID}`}>
-                              <Button color="success" size="lg">
-                                팀 정보
+                              <Button color="danger">
+                                <strong>팀 정보</strong>
                               </Button>
                             </Link>
                           </CardFooter>
@@ -425,7 +440,6 @@ export default function SearchTeamPage(props) {
               >
                 <Paginations
                   pages={makePagination(parseInt(pageNum / 11))}
-                  color="info"
                   selected={pageNum}
                 />
               </div>

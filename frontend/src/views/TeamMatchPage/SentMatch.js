@@ -53,6 +53,11 @@ export default function SentMatch({ userinfo }) {
   return (
     <div style={{ height: "750px", overflow: "auto" }}>
       <List>
+        {/* <ListItem>
+          <Badge badgeContent={"Home"} color="primary">
+            <h2>{matchInfo.homeName}</h2>
+          </Badge>
+        </ListItem> */}
         {sentList.length === 0 ? (
           <div>
             <h3 style={{ textAlign: "center" }}>신청한 매칭이 없습니다.</h3>

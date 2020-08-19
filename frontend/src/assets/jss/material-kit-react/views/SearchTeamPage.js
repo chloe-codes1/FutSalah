@@ -48,6 +48,19 @@ const SearchTeamPageStyle = {
       bottom: "0",
       width: "100%",
     },
+
+    "@media (max-width: 992px)": {
+      height: "1900px",
+    },
+    "@media (max-width: 576px)": {
+      height: "4500px",
+    },
+  },
+  location: {
+    marginLeft: "10px",
+    "@media (max-width: 560px)": {
+      width: "100%",
+    },
   },
   cardHeader: {
     width: "50%",
