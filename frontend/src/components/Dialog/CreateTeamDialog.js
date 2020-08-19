@@ -1,11 +1,4 @@
-import {
-  Dialog,
-  DialogTitle,
-  Grid,
-  List,
-  ListItem,
-  TextField,
-} from "@material-ui/core";
+import { Dialog, DialogTitle, Grid, List, ListItem, TextField } from "@material-ui/core";
 import React, { useCallback, useReducer, useState, useEffect } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -25,6 +18,7 @@ const initialState = {
     code: "",
     name: "",
     locationID: null,
+    profileURL: "team-default-" + Math.ceil(Math.random() * 20) + ".png",
   },
 };
 
@@ -47,6 +41,7 @@ const reducer = (state, action) => {
           code: "",
           name: "",
           locationID: null,
+          profileURL: "team-default-" + Math.ceil(Math.random() * 20) + ".png",
         },
       };
     default:
@@ -104,8 +99,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
       .then((res) => {
         const list = [];
         res.data.map((location) => {
-          if (list.find((sido) => sido === location.sido) === undefined)
-            list.push(location.sido);
+          if (list.find((sido) => sido === location.sido) === undefined) list.push(location.sido);
           return;
         });
         setSidoList(list);
@@ -268,12 +262,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
                   </Select>
                 </FormControl>
                 <ListItem>
-                  <TextField
-                    name="description"
-                    fullWidth
-                    label="팀소개"
-                    onChange={onChange}
-                  />
+                  <TextField name="description" fullWidth label="팀소개" onChange={onChange} />
                 </ListItem>
               </List>
               {/* <TextField fullWidth label="지역" /> */}
