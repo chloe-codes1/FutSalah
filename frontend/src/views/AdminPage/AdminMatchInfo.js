@@ -73,6 +73,10 @@ export default function AdminInfo(props) {
   // 매치 시작 여부
   const [isMatchStarted, setIsMatchStarted] = useState(false);
   const [isMatchFinished, setIsMatchFinished] = useState(false);
+  // 지각 여부
+  const [homeTeamLateStatus, setHomeTeamLateStatus] = useState(0);
+  const [awayTeamLateStatus, setAwayTeamLateStatus] = useState(0);
+  console.log(homeTeamLateStatus, awayTeamLateStatus);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -108,6 +112,31 @@ export default function AdminInfo(props) {
     console.log(homeScore);
   });
 
+  // 경기 시작 버튼 누르면 홈팀이름, 원정팀이름, 홈팀지각여부, 원정팀지각여부 보내주기
+  const sendMatchInfo = (
+    homeName,
+    awayName,
+    homeTeamLateStatus,
+    awayTeamLateStatus
+  ) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/gameStart`,
+      data: {
+        home: homeName,
+        away: awayName,
+        homeLate: homeTeamLateStatus,
+        awayLate: awayTeamLateStatus,
+      },
+    })
+      .then(() => {
+        console.log("경기 정보 전송 성공!");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
   const toAdminInfo = () => {
     history.push(`/Admin/${adminuserinfo.stadiumID}`);
   };
@@ -126,6 +155,12 @@ export default function AdminInfo(props) {
 
   const matchStart = () => {
     setIsMatchStarted(true);
+    sendMatchInfo(
+      matchInfo.homeName,
+      matchInfo.awayName,
+      homeTeamLateStatus,
+      awayTeamLateStatus
+    );
   };
 
   const matchEnd = () => {
@@ -238,8 +273,12 @@ export default function AdminInfo(props) {
             <GridItem className={classes.arriveInfoContainer}>
               <ArriveInfo
                 homeTeamID={matchInfo.homeTeamID}
+                homeName={matchInfo.homeName}
                 awayTeamID={matchInfo.awayTeamID}
+                awayName={matchInfo.awayName}
                 matchhour={matchInfo.time}
+                setHomeTeamLateStatus={setHomeTeamLateStatus}
+                setAwayTeamLateStatus={setAwayTeamLateStatus}
               />
             </GridItem>
             <GridItem className={classes.bottomButtonSet}>
