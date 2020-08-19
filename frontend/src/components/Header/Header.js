@@ -64,7 +64,13 @@ export default function Header(props) {
     [classes.fixed]: fixed,
   });
   const brandComponent = (
-    <Link to={"/"} className={classes.link}>
+    <Link
+      to={"/"}
+      className={classes.link}
+      onClick={() => {
+        window.scrollTo(0, 0);
+      }}
+    >
       <Button className={classes.title}>
         <strong>{brand}</strong>
       </Button>

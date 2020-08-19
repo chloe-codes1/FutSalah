@@ -15,7 +15,7 @@ const teamInfoStyle = {
     zIndex: 2,
   },
   infoContainer: {
-    backgroundColor: "rgba( 0, 0, 0, 0.7 )",
+    backgroundColor: "rgba( 17, 18, 26, 0.8 )",
     borderRadius: "15px",
     minHeight: "700px",
   },
@@ -28,6 +28,9 @@ const teamInfoStyle = {
     fontSize: "2rem",
     fontWeight: 600,
     cursor: "pointer",
+    "@media (max-width: 960px)": {
+      width: "100%",
+    },
   },
   list: {
     ...defaultFont,
@@ -73,11 +76,8 @@ const teamInfoStyle = {
     },
   },
   formation: {
-    margin: "auto",
     width: "90%",
-    height: "300px",
-    backgroundColor: "white",
-    // border: "2px solid #FF9800",
+    minHeight: "500px",
   },
   hiddenTable: {
     display: "none",
@@ -85,11 +85,13 @@ const teamInfoStyle = {
   hiddenRecord: {
     display: "none",
   },
-  title: {
+  header: {
     marginTop: "4%",
     display: "flex",
     lineHeight: "100%",
     marginBottom: "0",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
   },
   logo: {
     borderRadius: "70%",
@@ -100,10 +102,18 @@ const teamInfoStyle = {
   modifyButton: {
     margin: "auto 1%",
     height: "40px",
+    fontSize: "1rem",
+    fontWeight: 500,
+  },
+  removeButton: {
+    width: "5vw",
+    "@media (max-width: 960px)": {
+      width: "10vw",
+    },
   },
   table: {
     maxWidth: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#edf2f4",
     color: "white",
     height: "350px",
     overflow: "auto",
@@ -114,10 +124,7 @@ const teamInfoStyle = {
     width: "50px",
     height: "50px",
     margin: "auto 0 auto 5%",
-    // border: "4px solid black",
-  },
-  formation: {
-    minHeight: "500px",
+    backgroundColor: "#edf2f4",
   },
   management: {
     minHeight: "500px",
