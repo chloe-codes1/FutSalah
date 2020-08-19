@@ -7,9 +7,9 @@
 	<!-- create team -->
 	<!-- 팀 생성 -->
 	<insert id="insert" parameterType="teaminfo">
-		insert into team ( name,
-		description, profileURL,locationID, leader, code)
-		values (#{name},#{description},
+		insert into team ( name, description, wins, defeats, draws,
+		 profileURL,locationID, leader, code)
+		values (#{name},#{description}, #{wins}, #{defeats}, #{draws},
 		#{profileURL}, #{locationID}, #{leader}, #{code})
 	</insert>
 
