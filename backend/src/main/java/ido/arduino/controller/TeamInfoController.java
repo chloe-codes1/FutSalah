@@ -60,11 +60,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class TeamInfoController {
-	private static final Logger logger = LoggerFactory.getLogger(TeamInfoController.class);
-	private static final String SUCCESS = "success";
-	private static final String FAIL = "fail";
 
 	@Autowired
 	S3ServiceImpl s3ServiceImpl;
@@ -231,8 +227,6 @@ public class TeamInfoController {
 	@ApiOperation(value = "모든 팀 정보를 반환한다.", response = List.class)
 	@GetMapping("/team")
 	public ResponseEntity<List<TeamInfoSimpleDto>> selectAll() throws Exception {
-		logger.debug("selectAll - 호출");
-
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
 
@@ -254,7 +248,7 @@ public class TeamInfoController {
 			String gu = data.get("gu");
 			list = tService.searchTeamByBoth(name, gu, page);
 		}
-		
+
 		return list;
 	}
 
@@ -263,11 +257,8 @@ public class TeamInfoController {
 	@ApiOperation(value = "내가 속한 모든 팀 정보를 반환한다. ", response = List.class)
 	@PostMapping("/team/my")
 	public ResponseEntity<List<MyTeamDto>> selectAllmyteam(@RequestBody Map<String, Object> body) throws Exception {
-		System.out.println(body.toString());
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
-		logger.debug("selectAllmyteam - 호출");
-
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
 
@@ -372,7 +363,6 @@ public class TeamInfoController {
 		try {
 			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
 			tService.deleteformation(form);
-			// int result = tService.deleteformation(teamID);
 			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -383,7 +373,6 @@ public class TeamInfoController {
 	@ApiOperation(value = "포메이션 정보 반환한다.", response = List.class)
 	@GetMapping("/team/formation/{teamID}")
 	public ResponseEntity<List<Formation>> selectformation(@PathVariable int teamID) throws Exception {
-		logger.debug("selectformation - 호출");
 
 		return new ResponseEntity<List<Formation>>(tService.selectformation(teamID), HttpStatus.OK);
 	}
@@ -393,8 +382,6 @@ public class TeamInfoController {
 	@ApiOperation(value = "게임 결과 정보 반환한다.", response = List.class)
 	@GetMapping("/team/result/{teamID}")
 	public ResponseEntity<List<ResultDto>> resultscore(@PathVariable int teamID) throws Exception {
-		logger.debug("resultscore - 호출");
-
 		return new ResponseEntity<List<ResultDto>>(tService.resultscore(teamID), HttpStatus.OK);
 	}
 
@@ -435,7 +422,6 @@ public class TeamInfoController {
 	}
 
 	private ResponseEntity<Map<String, Object>> handleException(Exception e) {
-		logger.error("예외 발생", e);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", false);
 		resultMap.put("data", e.getMessage());
