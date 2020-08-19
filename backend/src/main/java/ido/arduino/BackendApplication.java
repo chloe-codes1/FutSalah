@@ -26,9 +26,9 @@ public class BackendApplication {
 		// python 실행
 		// test1();
 
-		System.out.println("Sleeping...");
-		Thread.sleep(10000);
-		System.out.println("Rerun...");
+//		System.out.println("Sleeping...");
+//		Thread.sleep(10000);
+//		System.out.println("Rerun...");
 		
 		// python 종료
 		// test2();

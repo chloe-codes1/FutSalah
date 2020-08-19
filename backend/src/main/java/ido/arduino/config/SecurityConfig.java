@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/api/team/upload/*", "/api/team/join/*", "/api/team/formation/*", "/api/team/formation/*/*",
 			"/api/match/fsearch/*", "/api/location", "/api/location/*", "/api/team/result/*", "/api/courtLogin",
 			"/api/match/stadium/*", "/api/match", "/api/match2", "/api/match/*", "/api/match/*/*", "/api/match/*/*/*",
-			"/api/waiting", "/api/rank", "/api/gameStart",
+			"/api/waiting", "/api/rank", "/api/gameStart", 
 			// assets 허용
 			"assets/*" };
 
