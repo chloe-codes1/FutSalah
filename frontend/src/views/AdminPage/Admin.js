@@ -51,7 +51,9 @@ export default function Admin(props) {
         style={{ alignItems: "stretch" }}
       >
         <div className={classes.container}>
-          <h1>관리자 페이지</h1>
+          <h1>구장 관리 페이지</h1>
+          <br></br>
+          <p>구장 ID로 로그인하면 오늘 예정된 매치 목록을 볼 수 있습니다.</p>
         </div>
       </Parallax>
       <Footer />
