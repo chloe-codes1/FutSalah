@@ -37,7 +37,6 @@ export default function Components(props) {
       />
       <GridContainer
         style={{
-          position: "absolute",
           margin: 0,
           padding: 0,
           minHeight: "700px",
@@ -88,7 +87,7 @@ export default function Components(props) {
           </div>
         </GridItem>
       </GridContainer>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }

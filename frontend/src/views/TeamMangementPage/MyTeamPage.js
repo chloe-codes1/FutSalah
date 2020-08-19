@@ -74,7 +74,9 @@ function MyTeamPage(props) {
       .then(() => {
         refreshTeam();
       })
-      .catch(() => {});
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   const refreshTeam = useCallback(() => {
@@ -91,7 +93,9 @@ function MyTeamPage(props) {
           setMyTeam(res.data);
         }
       })
-      .catch(() => {});
+      .catch((e) => {
+        console.log("error", e);
+      });
   });
 
   return (
@@ -125,7 +129,7 @@ function MyTeamPage(props) {
               <Grid item xs>
                 <Button
                   variant="contained"
-                  color="myTeam"
+                  color="danger"
                   startIcon={<Icon className="fa fa-plus-circle" />}
                   onClick={createTeamClick}
                 >
@@ -159,7 +163,10 @@ function MyTeamPage(props) {
                               className={imageClass.logo}
                             />
                           ) : (
-                            <img src={profileImage + defaultPath} className={imageClass.logo} />
+                            <img
+                              src={profileImage + defaultPath}
+                              className={imageClass.logo}
+                            />
                           )}
                         </ListItemAvatar>
                         <ListItemIcon></ListItemIcon>
@@ -174,7 +181,9 @@ function MyTeamPage(props) {
                               color: "black",
                             }}
                           >
-                            {team.leader === Number(userinfo.userID) && <StarsRoundedIcon />}
+                            {team.leader === Number(userinfo.userID) && (
+                              <StarsRoundedIcon />
+                            )}
                             {team.name}
                           </Link>
                         </ListItemText>
@@ -192,7 +201,11 @@ function MyTeamPage(props) {
                           <Button
                             color="transparent"
                             onClick={() => {
-                              if (window.confirm(team.name + " 팀을 나가겠습니까?")) {
+                              if (
+                                window.confirm(
+                                  team.name + " 팀을 나가겠습니까?"
+                                )
+                              ) {
                                 leaveTeam(team.teamID);
                               }
                             }}

@@ -192,7 +192,7 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }
         <DialogActions>
           <Grid container justify="center" spacing={1}>
             <Grid item>
-              <Button variant="contained" color="success" onClick={onRegister}>
+              <Button variant="contained" color="github" onClick={onRegister}>
                 등록
               </Button>
             </Grid>

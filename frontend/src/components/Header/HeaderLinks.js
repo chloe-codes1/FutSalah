@@ -149,7 +149,13 @@ export default function HeaderLinks(props) {
         .then((e) => {
           console.log("success");
           alert("정보 저장이 완료되었습니다!");
-          loggedUser(user.socialID, e.data.userID, user.name, "social", e.data.profileURL);
+          loggedUser(
+            user.socialID,
+            e.data.userID,
+            user.name,
+            "social",
+            e.data.profileURL
+          );
           addInfoClose();
         })
         .catch(() => {
@@ -174,14 +180,22 @@ export default function HeaderLinks(props) {
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         <Link to={"/searchteam"} className={classes.link}>
-          <Button color="transparent" target="_blank" className={classes.navLink}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
             팀 찾기
           </Button>
         </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
         <Link to={"/match"} className={classes.link}>
-          <Button color="transparent" target="_blank" className={classes.navLink}>
+          <Button
+            color="transparent"
+            target="_blank"
+            className={classes.navLink}
+          >
             팀 매칭
           </Button>
         </Link>
@@ -189,7 +203,11 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <Link to={"/myteam"} className={classes.link}>
           {userinfo.logged && (
-            <Button color="transparent" target="_blank" className={classes.navLink}>
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+            >
               나의 팀
             </Button>
           )}
@@ -198,7 +216,11 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <Link to={"/profile"} className={classes.link}>
           {userinfo.logged && (
-            <Button color="transparent" target="_blank" className={classes.navLink}>
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+            >
               회원정보
             </Button>
           )}
@@ -243,6 +265,9 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         {!userinfo.logged && (
           <Button
+            style={{
+              height: "30px",
+            }}
             href="#pablo"
             className={classes.ButtonNavLink}
             onClick={loginClickOpen}
@@ -263,6 +288,9 @@ export default function HeaderLinks(props) {
         )} */}
         {userinfo.logged && (
           <Button
+            style={{
+              height: "30px",
+            }}
             href="#pablo"
             className={classes.ButtonNavLink}
             onClick={() =>

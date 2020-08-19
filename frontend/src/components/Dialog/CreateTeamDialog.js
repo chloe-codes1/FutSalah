@@ -106,6 +106,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
         res.data.map((location) => {
           if (list.find((sido) => sido === location.sido) === undefined)
             list.push(location.sido);
+          return;
         });
         setSidoList(list);
       })
@@ -220,7 +221,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
                     }}
                   />
                   <Button
-                    color="myTeam"
+                    color="github"
                     onClick={() => {
                       checkTeamName(team.name);
                     }}
@@ -282,7 +283,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
           <Grid container justify="center">
             <List>
               <ListItem>
-                <Button variant="contained" color="myTeam" onClick={createTeam}>
+                <Button variant="contained" color="danger" onClick={createTeam}>
                   생성
                 </Button>
               </ListItem>

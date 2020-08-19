@@ -146,8 +146,10 @@ function ModifyTeamInfoDialog(props) {
                 value={sido}
                 onChange={sidoChange}
               >
-                {sidoList.map((s) => (
-                  <MenuItem value={s}>{s}</MenuItem>
+                {sidoList.map((s, idx) => (
+                  <MenuItem key={idx} value={s}>
+                    {s}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
