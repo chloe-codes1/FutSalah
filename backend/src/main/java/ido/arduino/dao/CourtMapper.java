@@ -10,4 +10,7 @@ public interface CourtMapper {
 	public String checkValid(String id);
 	public CourtAdminDTO login(String id);
 	CourtDTO getCourtInfo(int courtID);
+	public void reliability(String name, int much);
+	public void modifyRecord(String name, String result);
+	public void modifyPoints(String name);
 }

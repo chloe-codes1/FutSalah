@@ -31,4 +31,19 @@ public class CourtServiceImpl implements CourtService {
 	public CourtDTO getCourtInfo(int courtID) {
 		return courtMapper.getCourtInfo(courtID);
 	}
+	
+	@Override
+	public void reliability(String name, int much) {
+		courtMapper.reliability(name, much);
+	}
+	
+	@Override
+	public void modifyRecord(String name, String result) {
+		courtMapper.modifyRecord(name, result);
+	}
+	
+	@Override
+	public void modifyPoints(String name) {
+		courtMapper.modifyPoints(name);
+	}
 }

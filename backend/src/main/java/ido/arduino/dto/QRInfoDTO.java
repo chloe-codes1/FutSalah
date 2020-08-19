@@ -14,5 +14,5 @@ public class QRInfoDTO {
 	private String home;
 	private String away;
 	private int homeLate;
-	private String awayLate;
+	private int awayLate;
 }

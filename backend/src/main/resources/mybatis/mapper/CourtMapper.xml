@@ -20,4 +20,22 @@
 	<select id="getCourtInfo" parameterType="int" resultType="CourtDTO">
 		SELECT * FROM court WHERE courtID=#{courtID}
 	</select>
+	
+	<!-- 신뢰도 수정 -->
+	<select id="reliability" parameterType="map">
+		update team set reliability=reliability-#{much}
+		where name=#{name}
+	</select>
+	
+	<!-- 전적 갱신 -->
+	<select id="modifyRecord" parameterType="map">
+		update team set #{result}=#{result}+1
+		where name=#{name}
+	</select>
+	
+	<!-- 승점 갱신 -->
+	<select id="modifyPoints" parameterType="String">
+		update team set points=wins*3+draws*1
+		where name=#{name}
+	</select>
 </mapper>
