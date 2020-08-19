@@ -133,7 +133,7 @@ public class MatchGameController {
 		MatchDto matchInfo = mService.getMatchInfo(matchID);
 		int homeTeamID = matchInfo.getHomeTeamID();
 		mService.deleteAllWaitings(matchID);
-		mService.acceptMatchRequest(homeTeamID, matchID);
+		mService.acceptMatchRequest(teamID, matchID);
 		TeamLeaderDTO requestTeam = tService.getTeamLeaderInfo(teamID);
 		TeamInfoDto targetTeam = tService.getTeamInfo(homeTeamID);
 		LocationDto location = lService.getLocationInfo(matchInfo.getLocationID());
