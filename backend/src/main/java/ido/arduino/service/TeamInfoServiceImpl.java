@@ -62,19 +62,16 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Override
 	public int updatemy(UserDTO userID) {
-		// TODO Auto-generated method stub
 		return tRepo.updatemy(userID);
 	}
 
 	@Override
 	public int insertmy(UserTeamConnDto uteam) {
-		// TODO Auto-generated method stub
 		return tRepo.insertmy(uteam);
 	}
 
 	@Override
 	public int deletemyteam(UserTeamConnDto uteam) {
-		// TODO Auto-generated method stub
 		return tRepo.deletemyteam(uteam);
 	}
 
@@ -186,7 +183,6 @@ public class TeamInfoServiceImpl implements TeamInfoService {
 
 	@Override
 	public List<ResultDto> resultscore(int teamID) {
-		// TODO Auto-generated method stub
 		return tRepo.resultscore(teamID);
 	}
 
