@@ -85,7 +85,6 @@ public class MatchGameController {
 	public ResponseEntity<List<MatchDto>> simpleoption(@RequestParam Date date, @RequestParam int locationID)
 			throws Exception {
 		logger.debug("simpleoption - 호출");
-		System.out.println("simpleoption 호추추루룰...........................................................");
 
 		MatchDto matchrequest = new MatchDto(date, locationID);
 		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(matchrequest), HttpStatus.OK);
@@ -173,7 +172,6 @@ public class MatchGameController {
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
 		logger.debug("comematch - 호출");
-		System.out.println("comematch ...............................");
 
 		return new ResponseEntity<List<MatchDto>>(mService.comematch(userId), HttpStatus.OK);
 	}
@@ -209,7 +207,6 @@ public class MatchGameController {
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
 		logger.debug("requestmatch - 호출");
-		System.out.println("requestmatch ...............................");
 
 		return new ResponseEntity<List<MatchDto>>(mService.requestmatch(userId), HttpStatus.OK);
 	}
@@ -222,8 +219,6 @@ public class MatchGameController {
 			
 			WaitMatchDto wait = new WaitMatchDto(matchID,teamID);
 			mService.requestdelete(wait);
-			System.out.println("requestdelete.............................");
-			//int result = mService.deletematch(matchID);
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -252,7 +247,6 @@ public class MatchGameController {
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
 		logger.debug("requestmatch - 호출");
-		System.out.println("requestmatch ...............................");
 
 		return new ResponseEntity<List<MatchDto>>(mService.schedule(userId), HttpStatus.OK);
 	}

@@ -57,7 +57,6 @@ function reducer(state, action) {
         },
       };
     case "CHANGE_INPUT":
-      console.log(action.name + " " + action.value);
       return {
         ...state,
         user: {
@@ -159,10 +158,8 @@ export default function HeaderLinks(props) {
           );
           addInfoClose();
         })
-        .catch((e) => {
-          console.log("error", e);
+        .catch(() => {
           alert("잠시 후 다시 시도해주세요!");
-          console.log("fail");
           addInfoClose();
         });
     },
@@ -170,7 +167,6 @@ export default function HeaderLinks(props) {
   );
 
   const changeAge = useCallback((getAge) => {
-    console.log(getAge);
     const name = "age";
     const value = String(getAge);
     dispatch({

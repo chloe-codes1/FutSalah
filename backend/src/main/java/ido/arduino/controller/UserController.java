@@ -43,14 +43,11 @@ public class UserController {
 	@PostMapping("/login")
 	public @ResponseBody UserDTO findUser(@RequestBody Map<String, String> data) {
 		String socialID = data.get("socialID");
-		System.out.println("socialID?????" + socialID);
 		UserDTO loggedUser = userService.findBySocialID(socialID);
 		Calendar cal = Calendar.getInstance();
 		if (loggedUser != null && loggedUser.getAge() != null) {
 			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
 		}
-		System.out.println("current user?" + loggedUser);
-		
 		return loggedUser;
 	}
 
@@ -62,19 +59,13 @@ public class UserController {
 		if (loggedUser != null && loggedUser.getAge() != null) {
 			loggedUser.setAge((cal.get(Calendar.YEAR) - loggedUser.getAge() + 1));
 		}
-		System.out.println("current user?" + loggedUser);
 		return loggedUser;
 	}
 
 	// 회원 가입
 	@PostMapping("/user")
 	public @ResponseBody UserDTO createUser(@RequestBody UserDTO user) {
-		int newlySignedUp = userService.insert(user);
-		if (newlySignedUp == 1) {
-			System.out.println("successfully created!");
-		} else {
-			System.out.println("signup failed...");
-		}
+		userService.insert(user);
 		return user;
 	}
 
@@ -82,11 +73,6 @@ public class UserController {
 	@PutMapping("/user")
 	public @ResponseBody int updateUser(@RequestBody UserDTO user) {
 		int updateResult = userService.update(user);
-		if (updateResult == 1) {
-			System.out.println("successfully updated!");
-		} else {
-			System.out.println("user update failed..");
-		}
 		return updateResult;
 	}
 	
@@ -123,20 +109,13 @@ public class UserController {
 			});
 		}
 		// 위의 작업 완료 후 유저 삭제
-		int deleteResult = userService.delete(userID);
-		if (deleteResult == 1) {
-			System.out.println("successfully deleted!");
-		} else {
-			System.out.println("user delete failed...");
-		}
+		userService.delete(userID);
 	}
 
 	// search user by name
 	@GetMapping("/user/{name}")
 	public @ResponseBody List<UserDTO> searchByName(@PathVariable String name) {
-		System.out.println("name??" + name);
 		List<UserDTO> list = userService.searchUsersByName(name);
-		System.out.println("user list? " + list);
 		return list;
 	}
 
@@ -144,7 +123,6 @@ public class UserController {
 	@PostMapping("/user/upload/{userID}")
 	public ResponseEntity<String> uploadFile(@PathVariable int userID,
 			@RequestPart(value = "file") final MultipartFile multipartFile) {
-		System.out.println("file" + userID + multipartFile);
 		final String status = "user";
 		s3Service.uploadFile(multipartFile, userID, status);
 		final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";

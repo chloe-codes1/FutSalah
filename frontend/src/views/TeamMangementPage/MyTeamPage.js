@@ -72,7 +72,6 @@ function MyTeamPage(props) {
       },
     })
       .then(() => {
-        // console.log("success to leave");
         refreshTeam();
       })
       .catch((e) => {
@@ -89,15 +88,13 @@ function MyTeamPage(props) {
       },
     })
       .then((res) => {
-        console.log("my team list call success");
-        console.log(res.data);
         if (res.data.length > 0) {
           setExistTeam(true);
           setMyTeam(res.data);
         }
       })
-      .catch(() => {
-        console.log("my team list call fail");
+      .catch((e) => {
+        console.log("error", e);
       });
   });
 
