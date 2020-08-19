@@ -7,14 +7,18 @@ const componentsStyle = {
     textAlign: "left",
   },
   title: {
+    marginTop: "20%",
+    paddingLeft: "15%",
     fontSize: "4.2rem",
     fontWeight: "600",
     display: "inline-block",
     position: "relative",
   },
   subtitle: {
+    paddingLeft: "15%",
+    position: "relative",
     fontSize: "1.313rem",
-    maxWidth: "500px",
+    // maxWidth: "500px",
     margin: "10px 0 0",
   },
   main: {

@@ -168,7 +168,7 @@ export default function SearchTeamPage(props) {
             teamInfo.profileURL =
               process.env.REACT_APP_S3_BASE_URL +
               "/team-default-" +
-              Math.ceil(Math.random(1, 8)) +
+              Math.ceil(Math.random()*20) +
               ".png";
           }
         });
@@ -198,7 +198,7 @@ export default function SearchTeamPage(props) {
             teamInfo.profileURL =
               process.env.REACT_APP_S3_BASE_URL +
               "/team-default-" +
-              Math.ceil(Math.random(1, 8)) +
+              Math.ceil(Math.random()*20) +
               ".png";
           }
         });

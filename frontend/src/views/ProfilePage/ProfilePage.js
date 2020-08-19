@@ -46,6 +46,13 @@ const modalStyles = makeStyles((theme) => ({
   },
 }));
 
+const validationStyle = makeStyles(() => ({
+  message: {
+    color: '#f03e3e',
+    fontSize: '0.8rem'
+  }
+}));
+
 const useStyles = makeStyles(styles);
 
 const initialValues = {
@@ -70,6 +77,8 @@ export default function ProfilePage(props) {
     classes.imgRoundedCircle,
     classes.imgFluid
   );
+
+  const validationClass = validationStyle();
 
   const handleOpen = () => {
     setOpen(true);
@@ -294,7 +303,7 @@ export default function ProfilePage(props) {
                   }`}
                 />
                 {formik.touched.email && formik.errors.email && (
-                  <div className="invalid-feedback">{formik.errors.email}</div>
+                  <div className={validationClass.message}>{formik.errors.email}</div>
                 )}
 
                 <GridContainer>
@@ -406,7 +415,7 @@ export default function ProfilePage(props) {
                   </GridItem>
                 </GridContainer>
                 {formik.touched.position && formik.errors.position && (
-                  <div className="invalid-feedback">
+                  <div className={validationClass.message}>
                     {formik.errors.position}
                   </div>
                 )}
@@ -433,7 +442,7 @@ export default function ProfilePage(props) {
                   />
                 </GridItem>
                 {formik.touched.height && formik.errors.height && (
-                  <div className="invalid-feedback">{formik.errors.height}</div>
+                  <div className={validationClass.message}>{formik.errors.height}</div>
                 )}
                 <GridItem>
                   <h3 className={classes.buttonTitle}>몸무게</h3>
@@ -456,7 +465,7 @@ export default function ProfilePage(props) {
                   />
                 </GridItem>
                 {formik.touched.weight && formik.errors.weight && (
-                  <div className="invalid-feedback">{formik.errors.weight}</div>
+                  <div className={validationClass.message}>{formik.errors.weight}</div>
                 )}
               </GridItem>
 
@@ -498,7 +507,7 @@ export default function ProfilePage(props) {
                     스마트한 풋살 경기를 위한 최고의 플랫폼이 될 수 있도록
                     <br />
                     저희 FutSalah는 지속적으로 노력중입니다. <br />
-                    불편한점은 support@futsalah.com으로 알려주시면 <br />
+                    불편한점은 futsalah1@gmail.com으로 알려주시면 <br />
                     개선하고, 반영하겠습니다. <br />
                     <br />
                     FutSalah를 더 이상 사용하고 싶지 않다면, <br />
