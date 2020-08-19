@@ -43,7 +43,7 @@ import teamInfobg from "assets/img/teamInfobg2.jpg";
 // table style
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: "#4a7c59",
+    backgroundColor: "#8d99ae",
     color: theme.palette.common.white,
     padding: "5px 0",
   },
@@ -473,7 +473,7 @@ export default function TeamInfo(props) {
         fixed
         changeColorOnScroll={{
           height: 50,
-          color: "white",
+          color: "dark",
         }}
         {...rest}
       />
@@ -490,7 +490,7 @@ export default function TeamInfo(props) {
           ) : (
             <GridContainer className={classes.infoContainer} justify="center">
               {/* 팀정보 header 부분 */}
-              <GridItem className={classes.title} xs={11}>
+              <GridItem className={classes.header} xs={11} md={5}>
                 {Number(userinfo.userID) === teamInfo.leader ? (
                   <Tooltip title="팀 대표 사진 변경하기" interactive>
                     <img
@@ -562,13 +562,15 @@ export default function TeamInfo(props) {
                     </p>
                   </Popover>
                 </div>
+              </GridItem>
+              <GridItem className={classes.header} xs={10} md={5}>
                 {/* 가입 신청 버튼, QR 코드 버튼 */}
                 {userinfo.logged &&
                   (teamList.find(
                     (t) => t.userID === Number(userinfo.userID)
                   ) === undefined ? (
                     <Button
-                      color="danger"
+                      color="teamInfo"
                       className={classes.modifyButton}
                       size="sm"
                       onClick={() => {
@@ -583,7 +585,7 @@ export default function TeamInfo(props) {
                     </Button>
                   ) : (
                     <Button
-                      color="danger"
+                      color="teamInfo"
                       className={classes.modifyButton}
                       size="sm"
                       onClick={handleQRcodeZone}
@@ -594,7 +596,7 @@ export default function TeamInfo(props) {
                 {/* 팀 정보 변경 버튼 */}
                 {Number(userinfo.userID) === teamInfo.leader && (
                   <Button
-                    color="success"
+                    color="teamInfo2"
                     className={classes.modifyButton}
                     size="sm"
                     onClick={() => {
@@ -608,7 +610,7 @@ export default function TeamInfo(props) {
               {/* 포메이션 부분 */}
               <GridItem className={classes.formation} xs={10} md={5}>
                 <NavPills
-                  color="danger"
+                  color="teamInfo"
                   horizontal={{
                     tabsGrid: { xs: 3, sm: 3, md: 3 },
                     contentGrid: { xs: 9, sm: 9, md: 9 },
@@ -665,7 +667,7 @@ export default function TeamInfo(props) {
                               </GridItem>
                               <GridItem xs={5}>
                                 <Button
-                                  color="warning"
+                                  color="teamInfo"
                                   onClick={() => {
                                     storeFormation(5);
                                     alert("포메이션이 저장되었습니다!");
@@ -716,7 +718,8 @@ export default function TeamInfo(props) {
                                   fontSize: 12,
                                 }}
                               >
-                                Tip. 선수를 드래그해서 배치해보세요.
+                                Tip. 오른쪽 목록에서 팀원을 드래그해서 경기장에
+                                드롭해보세요.
                               </div>
                             )}
                           </GridItem>
@@ -742,7 +745,7 @@ export default function TeamInfo(props) {
                               </GridItem>
                               <GridItem xs={5}>
                                 <Button
-                                  color="danger"
+                                  color="teamInfo"
                                   onClick={() => {
                                     storeFormation(6);
                                     alert("포메이션이 저장되었습니다!");
@@ -780,7 +783,7 @@ export default function TeamInfo(props) {
               {/* 팀원, 전적, 신청관리 */}
               <GridItem className={classes.management} xs={10} md={5}>
                 <NavPills
-                  color="danger"
+                  color="teamInfo"
                   tabs={[
                     {
                       // 팀원목록
@@ -814,7 +817,7 @@ export default function TeamInfo(props) {
                                         />
                                       </Player>
                                     </TableCell>
-                                    <TableCell width="50%">
+                                    <TableCell width="40%">
                                       <Player
                                         movable={
                                           Number(userinfo.userID) ===
@@ -876,27 +879,28 @@ export default function TeamInfo(props) {
                                         </div>
                                       </Popover>
                                     </TableCell>
-                                    <TableCell align="center" width="30%">
+                                    <TableCell align="center" width="40%">
                                       {/* 채팅 버튼 */}
                                       {/* {userinfo.logged &&
                                         Number(userinfo.userID) !==
                                           t.userID && (
-                                          <Button
-                                            color="danger"
-                                            size="sm"
-                                            onClick={() => {}}
-                                            style={{
-                                              maxWidth: "3vw",
-                                            }}
-                                          >
-                                            <ChatIcon />
-                                          </Button>
-                                        )} */}
+                                      <Button
+                                        color="teamInfo"
+                                        size="sm"
+                                        onClick={() => {}}
+                                        style={{
+                                          maxWidth: "5vw",
+                                        }}
+                                      >
+                                        <ChatIcon />
+                                      </Button>
+                                      )} */}
                                       {Number(userinfo.userID) ===
                                         teamInfo.leader &&
                                         t.userID !== teamInfo.leader && (
                                           <Button
-                                            color="danger"
+                                            className={classes.removeButton}
+                                            color="teamInfo"
                                             size="sm"
                                             onClick={() => {
                                               if (
@@ -906,9 +910,6 @@ export default function TeamInfo(props) {
                                               ) {
                                                 removeTeamList(t.userID);
                                               }
-                                            }}
-                                            style={{
-                                              maxWidth: "3vw",
                                             }}
                                           >
                                             <RemoveIcon />
@@ -922,7 +923,7 @@ export default function TeamInfo(props) {
                           </TableContainer>
                           {Number(userinfo.userID) === teamInfo.leader && (
                             <Button
-                              color="danger"
+                              color="teamInfo"
                               onClick={() => {
                                 setAddUserOpen(true);
                               }}
@@ -1147,7 +1148,7 @@ export default function TeamInfo(props) {
           )}
         </DndProvider>
       </div>
-      {/* <Footer /> */}
+      <Footer />
       <ModifyTeamInfoDialog
         open={modifyOpen}
         onClose={() => {

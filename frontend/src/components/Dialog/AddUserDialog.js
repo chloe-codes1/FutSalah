@@ -35,11 +35,9 @@ function AddInfoDialog(props) {
       data: userTeamConn,
     })
       .then(() => {
-        if (userInfo.profileURL !== null) {
-          if (userInfo.profileURL.indexOf("http") === -1) {
-            userInfo.profileURL =
-              process.env.REACT_APP_S3_BASE_URL + "/" + userInfo.profileURL;
-          }
+        if (userInfo.profileURL) {
+          userInfo.profileURL =
+            process.env.REACT_APP_S3_BASE_URL + "/" + userInfo.profileURL;
         }
         modifyTeamList(userInfo);
         alert(userInfo.name + "님이 성공적으로 추가되었습니다.");
@@ -64,7 +62,6 @@ function AddInfoDialog(props) {
           url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/member/${teamID}`,
         })
           .then((res) => {
-            console.log("팀원으로 속하지 않은 유저 검색");
             setSerachTeamList(
               searchList.filter(
                 (sl) =>
@@ -84,8 +81,10 @@ function AddInfoDialog(props) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>팀원 추가</DialogTitle>
-      <List>
+      <DialogTitle style={{ backgroundColor: "#edf2f4" }}>
+        팀원 추가
+      </DialogTitle>
+      <List style={{ backgroundColor: "#edf2f4" }}>
         <ListItem>
           <input
             type="text"
@@ -114,35 +113,12 @@ function AddInfoDialog(props) {
                   // setChecked(checked.concat(false));
                   return (
                     <TableRow>
-                      {/* <TableCell>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              // checked={checked}
-                              // onChange={() => (setChecked(!checked))}
-                              value={list.name}
-                              // checkedIcon={
-                              //   <Check className={classes.checkedIcon} />
-                              // }
-                              // icon={<Check className={classes.uncheckedIcon} />}
-                              // classes={{
-                              //   checked: classes.checked,
-                              //   root: classes.checkRoot,
-                              // }}
-                            />
-                          }
-                          // classes={{
-                          //   label: classes.label,
-                          //   root: classes.labelRoot,
-                          // }}
-                          label={list.name}
-                        />
-                      </TableCell> */}
                       <TableCell>{list.name}</TableCell>
                       <TableCell>{list.email}</TableCell>
                       <TableCell>{list.position}</TableCell>
                       <TableCell>
                         <Button
+                          color="teamInfo2"
                           onClick={() => {
                             addMember(list, teamID);
                           }}
@@ -158,7 +134,7 @@ function AddInfoDialog(props) {
           </TableContainer>
         </ListItem>
         <ListItem>
-          <Button color="darkTeamInfo" onClick={handleClose}>
+          <Button color="teamInfo3" onClick={handleClose}>
             나가기
           </Button>
         </ListItem>

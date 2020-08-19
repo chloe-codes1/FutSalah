@@ -58,7 +58,7 @@ const SearchTeamPageStyle = {
   },
   location: {
     marginLeft: "10px",
-    "@media (max-width: 560px)": {
+    "@media (max-width: 992px)": {
       width: "100%",
     },
   },
