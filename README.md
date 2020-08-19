@@ -1,41 +1,123 @@
-# Welcome to Futsalah 👋
+<h1 align="center">Welcome to FutSalah 👋</h1>
+<p>
+  <a href="https://github.com/chloe-codes1/Ms.Movie#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/chloe-codes1/Ms.Movie/blob/master/LICENSE.md" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+</p>
 
 > SSAFY 3기 2학기 1반 12팀 - `I do Arduino` 의 프로젝트 저장소
 
 <br>
 
-## Overview
+### 🏠 [Explore FutSalah](http://i3a112.p.ssafy.io/)
 
-_오늘 풋살한판 풋살르자!_
+<br>
+
+## :mag: ​Overview
+
+> _오늘 풋살한판 풋살르자!_
+
+<br>
+
+### 개요
+
+- 기존에 풋살과 관련 서비스 존재하지만 서비스 이용에 **불편한 점**들이 있어 자주 사용을 하지 않는다.
+- 기존 서비스들의 불편한 점들을 **개선**하고, 라즈베리 파이를 이용한 경기 점수에 **투명성**을 보장하여 이용자들이 좀 더 **편리**하게 사용할 수 있는 사이트 구축
+
+<br>
+
+### Futsalah vs 기존 서비스 
+
+1. 매칭 등록시 일정한 폼이 존재하여 이용하기 간편하다
+2. **랭킹 서비스**를 이용하여 실력을 알 수 있다.
+3. 팀과 팀원 **관리**가 **용이**하다
+4. 라즈베리파이를 이용한 스마트 구장에서 경기한다는 전제 조건 하에 제공하는 서비스 임으로 경기 결과, 출결 등으로 **객관적인 신뢰도 서비스**를 제공한다
+5. **Formation** 제도를 통해 팀원들의 주요 formation을 알 수 있으며, 전 경기들에 대한 정보들을 제공함으로써 팀에 대한 **상세 정보**를 보다 **간편**하고 **정확**하게 제공한다.
+
+
 
 <br>
 
 <br>
 
-## Tech Stack
+## :wrench: ​Tech Stack
 
 ![](./images/techstack.PNG)
 
 ### Backend
 
-- SpringBoot `2.3.1`
+- SpringBoot  `2.3.1`
 
 ### Frontend
 
-- React
+- React  `16.13.1`
 
 ### DB
 
-- MySQL
+- MySQL  `5.7.31`
 
 ### SCM
 
-- Git
+- Git  `2.17.1`
 
 <br>
+<br>
+
+## :runner: Steps to run
+
+### Backend
+
+```bash
+$ cd backend
+$ mvn package
+$ cd target
+$ java -jar backend-0.0.1-SNAPSHOT.jar
+```
+
+### Frontend
+
+```bash
+$ cd frontend
+$ yarn install 
+$ yarn start
+```
+
+<br>
+
+<br>
+
+## 👤 Author 
+
+:information_desk_person: ​[김주현](https://github.com/chloe-codes1) - `팀장`  Backend, DevOps
+
+🙋‍♂️ [권혁규](https://github.com/klw940) - `CTO`  Frontend
+
+:raising_hand: ​[유현진](https://github.com/guswls) - Backend
+
+🙆‍♂️ [김형준](https://github.com/hyungjun268) - Frontend
+
+💁‍♂️ [김경훈](https://github.com/oogg7754) - IoT, Frontend
+
+🙋‍♂️ [김동휘](https://github.com/wheeking) - IoT, Frontend
+
+<br>
+
+<br>
+
+## :bulb: ​Wiki 
+
+- [Git 협업 스타일](/docs/Git_협업_스타일.md)
+
+<br>
+
 <br>
 
 ## Timeline
+
+> 개발 기간: 7/20/2020 ~ 8/21/2020
 
 <br>
 
@@ -66,17 +148,28 @@ _오늘 풋살한판 풋살르자!_
 <br>
 <br>
 
-## Environment variables 🧚‍♀️
+## 🧚‍♀️ Environment variables 
 
-- `REACT_APP_`: custom variables need this prefix
-- use `process.env.REACT_APP_{env_var_name}`
-  
-  <br>
+- 환경 설정 파일 추가하기
 
-ex) `.env`
-```javascript
-PORT= // client port
-REACT_APP_SERVER_BASE_URL=  // server url
-REACT_APP_S3_BASE_URL=  // s3 url
-```
- 
+  - `.env` 파일을 frontend folder의 root에 추가한다
+
+  ex) 
+
+  ```bash
+  PORT= // client port
+  REACT_APP_SERVER_BASE_URL=  // server url
+  REACT_APP_S3_BASE_URL=  // s3 url
+  ```
+
+- 사용법
+  - `process.env.REACT_APP_{env_var_name}`
+
+<br>
+
+<br>
+
+## 📝 License
+
+Copyright © 2020  I do Arduino <br />
+This project is [MIT](https://lab.ssafy.com/s03-webmobile3-sub3/s03p13a112/blob/master/LICENSE) licensed.
