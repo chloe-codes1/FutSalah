@@ -1,11 +1,9 @@
 import React from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
 // react components for routing our app without refresh
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
+
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -28,9 +26,13 @@ export default function Components(props) {
     <div>
       <Header
         brand="FutSalah"
+        color="transparent"
         rightLinks={<HeaderLinks />}
         fixed
-        color="dark"
+        changeColorOnScroll={{
+          height: 50,
+          color: "dark",
+        }}
         {...rest}
       />
       <GridContainer
@@ -52,8 +54,8 @@ export default function Components(props) {
           }}
         >
           <video
-            muted="muted"
-            autoplay="autoplay"
+            muted
+            autoPlay
             loop
             style={{
               position: "absolute",
@@ -70,7 +72,6 @@ export default function Components(props) {
           </div>
         </GridItem>
         <GridItem
-          justifyContent="center"
           style={{
             width: "100%",
             margin: 0,
