@@ -270,34 +270,32 @@ export default function AdminInfo(props) {
                 </h3>
               </List>
             </GridItem>
-            <GridItem xs={12}>
-              <List className={classes.list}>
-                <ListItem className={classes.leftListItem}>
-                  <Badge badgeContent={"Home"} color="primary">
-                    <h2>{matchInfo.homeName}</h2>
-                  </Badge>
-                  <h1>{homeScore}</h1>
-                </ListItem>
-                <ListItem className={classes.centerListItem}>
-                  {!isMatchStarted && !isMatchFinished && (
-                    <Button color="primary" size="sm" onClick={matchStart}>
-                      경기시작
-                    </Button>
-                  )}
-                  {isMatchStarted && !isMatchFinished && (
-                    <Button color="secondary" size="sm" onClick={matchEnd}>
-                      경기종료
-                    </Button>
-                  )}
-                  <Stopwatch />
-                </ListItem>
-                <ListItem className={classes.rightListItem}>
-                  <Badge badgeContent={"Away"} color="secondary">
-                    <h2>{matchInfo.awayName}</h2>
-                  </Badge>
-                  <h1>{awayScore}</h1>
-                </ListItem>
-              </List>
+            <GridItem xs={12} className={classes.matchInfoContainer}>
+              <GridItem xs={5} className={classes.matchInfoContent}>
+                <Badge badgeContent={"Home"} color="primary">
+                  <h2>{matchInfo.homeName}</h2>
+                </Badge>
+                <h1>{homeScore}</h1>
+              </GridItem>
+              <GridItem xs={2} className={classes.matchInfoContent}>
+                {!isMatchStarted && !isMatchFinished && (
+                  <Button color="danger" size="sm" onClick={matchStart}>
+                    경기시작
+                  </Button>
+                )}
+                {isMatchStarted && !isMatchFinished && (
+                  <Button color="warning" size="sm" onClick={matchEnd}>
+                    경기종료
+                  </Button>
+                )}
+                <Stopwatch />
+              </GridItem>
+              <GridItem xs={5} className={classes.matchInfoContent}>
+                <Badge badgeContent={"Away"} color="secondary">
+                  <h2>{matchInfo.awayName}</h2>
+                </Badge>
+                <h1>{awayScore}</h1>
+              </GridItem>
             </GridItem>
           </GridContainer>
           <GridContainer>

@@ -78,15 +78,17 @@ export default class ArriveInfo extends Component {
         <GridItem xs={4} className="QR-reader-container">
           <QrReader
             delay={this.state.delay}
-            style={{ width: "70%", margin: "auto" }}
+            style={{ width: "75%", margin: "auto", marginTop: "15px" }}
             onError={this.handleError}
             onScan={this.handleScan}
           />
-          <p style={{ height: "10px" }}>{this.state.result}</p>
+          <p style={{ fontSize: "12px", marginTop: "8px" }}>
+            팀 QR을 찍으면 오른쪽에 도착시간이 표시됩니다.
+          </p>
         </GridItem>
         <GridItem xs={8} className="arrive-contents">
           <GridItem xs={12} className="arrive-content">
-            <h2>도착 정보</h2>
+            <h2>팀 도착 정보</h2>
           </GridItem>
           <GridItem xs={12} className="arrive-content">
             <GridItem xs={4} className="arrive-content-team">
