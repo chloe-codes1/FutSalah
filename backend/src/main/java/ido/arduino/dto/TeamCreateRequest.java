@@ -13,4 +13,5 @@ public class TeamCreateRequest {
 	private String code;
 	private String name;
 	private Integer locationID;
+	private String profileURL;
 }
