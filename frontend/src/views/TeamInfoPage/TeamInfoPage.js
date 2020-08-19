@@ -7,7 +7,7 @@ import AddIcon from "@material-ui/icons/Add";
 import AddUserDialog from "components/Dialog/AddUserDialog";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
-import ChatIcon from "@material-ui/icons/Chat";
+// import ChatIcon from "@material-ui/icons/Chat";
 import { DndProvider } from "react-dnd";
 import Dropzone from "../Dropzone/Dropzone";
 import Fade from "@material-ui/core/Fade";
@@ -490,7 +490,7 @@ export default function TeamInfo(props) {
           ) : (
             <GridContainer className={classes.infoContainer} justify="center">
               {/* 팀정보 header 부분 */}
-              <GridItem className={classes.header} xs={11} md={5}>
+              <GridItem className={classes.header} xs={10} md={5}>
                 {Number(userinfo.userID) === teamInfo.leader ? (
                   <Tooltip title="팀 대표 사진 변경하기" interactive>
                     <img
