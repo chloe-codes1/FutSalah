@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
-
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
+import { Button } from "@material-ui/core";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
+import nologo from "assets/img/nologo.png";
+import styles from "assets/jss/material-kit-react/views/componentsSections/rankingStyle.js";
 import trophy1 from "assets/img/ranking/trophy1.png";
 import trophy2 from "assets/img/ranking/trophy2.png";
 import trophy3 from "assets/img/ranking/trophy3.png";
-import nologo from "assets/img/nologo.png";
-
-import axios from "axios";
-
-import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/componentsSections/rankingStyle.js";
 
 const useStyles = makeStyles(styles);
 
@@ -322,6 +319,10 @@ export default function Ranking() {
           </GridListTile>
         </GridList>
       </GridItem>
+
+      <Button>
+        TOP
+      </Button>
     </GridContainer>
   );
 }
