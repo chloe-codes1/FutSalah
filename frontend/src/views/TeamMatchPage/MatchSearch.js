@@ -81,8 +81,10 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
   const [state, searchDispatch] = useReducer(reducer, initialState);
   const [register, setOpenRegister] = useState(false);
   const [area, setArea] = useState();
+  const [courtList, setCourtList] = useState([]);
   const handleRegister = () => {
     if (userinfo.logged) {
+      let today = new Date();
       if (state.search.locationID === "") {
         alert("지역을 선택하세요.");
         return;
@@ -91,10 +93,31 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
         alert("시간을 선택하세요.");
         return;
       }
+      if (selectedDate < today) {
+        console.log(today);
+        let dayGuide =
+          today.getFullYear() +
+          "년 " +
+          (today.getMonth() + 1) +
+          "월 " +
+          (today.getDate() + 1) +
+          "일";
+        alert(dayGuide + " 부터 선택가능합니다.");
+        return;
+      }
+
       if (state.search.type === "") {
         alert("경기방식을 선택하세요.");
         return;
       }
+      axios({
+        method: "get",
+        url:
+          `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + state.search.locationID,
+      }).then((e) => {
+        setCourtList(e.data);
+        console.log(e.data);
+      });
       axios({
         method: "get",
         url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` + state.search.locationID,
@@ -372,6 +395,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
         </Grid>
       </Grid>
       <MatchRegisterDialog
+        courtList={courtList}
         open={register}
         onClose={handleCloseRegister}
         info={state.search}
