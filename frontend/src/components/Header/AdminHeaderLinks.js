@@ -19,6 +19,7 @@ import AdminUserContext from "../../contexts/AdminUserContext";
 // style components
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
+import appleIcon from "assets/img/apple-icon.png";
 
 const useStyles = makeStyles(styles);
 
@@ -90,14 +91,17 @@ export default function AdminHeaderLinks(props) {
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         {adminuserinfo.logged && (
-          <IconButton>
-            <Avatar className={classes.small} />
+          <IconButton style={{ paddingTop: "5px", paddingRight: "5px" }}>
+            <Avatar className={classes.small} src={appleIcon} />
           </IconButton>
         )}
       </ListItem>
       <ListItem className={classes.listItem}>
         {adminuserinfo.logged && (
-          <ListItemText className={classes.listItemText}>
+          <ListItemText
+            className={classes.listItemText}
+            style={{ marginRight: "10px" }}
+          >
             {adminuserinfo.name}
           </ListItemText>
         )}
@@ -106,6 +110,9 @@ export default function AdminHeaderLinks(props) {
         {!adminuserinfo.logged && (
           <Button
             href="#pablo"
+            style={{
+              height: "30px",
+            }}
             className={classes.ButtonNavLink}
             onClick={loginClickOpen}
             color="danger"
@@ -116,6 +123,9 @@ export default function AdminHeaderLinks(props) {
         {adminuserinfo.logged && (
           <Button
             href="#pablo"
+            style={{
+              height: "30px",
+            }}
             className={classes.ButtonNavLink}
             onClick={() =>
               adminUserDispatch({

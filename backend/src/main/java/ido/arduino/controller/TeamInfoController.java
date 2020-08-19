@@ -254,6 +254,7 @@ public class TeamInfoController {
 			String gu = data.get("gu");
 			list = tService.searchTeamByBoth(name, gu, page);
 		}
+		
 		return list;
 	}
 

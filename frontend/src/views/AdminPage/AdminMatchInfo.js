@@ -59,7 +59,7 @@ export default function AdminInfo(props) {
     awayName: "팀동휘",
   };
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
-
+  console.log(matchInfo);
   // Raspberry pi에서 받을 것
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
@@ -73,6 +73,10 @@ export default function AdminInfo(props) {
   // 매치 시작 여부
   const [isMatchStarted, setIsMatchStarted] = useState(false);
   const [isMatchFinished, setIsMatchFinished] = useState(false);
+  // 지각 여부
+  const [homeTeamLateStatus, setHomeTeamLateStatus] = useState(0);
+  const [awayTeamLateStatus, setAwayTeamLateStatus] = useState(0);
+  console.log(homeTeamLateStatus, awayTeamLateStatus);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -108,6 +112,64 @@ export default function AdminInfo(props) {
     console.log(homeScore);
   });
 
+  var channel2 = pusher.subscribe("channel2");
+  channel2.bind("event2", function (data) {
+    setAwayScore(data.awayScore);
+    console.log(awayScore);
+  });
+
+  // 경기 시작 버튼 누르면 홈팀이름, 원정팀이름, 홈팀지각여부, 원정팀지각여부 보내주기
+  const sendMatchInfo = (
+    homeName,
+    awayName,
+    homeTeamLateStatus,
+    awayTeamLateStatus
+  ) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/gameStart`,
+      data: {
+        home: homeName,
+        away: awayName,
+        homeLate: homeTeamLateStatus,
+        awayLate: awayTeamLateStatus,
+      },
+    })
+      .then(() => {
+        console.log("경기 정보 전송 성공!");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 경기 종료 버튼 누르면 매치ID, 홈 점수, 원정 점수, 홈팀 이름, 원정팀 이름 보내주기
+  const sendMatchResult = (
+    matchID,
+    homeScore,
+    awayScore,
+    homeTeam,
+    awayTeam
+  ) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/gameFinish`,
+      data: {
+        matchID: matchID,
+        homeScore: homeScore,
+        awayScore: awayScore,
+        homeTeam: homeTeam,
+        awayTeam: awayTeam,
+      },
+    })
+      .then(() => {
+        console.log("경기 결과 전송 성공!");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
   const toAdminInfo = () => {
     history.push(`/Admin/${adminuserinfo.stadiumID}`);
   };
@@ -126,14 +188,23 @@ export default function AdminInfo(props) {
 
   const matchStart = () => {
     setIsMatchStarted(true);
+    sendMatchInfo(
+      matchInfo.homeName,
+      matchInfo.awayName,
+      homeTeamLateStatus,
+      awayTeamLateStatus
+    );
   };
 
   const matchEnd = () => {
     setIsMatchFinished(true);
-  };
-
-  const matchRestart = () => {
-    setIsMatchFinished(false);
+    sendMatchResult(
+      matchInfo.matchID,
+      homeScore,
+      awayScore,
+      matchInfo.homeName,
+      matchInfo.awayName
+    );
   };
 
   const Stopwatch = () => (
@@ -199,47 +270,44 @@ export default function AdminInfo(props) {
                 </h3>
               </List>
             </GridItem>
-            <GridItem xs={12}>
-              <List className={classes.list}>
-                <ListItem className={classes.leftListItem}>
-                  <Badge badgeContent={"Home"} color="primary">
-                    <h2>{matchInfo.homeName}</h2>
-                  </Badge>
-                  <h1>{homeScore}</h1>
-                </ListItem>
-                <ListItem className={classes.centerListItem}>
-                  {!isMatchStarted && !isMatchFinished && (
-                    <Button color="primary" size="sm" onClick={matchStart}>
-                      경기시작
-                    </Button>
-                  )}
-                  {isMatchStarted && !isMatchFinished && (
-                    <Button color="secondary" size="sm" onClick={matchEnd}>
-                      경기종료
-                    </Button>
-                  )}
-                  {isMatchStarted && isMatchFinished && (
-                    <Button color="secondary" size="sm" onClick={matchRestart}>
-                      다시시작
-                    </Button>
-                  )}
-                  <Stopwatch />
-                </ListItem>
-                <ListItem className={classes.rightListItem}>
-                  <Badge badgeContent={"Away"} color="secondary">
-                    <h2>{matchInfo.awayName}</h2>
-                  </Badge>
-                  <h1>{awayScore}</h1>
-                </ListItem>
-              </List>
+            <GridItem xs={12} className={classes.matchInfoContainer}>
+              <GridItem xs={5} className={classes.matchInfoContent}>
+                <Badge badgeContent={"Home"} color="primary">
+                  <h2>{matchInfo.homeName}</h2>
+                </Badge>
+                <h1>{homeScore}</h1>
+              </GridItem>
+              <GridItem xs={2} className={classes.matchInfoContent}>
+                {!isMatchStarted && !isMatchFinished && (
+                  <Button color="danger" size="sm" onClick={matchStart}>
+                    경기시작
+                  </Button>
+                )}
+                {isMatchStarted && !isMatchFinished && (
+                  <Button color="warning" size="sm" onClick={matchEnd}>
+                    경기종료
+                  </Button>
+                )}
+                <Stopwatch />
+              </GridItem>
+              <GridItem xs={5} className={classes.matchInfoContent}>
+                <Badge badgeContent={"Away"} color="secondary">
+                  <h2>{matchInfo.awayName}</h2>
+                </Badge>
+                <h1>{awayScore}</h1>
+              </GridItem>
             </GridItem>
           </GridContainer>
           <GridContainer>
             <GridItem className={classes.arriveInfoContainer}>
               <ArriveInfo
                 homeTeamID={matchInfo.homeTeamID}
+                homeName={matchInfo.homeName}
                 awayTeamID={matchInfo.awayTeamID}
+                awayName={matchInfo.awayName}
                 matchhour={matchInfo.time}
+                setHomeTeamLateStatus={setHomeTeamLateStatus}
+                setAwayTeamLateStatus={setAwayTeamLateStatus}
               />
             </GridItem>
             <GridItem className={classes.bottomButtonSet}>

@@ -148,10 +148,10 @@ export default function AdminInfo(props) {
             <Table className={classes.table} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>No.</StyledTableCell>
-                  <StyledTableCell>Kick-off time</StyledTableCell>
-                  <StyledTableCell>Home</StyledTableCell>
-                  <StyledTableCell>Away</StyledTableCell>
+                  <StyledTableCell>순번</StyledTableCell>
+                  <StyledTableCell>경기시간</StyledTableCell>
+                  <StyledTableCell>홈팀</StyledTableCell>
+                  <StyledTableCell>원정팀</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -161,7 +161,9 @@ export default function AdminInfo(props) {
                       <StyledTableCell component="th" scope="row">
                         {testMatchInfo.matchID}
                       </StyledTableCell>
-                      <StyledTableCell>{testMatchInfo.time}:00</StyledTableCell>
+                      <StyledTableCell>
+                        {testMatchInfo.time}:00 - {testMatchInfo.time + 2}:00
+                      </StyledTableCell>
                       <StyledTableCell>
                         {testMatchInfo.homeName}
                       </StyledTableCell>
@@ -176,7 +178,7 @@ export default function AdminInfo(props) {
                       </StyledTableCell>
                       <StyledTableCell>
                         <Link to={`/Admin/1/match/${index + 1}`}>
-                          {m.time}:00
+                          {m.time}:00 - {m.time + 2}:00
                         </Link>
                       </StyledTableCell>
                       <StyledTableCell>{m.homeName}</StyledTableCell>

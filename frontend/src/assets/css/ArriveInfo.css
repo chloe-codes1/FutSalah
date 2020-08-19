@@ -4,12 +4,13 @@
   align-items: center;
   justify-content: center;
   margin: 0;
+  padding: 0;
 }
 
 .arrive-contents {
   position: relative;
   display: inline-block;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.4);
   border: none;
   border-radius: 10px;
 }
