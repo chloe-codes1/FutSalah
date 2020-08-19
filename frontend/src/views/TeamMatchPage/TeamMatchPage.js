@@ -25,14 +25,11 @@ import MatchSearch from "./MatchSearch.js";
 import MatchCard from "./MatchCard.js";
 import UserContext from "contexts/UserContext.js";
 
-import NavPills from "components/NavPills/NavPills.js";
 import ReceivedMatch from "./ReceivedMatch.js";
 import SentMatch from "./SentMatch.js";
 import UpcomingMatch from "./UpcomingMatch.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import SwipeableViews from "react-swipeable-views";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles(styles);
 function TeamMatchPage() {
@@ -40,14 +37,12 @@ function TeamMatchPage() {
   const [matchingList, setMatchingList] = useState([]);
   const [myteam, setMyteam] = useState([]);
   const { userinfo } = useContext(UserContext);
-  console.log(matchingList.length);
   useEffect(() => {
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
       params: { date: "1900-01-01", formCode: 99, isBooked: 9, locationID: 999, time: 25 },
     }).then((e) => {
-      console.log(e.data);
       setMatchingList(e.data);
     });
   }, []);

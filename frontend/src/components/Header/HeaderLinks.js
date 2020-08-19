@@ -57,7 +57,6 @@ function reducer(state, action) {
         },
       };
     case "CHANGE_INPUT":
-      console.log(action.name + " " + action.value);
       return {
         ...state,
         user: {
@@ -132,43 +131,36 @@ export default function HeaderLinks(props) {
       profileURL,
     });
   }, []);
-  const onRegister = useCallback((formik) => {
-    const email = formik.values.email;
-    const weight = formik.values.weight;
-    const height = formik.values.height;
-    axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
-      data: {
-        ...user,
-        email : email,
-        weight: weight,
-        height: height
-
-      },
-    })
-      .then((e) => {
-        console.log("success");
-        alert("정보 저장이 완료되었습니다!");
-        loggedUser(
-          user.socialID,
-          e.data.userID,
-          user.name,
-          "social",
-          e.data.profileURL
-        );
-        addInfoClose();
+  const onRegister = useCallback(
+    (formik) => {
+      const email = formik.values.email;
+      const weight = formik.values.weight;
+      const height = formik.values.height;
+      axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
+        data: {
+          ...user,
+          email: email,
+          weight: weight,
+          height: height,
+        },
       })
-      .catch((e) => {
-        console.log("error", e);
-        alert("잠시 후 다시 시도해주세요!");
-        console.log("fail");
-        addInfoClose();
-      });
-  }, [user]);
+        .then((e) => {
+          console.log("success");
+          alert("정보 저장이 완료되었습니다!");
+          loggedUser(user.socialID, e.data.userID, user.name, "social", e.data.profileURL);
+          addInfoClose();
+        })
+        .catch(() => {
+          alert("잠시 후 다시 시도해주세요!");
+          addInfoClose();
+        });
+    },
+    [user]
+  );
 
   const changeAge = useCallback((getAge) => {
-    console.log(getAge);
     const name = "age";
     const value = String(getAge);
     dispatch({
@@ -182,22 +174,14 @@ export default function HeaderLinks(props) {
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         <Link to={"/searchteam"} className={classes.link}>
-          <Button
-            color="transparent"
-            target="_blank"
-            className={classes.navLink}
-          >
+          <Button color="transparent" target="_blank" className={classes.navLink}>
             팀 찾기
           </Button>
         </Link>
       </ListItem>
       <ListItem className={classes.listItem}>
         <Link to={"/match"} className={classes.link}>
-          <Button
-            color="transparent"
-            target="_blank"
-            className={classes.navLink}
-          >
+          <Button color="transparent" target="_blank" className={classes.navLink}>
             팀 매칭
           </Button>
         </Link>
@@ -205,11 +189,7 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <Link to={"/myteam"} className={classes.link}>
           {userinfo.logged && (
-            <Button
-              color="transparent"
-              target="_blank"
-              className={classes.navLink}
-            >
+            <Button color="transparent" target="_blank" className={classes.navLink}>
               나의 팀
             </Button>
           )}
@@ -218,11 +198,7 @@ export default function HeaderLinks(props) {
       <ListItem className={classes.listItem}>
         <Link to={"/profile"} className={classes.link}>
           {userinfo.logged && (
-            <Button
-              color="transparent"
-              target="_blank"
-              className={classes.navLink}
-            >
+            <Button color="transparent" target="_blank" className={classes.navLink}>
               회원정보
             </Button>
           )}
