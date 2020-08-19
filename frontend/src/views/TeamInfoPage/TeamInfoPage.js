@@ -144,7 +144,7 @@ export default function TeamInfoPage(props) {
           setTeamImage(
             process.env.REACT_APP_S3_BASE_URL +
               "/team-default-" +
-              Math.ceil(Math.random()*8) +
+              Math.ceil(Math.random()*20) +
               ".png"
           );
         }

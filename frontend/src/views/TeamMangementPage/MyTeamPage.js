@@ -53,7 +53,7 @@ function MyTeamPage(props) {
   const [createTeam, setCreateTeam] = useState(false);
   const [existTeam, setExistTeam] = useState(false);
   const profileImage = process.env.REACT_APP_S3_BASE_URL;
-  const defaultPath = '/team-default-' + Math.ceil(Math.random() * 8) + '.png';
+  const defaultPath = '/team-default-' + Math.ceil(Math.random() * 20) + '.png';
 
   const createTeamClick = () => {
     setCreateTeam(true);
