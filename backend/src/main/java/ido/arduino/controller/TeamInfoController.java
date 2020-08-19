@@ -112,7 +112,6 @@ public class TeamInfoController {
 		try {
 			// 생성 시 부여 받을 TeamID 값
 			id = getAutoIncrement();
-			System.out.println(">>>>>>>>>>>>>>>>>>>>" + id);
 			createQRCodeImage(Integer.toString(id), 350, 350, 0x00000000, 0xFFFFFFFF);
 		} catch (WriterException e) {
 			System.out.println("QR생성 실패");
@@ -123,7 +122,6 @@ public class TeamInfoController {
 			UserDTO user = uService.findBySocialID(teamInfo.getSocialID());
 			int userId = user.getUserID();
 			String code = "QR" + Integer.toString(id);
-			System.out.println(">>>>>>>>>>>>>>>>>>>>" + code);
 			TeamInfoDto newTeam = TeamInfoDto.of(teamInfo, userId, code);
 			int lastTeamId = tService.insert(newTeam);
 			tService.insertmy(new UserTeamConnDto(userId, lastTeamId, LocalDate.now()));
@@ -140,7 +138,7 @@ public class TeamInfoController {
 	public ResponseEntity<Map<String, Object>> update(@RequestBody TeamInfoDto teamInfo) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			int result = tService.update(teamInfo);
+			tService.update(teamInfo);
 			entity = handleSuccess(teamInfo.getClass() + "가 수정되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -154,7 +152,7 @@ public class TeamInfoController {
 	public ResponseEntity<Map<String, Object>> delete(@PathVariable int teamID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			int result = tService.delete(teamID);
+			tService.delete(teamID);
 			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
 			entity = handleException(e);
@@ -166,7 +164,6 @@ public class TeamInfoController {
 	@PostMapping("/team/upload/{teamID}")
 	public ResponseEntity<String> uploadFile(@PathVariable int teamID,
 			@RequestPart(value = "file") final MultipartFile multipartFile) {
-		System.out.println("file" + teamID + multipartFile);
 		final String status = "team";
 		s3Service.uploadFile(multipartFile, teamID, status);
 		final String response = "[" + multipartFile.getOriginalFilename() + "] uploaded successfully.";
@@ -235,7 +232,6 @@ public class TeamInfoController {
 	@GetMapping("/team")
 	public ResponseEntity<List<TeamInfoSimpleDto>> selectAll() throws Exception {
 		logger.debug("selectAll - 호출");
-		System.out.println("CaaaORS Filtering on...........................................................");
 
 		return new ResponseEntity<List<TeamInfoSimpleDto>>(tService.selectAll(), HttpStatus.OK);
 	}
@@ -270,7 +266,6 @@ public class TeamInfoController {
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
 		logger.debug("selectAllmyteam - 호출");
-		System.out.println("check.............................");
 
 		return new ResponseEntity<List<MyTeamDto>>(tService.selectAllmyteam(userId), HttpStatus.OK);
 	}
@@ -376,7 +371,6 @@ public class TeamInfoController {
 		try {
 			DeleteFormationDto form = new DeleteFormationDto(teamID, formCode);
 			tService.deleteformation(form);
-			System.out.println("왜 안불러어어어어ㅓㅇ.............................");
 			// int result = tService.deleteformation(teamID);
 			entity = handleSuccess(teamID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
@@ -389,7 +383,6 @@ public class TeamInfoController {
 	@GetMapping("/team/formation/{teamID}")
 	public ResponseEntity<List<Formation>> selectformation(@PathVariable int teamID) throws Exception {
 		logger.debug("selectformation - 호출");
-		System.out.println("호오오오추우울...........................................................");
 
 		return new ResponseEntity<List<Formation>>(tService.selectformation(teamID), HttpStatus.OK);
 	}
@@ -400,7 +393,6 @@ public class TeamInfoController {
 	@GetMapping("/team/result/{teamID}")
 	public ResponseEntity<List<ResultDto>> resultscore(@PathVariable int teamID) throws Exception {
 		logger.debug("resultscore - 호출");
-		System.out.println("resultscore호추추루룰...........................................................");
 
 		return new ResponseEntity<List<ResultDto>>(tService.resultscore(teamID), HttpStatus.OK);
 	}
@@ -414,13 +406,9 @@ public class TeamInfoController {
 		MatrixToImageConfig config = new MatrixToImageConfig(qrDarkColor, qrLightColor); // 진한색, 연한색
 		BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix, config);
 
-		// File file = new File("c:\\qrtest.jpg"); // 파일의 이름을 설정한다
-		// ImageIO.write(qrImage, "jpg", file); // write메소드를 이용해 파일을 만든다
-
 		String title = "QR" + text;
 		File temp = File.createTempFile(title, ".png");
 		ImageIO.write(qrImage, "png", temp); // temp 위치에 qr이 이미지 생성됨.
-		// InputStream is = new FileInputStream(temp.getAbsolutePath()); // 인풋 스트림으로
 		// 변환(향후 S3로 업로드하기위한 작업)
 		s3ServiceImpl.uploadQRToS3Bucket(bucketName, temp, title);
 
