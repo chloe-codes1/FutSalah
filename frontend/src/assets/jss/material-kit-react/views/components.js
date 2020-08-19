@@ -38,12 +38,6 @@ const componentsStyle = {
   textCenter: {
     textAlign: "center",
   },
-  rankingTitle: {
-    fontSize: "4.2rem",
-    fontWeight: "600",
-    display: "inline-block",
-    position: "relative",
-  },
 };
 
 export default componentsStyle;

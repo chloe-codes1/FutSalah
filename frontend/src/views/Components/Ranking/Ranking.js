@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
@@ -20,16 +21,17 @@ import nologo from "assets/img/nologo.png";
 import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
-import styles from "assets/jss/material-kit-react/views/componentsSections/loadingStyle.js";
+import styles from "assets/jss/material-kit-react/views/componentsSections/rankingStyle.js";
 
 const useStyles = makeStyles(styles);
 
 export default function Ranking() {
   const classes = useStyles();
-  const [champions, setChampions] = useState([]);
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
+  const [champions, setChampions] = useState([]); // 1,2,3위 팀 가져오기
 
-  // 지역 목록 불러오기
   useEffect(() => {
+    // ranking 데이터 가져오기
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/rank`,
@@ -50,263 +52,321 @@ export default function Ranking() {
       });
   }, []);
 
+  // 현재 창 너비,  구하기
+  useEffect(() => {
+    const handleResize = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
   return (
-    <GridContainer
-      style={{
-        width: "100%",
-        margin: "0 auto",
-        padding: "auto",
-        paddingTop: "50px",
-        paddingLeft: "15px",
-      }}
-    >
-      <GridItem
-        style={{
-          width: "100%",
-          marginBottom: 0,
-          paddingTop: "80px",
-          paddingLeft: "50px",
-          padding: "auto",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "3rem",
-            fontWeight: "600",
-          }}
-        >
-          Ranking
-        </div>
+    <GridContainer className={classes.rankingContainer}>
+      <GridItem className={classes.rankingTitle}>
+        <div>Ranking</div>
       </GridItem>
-      <GridItem style={{ padding: "0 auto", width: "100%" }}>
+      <GridItem className={classes.rankingCards}>
         <GridList
-          spacing={15}
+          spacing={20}
           cellHeight="auto"
-          cols={3}
+          cols={innerWidth > 768 ? 3 : 1}
           style={{ margin: "0 auto", width: "80%" }}
         >
-          <GridContainer
-            justify="center"
-            style={{ margin: "0 auto", paddingTop: "100px" }}
-          >
-            <GridItem>
-              <Card>
-                <CardHeader
-                  className={classes.cardHeader}
-                  style={{ paddingBottom: 0 }}
+          {innerWidth <= 768 && (
+            <GridListTile>
+              {champions.length > 0 && (
+                <Link
+                  to={"/teaminfo/" + champions[0].teamID}
+                  style={{ color: "black" }}
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                  }}
                 >
-                  <GridItem
-                    style={{
-                      position: "relative",
-                      overflow: "hidden",
-                      width: "40px",
-                      height: "40px",
-                    }}
-                  >
-                    <img
-                      src={two}
-                      style={{
-                        position: "absolute",
-                        top: "0",
-                        left: "0",
-                        right: "0",
-                        bottom: "0",
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "white",
-                      }}
-                    />
-                  </GridItem>
-                </CardHeader>
-                <CardBody className={classes.cardBody}>
-                  <img
-                    src={
-                      champions.length > 0 && champions[1].profileURL
-                        ? champions[1].profileURL
-                        : nologo
-                    }
-                    alt="..."
-                    style={{
-                      zIndex: 0,
-                      borderRadius:
-                        champions.length > 0 &&
-                        champions[1].profileURL &&
-                        "70%",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                  <img
-                    src={trophy2}
-                    style={{
-                      width: "40%",
-                      zIndex: 1,
-                      marginTop: "-30%",
-                      marginLeft: "70%",
-                    }}
-                  />
-                  {champions.length > 0 && (
-                    <Link
-                      to={"/teaminfo/" + champions[1].teamID}
-                      style={{ color: "black" }}
+                  <Card>
+                    <CardHeader
+                      className={classes.cardHeader}
+                      style={{ paddingBottom: 0 }}
                     >
-                      <h5>
-                        <strong>{champions[1].name}</strong>
-                      </h5>
-                    </Link>
-                  )}
-                  <h5>{champions.length > 0 && champions[1].points} points</h5>
-                </CardBody>
-              </Card>
-            </GridItem>
-          </GridContainer>
-          <GridContainer justify="center" style={{ margin: "0 auto" }}>
-            <GridItem>
-              <Card>
-                <CardHeader
-                  className={classes.cardHeader}
-                  style={{ paddingBottom: 0 }}
-                >
-                  <GridItem
-                    style={{
-                      position: "relative",
-                      overflow: "hidden",
-                      width: "40px",
-                      height: "40px",
-                    }}
-                  >
-                    <img
-                      src={one}
-                      style={{
-                        position: "absolute",
-                        top: "0",
-                        left: "0",
-                        right: "0",
-                        bottom: "0",
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "white",
-                      }}
-                    />
-                  </GridItem>
-                </CardHeader>
-                <CardBody className={classes.cardBody}>
-                  <img
-                    src={
-                      champions.length > 0 && champions[0].profileURL
-                        ? champions[0].profileURL
-                        : nologo
-                    }
-                    alt="..."
-                    style={{
-                      zIndex: 0,
-                      borderRadius:
-                        champions.length > 0 &&
-                        champions[0].profileURL &&
-                        "70%",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                  <img
-                    src={trophy1}
-                    style={{
-                      width: "40%",
-                      zIndex: 1,
-                      marginTop: "-30%",
-                      marginLeft: "70%",
-                    }}
-                  />
-                  {champions.length > 0 && (
-                    <Link
-                      to={"/teaminfo/" + champions[0].teamID}
-                      style={{ color: "black" }}
-                    >
+                      <GridItem
+                        style={{
+                          position: "relative",
+                          width: "40px",
+                          height: "40px",
+                        }}
+                      >
+                        <img
+                          src={one}
+                          alt="..."
+                          style={{
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                            right: "0",
+                            bottom: "0",
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "white",
+                          }}
+                        />
+                      </GridItem>
+                    </CardHeader>
+                    <CardBody className={classes.cardBody}>
+                      <img
+                        src={
+                          champions[0].profileURL
+                            ? champions[0].profileURL
+                            : nologo
+                        }
+                        alt="..."
+                        style={{
+                          zIndex: 0,
+                          borderRadius: champions[0].profileURL && "70%",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      />
+                      <img
+                        src={trophy1}
+                        alt="..."
+                        style={{
+                          width: "40%",
+                          zIndex: 1,
+                          marginTop: "-30%",
+                          marginLeft: "70%",
+                        }}
+                      />
                       <h5>
                         <strong>{champions[0].name}</strong>
                       </h5>
-                    </Link>
-                  )}
-                  <h5>{champions.length > 0 && champions[0].points} points</h5>
-                </CardBody>
-              </Card>
-            </GridItem>
-          </GridContainer>
-          <GridContainer
-            justify="center"
-            style={{ margin: "0 auto", paddingTop: "100px" }}
-          >
-            <GridItem>
-              <Card>
-                <CardHeader
-                  className={classes.cardHeader}
-                  style={{ paddingBottom: 0 }}
+                      <h5>{champions[0].points} points</h5>
+                    </CardBody>
+                  </Card>
+                </Link>
+              )}
+            </GridListTile>
+          )}
+          <GridListTile>
+            {champions.length > 0 && (
+              <Link
+                to={"/teaminfo/" + champions[1].teamID}
+                style={{ color: "black" }}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+              >
+                <Card
+                  className={innerWidth > 768 ? classes.rankingCardDown : ""}
                 >
-                  <GridItem
-                    style={{
-                      position: "relative",
-                      overflow: "hidden",
-                      width: "40px",
-                      height: "40px",
-                    }}
+                  <CardHeader
+                    className={classes.cardHeader}
+                    style={{ paddingBottom: 0 }}
                   >
-                    <img
-                      src={three}
+                    <GridItem
                       style={{
-                        position: "absolute",
-                        top: "0",
-                        left: "0",
-                        right: "0",
-                        bottom: "0",
+                        position: "relative",
+                        width: "40px",
+                        height: "40px",
+                      }}
+                    >
+                      <img
+                        src={two}
+                        alt="..."
+                        style={{
+                          position: "absolute",
+                          top: "0",
+                          left: "0",
+                          right: "0",
+                          bottom: "0",
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "white",
+                        }}
+                      />
+                    </GridItem>
+                  </CardHeader>
+                  <CardBody className={classes.cardBody}>
+                    <img
+                      src={
+                        champions[1].profileURL
+                          ? champions[1].profileURL
+                          : nologo
+                      }
+                      alt="..."
+                      style={{
+                        zIndex: 0,
+                        borderRadius: champions[1].profileURL && "70%",
                         width: "100%",
                         height: "100%",
-                        backgroundColor: "white",
                       }}
                     />
-                  </GridItem>
-                </CardHeader>
-                <CardBody className={classes.cardBody}>
-                  <img
-                    src={
-                      champions.length > 0 && champions[2].profileURL
-                        ? champions[2].profileURL
-                        : nologo
-                    }
-                    alt="..."
-                    style={{
-                      zIndex: 0,
-                      borderRadius:
-                        champions.length > 0 &&
-                        champions[2].profileURL &&
-                        "70%",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                  <img
-                    src={trophy3}
-                    style={{
-                      width: "40%",
-                      zIndex: 1,
-                      marginTop: "-30%",
-                      marginLeft: "70%",
-                    }}
-                  />
-                  {champions.length > 0 && (
-                    <Link
-                      to={"/teaminfo/" + champions[2].teamID}
-                      style={{ color: "black" }}
+                    <img
+                      src={trophy2}
+                      alt="..."
+                      style={{
+                        width: "40%",
+                        zIndex: 1,
+                        marginTop: "-30%",
+                        marginLeft: "70%",
+                      }}
+                    />
+                    <h5>
+                      <strong>{champions[1].name}</strong>
+                    </h5>
+                    <h5>{champions[1].points} points</h5>
+                  </CardBody>
+                </Card>
+              </Link>
+            )}
+          </GridListTile>
+          {innerWidth > 768 && (
+            <GridListTile>
+              {champions.length > 0 && (
+                <Link
+                  to={"/teaminfo/" + champions[0].teamID}
+                  style={{ color: "black" }}
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                  }}
+                >
+                  <Card>
+                    <CardHeader
+                      className={classes.cardHeader}
+                      style={{ paddingBottom: 0 }}
                     >
+                      <GridItem
+                        style={{
+                          position: "relative",
+                          width: "40px",
+                          height: "40px",
+                        }}
+                      >
+                        <img
+                          src={one}
+                          alt="..."
+                          style={{
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                            right: "0",
+                            bottom: "0",
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "white",
+                          }}
+                        />
+                      </GridItem>
+                    </CardHeader>
+                    <CardBody className={classes.cardBody}>
+                      <img
+                        src={
+                          champions[0].profileURL
+                            ? champions[0].profileURL
+                            : nologo
+                        }
+                        alt="..."
+                        style={{
+                          zIndex: 0,
+                          borderRadius: champions[0].profileURL && "70%",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      />
+                      <img
+                        src={trophy1}
+                        alt="..."
+                        style={{
+                          width: "40%",
+                          zIndex: 1,
+                          marginTop: "-30%",
+                          marginLeft: "70%",
+                        }}
+                      />
                       <h5>
-                        <strong>{champions[2].name}</strong>
+                        <strong>{champions[0].name}</strong>
                       </h5>
-                    </Link>
-                  )}
-                  <h5>{champions.length > 0 && champions[2].points} points</h5>
-                </CardBody>
-              </Card>
-            </GridItem>
-          </GridContainer>
+                      <h5>{champions[0].points} points</h5>
+                    </CardBody>
+                  </Card>
+                </Link>
+              )}
+            </GridListTile>
+          )}
+          <GridListTile>
+            {champions.length > 0 && (
+              <Link
+                to={"/teaminfo/" + champions[2].teamID}
+                style={{ color: "black" }}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+              >
+                <Card
+                  className={innerWidth > 768 ? classes.rankingCardDown : ""}
+                >
+                  <CardHeader
+                    className={classes.cardHeader}
+                    style={{ paddingBottom: 0 }}
+                  >
+                    <GridItem
+                      style={{
+                        position: "relative",
+                        width: "40px",
+                        height: "40px",
+                      }}
+                    >
+                      <img
+                        src={three}
+                        alt="..."
+                        style={{
+                          position: "absolute",
+                          top: "0",
+                          left: "0",
+                          right: "0",
+                          bottom: "0",
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "white",
+                        }}
+                      />
+                    </GridItem>
+                  </CardHeader>
+                  <CardBody className={classes.cardBody}>
+                    <img
+                      src={
+                        champions[2].profileURL
+                          ? champions[2].profileURL
+                          : nologo
+                      }
+                      alt="..."
+                      style={{
+                        zIndex: 0,
+                        borderRadius: champions[2].profileURL && "70%",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                    <img
+                      src={trophy3}
+                      alt="..."
+                      style={{
+                        width: "40%",
+                        zIndex: 1,
+                        marginTop: "-30%",
+                        marginLeft: "70%",
+                      }}
+                    />
+                    <h5>
+                      <strong>{champions[2].name}</strong>
+                    </h5>
+                    <h5>{champions[2].points} points</h5>
+                  </CardBody>
+                </Card>
+              </Link>
+            )}
+          </GridListTile>
         </GridList>
       </GridItem>
     </GridContainer>
