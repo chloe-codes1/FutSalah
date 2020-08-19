@@ -59,7 +59,7 @@ export default function AdminInfo(props) {
     awayName: "팀동휘",
   };
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
-
+  console.log(matchInfo);
   // Raspberry pi에서 받을 것
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
@@ -112,6 +112,12 @@ export default function AdminInfo(props) {
     console.log(homeScore);
   });
 
+  var channel2 = pusher.subscribe("channel2");
+  channel2.bind("event2", function (data) {
+    setAwayScore(data.awayScore);
+    console.log(awayScore);
+  });
+
   // 경기 시작 버튼 누르면 홈팀이름, 원정팀이름, 홈팀지각여부, 원정팀지각여부 보내주기
   const sendMatchInfo = (
     homeName,
@@ -131,6 +137,33 @@ export default function AdminInfo(props) {
     })
       .then(() => {
         console.log("경기 정보 전송 성공!");
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
+  // 경기 종료 버튼 누르면 매치ID, 홈 점수, 원정 점수, 홈팀 이름, 원정팀 이름 보내주기
+  const sendMatchResult = (
+    matchID,
+    homeScore,
+    awayScore,
+    homeTeam,
+    awayTeam
+  ) => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/gameFinish`,
+      data: {
+        matchID: matchID,
+        homeScore: homeScore,
+        awayScore: awayScore,
+        homeTeam: homeTeam,
+        awayTeam: awayTeam,
+      },
+    })
+      .then(() => {
+        console.log("경기 결과 전송 성공!");
       })
       .catch((e) => {
         console.log("error", e);
@@ -165,10 +198,13 @@ export default function AdminInfo(props) {
 
   const matchEnd = () => {
     setIsMatchFinished(true);
-  };
-
-  const matchRestart = () => {
-    setIsMatchFinished(false);
+    sendMatchResult(
+      matchInfo.matchID,
+      homeScore,
+      awayScore,
+      matchInfo.homeName,
+      matchInfo.awayName
+    );
   };
 
   const Stopwatch = () => (
@@ -251,11 +287,6 @@ export default function AdminInfo(props) {
                   {isMatchStarted && !isMatchFinished && (
                     <Button color="secondary" size="sm" onClick={matchEnd}>
                       경기종료
-                    </Button>
-                  )}
-                  {isMatchStarted && isMatchFinished && (
-                    <Button color="secondary" size="sm" onClick={matchRestart}>
-                      다시시작
                     </Button>
                   )}
                   <Stopwatch />
