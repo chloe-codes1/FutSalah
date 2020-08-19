@@ -321,7 +321,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <FormControl className={classes.formControl} component="fieldset">
             <FormLabel component="legend">경기장 예약 유/무</FormLabel>
             <RadioGroup
@@ -345,7 +345,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
               </Grid>
             </RadioGroup>
           </FormControl>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid container justify="center">
         <Grid item>

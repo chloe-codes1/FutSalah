@@ -15,7 +15,10 @@ import matchIng from "assets/img/match-ing.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    maxWidth: 280,
+    minWidth: 280,
+    maxHeight: 435,
+    minHeight: 435,
   },
   media: {
     height: 10,
