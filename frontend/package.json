@@ -40,6 +40,7 @@
     "react-stopwatch": "^2.0.4",
     "react-swipeable-views": "0.13.9",
     "request": "^2.88.2",
+    "styled-components": "^5.1.1",
     "yarn": "^1.22.4",
     "yup": "^0.29.2"
   },

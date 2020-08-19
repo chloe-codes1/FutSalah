@@ -7,36 +7,36 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-} from '@material-ui/core';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+} from "@material-ui/core";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
-import Button from 'components/CustomButtons/Button.js';
-import CreateTeamDialog from '../../components/Dialog/CreateTeamDialog.js';
-import Footer from 'components/Footer/Footer.js';
+import Button from "components/CustomButtons/Button.js";
+import CreateTeamDialog from "../../components/Dialog/CreateTeamDialog.js";
+import Footer from "components/Footer/Footer.js";
 // component
-import Header from 'components/Header/Header.js';
+import Header from "components/Header/Header.js";
 //import GridContainer from "components/Grid/GridContainer.js";
 //import GridItem from "components/Grid/GridItem.js";
-import HeaderLinks from 'components/Header/HeaderLinks.js';
-import Icon from '@material-ui/core/Icon';
+import HeaderLinks from "components/Header/HeaderLinks.js";
+import Icon from "@material-ui/core/Icon";
 // react components for routing our app without refresh
-import { Link } from 'react-router-dom';
-import Parallax from 'components/Parallax/Parallax.js';
-import StarsRoundedIcon from '@material-ui/icons/StarsRounded';
-import UserContext from '../../contexts/UserContext.js';
-import axios from 'axios';
-import classNames from 'classnames';
+import { Link } from "react-router-dom";
+import Parallax from "components/Parallax/Parallax.js";
+import StarsRoundedIcon from "@material-ui/icons/StarsRounded";
+import UserContext from "../../contexts/UserContext.js";
+import axios from "axios";
+import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from '@material-ui/core/styles';
-import styles from 'assets/jss/material-kit-react/views/profilePage.js';
+import { makeStyles } from "@material-ui/core/styles";
+import styles from "assets/jss/material-kit-react/views/profilePage.js";
 
 const useStyles = makeStyles(styles);
 const imageStyles = makeStyles(() => ({
   logo: {
-    borderRadius: '70%',
-    width: '65px',
-    height: '65x',
-    margin: 'auto 0 auto 5%',
+    borderRadius: "70%",
+    width: "65px",
+    height: "65x",
+    margin: "auto 0 auto 5%",
   },
 }));
 
@@ -53,7 +53,7 @@ function MyTeamPage(props) {
   const [createTeam, setCreateTeam] = useState(false);
   const [existTeam, setExistTeam] = useState(false);
   const profileImage = process.env.REACT_APP_S3_BASE_URL;
-  const defaultPath = '/team-default-' + Math.ceil(Math.random() * 20) + '.png';
+  const defaultPath = "/team-default-" + Math.ceil(Math.random() * 20) + ".png";
 
   const createTeamClick = () => {
     setCreateTeam(true);
@@ -64,7 +64,7 @@ function MyTeamPage(props) {
 
   const leaveTeam = (teamId) => {
     axios({
-      method: 'delete',
+      method: "delete",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
       data: {
         teamID: teamId,
@@ -72,33 +72,26 @@ function MyTeamPage(props) {
       },
     })
       .then(() => {
-        // console.log("success to leave");
         refreshTeam();
       })
-      .catch((e) => {
-        console.log('error', e);
-      });
+      .catch(() => {});
   };
 
   const refreshTeam = useCallback(() => {
     axios({
-      method: 'post',
+      method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
       data: {
-        socialID: window.sessionStorage.getItem('id'),
+        socialID: window.sessionStorage.getItem("id"),
       },
     })
       .then((res) => {
-        console.log('my team list call success');
-        console.log(res.data);
         if (res.data.length > 0) {
           setExistTeam(true);
           setMyTeam(res.data);
         }
       })
-      .catch(() => {
-        console.log('my team list call fail');
-      });
+      .catch(() => {});
   });
 
   return (
@@ -117,10 +110,10 @@ function MyTeamPage(props) {
           fixed
           changeColorOnScroll={{
             height: 200,
-            color: 'white',
+            color: "white",
           }}
         />
-        <Parallax small filter image={require('assets/img/myteambg.jpg')} />
+        <Parallax small filter image={require("assets/img/myteambg.jpg")} />
         <div className={classNames(classes.main, classes.mainRaised)}>
           <div className={classes.container}>
             <Grid container spacing={3}>
@@ -162,58 +155,49 @@ function MyTeamPage(props) {
                         <ListItemAvatar>
                           {team.profileURL ? (
                             <img
-                              src={profileImage + '/' + team.profileURL}
+                              src={profileImage + "/" + team.profileURL}
                               className={imageClass.logo}
                             />
                           ) : (
-                            <img
-                              src={profileImage + defaultPath}
-                              className={imageClass.logo}
-                            />
+                            <img src={profileImage + defaultPath} className={imageClass.logo} />
                           )}
                         </ListItemAvatar>
                         <ListItemIcon></ListItemIcon>
                         <ListItemText
                           style={{
-                            width: '25%',
+                            width: "25%",
                           }}
                         >
                           <Link
-                            to={'/teaminfo/' + team.teamID}
+                            to={"/teaminfo/" + team.teamID}
                             style={{
-                              color: 'black',
+                              color: "black",
                             }}
                           >
-                            {team.leader === Number(userinfo.userID) && (
-                              <StarsRoundedIcon />
-                            )}
+                            {team.leader === Number(userinfo.userID) && <StarsRoundedIcon />}
                             {team.name}
                           </Link>
                         </ListItemText>
                         <ListItemText
                           primary={team.description}
                           style={{
-                            width: '50%',
+                            width: "50%",
                           }}
                         />
                         <ListItemSecondaryAction
                           style={{
-                            width: '15%',
+                            width: "15%",
                           }}
                         >
                           <Button
                             color="transparent"
                             onClick={() => {
-                              if (
-                                window.confirm(
-                                  team.name + ' 팀을 나가겠습니까?'
-                                )
-                              ) {
+                              if (window.confirm(team.name + " 팀을 나가겠습니까?")) {
                                 leaveTeam(team.teamID);
                               }
                             }}
                             style={{
-                              width: '10%',
+                              width: "10%",
                             }}
                           >
                             팀 나가기

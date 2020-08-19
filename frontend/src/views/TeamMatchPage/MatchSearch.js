@@ -59,7 +59,6 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "SELECT":
-      //console.log(action.name + " " + action.value);
       return {
         ...state,
         search: {
@@ -98,11 +97,8 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
       }
       axios({
         method: "get",
-        url:
-          `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` +
-          state.search.locationID,
+        url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location/` + state.search.locationID,
       }).then((e) => {
-        console.log(e.data);
         setArea(e.data.sido + " " + e.data.gu);
       });
       axios({
@@ -110,7 +106,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
         url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/team/my`,
         data: { socialID: userinfo.socialID },
       }).then((e) => {
-        console.log(e.data);
         setMyteam(e.data);
       });
       setOpenRegister(true);
@@ -121,7 +116,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
   const handleCloseRegister = () => {
     setOpenRegister(false);
   };
-  //console.log(state);
   const handleDateChange = (date) => {
     setSelectedDate(date);
     const name = "date";
@@ -132,16 +126,13 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
       value,
     });
   };
-  //console.log(selectedDate);
   const handleSidoChange = (event) => {
-    //console.log(event.target.value + " " + "선택");
     setSelectedSido(event.target.value);
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
       data: { sido: event.target.value },
     }).then((e) => {
-      console.log(e.data);
       setSelectedGu([...e.data]);
     });
     const name = "locationID";
@@ -154,7 +145,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
   };
   const onChange = useCallback((e) => {
     const { name, value } = e.target;
-    console.log(name + " " + value);
     searchDispatch({
       type: "SELECT",
       name,
@@ -162,7 +152,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
     });
   }, []);
   const handleSearch = useCallback(() => {
-    console.log(state.search);
     let searchData = {
       date: "1900-01-01",
       formCode: 99,
@@ -190,7 +179,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
     if (state.search.time !== "") {
       searchData.time = state.search.time;
     }
-    console.log(searchData);
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
@@ -202,8 +190,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
         time: searchData.time,
       },
     }).then((e) => {
-      console.log("search success");
-      console.log(e.data);
       setMatchingList(e.data);
     });
   });
@@ -257,9 +243,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
                     </MenuItem>
                   );
                 })}
-              {selectedGu.length === 0 && (
-                <MenuItem value="">시/도를 먼저 선택</MenuItem>
-              )}
+              {selectedGu.length === 0 && <MenuItem value="">시/도를 먼저 선택</MenuItem>}
             </Select>
           </FormControl>
         </Grid>
@@ -337,7 +321,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <FormControl className={classes.formControl} component="fieldset">
             <FormLabel component="legend">경기장 예약 유/무</FormLabel>
             <RadioGroup
@@ -356,16 +340,12 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
                   />
                 </Grid>
                 <Grid item>
-                  <FormControlLabel
-                    control={<Radio value="0" />}
-                    label="무"
-                    labelPlacement="end"
-                  />
+                  <FormControlLabel control={<Radio value="0" />} label="무" labelPlacement="end" />
                 </Grid>
               </Grid>
             </RadioGroup>
           </FormControl>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid container justify="center">
         <Grid item>
