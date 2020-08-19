@@ -1,4 +1,3 @@
-import { container } from "assets/jss/material-kit-react.js";
 import { defaultFont } from "assets/jss/material-kit-react.js";
 import popoverStyles from "assets/jss/material-kit-react/popoverStyles.js";
 import tooltipsStyle from "assets/jss/material-kit-react/tooltipsStyle.js";
@@ -14,6 +13,21 @@ const teamInfoStyle = {
     paddingBottom: "120px",
     color: "white",
     zIndex: 2,
+  },
+  infoContainer: {
+    backgroundColor: "rgba( 0, 0, 0, 0.7 )",
+    borderRadius: "15px",
+    minHeight: "700px",
+  },
+  teamRegion: {
+    height: "40px",
+    fontSize: "1.2rem",
+  },
+  teamName: {
+    height: "40px",
+    fontSize: "2rem",
+    fontWeight: 600,
+    cursor: "pointer",
   },
   list: {
     ...defaultFont,

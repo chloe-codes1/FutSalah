@@ -10,9 +10,6 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 
-import one from "assets/img/ranking/one.png";
-import two from "assets/img/ranking/two.png";
-import three from "assets/img/ranking/three.png";
 import trophy1 from "assets/img/ranking/trophy1.png";
 import trophy2 from "assets/img/ranking/trophy2.png";
 import trophy3 from "assets/img/ranking/trophy3.png";
@@ -66,7 +63,7 @@ export default function Ranking() {
   return (
     <GridContainer className={classes.rankingContainer}>
       <GridItem className={classes.rankingTitle}>
-        <div>Ranking</div>
+        <span>Team Ranking</span>
       </GridItem>
       <GridItem className={classes.rankingCards}>
         <GridList
@@ -93,12 +90,12 @@ export default function Ranking() {
                       <GridItem
                         style={{
                           position: "relative",
-                          width: "40px",
-                          height: "40px",
+                          width: "60px",
+                          height: "60px",
                         }}
                       >
                         <img
-                          src={one}
+                          src={trophy1}
                           alt="..."
                           style={{
                             position: "absolute",
@@ -108,7 +105,6 @@ export default function Ranking() {
                             bottom: "0",
                             width: "100%",
                             height: "100%",
-                            backgroundColor: "white",
                           }}
                         />
                       </GridItem>
@@ -128,16 +124,6 @@ export default function Ranking() {
                           height: "100%",
                         }}
                       />
-                      <img
-                        src={trophy1}
-                        alt="..."
-                        style={{
-                          width: "40%",
-                          zIndex: 1,
-                          marginTop: "-30%",
-                          marginLeft: "70%",
-                        }}
-                      />
                       <h5>
                         <strong>{champions[0].name}</strong>
                       </h5>
@@ -149,7 +135,7 @@ export default function Ranking() {
             </GridListTile>
           )}
           <GridListTile>
-            {champions.length > 0 && (
+            {champions.length > 1 && (
               <Link
                 to={"/teaminfo/" + champions[1].teamID}
                 style={{ color: "black" }}
@@ -167,12 +153,12 @@ export default function Ranking() {
                     <GridItem
                       style={{
                         position: "relative",
-                        width: "40px",
-                        height: "40px",
+                        width: "60px",
+                        height: "60px",
                       }}
                     >
                       <img
-                        src={two}
+                        src={trophy2}
                         alt="..."
                         style={{
                           position: "absolute",
@@ -182,7 +168,6 @@ export default function Ranking() {
                           bottom: "0",
                           width: "100%",
                           height: "100%",
-                          backgroundColor: "white",
                         }}
                       />
                     </GridItem>
@@ -200,16 +185,6 @@ export default function Ranking() {
                         borderRadius: champions[1].profileURL && "70%",
                         width: "100%",
                         height: "100%",
-                      }}
-                    />
-                    <img
-                      src={trophy2}
-                      alt="..."
-                      style={{
-                        width: "40%",
-                        zIndex: 1,
-                        marginTop: "-30%",
-                        marginLeft: "70%",
                       }}
                     />
                     <h5>
@@ -239,12 +214,12 @@ export default function Ranking() {
                       <GridItem
                         style={{
                           position: "relative",
-                          width: "40px",
-                          height: "40px",
+                          width: "60px",
+                          height: "60px",
                         }}
                       >
                         <img
-                          src={one}
+                          src={trophy1}
                           alt="..."
                           style={{
                             position: "absolute",
@@ -254,7 +229,6 @@ export default function Ranking() {
                             bottom: "0",
                             width: "100%",
                             height: "100%",
-                            backgroundColor: "white",
                           }}
                         />
                       </GridItem>
@@ -274,16 +248,6 @@ export default function Ranking() {
                           height: "100%",
                         }}
                       />
-                      <img
-                        src={trophy1}
-                        alt="..."
-                        style={{
-                          width: "40%",
-                          zIndex: 1,
-                          marginTop: "-30%",
-                          marginLeft: "70%",
-                        }}
-                      />
                       <h5>
                         <strong>{champions[0].name}</strong>
                       </h5>
@@ -295,7 +259,7 @@ export default function Ranking() {
             </GridListTile>
           )}
           <GridListTile>
-            {champions.length > 0 && (
+            {champions.length > 2 && (
               <Link
                 to={"/teaminfo/" + champions[2].teamID}
                 style={{ color: "black" }}
@@ -313,12 +277,12 @@ export default function Ranking() {
                     <GridItem
                       style={{
                         position: "relative",
-                        width: "40px",
-                        height: "40px",
+                        width: "60px",
+                        height: "60px",
                       }}
                     >
                       <img
-                        src={three}
+                        src={trophy3}
                         alt="..."
                         style={{
                           position: "absolute",
@@ -328,7 +292,6 @@ export default function Ranking() {
                           bottom: "0",
                           width: "100%",
                           height: "100%",
-                          backgroundColor: "white",
                         }}
                       />
                     </GridItem>
@@ -346,16 +309,6 @@ export default function Ranking() {
                         borderRadius: champions[2].profileURL && "70%",
                         width: "100%",
                         height: "100%",
-                      }}
-                    />
-                    <img
-                      src={trophy3}
-                      alt="..."
-                      style={{
-                        width: "40%",
-                        zIndex: 1,
-                        marginTop: "-30%",
-                        marginLeft: "70%",
                       }}
                     />
                     <h5>

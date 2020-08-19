@@ -13,6 +13,9 @@ const rankingStyle = {
     padding: "auto",
     fontSize: "3em",
     fontWeight: "600",
+    "@media (max-width: 768px)": {
+      fontSize: "2em",
+    },
   },
   rankingCards: {
     paddingTop: "30px",

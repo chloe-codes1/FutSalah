@@ -10,7 +10,6 @@ const paginationStyle = {
   pagination: {
     display: "inline-block",
     textAlign: "center",
-    // backgroundColor: "white",
     paddingLeft: "0",
     padding: "5px 5px",
     borderRadius: "4px",
@@ -45,8 +44,8 @@ const paginationStyle = {
     },
     "&:hover": {
       zIndex: "3",
-      backgroundColor: successColor,
-      borderColor: successColor,
+      backgroundColor: dangerColor,
+      borderColor: dangerColor,
       cursor: "pointer",
     },
   },
@@ -69,15 +68,15 @@ const paginationStyle = {
     float: "left",
     textDecoration: "none",
     boxSizing: "border-box",
-    backgroundColor: successColor,
-    borderColor: successColor,
+    backgroundColor: dangerColor,
+    borderColor: dangerColor,
     "&,&:hover": {
       color: "white",
     },
     "&:hover": {
       zIndex: "3",
-      backgroundColor: successColor,
-      borderColor: successColor,
+      backgroundColor: dangerColor,
+      borderColor: dangerColor,
       cursor: "pointer",
     },
   },
