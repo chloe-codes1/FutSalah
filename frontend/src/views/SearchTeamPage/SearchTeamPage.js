@@ -417,7 +417,10 @@ export default function SearchTeamPage(props) {
                           </CardBody>
                           <CardFooter className={classes.cardFooter}>
                             <Link to={`/teaminfo/${t.teamID}`}>
-                              <Button color="danger">
+                              <Button
+                                color="danger"
+                                style={{ fontSize: "1.2rem" }}
+                              >
                                 <strong>팀 정보</strong>
                               </Button>
                             </Link>

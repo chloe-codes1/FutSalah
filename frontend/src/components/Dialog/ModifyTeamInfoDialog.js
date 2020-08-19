@@ -5,7 +5,6 @@ import {
   DialogTitle,
   TextField,
   DialogContent,
-  DialogContentText,
   DialogActions,
 } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -107,8 +106,10 @@ function ModifyTeamInfoDialog(props) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>팀 정보 변경</DialogTitle>
-      <DialogContent>
+      <DialogTitle style={{ backgroundColor: "#edf2f4" }}>
+        팀 정보 변경
+      </DialogTitle>
+      <DialogContent style={{ backgroundColor: "#edf2f4" }}>
         <List>
           <ListItem>
             <TextField
@@ -169,7 +170,7 @@ function ModifyTeamInfoDialog(props) {
           </ListItem>
         </List>
       </DialogContent>
-      <DialogActions>
+      <DialogActions style={{ backgroundColor: "#edf2f4" }}>
         <Button
           color="teamInfo"
           onClick={() => {
@@ -184,7 +185,7 @@ function ModifyTeamInfoDialog(props) {
         >
           변경
         </Button>
-        <Button color="teamInfo" onClick={handleClose}>
+        <Button color="teamInfo3" onClick={handleClose}>
           나가기
         </Button>
       </DialogActions>

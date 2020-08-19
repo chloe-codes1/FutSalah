@@ -184,6 +184,9 @@ export default function HeaderLinks(props) {
             color="transparent"
             target="_blank"
             className={classes.navLink}
+            onClick={() => {
+              window.scrollTo(0, 0);
+            }}
           >
             팀 찾기
           </Button>
@@ -195,6 +198,9 @@ export default function HeaderLinks(props) {
             color="transparent"
             target="_blank"
             className={classes.navLink}
+            onClick={() => {
+              window.scrollTo(0, 0);
+            }}
           >
             팀 매칭
           </Button>
@@ -207,6 +213,9 @@ export default function HeaderLinks(props) {
               color="transparent"
               target="_blank"
               className={classes.navLink}
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
             >
               나의 팀
             </Button>
@@ -220,6 +229,9 @@ export default function HeaderLinks(props) {
               color="transparent"
               target="_blank"
               className={classes.navLink}
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
             >
               회원정보
             </Button>
@@ -232,17 +244,7 @@ export default function HeaderLinks(props) {
             <TableBody>
               <TableRow>
                 <TableCell align="center" className={classes.avatar} style={{}}>
-                  {/* <IconButton size="small" className={classes.buttonIcon}> */}
-                  {/* <ListItemAvatar> */}
                   <Avatar className={classes.small} src={userinfo.profileURL} />
-                  {/* </ListItemAvatar> */}
-                  {/* </IconButton>
-          <Badge
-          badgeContent={4}
-          color="secondary"
-          className={classes.badgeRoot}
-          >
-        </Badge> */}
                 </TableCell>
                 <TableCell
                   className={classes.user}
@@ -253,9 +255,7 @@ export default function HeaderLinks(props) {
                     borderStyle: "none",
                   }}
                 >
-                  {/* <ListItemText className={classes.listItemText}> */}
                   {userinfo.name}님 환영합니다!
-                  {/* </ListItemText> */}
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -266,6 +266,7 @@ export default function HeaderLinks(props) {
         {!userinfo.logged && (
           <Button
             style={{
+              marginTop: "10px",
               height: "30px",
             }}
             href="#pablo"
@@ -276,19 +277,10 @@ export default function HeaderLinks(props) {
             Login
           </Button>
         )}
-        {/* {!userinfo.logged && (
-          <Button
-            href="#pablo"
-            className={classes.ButtonNavLink}
-            onClick={(e) => e.preventDefault()}
-            color="info"
-          >
-            register
-          </Button>
-        )} */}
         {userinfo.logged && (
           <Button
             style={{
+              marginTop: "10px",
               height: "30px",
             }}
             href="#pablo"

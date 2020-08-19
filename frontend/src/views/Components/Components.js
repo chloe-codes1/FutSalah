@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // react components for routing our app without refresh
 
 // @material-ui/core components
@@ -11,6 +11,7 @@ import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import Ranking from "views/Components/Ranking/Ranking.js";
 
+import bg from "assets/img/bg1.jpg";
 import mainVideo from "assets/video/main.mp4";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.js";
@@ -22,6 +23,20 @@ const useStyles = makeStyles(styles);
 export default function Components(props) {
   const classes = useStyles();
   const { ...rest } = props;
+
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
+
+  // 현재 창 너비,  구하기
+  useEffect(() => {
+    const handleResize = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
   return (
     <div>
       <Header
@@ -45,36 +60,53 @@ export default function Components(props) {
       >
         <GridItem
           style={{
-            position: "absolute",
             width: "100%",
-            height: "100%",
             margin: 0,
             padding: 0,
           }}
         >
-          <video
-            muted
-            autoPlay
-            loop
-            style={{
-              position: "absolute",
-              padding: 0,
-              width: "100%",
-            }}
-          >
-            <source src={mainVideo} type="video/mp4" />
-            <strong>Your browser does not support the video tag.</strong>
-          </video>
-          <div className={classes.brand}>
-            <h1 className={classes.title}>FutSalah</h1>
-            <h3 className={classes.subtitle}>동네축구지만 프로축구처럼</h3>
-          </div>
+          {innerWidth > 768 ? (
+            <div>
+              <video
+                muted
+                autoPlay
+                loop
+                style={{
+                  position: "absolute",
+                  padding: 0,
+                  width: "100%",
+                }}
+              >
+                <source src={mainVideo} type="video/mp4" />
+                <strong>Your browser does not support the video tag.</strong>
+              </video>
+              <div className={classes.brand}>
+                <h1 className={classes.title}>FutSalah</h1>
+                <h3 className={classes.subtitle}>동네축구지만 프로축구처럼</h3>
+              </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                position: "flex",
+                backgroundImage: "url(" + bg + ")",
+                height: "1000px",
+                backgroundSize: "cover",
+                backgroundPosition: "center center",
+              }}
+            >
+              <div className={classes.brand} style={{ paddingTop: "250px" }}>
+                <h1 className={classes.title}>FutSalah</h1>
+                <h3 className={classes.subtitle}>동네축구지만 프로축구처럼</h3>
+              </div>
+            </div>
+          )}
         </GridItem>
         <GridItem
           style={{
             width: "100%",
             margin: 0,
-            padding: "56.25% 0 0 0",
+            paddingTop: innerWidth > 768 ? "25%" : 0,
           }}
         >
           <div

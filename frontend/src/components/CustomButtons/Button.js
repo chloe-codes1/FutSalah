@@ -68,6 +68,8 @@ RegularButton.propTypes = {
     "google",
     "github",
     "teamInfo",
+    "teamInfo2",
+    "teamInfo3",
     "darkTeamInfo",
     "myTeam",
     "transparent",
