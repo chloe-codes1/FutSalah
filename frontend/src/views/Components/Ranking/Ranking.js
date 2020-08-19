@@ -9,20 +9,35 @@ import GridItem from "components/Grid/GridItem.js";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import { Link } from "react-router-dom";
+import Tooltip from "@material-ui/core/Tooltip";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import nologo from "assets/img/nologo.png";
 import styles from "assets/jss/material-kit-react/views/componentsSections/rankingStyle.js";
+import top from "assets/img/up-arrow.png";
 import trophy1 from "assets/img/ranking/trophy1.png";
 import trophy2 from "assets/img/ranking/trophy2.png";
 import trophy3 from "assets/img/ranking/trophy3.png";
 
 const useStyles = makeStyles(styles);
 
+const buttonStyle = makeStyles(() => ({
+  top: {
+    position: 'fixed',
+    right: '2vw',
+    bottom: '3vh',
+    width: '30px'
+  }
+}));
+
 export default function Ranking() {
   const classes = useStyles();
+  const buttonClass = buttonStyle();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
   const [champions, setChampions] = useState([]); // 1,2,3위 팀 가져오기
+  const scrollToTop = () =>{
+    window.scrollTo(0, 0);
+  }
 
   useEffect(() => {
     // ranking 데이터 가져오기
@@ -319,10 +334,11 @@ export default function Ranking() {
           </GridListTile>
         </GridList>
       </GridItem>
-
-      <Button>
-        TOP
+      <Tooltip title="상단으로 이동" interactive>
+      <Button className={buttonClass.top} onClick={scrollToTop}>
+        <img src={top} width="100%"/>
       </Button>
+      </Tooltip>
     </GridContainer>
   );
 }
