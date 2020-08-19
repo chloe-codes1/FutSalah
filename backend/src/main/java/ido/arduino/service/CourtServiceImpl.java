@@ -39,7 +39,13 @@ public class CourtServiceImpl implements CourtService {
 	
 	@Override
 	public void modifyRecord(String name, String result) {
-		courtMapper.modifyRecord(name, result);
+		if (result.equals("wins")) {
+			courtMapper.modifyWinRecord(name);
+		} else if (result.equals("draws")) {
+			courtMapper.modifyDrawRecord(name);
+		} else {
+			courtMapper.modifyDefeatRecord(name);
+		}
 	}
 	
 	@Override

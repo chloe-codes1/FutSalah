@@ -11,6 +11,8 @@ public interface CourtMapper {
 	public CourtAdminDTO login(String id);
 	CourtDTO getCourtInfo(int courtID);
 	public void reliability(String name, int much);
-	public void modifyRecord(String name, String result);
+	public void modifyWinRecord(String name);
+	public void modifyDrawRecord(String name);
+	public void modifyDefeatRecord(String name);
 	public void modifyPoints(String name);
 }

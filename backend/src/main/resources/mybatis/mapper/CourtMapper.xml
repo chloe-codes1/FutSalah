@@ -28,10 +28,19 @@
 	</select>
 	
 	<!-- 전적 갱신 -->
-	<select id="modifyRecord" parameterType="map">
-		update team set #{result}=#{result}+1
+	<select id="modifyWinRecord" parameterType="String">
+		update team set wins=wins+1
 		where name=#{name}
 	</select>
+	<select id="modifyDrawRecord" parameterType="String">
+		update team set draws=draws+1
+		where name=#{name}
+	</select>
+	<select id="modifyDefeatRecord" parameterType="String">
+		update team set defeats=defeats+1
+		where name=#{name}
+	</select>
+	
 	
 	<!-- 승점 갱신 -->
 	<select id="modifyPoints" parameterType="String">
