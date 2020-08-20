@@ -25,6 +25,7 @@ import SentMatch from "./SentMatch.js";
 import UpcomingMatch from "./UpcomingMatch.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import Typography from "@material-ui/core/Typography";
+import sad from "assets/img/sad.png";
 
 const useStyles = makeStyles(styles);
 function TeamMatchPage() {
@@ -96,10 +97,11 @@ function TeamMatchPage() {
                   <br />
                   <Grid container justify="center" spacing={3}>
                     {matchingList.length === 0 && (
-                      <Grid item>
+                      <Grid item style={{ textAlign: "center" }}>
                         <Typography variant="h6" color="textPrimary">
                           현재 등록된 매칭이 존재하지 않습니다.
                         </Typography>
+                        <img src={sad} style={{ width: "50%" }} />
                       </Grid>
                     )}
                     {!(matchingList.length === 0) &&

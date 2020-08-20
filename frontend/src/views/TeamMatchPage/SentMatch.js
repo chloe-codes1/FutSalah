@@ -4,6 +4,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Button from "components/CustomButtons/Button.js";
+import sad from "assets/img/sad.png";
 
 import { Link } from "react-router-dom";
 
@@ -87,8 +88,9 @@ export default function SentMatch({ userinfo }) {
           </ListItem>
         )}
         {sentList.length === 0 ? (
-          <div>
-            <h3 style={{ textAlign: "center" }}>신청한 매칭이 없습니다.</h3>
+          <div style={{ textAlign: "center" }}>
+            <h3>신청한 매칭이 없습니다.</h3>
+            <img src={sad} style={{ width: "25%" }} />
           </div>
         ) : (
           sentList.map((sl) => (

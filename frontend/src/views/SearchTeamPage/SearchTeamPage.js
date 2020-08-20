@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
@@ -19,6 +19,7 @@ import Paginations from "components/Pagination/Pagination.js";
 import Select from "@material-ui/core/Select";
 import axios from "axios";
 import bgImage from "assets/img/searchTeam.jpg";
+import sad from "assets/img/sad.png";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
@@ -66,48 +67,6 @@ export default function SearchTeamPage(props) {
   const [teamList, setTeamList] = useState([]); // 보여줄 팀리스트
   const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
 
-  // 전체 목록 불러오기
-  useEffect(() => {
-    search();
-  }, [search]);
-
-  // 지역 목록 불러오기
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
-    })
-      .then((res) => {
-        const list = [];
-        res.data.map((location) => {
-          if (list.find((sido) => sido === location.sido) === undefined)
-            list.push(location.sido);
-          return 0;
-        });
-        setSidoList(list);
-        return;
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
-  }, []);
-
-  // 현제 페이지 번호 변할때마다
-  useEffect(() => {
-    movePage();
-  }, [movePage, pageNum]);
-
-  // 현재 창 너비,  구하기
-  useEffect(() => {
-    const handleResize = () => {
-      setInnerWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  });
-
   const makePagination = (pageRow) => {
     const page = [{ text: "PREV", onClick: prePage }];
     for (let i = 1; i < 11; i++) {
@@ -146,7 +105,7 @@ export default function SearchTeamPage(props) {
         const list = [];
         res.data.map((location) => {
           list.push(location.gu);
-          return;
+          return 0;
         });
         setGuList(list);
         setGu("");
@@ -213,7 +172,7 @@ export default function SearchTeamPage(props) {
               Math.ceil(Math.random() * 20) +
               ".png";
           }
-          return;
+          return 0;
         });
         setTeamList(res.data);
         setTotalPage(
@@ -246,6 +205,48 @@ export default function SearchTeamPage(props) {
       alert("지역을 끝까지 선택해주세요!");
     }
   };
+
+  // 전체 목록 불러오기
+  useEffect(() => {
+    search();
+  }, []);
+
+  // 지역 목록 불러오기
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/location`,
+    })
+      .then((res) => {
+        const list = [];
+        res.data.map((location) => {
+          if (list.find((sido) => sido === location.sido) === undefined)
+            list.push(location.sido);
+          return 0;
+        });
+        setSidoList(list);
+        return;
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  }, []);
+
+  // 현제 페이지 번호 변할때마다
+  useEffect(() => {
+    movePage();
+  }, [pageNum]);
+
+  // 현재 창 너비,  구하기
+  useEffect(() => {
+    const handleResize = () => {
+      setInnerWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   return (
     <div>
@@ -420,7 +421,12 @@ export default function SearchTeamPage(props) {
                             </h4>
                           </CardBody>
                           <CardFooter className={classes.cardFooter}>
-                            <Link to={`/teaminfo/${t.teamID}`}>
+                            <Link
+                              to={`/teaminfo/${t.teamID}`}
+                              onClick={() => {
+                                window.scrollTo(0, 0);
+                              }}
+                            >
                               <Button
                                 color="danger"
                                 style={{ fontSize: "1.2rem" }}
@@ -452,10 +458,9 @@ export default function SearchTeamPage(props) {
               </div>
             </div>
           ) : (
-            <div className={classes.container}>
-              <h3 style={{ textAlign: "center" }}>
-                일치하는 검색 결과가 없습니다.
-              </h3>
+            <div className={classes.container} style={{ textAlign: "center" }}>
+              <h3>일치하는 검색 결과가 없습니다.</h3>
+              <img src={sad} style={{ width: "50%" }} />
             </div>
           )}
         </div>
