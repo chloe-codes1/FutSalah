@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import ReactStopwatch from "react-stopwatch";
 import { useHistory } from "react-router-dom";
 import ArriveInfo from "./ArriveInfo.js";
 
@@ -13,7 +12,6 @@ import GridItem from "components/Grid/GridItem.js";
 import AdminHeader from "components/Header/AdminHeader.js";
 import AdminHeaderLinks from "components/Header/AdminHeaderLinks.js";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
@@ -24,7 +22,6 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
-import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminMatchInfoPage.js";
 
@@ -224,38 +221,6 @@ export default function AdminInfo(props) {
     history.push(`/Admin/${adminuserinfo.stadiumID}`);
   };
 
-  const Stopwatch = () => (
-    <ReactStopwatch
-      seconds={0}
-      minutes={0}
-      hours={0}
-      limit="02:00:00"
-      onCallback={() => console.log("Finish")}
-      autoStart={isMatchStarted}
-      render={
-        !isMatchFinished
-          ? ({ formatted }) => {
-              return (
-                <div>
-                  <h3 style={{ marginTop: "32px", marginBottom: 0 }}>
-                    {formatted}
-                  </h3>
-                </div>
-              );
-            }
-          : ({}) => {
-              return (
-                <div>
-                  <h3 style={{ marginTop: "32px", marginBottom: 0 }}>
-                    00:00:00
-                  </h3>
-                </div>
-              );
-            }
-      }
-    />
-  );
-
   const homeTeamScoreUp = () => {
     setHomeChangedScore(homeChangedScore + 1);
   };
@@ -343,11 +308,14 @@ export default function AdminInfo(props) {
                 </div>
               </GridItem>
               <GridItem xs={2} className={classes.matchInfoContent}>
-                {!isMatchStarted && !isMatchFinished && (
-                  <Button color="danger" size="sm" onClick={matchStart}>
-                    경기시작
-                  </Button>
-                )}
+                {isHomeTeamArrived &&
+                  isAwayTeamArrived &&
+                  !isMatchStarted &&
+                  !isMatchFinished && (
+                    <Button color="danger" size="sm" onClick={matchStart}>
+                      경기시작
+                    </Button>
+                  )}
                 {isMatchStarted && !isMatchFinished && (
                   <Button color="warning" size="sm" onClick={matchEnd}>
                     경기종료
