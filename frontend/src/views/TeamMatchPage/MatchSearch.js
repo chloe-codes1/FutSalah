@@ -27,7 +27,7 @@ import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 300,
+    width: 300,
   },
   selectEmpty: {
     marginTop: theme.spacing(1),

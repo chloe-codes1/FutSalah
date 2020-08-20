@@ -48,9 +48,9 @@ const modalStyles = makeStyles((theme) => ({
 
 const validationStyle = makeStyles(() => ({
   message: {
-    color: '#f03e3e',
-    fontSize: '0.8rem'
-  }
+    color: "#f03e3e",
+    fontSize: "0.8rem",
+  },
 }));
 
 const useStyles = makeStyles(styles);
@@ -62,8 +62,8 @@ const initialValues = {
   email: "",
   age: 0,
   position: "",
-  height: null,
-  weight: null,
+  height: undefined,
+  weight: undefined,
   profileURL: "",
 };
 
@@ -72,11 +72,7 @@ export default function ProfilePage(props) {
   const modal = modalStyles();
   const history = useHistory();
   const { ...rest } = props;
-  const imageClasses = classNames(
-    classes.imgRaised,
-    classes.imgRoundedCircle,
-    classes.imgFluid
-  );
+  const imageClasses = classNames(classes.imgRaised, classes.imgRoundedCircle, classes.imgFluid);
 
   const validationClass = validationStyle();
 
@@ -103,8 +99,8 @@ export default function ProfilePage(props) {
     email: "",
     age: 0,
     position: "",
-    height: null,
-    weight: null,
+    height: "",
+    weight: "",
     profileURL: "",
   });
   const [isLoadded, setIsLoadded] = useState(false);
@@ -116,9 +112,7 @@ export default function ProfilePage(props) {
   const formik = useFormik({
     initialValues,
     validationSchema: Yup.object({
-      email: Yup.string()
-        .required("이메일을 입력해주세요.")
-        .email("올바른 이메일 형식이 아닙니다"),
+      email: Yup.string().required("이메일을 입력해주세요.").email("올바른 이메일 형식이 아닙니다"),
       weight: Yup.number()
         .moreThan(1, "입력하신 몸무게를 다시 확인해주세요.")
         .lessThan(200, "입력하신 몸무게를 다시 확인해주세요.")
@@ -144,18 +138,18 @@ export default function ProfilePage(props) {
     })
       .then((res) => {
         console.log("get user info succeed!");
-        console.log("res??", res.data);
+        //console.log("res??", res.data);
         let profileURL = res.data.profileURL;
         if (profileURL) {
-          if (profileURL.slice(0, 10) == "https://lh") {
-            console.log("google profile image 있는 유저")
+          if (profileURL.slice(0, 10) === "https://lh") {
+            console.log("google profile image 있는 유저");
           } else {
             profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
           }
         } else {
           profileURL = profile;
         }
-        
+
         const userUpdate = {
           ...user,
           userID: res.data.userID,
@@ -183,17 +177,14 @@ export default function ProfilePage(props) {
   }, []);
 
   if (isLoadded) {
-    console.log(
-      "formik initialValues->",
-      JSON.stringify(formik.initialValues, null, 2)
-    );
-    console.log("formik values->", JSON.stringify(formik.values, null, 2));
+    //console.log("formik initialValues->", JSON.stringify(formik.initialValues, null, 2));
+    //console.log("formik values->", JSON.stringify(formik.values, null, 2));
     // console.log("user->", JSON.stringify(user, null, 2));
   }
 
   const onSubmit = () => {
     formik.submitForm();
-    console.log("formik.values??", formik.values);
+    // console.log("formik.values??", formik.values);
     if (!formik.isValid || !formik.values.email) {
       console.log("Caught in validation filter...");
       return;
@@ -207,7 +198,7 @@ export default function ProfilePage(props) {
       weight: formik.values.weight,
       height: formik.values.height,
     };
-    console.log("updatedUser", updatedUser);
+    // console.log("updatedUser", updatedUser);
 
     axios({
       method: "PUT",
@@ -228,7 +219,7 @@ export default function ProfilePage(props) {
   const deleteUser = () => {
     let params = new FormData();
     params.append("userID", user.userID);
-    console.log("params", params);
+    // console.log("params", params);
     axios({
       method: "DELETE",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/user`,
@@ -247,8 +238,8 @@ export default function ProfilePage(props) {
       .catch((err) => console.error("Wasn't able to delete user...", err));
   };
 
-  console.log("age..", age._d?.getFullYear());
-  console.log("pos..", pos);
+  // console.log("age..", age._d?.getFullYear());
+  // console.log("pos..", pos);
 
   return (
     <div>
@@ -297,9 +288,7 @@ export default function ProfilePage(props) {
                     onChange: formik.handleChange,
                   }}
                   className={`form-control ${
-                    formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
+                    formik.touched.email && formik.errors.email ? "is-invalid" : ""
                   }`}
                 />
                 {formik.touched.email && formik.errors.email && (
@@ -330,11 +319,7 @@ export default function ProfilePage(props) {
                   </GridItem>
                   <GridItem>
                     <Button
-                      className={
-                        pos === "all"
-                          ? classes.selectButton
-                          : classes.buttonList
-                      }
+                      className={pos === "all" ? classes.selectButton : classes.buttonList}
                       color="danger"
                       onClick={() => setPos("all")}
                     >
@@ -347,11 +332,7 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        className={
-                          pos === "pivo"
-                            ? classes.selectButton
-                            : classes.buttonList
-                        }
+                        className={pos === "pivo" ? classes.selectButton : classes.buttonList}
                         color="rose"
                         onClick={() => setPos("pivo")}
                       >
@@ -365,11 +346,7 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        className={
-                          pos === "ala"
-                            ? classes.selectButton
-                            : classes.buttonList
-                        }
+                        className={pos === "ala" ? classes.selectButton : classes.buttonList}
                         color="warning"
                         onClick={() => setPos("ala")}
                       >
@@ -383,11 +360,7 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        className={
-                          pos === "fixo"
-                            ? classes.selectButton
-                            : classes.buttonList
-                        }
+                        className={pos === "fixo" ? classes.selectButton : classes.buttonList}
                         color="success"
                         onClick={() => setPos("fixo")}
                       >
@@ -401,11 +374,7 @@ export default function ProfilePage(props) {
                       classes={{ tooltip: classes.tooltip }}
                     >
                       <Button
-                        className={
-                          pos === "goleiro"
-                            ? classes.selectButton
-                            : classes.buttonList
-                        }
+                        className={pos === "goleiro" ? classes.selectButton : classes.buttonList}
                         color="info"
                         onClick={() => setPos("goleiro")}
                       >
@@ -415,9 +384,7 @@ export default function ProfilePage(props) {
                   </GridItem>
                 </GridContainer>
                 {formik.touched.position && formik.errors.position && (
-                  <div className={validationClass.message}>
-                    {formik.errors.position}
-                  </div>
+                  <div className={validationClass.message}>{formik.errors.position}</div>
                 )}
                 <GridItem>
                   <h3 className={classes.buttonTitle}>키</h3>
@@ -435,9 +402,7 @@ export default function ProfilePage(props) {
                       onChange: formik.handleChange,
                     }}
                     className={`form-control ${
-                      formik.touched.height && formik.errors.height
-                        ? "is-invalid"
-                        : ""
+                      formik.touched.height && formik.errors.height ? "is-invalid" : ""
                     }`}
                   />
                 </GridItem>
@@ -458,9 +423,7 @@ export default function ProfilePage(props) {
                       value: formik.values.weight,
                     }}
                     className={`form-control ${
-                      formik.touched.weight && formik.errors.weight
-                        ? "is-invalid"
-                        : ""
+                      formik.touched.weight && formik.errors.weight ? "is-invalid" : ""
                     }`}
                   />
                 </GridItem>
@@ -514,11 +477,7 @@ export default function ProfilePage(props) {
                     아래 '탈퇴하기'를 클릭해주세요. <br />
                     <br />
                   </Typography>
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    onClick={deleteUser}
-                  >
+                  <Button variant="contained" color="warning" onClick={deleteUser}>
                     탈퇴하기
                   </Button>
                   <Button onClick={handleClose}>계속 사용할래요!</Button>
@@ -540,7 +499,7 @@ export default function ProfilePage(props) {
               <Fade in={dropZone}>
                 <div className={modal.paper} align="center">
                   <Grid mt={5}>
-                    <Dropzone align="center" ID={user.userID} path="user"/>
+                    <Dropzone align="center" ID={user.userID} path="user" />
                   </Grid>
                   <Typography
                     id="transition-modal-title"

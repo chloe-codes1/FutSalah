@@ -1,9 +1,4 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-} from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, DialogContentText } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
@@ -114,7 +109,9 @@ function LoginDialog(props) {
     });
   };
 
-  const responseFail = (res) => {};
+  const responseFail = () => {
+    alert("로그인 실패");
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>

@@ -142,10 +142,18 @@ export default function HeaderLinks(props) {
           height: height,
         },
       })
-        .then((e) => {
+        .then(() => {
+          axios({
+            method: "post",
+            url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/login`,
+            data: { socialID: user.socialID },
+          }).then((e) => {
+            console.log("데이터 불러오기 성공!");
+            console.log(e.data);
+            loggedUser(user.socialID, e.data.userID, user.name, "social", e.data.profileURL);
+          });
           console.log("success");
           alert("정보 저장이 완료되었습니다!");
-          loggedUser(user.socialID, e.data.userID, user.name, "social", e.data.profileURL);
           addInfoClose();
         })
         .catch(() => {
