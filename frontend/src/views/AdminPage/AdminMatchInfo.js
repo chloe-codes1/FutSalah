@@ -19,6 +19,9 @@ import Parallax from "components/Parallax/Parallax.js";
 import AdminUserContext from "../../contexts/AdminUserContext";
 
 // @material-ui/core components
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminMatchInfoPage.js";
@@ -58,9 +61,9 @@ export default function AdminInfo(props) {
     awayName: "팀동휘",
   };
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
-  console.log(matchInfo);
   // Raspberry pi에서 받을 것
   const [homeScore, setHomeScore] = useState(0);
+  console.log(homeScore);
   const [awayScore, setAwayScore] = useState(0);
 
   // 이 경기장, 오늘 매치 리스트의 몇번째 경기인가?
@@ -75,7 +78,6 @@ export default function AdminInfo(props) {
   // 지각 여부
   const [homeTeamLateStatus, setHomeTeamLateStatus] = useState(0);
   const [awayTeamLateStatus, setAwayTeamLateStatus] = useState(0);
-  console.log(homeTeamLateStatus, awayTeamLateStatus);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -219,20 +221,40 @@ export default function AdminInfo(props) {
           ? ({ formatted }) => {
               return (
                 <div>
-                  <h3 style={{ marginTop: "60px" }}>{formatted}</h3>
+                  <h3 style={{ marginTop: "32px", marginBottom: 0 }}>
+                    {formatted}
+                  </h3>
                 </div>
               );
             }
           : ({}) => {
               return (
                 <div>
-                  <h3 style={{ marginTop: "60px" }}>00:00:00</h3>
+                  <h3 style={{ marginTop: "32px", marginBottom: 0 }}>
+                    00:00:00
+                  </h3>
                 </div>
               );
             }
       }
     />
   );
+
+  const homeTeamScoreUp = () => {
+    setHomeScore(homeScore + 1);
+  };
+
+  const homeTeamScoreDown = () => {
+    setHomeScore(homeScore - 1);
+  };
+
+  const awayTeamScoreUp = () => {
+    setAwayScore(awayScore + 1);
+  };
+
+  const awayTeamScoreDown = () => {
+    setAwayScore(awayScore - 1);
+  };
 
   return (
     <div>
@@ -274,7 +296,35 @@ export default function AdminInfo(props) {
                 <Badge badgeContent={"Home"} color="primary">
                   <h2>{matchInfo.homeName}</h2>
                 </Badge>
-                <h1>{homeScore}</h1>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <IconButton></IconButton>
+                  <h1>{homeScore}</h1>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      marginLeft: "5px",
+                    }}
+                  >
+                    <IconButton
+                      style={{ color: "white", padding: "0" }}
+                      aria-label="DropUpIcon"
+                      onClick={homeTeamScoreUp}
+                    >
+                      <ArrowDropUpIcon />
+                    </IconButton>
+                    {homeScore !== 0 && (
+                      <IconButton
+                        style={{ color: "white", padding: "0" }}
+                        aria-label="DropDownIcon"
+                        onClick={homeTeamScoreDown}
+                      >
+                        <ArrowDropDownIcon />
+                      </IconButton>
+                    )}
+                  </div>
+                </div>
               </GridItem>
               <GridItem xs={2} className={classes.matchInfoContent}>
                 {!isMatchStarted && !isMatchFinished && (
@@ -293,7 +343,35 @@ export default function AdminInfo(props) {
                 <Badge badgeContent={"Away"} color="secondary">
                   <h2>{matchInfo.awayName}</h2>
                 </Badge>
-                <h1>{awayScore}</h1>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <IconButton></IconButton>
+                  <h1>{awayScore}</h1>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      marginLeft: "5px",
+                    }}
+                  >
+                    <IconButton
+                      style={{ color: "white", padding: "0" }}
+                      aria-label="DropUpIcon"
+                      onClick={awayTeamScoreUp}
+                    >
+                      <ArrowDropUpIcon />
+                    </IconButton>
+                    {awayScore !== 0 && (
+                      <IconButton
+                        style={{ color: "white", padding: "0" }}
+                        aria-label="DropDownIcon"
+                        onClick={awayTeamScoreDown}
+                      >
+                        <ArrowDropDownIcon />
+                      </IconButton>
+                    )}
+                  </div>
+                </div>
               </GridItem>
             </GridItem>
           </GridContainer>

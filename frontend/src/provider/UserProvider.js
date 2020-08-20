@@ -17,9 +17,8 @@ const reducer = (state, action) => {
       console.log("LOGGED!");
       if (action.profileURL) {
         if (
-          action.profileURL.slice(0, 33) === "https://lh5.googleusercontent.com"
+          action.profileURL.slice(0, 33) == "https://lh5.googleusercontent.com"
         ) {
-          console.log("google profile image 있는 유저");
         } else {
           action.profileURL =
             process.env.REACT_APP_S3_BASE_URL + "/" + action.profileURL;

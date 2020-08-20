@@ -75,6 +75,7 @@ export default function AdminInfo(props) {
     },
   ];
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
+  console.log(matchInfo);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
