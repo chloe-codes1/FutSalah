@@ -125,7 +125,7 @@ export default function ProfilePage(props) {
         .positive()
         .nullable(true)
         .notRequired(),
-      profileURL: Yup.string().url().notRequired(),
+      // profileURL: Yup.string().url().notRequired(),
     }),
     onSubmit: () => {},
   });
