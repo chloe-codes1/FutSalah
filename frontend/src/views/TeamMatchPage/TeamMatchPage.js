@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 
 import { Divider, Grid } from "@material-ui/core";
 import Footer from "components/Footer/Footer.js";
@@ -33,7 +33,7 @@ function TeamMatchPage() {
   const [matchingList, setMatchingList] = useState([]);
   const [myteam, setMyteam] = useState([]);
   const { userinfo } = useContext(UserContext);
-  useEffect(() => {
+  const refreshMatch = useCallback(() => {
     axios({
       method: "get",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match`,
@@ -47,6 +47,9 @@ function TeamMatchPage() {
     }).then((e) => {
       setMatchingList(e.data);
     });
+  });
+  useEffect(() => {
+    refreshMatch();
   }, []);
   return (
     <div>
@@ -92,6 +95,7 @@ function TeamMatchPage() {
                     setMyteam={setMyteam}
                     setMatchingList={setMatchingList}
                     userinfo={userinfo}
+                    refreshMatch={refreshMatch}
                   />
                   <Divider />
                   <br />

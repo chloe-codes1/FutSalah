@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "components/CustomButtons/Button.js";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -8,11 +7,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import { Typography } from "@material-ui/core";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -48,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, courtList }) {
+function MatchApplyDialog({ open, onClose, info, homeTeam, history, myteam, courtList }) {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [selectAway, setSelectAway] = useState("");

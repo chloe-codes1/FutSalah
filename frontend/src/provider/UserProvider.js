@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 
 import UserContext from "../contexts/UserContext";
+import axios from "axios";
 
 const initialState = {
   socialID: "",
@@ -13,15 +14,18 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case "PROFILE_IMAGE":
+      console.log("RENEWAL IMAGE!");
+      return {
+        ...state,
+        profileURL: action.profileURL,
+      };
     case "LOGIN_USER":
       console.log("LOGGED!");
       if (action.profileURL) {
-        if (
-          action.profileURL.slice(0, 33) == "https://lh5.googleusercontent.com"
-        ) {
+        if (action.profileURL.slice(0, 33) === "https://lh5.googleusercontent.com") {
         } else {
-          action.profileURL =
-            process.env.REACT_APP_S3_BASE_URL + "/" + action.profileURL;
+          action.profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + action.profileURL;
         }
       }
       return {
@@ -72,11 +76,7 @@ const UserProvider = ({ children }) => {
     }
   }, []);
 
-  return (
-    <UserContext.Provider value={{ userinfo, userDispatch }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ userinfo, userDispatch }}>{children}</UserContext.Provider>;
 };
 
 export default UserProvider;
