@@ -68,7 +68,7 @@ const reducer = (state, action) => {
   }
 };
 
-function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
+function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo, refreshMatch }) {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSido, setSelectedSido] = useState("");
@@ -395,6 +395,7 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
         area={area}
         myteam={myteam}
         selectedDate={selectedDate}
+        refreshMatch={refreshMatch}
       />
     </>
   );

@@ -1,5 +1,5 @@
 // @material-ui/icons
-import { Avatar, ListItemAvatar, ListItemText } from "@material-ui/core";
+import { Avatar } from "@material-ui/core";
 /*eslint-disable*/
 import React, { useCallback, useContext, useReducer, useState } from "react";
 
