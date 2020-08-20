@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "components/CustomButtons/Button.js";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
   handleButton: {
     width: 280,
-    // margin: "0 0 10px 0",
     margin: theme.spacing(1),
   },
   radioButton: {
@@ -34,7 +33,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate, courtList }) {
+function MatchRegisterDialog({
+  open,
+  onClose,
+  info,
+  area,
+  myteam,
+  selectedDate,
+  courtList,
+}) {
   const classes = useStyles();
   const [selectTeam, setSelectTeam] = useState("");
   const [selectIsBook, setSelectIsBook] = useState("1");
@@ -69,16 +76,18 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate, 
   return (
     <div>
       <Dialog open={open} onClose={onClose}>
-        <img src={require("assets/img/match_register.jpg")} />
+        <img src={require("assets/img/match_register.jpg")} alt="..." />
         <DialogTitle>매칭 등록</DialogTitle>
         <DialogContent>
-          <DialogContentText>원하는 매칭이 없으신가요? 직접 매칭을 등록해보세요!</DialogContentText>
+          <DialogContentText>
+            원하는 매칭이 없으신가요? 직접 매칭을 등록해보세요!
+          </DialogContentText>
           <Typography variant="subtitle2" gutterBottom>
             지역 : {area}
           </Typography>
           <Typography variant="subtitle2" gutterBottom>
-            일시 : {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월{" "}
-            {selectedDate.getDate()}일 {info.time}시
+            일시 : {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}
+            월 {selectedDate.getDate()}일 {info.time}시
           </Typography>
           <Typography variant="subtitle2" gutterBottom>
             경기방식 : {info.type}인 팀 매치
@@ -124,7 +133,9 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate, 
             {selectIsBook === "1" && (
               <Grid item>
                 <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">경기장 선택</InputLabel>
+                  <InputLabel id="demo-simple-select-label">
+                    경기장 선택
+                  </InputLabel>
                   <Select
                     name="teamID"
                     labelId="demo-simple-select-label"
@@ -135,7 +146,9 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate, 
                     }}
                   >
                     {courtList.length === 0 && (
-                      <MenuItem value="">해당 지역에 경기장이 없습니다.</MenuItem>
+                      <MenuItem value="">
+                        해당 지역에 경기장이 없습니다.
+                      </MenuItem>
                     )}
                     {courtList.length > 0 &&
                       courtList.map((court, index) => {
@@ -161,7 +174,9 @@ function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate, 
                     setSelectTeam(e.target.value);
                   }}
                 >
-                  {myteam.length === 0 && <MenuItem value="">소속된 팀이 없습니다.</MenuItem>}
+                  {myteam.length === 0 && (
+                    <MenuItem value="">소속된 팀이 없습니다.</MenuItem>
+                  )}
                   {myteam.length > 0 &&
                     myteam.map((team, index) => {
                       return (

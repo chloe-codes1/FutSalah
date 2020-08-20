@@ -13,7 +13,6 @@ import GridList from "@material-ui/core/GridList";
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-import InputLabel from "@material-ui/core/InputLabel";
 import { Link } from "react-router-dom";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paginations from "components/Pagination/Pagination.js";
@@ -23,8 +22,6 @@ import bgImage from "assets/img/searchTeam.jpg";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/SearchTeamPage.js";
-// import teamImage from "assets/img/basicTeamImg.jpg";
-import teamImage from "assets/img/basicTeamImg1.jpg";
 
 const selectStyles = (theme) => ({
   root: {
@@ -72,7 +69,7 @@ export default function SearchTeamPage(props) {
   // 전체 목록 불러오기
   useEffect(() => {
     search();
-  }, []);
+  }, [search]);
 
   // 지역 목록 불러오기
   useEffect(() => {
@@ -85,8 +82,10 @@ export default function SearchTeamPage(props) {
         res.data.map((location) => {
           if (list.find((sido) => sido === location.sido) === undefined)
             list.push(location.sido);
+          return 0;
         });
         setSidoList(list);
+        return;
       })
       .catch((e) => {
         console.log("error", e);
@@ -96,7 +95,7 @@ export default function SearchTeamPage(props) {
   // 현제 페이지 번호 변할때마다
   useEffect(() => {
     movePage();
-  }, [pageNum]);
+  }, [movePage, pageNum]);
 
   // 현재 창 너비,  구하기
   useEffect(() => {
@@ -147,6 +146,7 @@ export default function SearchTeamPage(props) {
         const list = [];
         res.data.map((location) => {
           list.push(location.gu);
+          return;
         });
         setGuList(list);
         setGu("");
@@ -182,6 +182,7 @@ export default function SearchTeamPage(props) {
               Math.ceil(Math.random() * 20) +
               ".png";
           }
+          return;
         });
         setTeamList(res.data);
       })
@@ -212,6 +213,7 @@ export default function SearchTeamPage(props) {
               Math.ceil(Math.random() * 20) +
               ".png";
           }
+          return;
         });
         setTeamList(res.data);
         setTotalPage(

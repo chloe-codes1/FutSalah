@@ -147,7 +147,7 @@ export default function ProfilePage(props) {
         console.log("res??", res.data);
         let profileURL = res.data.profileURL;
         if (profileURL) {
-          if (profileURL.slice(0, 10) == "https://lh") {
+          if (profileURL.slice(0, 10) === "https://lh") {
             console.log("google profile image 있는 유저");
           } else {
             profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
@@ -273,6 +273,7 @@ export default function ProfilePage(props) {
                   <Tooltip title="프로파일 사진 변경하기" interactive>
                     <img
                       src={formik.values.profileURL}
+                      alt="..."
                       className={imageClasses}
                       onClick={handleDropZone}
                       style={{

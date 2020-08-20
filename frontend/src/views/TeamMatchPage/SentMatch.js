@@ -4,7 +4,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Button from "components/CustomButtons/Button.js";
-import Badge from "@material-ui/core/Badge";
 
 import { Link } from "react-router-dom";
 
@@ -15,14 +14,12 @@ export default function SentMatch({ userinfo }) {
 
   // 처음 목록 받아오기
   useEffect(() => {
-    console.log(userinfo);
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/requestmatch`,
       data: userinfo,
     })
       .then((res) => {
-        console.log(res.data);
         setSentList(
           res.data.map((r) => {
             if (r.profileURL) {
@@ -100,6 +97,7 @@ export default function SentMatch({ userinfo }) {
                 {sl.profileURL ? (
                   <img
                     src={sl.profileURL}
+                    alt="프로필 사진"
                     style={{
                       width: "50px",
                       height: "50px",
