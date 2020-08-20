@@ -1,4 +1,3 @@
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Overlay } from "./Overlay";
 import React from "react";
 import benchImg from "assets/img/bench.png";

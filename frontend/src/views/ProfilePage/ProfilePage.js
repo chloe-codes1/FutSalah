@@ -27,7 +27,7 @@ import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // 사용자의 프로필 사진이 없을 때 대신 사진
-import profile from "assets/img/faces/christian.jpg";
+import profile from "assets/img/user.png";
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
@@ -125,7 +125,7 @@ export default function ProfilePage(props) {
         .positive()
         .nullable(true)
         .notRequired(),
-      profileURL: Yup.string().url().notRequired(),
+      // profileURL: Yup.string().url().notRequired(),
     }),
     onSubmit: () => {},
   });
@@ -264,9 +264,13 @@ export default function ProfilePage(props) {
                   <Tooltip title="프로파일 사진 변경하기" interactive>
                     <img
                       src={formik.values.profileURL}
+                      alt="..."
                       className={imageClasses}
                       onClick={handleDropZone}
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "white",
+                      }}
                     />
                   </Tooltip>
                   <div className={classes.name}>

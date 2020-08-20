@@ -1,4 +1,11 @@
-import { Dialog, DialogTitle, Grid, List, ListItem, TextField } from "@material-ui/core";
+import {
+  Dialog,
+  DialogTitle,
+  Grid,
+  List,
+  ListItem,
+  TextField,
+} from "@material-ui/core";
 import React, { useCallback, useReducer, useState, useEffect } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -99,10 +106,12 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
       .then((res) => {
         const list = [];
         res.data.map((location) => {
-          if (list.find((sido) => sido === location.sido) === undefined) list.push(location.sido);
-          return;
+          if (list.find((sido) => sido === location.sido) === undefined)
+            list.push(location.sido);
+          return 0;
         });
         setSidoList(list);
+        return;
       })
       .catch((e) => {
         console.log("error", e);
@@ -126,7 +135,6 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
         data: team,
       })
         .then(() => {
-          console.log("team create success!");
           alert("팀 생성 완료!");
           dispatch({
             type: "INIT_INPUT",
@@ -138,6 +146,7 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
           console.log("team create fail!");
           alert("팀 생성 실패-잠시후 다시 시도해주세요");
           onClose();
+          return;
         });
       setLoading(false);
     }
@@ -178,8 +187,10 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
         const list = [];
         res.data.map((location) => {
           list.push(location);
+          return 0;
         });
         setGuList(list);
+        return;
       })
       .catch((e) => {
         console.log("error", e);
@@ -265,7 +276,12 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
                   </FormControl>
                 </ListItem>
                 <ListItem>
-                  <TextField name="description" fullWidth label="팀소개" onChange={onChange} />
+                  <TextField
+                    name="description"
+                    fullWidth
+                    label="팀소개"
+                    onChange={onChange}
+                  />
                 </ListItem>
               </List>
               {/* <TextField fullWidth label="지역" /> */}

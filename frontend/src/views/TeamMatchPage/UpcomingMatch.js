@@ -3,6 +3,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import sad from "assets/img/sad.png";
 
 import { Link } from "react-router-dom";
 
@@ -42,8 +43,9 @@ export default function UpcomingMatch({ userinfo }) {
     <div style={{ height: "750px", overflow: "auto" }}>
       <List>
         {matchList.length === 0 ? (
-          <div>
-            <h3 style={{ textAlign: "center" }}>예정된 매치가 없습니다.</h3>
+          <div style={{ textAlign: "center" }}>
+            <h3>예정된 매치가 없습니다.</h3>
+            <img src={sad} style={{ width: "25%" }} />
           </div>
         ) : (
           matchList.map((ml) => (

@@ -5,6 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Button from "components/CustomButtons/Button.js";
 import Loading from "views/Components/Loading/Loading";
+import sad from "assets/img/sad.png";
 
 import { Modal, Typography } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
@@ -28,7 +29,6 @@ export default function ReceivedMatch({ userinfo }) {
       data: userinfo,
     })
       .then((res) => {
-        console.log(res.data);
         setReceivedList(
           res.data.map((r) => {
             if (r.profileURL) {
@@ -51,6 +51,29 @@ export default function ReceivedMatch({ userinfo }) {
   };
   const handleRequestListClose = () => {
     setRequestModal(false);
+  };
+
+  // 등록한 매칭 목록 받아오기
+  const getReceivedList = () => {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch`,
+      data: userinfo,
+    })
+      .then((res) => {
+        setReceivedList(
+          res.data.map((r) => {
+            if (r.profileURL) {
+              r.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + r.profileURL;
+            }
+            return r;
+          })
+        );
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   // 등록한 매칭 삭제
@@ -77,8 +100,15 @@ export default function ReceivedMatch({ userinfo }) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch/${matchID}`,
     })
       .then((res) => {
-        console.log(res.data);
-        setRequestList(res.data);
+        setRequestList(
+          res.data.map((r) => {
+            if (r.profileURL) {
+              r.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + r.profileURL;
+            }
+            return r;
+          })
+        );
       })
       .catch((e) => {
         console.log("error" + e);
@@ -98,6 +128,7 @@ export default function ReceivedMatch({ userinfo }) {
     })
       .then(() => {
         setRequestModal(false);
+        getReceivedList();
       })
       .catch((e) => {
         console.log("error" + e);
@@ -129,8 +160,9 @@ export default function ReceivedMatch({ userinfo }) {
     <div style={{ height: "750px", overflow: "auto" }}>
       <List>
         {receivedList.length === 0 ? (
-          <div>
-            <h3 style={{ textAlign: "center" }}>등록된 매칭이 없습니다.</h3>
+          <div style={{ textAlign: "center" }}>
+            <h3>등록된 매칭이 없습니다.</h3>
+            <img src={sad} style={{ width: "25%" }} />
           </div>
         ) : (
           receivedList.map((rl) => (
@@ -216,7 +248,6 @@ export default function ReceivedMatch({ userinfo }) {
                 }}
                 style={{
                   width: "10%",
-                  backgroundColor: "#05b0c4",
                 }}
               >
                 삭제
