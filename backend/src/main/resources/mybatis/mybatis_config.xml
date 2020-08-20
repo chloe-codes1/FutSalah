@@ -18,11 +18,8 @@
 		<typeAlias type="ido.arduino.dto.Formation" alias="formation"/>
 		<typeAlias type="ido.arduino.dto.MatchDto" alias="match"/>
 		<typeAlias type="ido.arduino.dto.ResultDto" alias="result"/>
-		<typeAlias type="ido.arduino.dto.MatchRequestDto" alias="request"/>
-		<typeAlias type="ido.arduino.dto.MatchRequestSimpleDto" alias="requestsimple"/>
 		<typeAlias type="ido.arduino.dto.DeleteFormationDto" alias="deleteform"/>
 		<typeAlias type="ido.arduino.dto.WaitMatchDto" alias="wait"/>
-		<typeAlias type="ido.arduino.dto.MatchRegisterDto" alias="registermatch"/>
 	</typeAliases>
 	<mappers>
 		<!-- 사용할 mapper 등록 -->

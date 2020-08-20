@@ -1,15 +1,11 @@
 // @material-ui/icons
-import { Apps, CloudDownload } from "@material-ui/icons";
 import { Avatar, ListItemAvatar, ListItemText } from "@material-ui/core";
 /*eslint-disable*/
 import React, { useCallback, useContext, useReducer, useState } from "react";
 
 import AddInfoDialog from "../Dialog/AddInfoDialog";
-import Badge from "@material-ui/core/Badge";
 // core components
 import Button from "components/CustomButtons/Button.js";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 import List from "@material-ui/core/List";
@@ -149,13 +145,7 @@ export default function HeaderLinks(props) {
         .then((e) => {
           console.log("success");
           alert("정보 저장이 완료되었습니다!");
-          loggedUser(
-            user.socialID,
-            e.data.userID,
-            user.name,
-            "social",
-            e.data.profileURL
-          );
+          loggedUser(user.socialID, e.data.userID, user.name, "social", e.data.profileURL);
           addInfoClose();
         })
         .catch(() => {

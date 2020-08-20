@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import ido.arduino.dao.MatchMapper;
 import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchInfoDTO;
-import ido.arduino.dto.MatchRegisterDto;
-import ido.arduino.dto.MatchRequestDto;
-import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.TeamLeaderDTO;
 import ido.arduino.dto.WaitMatchDto;
 import ido.arduino.repo.MatchGameRepo;
@@ -99,20 +96,17 @@ public class MatchGameServiceImpl implements MatchGameService {
 	// ----------내가 요청한 매칭 리스트 (내팀이 요청한 매칭 정보) & 요청 삭제 ---------------
 	@Override
 	public List<MatchDto> requestmatch(int userID) {
-		// TODO Auto-generated method stub
 		return mRepo.requestmatch(userID);
 	}
 
 	@Override
 	public int requestdelete(WaitMatchDto wait) {
-		// TODO Auto-generated method stub
 		return mRepo.requestdelete(wait);
 	}
 
 	// ----------내가 속한 팀의 예정된 경기 일정 ---------------
 	@Override
 	public List<MatchDto> schedule(int userID) {
-		// TODO Auto-generated method stub
 		return mRepo.schedule(userID);
 	}
 

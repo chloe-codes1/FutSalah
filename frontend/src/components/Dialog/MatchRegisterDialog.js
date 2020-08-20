@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "components/CustomButtons/Button.js";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -11,10 +11,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
 
 import Grid from "@material-ui/core/Grid";
 
@@ -38,21 +34,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate }) {
+function MatchRegisterDialog({ open, onClose, info, area, myteam, selectedDate, courtList }) {
   const classes = useStyles();
   const [selectTeam, setSelectTeam] = useState("");
   const [selectIsBook, setSelectIsBook] = useState("1");
   const [selectCourt, setSelectCourt] = useState("");
-  const [courtList, setCourtList] = useState([]);
-  const handleIsBook = (e) => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + info.locationID,
-    }).then((e) => {
-      setCourtList(e.data);
-    });
-    setSelectIsBook(e.target.value);
-  };
 
   const onRegister = () => {
     if (selectIsBook === "1" && selectCourt === "") {

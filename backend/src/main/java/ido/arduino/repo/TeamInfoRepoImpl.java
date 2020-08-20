@@ -61,26 +61,21 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 
 	@Override
 	public int insertmy(UserTeamConnDto uteam) {
-		// TODO Auto-generated method stub
 		return template.insert(ns + "insertmy", uteam);
 	}
 	@Override
 	public int updatemy(UserDTO userID) {
-		// TODO Auto-generated method stub
 		return template.update(ns + "updatemy", userID);
 
 	}
 	@Override
 	public int deletemyteam(UserTeamConnDto uteam) {
-		// TODO Auto-generated method stub
 		return template.delete(ns+"deletemyteam",uteam);
 	}
 
 
 	@Override
 	public int selectlast() {
-
-		// TODO Auto-generated method stub
 		return template.selectOne(ns + "selectlast");
 	}
 
@@ -91,25 +86,21 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	//----------------formation---------------------------
 	@Override
 	public int insertformation(Formation form) {
-		// TODO Auto-generated method stub
 		return template.insert(ns + "insertformation", form);
 	}
 
 	@Override
 	public int updateformation(Formation form) {
-		// TODO Auto-generated method stub
 		return template.update(ns + "updateformation", form);
 	}
 
 	@Override
 	public int deleteformation(DeleteFormationDto form) {
-		// TODO Auto-generated method stub
 		return template.delete(ns + "deleteformation", form);
 	}
 
 	@Override
 	public List<Formation> selectformation(int teamID) {
-		// TODO Auto-generated method stub
 		return template.selectList(ns+"selectformation", teamID);
 	}
 
@@ -117,7 +108,6 @@ public class TeamInfoRepoImpl implements TeamInfoRepo {
 	//----------------result game---------------------------
 	@Override
 	public List<ResultDto> resultscore(int teamID) {
-		// TODO Auto-generated method stub
 		return template.selectList(ns+"resultscore",teamID);
 	}
 

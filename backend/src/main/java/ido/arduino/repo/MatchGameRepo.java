@@ -4,8 +4,6 @@ import java.util.List;
 
 import ido.arduino.dto.MatchDto;
 import ido.arduino.dto.MatchRegisterDto;
-import ido.arduino.dto.MatchRequestDto;
-import ido.arduino.dto.MatchRequestSimpleDto;
 import ido.arduino.dto.WaitMatchDto;
 
 public interface MatchGameRepo {

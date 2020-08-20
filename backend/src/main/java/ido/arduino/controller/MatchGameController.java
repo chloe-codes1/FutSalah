@@ -41,9 +41,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/api")
 public class MatchGameController {
-	private static final Logger logger = LoggerFactory.getLogger(MatchGameController.class);
-	private static final String SUCCESS = "success";
-	private static final String FAIL = "fail";
 
 	@Autowired
 	MatchGameService mService;
@@ -56,36 +53,33 @@ public class MatchGameController {
 
 	@Autowired
 	LocationService lService;
-	
+
 	@Autowired
 	CourtService cService;
-	
+
 	@Autowired
 	JavaMailSender javaMailSender;
 
 	// ----------------Matching game search ---------------------------
 
+	@ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
+	@GetMapping("/match")
+	public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date, @RequestParam int time,
+			@RequestParam int isBooked, @RequestParam int locationID, @RequestParam int formCode) throws Exception {
+		Date def = Date.valueOf("1900-01-01");
 
-	   @ApiOperation(value = "모든 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
-	   @GetMapping("/match")
-	   public ResponseEntity<List<MatchDto>> alloption(@RequestParam Date date, @RequestParam int time,
-	         @RequestParam int isBooked, @RequestParam int locationID, @RequestParam int formCode) throws Exception {
-	      Date def = Date.valueOf("1900-01-01");
-	      logger.debug("alloption - 호출");
-	      if(date.equals(def)){
-	         date = null;
-	      }
-	      MatchDto matchrequest = new MatchDto(date, time, isBooked, locationID, formCode);      
+		if (date.equals(def)) {
+			date = null;
+		}
+		MatchDto matchrequest = new MatchDto(date, time, isBooked, locationID, formCode);
 
-	      return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
-	   }
+		return new ResponseEntity<List<MatchDto>>(mService.alloption(matchrequest), HttpStatus.OK);
+	}
 
 	@ApiOperation(value = "일부 조건에 맞는 결과를 반환한다", response = MatchDto.class, responseContainer = "List")
 	@GetMapping("/match2")
 	public ResponseEntity<List<MatchDto>> simpleoption(@RequestParam Date date, @RequestParam int locationID)
 			throws Exception {
-		logger.debug("simpleoption - 호출");
-
 		MatchDto matchrequest = new MatchDto(date, locationID);
 		return new ResponseEntity<List<MatchDto>>(mService.simpleoption(matchrequest), HttpStatus.OK);
 	}
@@ -112,7 +106,6 @@ public class MatchGameController {
 	public @ResponseBody int registerForGame(@RequestBody Map<String, Integer> data) {
 		int matchID = data.get("matchID");
 		int teamID = data.get("teamID"); // 신청팀
-
 		int homeTeamID = mService.getMatchInfo(matchID).getHomeTeamID();
 
 		// 자신의 팀에 매칭신청하는 오류 방지
@@ -140,7 +133,7 @@ public class MatchGameController {
 		MatchDto matchInfo = mService.getMatchInfo(matchID);
 		int homeTeamID = matchInfo.getHomeTeamID();
 		mService.deleteAllWaitings(matchID);
-		mService.acceptMatchRequest(homeTeamID, matchID);
+		mService.acceptMatchRequest(teamID, matchID);
 		TeamLeaderDTO requestTeam = tService.getTeamLeaderInfo(teamID);
 		TeamInfoDto targetTeam = tService.getTeamInfo(homeTeamID);
 		LocationDto location = lService.getLocationInfo(matchInfo.getLocationID());
@@ -149,7 +142,7 @@ public class MatchGameController {
 		emailService.setJavaMailSender(javaMailSender);
 		return emailService.acceptMatchRequestMail(targetTeam, requestTeam, matchInfo, location, court);
 	}
-	
+
 	// 매칭 거절
 	@PostMapping("/match/refuse")
 	public @ResponseBody int refuseMatchRequest(@RequestBody Map<String, Integer> data) {
@@ -168,11 +161,9 @@ public class MatchGameController {
 	@ApiOperation(value = "내가 속한 모든 팀의 등록한 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer = "List")
 	@PostMapping("/match/mymatch")
 	public ResponseEntity<List<MatchDto>> comematch(@RequestBody Map<String, Object> body) throws Exception {
-		System.out.println(body.toString());
+
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
-		logger.debug("comematch - 호출");
-
 		return new ResponseEntity<List<MatchDto>>(mService.comematch(userId), HttpStatus.OK);
 	}
 
@@ -185,11 +176,12 @@ public class MatchGameController {
 			if (isWaitingExists >= 1) {
 				MatchInfoDTO matchInfo = mService.getSimpleMatchInfo(matchID);
 				List<TeamLeaderDTO> waitingList = mService.getAllWaitingTeamsInfo(matchID);
-				waitingList.forEach( waiting -> {
-					System.out.println("waiting?"+waiting);
+				waitingList.forEach(waiting -> {
+
 					EmailServiceImpl emailService = new EmailServiceImpl();
 					emailService.setJavaMailSender(javaMailSender);
-					emailService.notifyMatchCancelledMail(matchInfo, waiting); });
+					emailService.notifyMatchCancelledMail(matchInfo, waiting);
+				});
 			}
 			mService.deleteWaiting(matchID);
 			mService.deletematch(matchID);
@@ -199,25 +191,23 @@ public class MatchGameController {
 		}
 		return entity;
 	}
-	
+
 	@ApiOperation(value = "내가 매칭 요청한 팀의 매칭정보를 반환한다. ", response = MatchDto.class, responseContainer = "List")
 	@PostMapping("/match/requestmatch")
 	public ResponseEntity<List<MatchDto>> requestmatch(@RequestBody Map<String, Object> body) throws Exception {
-		System.out.println(body.toString());
+
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
-		logger.debug("requestmatch - 호출");
-
 		return new ResponseEntity<List<MatchDto>>(mService.requestmatch(userId), HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "내가 매칭 요청한 팀 요청 삭제.", response = WaitMatchDto.class, responseContainer = "List")
 	@DeleteMapping("/match/requestmatch/{matchID}/{teamID}")
 	public ResponseEntity<Map<String, Object>> requestdelete(@PathVariable int matchID, @PathVariable int teamID) {
 		ResponseEntity<Map<String, Object>> entity = null;
 		try {
-			
-			WaitMatchDto wait = new WaitMatchDto(matchID,teamID);
+
+			WaitMatchDto wait = new WaitMatchDto(matchID, teamID);
 			mService.requestdelete(wait);
 			entity = handleSuccess(matchID + "가 삭제되었습니다.");
 		} catch (RuntimeException e) {
@@ -225,33 +215,24 @@ public class MatchGameController {
 		}
 		return entity;
 	}
-	
-	
+
 	// ----------------내가 등록한 매칭에 대한 받은 신청 목록 ---------------------------
 	@ApiOperation(value = "내가 등록한 매칭에 대한 받은 신청 목록 ", response = MatchDto.class, responseContainer = "List")
 	@GetMapping("/match/mymatch/{matchID}")
-	public ResponseEntity<List<WaitMatchDto>> waitmatch(@PathVariable int matchID)
-			throws Exception {
-		logger.debug("waitmatch - 호출");
-		System.out.println("waitmatch 호추추루룰...........................................................");
+	public ResponseEntity<List<WaitMatchDto>> waitmatch(@PathVariable int matchID) throws Exception {
 		return new ResponseEntity<List<WaitMatchDto>>(mService.waitmatch(matchID), HttpStatus.OK);
 	}
-	
 
-	
 	// ----------------Matching game schedule---------------------------
 	@ApiOperation(value = "내가 속한 팀의 경기 일정 출력 ", response = MatchDto.class, responseContainer = "List")
 	@PostMapping("/match/schedule")
 	public ResponseEntity<List<MatchDto>> schedule(@RequestBody Map<String, Object> body) throws Exception {
-		System.out.println(body.toString());
+
 		UserDTO user = uService.findBySocialID((String) body.get("socialID"));
 		int userId = user.getUserID();
-		logger.debug("requestmatch - 호출");
-
 		return new ResponseEntity<List<MatchDto>>(mService.schedule(userId), HttpStatus.OK);
 	}
-	
-	
+
 	// ----------------예외처리---------------------------
 
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
@@ -262,7 +243,6 @@ public class MatchGameController {
 	}
 
 	private ResponseEntity<Map<String, Object>> handleException(Exception e) {
-		logger.error("예외 발생", e);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", false);
 		resultMap.put("data", e.getMessage());
