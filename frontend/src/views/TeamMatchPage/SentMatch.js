@@ -90,7 +90,7 @@ export default function SentMatch({ userinfo }) {
             <Button disabled color="transparent" style={{ width: "10%" }} />
           </ListItem>
         )}
-        {sentList.length === 0 && <Divider />}
+        {sentList.length !== 0 && <Divider />}
         {sentList.length === 0 ? (
           <div style={{ textAlign: "center" }}>
             <h3>신청한 매칭이 없습니다.</h3>
