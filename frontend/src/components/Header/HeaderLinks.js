@@ -149,7 +149,6 @@ export default function HeaderLinks(props) {
             data: { socialID: user.socialID },
           }).then((e) => {
             console.log("데이터 불러오기 성공!");
-            console.log(e.data);
             loggedUser(user.socialID, e.data.userID, user.name, "social", e.data.profileURL);
           });
           console.log("success");

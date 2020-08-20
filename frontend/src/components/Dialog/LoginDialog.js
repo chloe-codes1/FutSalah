@@ -1,5 +1,5 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText } from "@material-ui/core";
-
+import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import KakaoLogin from "react-kakao-login";
@@ -9,6 +9,16 @@ import React from "react";
 import axios from "axios";
 import kakaobtn from "../../assets/img/button/kakao_login.png";
 import styled from "styled-components";
+import divider from "../../assets/img/divider-login.png";
+import Button from "components/CustomButtons/Button.js";
+
+const useStyles = makeStyles((theme) => ({
+  courtButton: {
+    width: 183,
+    // margin: "0 0 10px 0",
+    //margin: theme.spacing(1),
+  },
+}));
 
 const StyledKakaoLogin = styled(KakaoLogin)`
   display: inline-block;
@@ -36,6 +46,7 @@ const StyledGoogleLogin = styled(GoogleLogin)`
 `;
 
 function LoginDialog(props) {
+  const classes = useStyles();
   const { open, onClose, addInfo, initUser, loggedUser } = props;
 
   const handleClose = () => {
@@ -138,7 +149,17 @@ function LoginDialog(props) {
             />
           </ListItem>
           <ListItem>
-            <Link to={"/Admin"}>구장 관리 페이지</Link>
+            <img src={divider} />
+          </ListItem>
+          <ListItem>
+            <Link to={"/Admin"}>
+              <Button className={classes.courtButton} variant="contained" color="danger">
+                <i className="fas fa-tasks" />
+                구장 관리 페이지
+              </Button>
+            </Link>
+
+            {/* <Link to={"/Admin"}>구장 관리 페이지</Link> */}
           </ListItem>
         </List>
       </DialogContent>

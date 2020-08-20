@@ -2,14 +2,9 @@ import React, { useState, useReducer, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Grid from "@material-ui/core/Grid";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
 
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -52,7 +47,7 @@ const initialState = {
     date: new Date(),
     time: "",
     type: "",
-    isBook: "0",
+    isBook: "1",
   },
 };
 
@@ -94,7 +89,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
         return;
       }
       if (selectedDate < today) {
-        console.log(today);
         let dayGuide =
           today.getFullYear() +
           "년 " +
@@ -116,7 +110,6 @@ function MatchSearch({ myteam, setMatchingList, setMyteam, userinfo }) {
           `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/stadium/` + state.search.locationID,
       }).then((e) => {
         setCourtList(e.data);
-        console.log(e.data);
       });
       axios({
         method: "get",
