@@ -120,10 +120,19 @@ export default function Components(props) {
         </GridItem>
         <GridItem style={{ padding: 0 }}>
           <GridContainer
-            style={{ paddingLeft: "5%", backgroundColor: "white" }}
+            style={{ paddingLeft: "5%", backgroundColor: "#2b2d42" }}
           >
-            <GridItem xs={12}>
-              <h1>Guide</h1>
+            <GridItem
+              xs={12}
+              style={{
+                color: "white",
+                paddingTop: "40px",
+                paddingBottom: "30px",
+              }}
+            >
+              <h1>
+                <strong>Guide</strong>
+              </h1>
             </GridItem>
             <GridItem xs={6}>
               <iframe
@@ -135,7 +144,7 @@ export default function Components(props) {
                 allowfullscreen
               ></iframe>
             </GridItem>
-            <GridItem xs={6}>
+            <GridItem xs={6} style={{ color: "white" }}>
               <h3>Step 1.</h3>
               <p>팀생성, 팀관리</p>
             </GridItem>
@@ -150,9 +159,23 @@ export default function Components(props) {
                 allowfullscreen
               ></iframe>
             </GridItem>
-            <GridItem xs={6}>
+            <GridItem xs={6} style={{ color: "white" }}>
               <h3>Step 2.</h3>
               <p>팀 찾기</p>
+            </GridItem>
+            <GridItem xs={6}>
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/THS8NgvpXsw"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </GridItem>
+            <GridItem xs={6} style={{ color: "white" }}>
+              <h3>Step 3.</h3>
+              <p>매칭하기</p>
             </GridItem>
           </GridContainer>
         </GridItem>
