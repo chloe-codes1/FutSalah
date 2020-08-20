@@ -66,6 +66,18 @@
 <br>
 <br>
 
+## :pencil2: ERD
+
+![](./images/erd.png)
+
+
+
+
+
+<br>
+
+<br>
+
 ## :runner: Steps to run
 
 ### Backend
@@ -115,7 +127,7 @@ $ yarn start
 
 <br>
 
-## Timeline
+## :date: ​Timeline
 
 > 개발 기간: 7/20/2020 ~ 8/21/2020
 
@@ -163,6 +175,7 @@ $ yarn start
   ```
 
 - 사용법
+  
   - `process.env.REACT_APP_{env_var_name}`
 
 <br>
