@@ -3,6 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import ArriveInfo from "./ArriveInfo.js";
 
+import Footer from "components/Footer/Footer.js";
 import Button from "components/CustomButtons/Button.js";
 
 import GridContainer from "components/Grid/GridContainer.js";
@@ -91,9 +92,19 @@ export default function AdminInfo(props) {
   const hour = dateInfo.getHours();
   const minute = dateInfo.getMinutes();
 
+  const changeHour = (hour) => {
+    if (Number(hour) < 10) {
+      return "0" + String(hour);
+    } else {
+      return hour;
+    }
+  };
+
   const changeMinute = (minute) => {
     if (Number(minute) < 10) {
-      minute = "0" + minute;
+      return "0" + String(minute);
+    } else {
+      return minute;
     }
   };
 
@@ -116,8 +127,6 @@ export default function AdminInfo(props) {
     const stadiumID = window.sessionStorage.getItem("stadiumID");
     adminuser.stadiumID = stadiumID;
     loadMatchInfo(matchNo);
-    changeMinute(minute);
-    console.log("새로고침!");
   }, []);
 
   var channel = pusher.subscribe("channel");
@@ -270,6 +279,16 @@ export default function AdminInfo(props) {
                 <h3>
                   {year}-{month + 1}-{date} {matchInfo.time}:00
                 </h3>
+                {(!isHomeTeamArrived || !isAwayTeamArrived) && (
+                  <p style={{ fontSize: "12px" }}>
+                    팀 QR 출석이 완료되면 경기 시작 버튼이 생성됩니다.
+                  </p>
+                )}
+                {isMatchStarted && !isMatchFinished && (
+                  <p style={{ fontSize: "12px" }}>
+                    경기 종료 버튼을 누르면 경기 결과가 전적에 저장됩니다.
+                  </p>
+                )}
               </List>
             </GridItem>
             <GridItem xs={12} className={classes.matchInfoContainer}>
@@ -327,7 +346,7 @@ export default function AdminInfo(props) {
                   style={{ marginTop: "35px" }}
                 >
                   <h2 style={{ marginTop: "3px" }}>
-                    {hour}:{minute}
+                    {changeHour(hour)}:{changeMinute(minute)}
                   </h2>
                 </Badge>
               </GridItem>
@@ -417,6 +436,7 @@ export default function AdminInfo(props) {
           </GridContainer>
         </div>
       </Parallax>
+      <Footer />
     </div>
   );
 }

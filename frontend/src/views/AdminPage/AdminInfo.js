@@ -75,7 +75,6 @@ export default function AdminInfo(props) {
     },
   ];
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
-  console.log(matchInfo);
 
   // 현재 날짜 정보 (년, 월, 일, 요일)
   const dateInfo = new Date();
@@ -89,9 +88,7 @@ export default function AdminInfo(props) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/fsearch/${adminuser.stadiumID}`,
     })
       .then((res) => {
-        console.log(res.data);
         setMatchInfo(res.data);
-        console.log(matchInfo);
       })
       .catch((e) => {
         console.log("error", e);
@@ -137,6 +134,9 @@ export default function AdminInfo(props) {
                 <h3 style={{ textAlign: "left", paddingLeft: "20px" }}>
                   {year}-{month + 1}-{date}
                 </h3>
+              </GridItem>
+              <GridItem xs={12}>
+                <p>경기 시간을 클릭하면 각 경기 상세 페이지로 이동합니다.</p>
               </GridItem>
             </GridItem>
           </GridContainer>
