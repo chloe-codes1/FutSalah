@@ -45,8 +45,6 @@ function AdminLoginDialog(props) {
   };
 
   const responseAdmin = () => {
-    console.log(adminID);
-    console.log(password);
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/courtLogin`,
@@ -55,7 +53,6 @@ function AdminLoginDialog(props) {
         password: password,
       },
     }).then((e) => {
-      console.log(e.data);
       if (e.data) {
         initAdmin(e.data.adminID, e.data.name, e.data.stadiumID);
         loggedUser(e.data.adminID, e.data.name, e.data.stadiumID);

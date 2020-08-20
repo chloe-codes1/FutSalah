@@ -20,7 +20,6 @@ export default function Admin(props) {
   const history = useHistory();
 
   const { adminuserinfo, adminUserDispatch } = useContext(AdminUserContext);
-  console.log(adminuserinfo);
 
   const redirectToMatchList = () => {
     if (adminuserinfo.logged) {

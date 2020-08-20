@@ -57,7 +57,6 @@ export default function AdminHeaderLinks(props) {
   const classes = useStyles();
   const [loginOpen, setLoginOpen] = useState(false);
   const [state, dispatch] = useReducer(adminreducer, adminInitialState);
-  console.log(adminuserinfo);
 
   const loginClickOpen = () => {
     setLoginOpen(true);
