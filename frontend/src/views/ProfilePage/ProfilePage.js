@@ -27,7 +27,7 @@ import classNames from "classnames";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // 사용자의 프로필 사진이 없을 때 대신 사진
-import profile from "assets/img/faces/christian.jpg";
+import profile from "assets/img/user.png";
 import styles from "assets/jss/material-kit-react/views/profilePage.js";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
@@ -275,7 +275,10 @@ export default function ProfilePage(props) {
                       src={formik.values.profileURL}
                       className={imageClasses}
                       onClick={handleDropZone}
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor: "white",
+                      }}
                     />
                   </Tooltip>
                   <div className={classes.name}>
