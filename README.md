@@ -1,9 +1,9 @@
 <h1 align="center">Welcome to FutSalah 👋</h1>
 <p>
-  <a href="https://github.com/chloe-codes1/Ms.Movie#readme" target="_blank">
+  <a href="#" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
-  <a href="https://github.com/chloe-codes1/Ms.Movie/blob/master/LICENSE.md" target="_blank">
+  <a href="https://lab.ssafy.com/s03-webmobile3-sub3/s03p13a112/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 </p>
