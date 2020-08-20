@@ -180,15 +180,7 @@ export default function ReceivedMatch({ userinfo }) {
               </ListItemText>
               <ListItemText
                 primary={`${rl.date} / ${rl.time}시`}
-                secondary={
-                  rl.name === null
-                    ? `${rl.sido} ${rl.gu} 경기장없음 / 예약여부:${
-                        rl.isBooked ? "O" : "X"
-                      }`
-                    : `${rl.sido} ${rl.gu} ${rl.name} / 예약여부:${
-                        rl.isBooked ? "O" : "X"
-                      } `
-                }
+                secondary={`${rl.sido} ${rl.gu} ${rl.name}`}
                 style={{
                   width: "30%",
                 }}
@@ -202,19 +194,20 @@ export default function ReceivedMatch({ userinfo }) {
               />
               <Button
                 small
+                color="github"
                 variant="contained"
                 onClick={() => {
                   handleRequestListOpen(rl.matchID);
                 }}
                 style={{
                   width: "10%",
-                  backgroundColor: "#05b0c4",
                 }}
               >
                 신청 관리
               </Button>
               <Button
                 small
+                color="danger"
                 variant="contained"
                 onClick={() => {
                   if (window.confirm("이 매칭을 삭제하시겠습니까?")) {
@@ -317,6 +310,7 @@ export default function ReceivedMatch({ userinfo }) {
                       />
                       <Button
                         variant="contained"
+                        color="github"
                         onClick={() => {
                           if (
                             window.confirm(
@@ -328,13 +322,13 @@ export default function ReceivedMatch({ userinfo }) {
                         }}
                         style={{
                           width: "10%",
-                          backgroundColor: "#05b0c4",
                         }}
                       >
                         수락
                       </Button>
                       <Button
                         variant="contained"
+                        color="danger"
                         onClick={() => {
                           if (
                             window.confirm(
@@ -346,7 +340,6 @@ export default function ReceivedMatch({ userinfo }) {
                         }}
                         style={{
                           width: "10%",
-                          backgroundColor: "#05b0c4",
                         }}
                       >
                         거절

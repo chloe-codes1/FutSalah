@@ -113,8 +113,8 @@ function MyTeamPage(props) {
           rightLinks={<HeaderLinks />}
           fixed
           changeColorOnScroll={{
-            height: 200,
-            color: "white",
+            height: 50,
+            color: "dark",
           }}
         />
         <Parallax small filter image={require("assets/img/myteambg.jpg")} />

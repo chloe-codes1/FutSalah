@@ -230,43 +230,46 @@ function CreateTeamDialog({ open, onClose, idData, refreshTeam }) {
                     이름 중복 확인
                   </Button>
                 </ListItem>
-                <FormControl style={{ width: "45%", padding: "0 16px" }}>
-                  <Select
-                    labelId="sido"
-                    id="sido-select"
-                    onChange={sidoChange}
-                    inputProps={{
-                      classes: {
-                        icon: "white",
-                      },
-                    }}
-                  >
-                    <MenuItem disabled value="">
-                      <em>시도</em>
-                    </MenuItem>
-                    {sidoList.map((s) => (
-                      <MenuItem value={s}>{s}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl style={{ width: "45%" }}>
-                  <Select
-                    name="locationID"
-                    labelId="gu"
-                    id="gu-select"
-                    onChange={(e) => {
-                      onChange(e);
-                      // guChange(e);
-                    }}
-                  >
-                    <MenuItem disabled value="">
-                      <em>시군구</em>
-                    </MenuItem>
-                    {guList.map((g) => (
-                      <MenuItem value={g.locationID}>{g.gu}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <ListItem>
+                  <label>지역</label>
+                  <FormControl style={{ width: "45%", padding: "0 16px" }}>
+                    <Select
+                      labelId="sido"
+                      id="sido-select"
+                      onChange={sidoChange}
+                      inputProps={{
+                        classes: {
+                          icon: "white",
+                        },
+                      }}
+                    >
+                      <MenuItem disabled value="">
+                        <em>시도</em>
+                      </MenuItem>
+                      {sidoList.map((s) => (
+                        <MenuItem value={s}>{s}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl style={{ width: "45%" }}>
+                    <Select
+                      name="locationID"
+                      labelId="gu"
+                      id="gu-select"
+                      onChange={(e) => {
+                        onChange(e);
+                        // guChange(e);
+                      }}
+                    >
+                      <MenuItem disabled value="">
+                        <em>시군구</em>
+                      </MenuItem>
+                      {guList.map((g) => (
+                        <MenuItem value={g.locationID}>{g.gu}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </ListItem>
                 <ListItem>
                   <TextField
                     name="description"
