@@ -96,8 +96,8 @@
 	<!-- 내가 매칭 신청 요청한 매칭 정보 -->
 
 	<select id="requestmatch" resultType="match">
-		select m.*,t.name as
-		awayteam,t.profileURL, l.sido, l.gu, c.name, t2.name as hometeam from
+		select m.matchID, m.homeTeamID, m.date, m.time, m.isBooked, m.locationID, m.state, m.courtID, m.formCode, t.name as
+		awayteam, t.teamID as awayTeamID, t.profileURL, l.sido, l.gu, c.name, t2.name as hometeam from
 		waiting w
 		left outer join team t on w.awayTeamID=t.teamID
 		inner join

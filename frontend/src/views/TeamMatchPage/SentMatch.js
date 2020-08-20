@@ -4,6 +4,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Button from "components/CustomButtons/Button.js";
+import Badge from "@material-ui/core/Badge";
 
 import { Link } from "react-router-dom";
 
@@ -14,6 +15,7 @@ export default function SentMatch({ userinfo }) {
 
   // 처음 목록 받아오기
   useEffect(() => {
+    console.log(userinfo);
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/requestmatch`,
@@ -53,11 +55,40 @@ export default function SentMatch({ userinfo }) {
   return (
     <div style={{ height: "750px", overflow: "auto" }}>
       <List>
-        {/* <ListItem>
-          <Badge badgeContent={"Home"} color="primary">
-            <h2>{matchInfo.homeName}</h2>
-          </Badge>
-        </ListItem> */}
+        {sentList.length > 0 && (
+          <ListItem>
+            <ListItemAvatar>
+              <div
+                style={{
+                  width: "50px",
+                }}
+              ></div>
+            </ListItemAvatar>
+            <ListItemText
+              primary="My team"
+              style={{
+                width: "10%",
+              }}
+            />
+            <ListItemText
+              primary="Opponent"
+              style={{
+                width: "10%",
+              }}
+            />
+            <ListItemText
+              style={{
+                width: "30%",
+              }}
+            />
+            <ListItemText
+              style={{
+                width: "10%",
+              }}
+            />
+            <Button disabled color="transparent" style={{ width: "10%" }} />
+          </ListItem>
+        )}
         {sentList.length === 0 ? (
           <div>
             <h3 style={{ textAlign: "center" }}>신청한 매칭이 없습니다.</h3>
@@ -122,15 +153,7 @@ export default function SentMatch({ userinfo }) {
               </ListItemText>
               <ListItemText
                 primary={`${sl.date} / ${sl.time}시`}
-                secondary={
-                  sl.name === null
-                    ? `${sl.sido} ${sl.gu} 경기장없음 / 예약여부:${
-                        sl.isBooked ? "O" : "X"
-                      }`
-                    : `${sl.sido} ${sl.gu} ${sl.name} / 예약여부:${
-                        sl.isBooked ? "O" : "X"
-                      } `
-                }
+                secondary={`${sl.sido} ${sl.gu} ${sl.name}`}
                 style={{
                   width: "30%",
                 }}
@@ -144,6 +167,7 @@ export default function SentMatch({ userinfo }) {
               />
               <Button
                 variant="contained"
+                color="danger"
                 onClick={() => {
                   if (window.confirm("신청 취소하시겠습니까?")) {
                     cancelRequest(sl.matchID, sl.awayTeamID);
@@ -151,7 +175,6 @@ export default function SentMatch({ userinfo }) {
                 }}
                 style={{
                   width: "10%",
-                  backgroundColor: "#05b0c4",
                 }}
               >
                 신청 취소

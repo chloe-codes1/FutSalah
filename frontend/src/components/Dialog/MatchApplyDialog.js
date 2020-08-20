@@ -48,7 +48,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, courtList }) {
+function MatchApplyDialog({
+  open,
+  onClose,
+  info,
+  homeTeam,
+  profileURL,
+  myteam,
+  courtList,
+}) {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [selectAway, setSelectAway] = useState("");
@@ -96,13 +104,19 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
         ) : (
           <>
             <DialogContent>
-              <DialogContentText>경기방식 : {info.formCode}인 팀 매치</DialogContentText>
+              <DialogContentText>
+                경기방식 : {info.formCode}인 팀 매치
+              </DialogContentText>
               <DialogContentText>경기일시 : {info.date}</DialogContentText>
               <DialogContentText>
                 지역 : {info.sido} {info.gu}
               </DialogContentText>
-              {info.isBooked === 1 && <DialogContentText>경기장 : {info.name}</DialogContentText>}
-              {info.isBooked === 0 && <DialogContentText>경기장 : 미정</DialogContentText>}
+              {info.isBooked === 1 && (
+                <DialogContentText>경기장 : {info.name}</DialogContentText>
+              )}
+              {info.isBooked === 0 && (
+                <DialogContentText>경기장 : 미정</DialogContentText>
+              )}
               <Grid container justify="center" className={classes.container}>
                 <Grid item>
                   <Typography variant="h6" align="center">
@@ -124,7 +138,9 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
                 </Grid>
                 <Grid item>
                   <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-label">팀 선택</InputLabel>
+                    <InputLabel id="demo-simple-select-label">
+                      팀 선택
+                    </InputLabel>
                     <Select
                       name="teamID"
                       labelId="demo-simple-select-label"
@@ -134,7 +150,9 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
                         setSelectAway(e.target.value);
                       }}
                     >
-                      {myteam.length === 0 && <MenuItem value="">소속된 팀이 없습니다.</MenuItem>}
+                      {myteam.length === 0 && (
+                        <MenuItem value="">소속된 팀이 없습니다.</MenuItem>
+                      )}
                       {myteam.length > 0 &&
                         myteam.map((team, index) => {
                           return (
@@ -149,7 +167,9 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
                 {info.isBooked === 0 && (
                   <Grid item>
                     <FormControl className={classes.formControl}>
-                      <InputLabel id="demo-simple-select-label">경기장 선택</InputLabel>
+                      <InputLabel id="demo-simple-select-label">
+                        경기장 선택
+                      </InputLabel>
                       <Select
                         name="teamID"
                         labelId="demo-simple-select-label"
@@ -160,7 +180,9 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
                         }}
                       >
                         {courtList.length === 0 && (
-                          <MenuItem value="">해당 지역에 경기장이 없습니다.</MenuItem>
+                          <MenuItem value="">
+                            해당 지역에 경기장이 없습니다.
+                          </MenuItem>
                         )}
                         {courtList.length > 0 &&
                           courtList.map((court, index) => {
@@ -196,7 +218,11 @@ function MatchApplyDialog({ open, onClose, info, homeTeam, profileURL, myteam, c
             <DialogActions>
               <Grid container justify="center" spacing={1}>
                 <Grid item>
-                  <Button variant="contained" color="success" onClick={handleApply}>
+                  <Button
+                    variant="contained"
+                    color="github"
+                    onClick={handleApply}
+                  >
                     신청
                   </Button>
                 </Grid>

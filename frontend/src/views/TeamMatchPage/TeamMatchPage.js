@@ -1,25 +1,20 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { Divider, Grid, List, ListItem } from "@material-ui/core";
-import Button from "components/CustomButtons/Button.js";
+import { Divider, Grid } from "@material-ui/core";
 import Footer from "components/Footer/Footer.js";
 // component
 import Header from "components/Header/Header.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
-// react components for routing our app without refresh
-import { Link } from "react-router-dom";
 import Parallax from "components/Parallax/Parallax.js";
-//import Dropdown from "components/CustomDropdown/CustomDropdown.js";
+
 import axios from "axios";
 
 import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
-
-import InfiniteScroll from "react-infinite-scroll-component";
 
 import MatchSearch from "./MatchSearch.js";
 import MatchCard from "./MatchCard.js";
@@ -60,8 +55,8 @@ function TeamMatchPage() {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 100,
-          color: "white",
+          height: 50,
+          color: "dark",
         }}
       />
       <Parallax small filter image={require("assets/img/teammatch.jpg")}>

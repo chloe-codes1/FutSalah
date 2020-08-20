@@ -48,9 +48,9 @@ const modalStyles = makeStyles((theme) => ({
 
 const validationStyle = makeStyles(() => ({
   message: {
-    color: '#f03e3e',
-    fontSize: '0.8rem'
-  }
+    color: "#f03e3e",
+    fontSize: "0.8rem",
+  },
 }));
 
 const useStyles = makeStyles(styles);
@@ -148,14 +148,14 @@ export default function ProfilePage(props) {
         let profileURL = res.data.profileURL;
         if (profileURL) {
           if (profileURL.slice(0, 10) == "https://lh") {
-            console.log("google profile image 있는 유저")
+            console.log("google profile image 있는 유저");
           } else {
             profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + profileURL;
           }
         } else {
           profileURL = profile;
         }
-        
+
         const userUpdate = {
           ...user,
           userID: res.data.userID,
@@ -258,8 +258,8 @@ export default function ProfilePage(props) {
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
-          height: 200,
-          color: "white",
+          height: 50,
+          color: "dark",
         }}
         {...rest}
       />
@@ -303,7 +303,9 @@ export default function ProfilePage(props) {
                   }`}
                 />
                 {formik.touched.email && formik.errors.email && (
-                  <div className={validationClass.message}>{formik.errors.email}</div>
+                  <div className={validationClass.message}>
+                    {formik.errors.email}
+                  </div>
                 )}
 
                 <GridContainer>
@@ -442,7 +444,9 @@ export default function ProfilePage(props) {
                   />
                 </GridItem>
                 {formik.touched.height && formik.errors.height && (
-                  <div className={validationClass.message}>{formik.errors.height}</div>
+                  <div className={validationClass.message}>
+                    {formik.errors.height}
+                  </div>
                 )}
                 <GridItem>
                   <h3 className={classes.buttonTitle}>몸무게</h3>
@@ -465,7 +469,9 @@ export default function ProfilePage(props) {
                   />
                 </GridItem>
                 {formik.touched.weight && formik.errors.weight && (
-                  <div className={validationClass.message}>{formik.errors.weight}</div>
+                  <div className={validationClass.message}>
+                    {formik.errors.weight}
+                  </div>
                 )}
               </GridItem>
 
@@ -540,7 +546,7 @@ export default function ProfilePage(props) {
               <Fade in={dropZone}>
                 <div className={modal.paper} align="center">
                   <Grid mt={5}>
-                    <Dropzone align="center" ID={user.userID} path="user"/>
+                    <Dropzone align="center" ID={user.userID} path="user" />
                   </Grid>
                   <Typography
                     id="transition-modal-title"
