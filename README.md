@@ -16,9 +16,9 @@
 
 <br>
 
-## :mag: ​Overview
+## :page_with_curl: ​Description
 
-> _오늘 풋살한판 풋살르자!_
+> 동네축구를 프로축구처럼
 
 <br>
 
@@ -39,52 +39,51 @@
 
 <br>
 
-### 주요 기능
+<br>
 
-#### 1. 회원 관리
+## :mag: Overview
 
-<details>
-<summary>일반 유저</summary>
-<ol>
-<li> 소셜 로그인(카카오, 구글)을 통해서 쉽게 회원가입이 가능하다. </li>
-<li> 회원정보 탭에서 프로필 사진, 출생 연도, 포지션, 키, 몸무게 정보를 변결할 수 있다. </li>
-<li> 로그인하면 생기는 나의 팀 탭에서 내가 속해있는 팀의 목록을 볼 수 있다. </li>
-<li> 나의 팀 목록에서 팀 목록을 클릭하면 해당 팀의 상세 정보 페이지로 이동한다.</li>
-<li> 팀 나가기를 통해 팀 탈퇴가 가능하다.  </li>
-</div>
-</details>
+<br>
 
-<details>
-<summary>구장 관리자</summary>
-<ol>
-<li> 구장 주인의 계정으로 로그인하면 해당구장의 경기 일정을 알 수 있다.  </li>
-<li> 경기 리스트를 클릭하면 홈팀, 상대팀의 이름과 qr코드를 인식한 후 두팀 모두 인식한다면 경기를 시작한다.  </li>
-<li> 라즈베리파이와 연동되어 경기장에서 골을 넣게 되면 해당 팀의 점수가 올라간다.  </li>
-</div>
-</details>
+### Main page
 
-#### 2. 팀 관리
+![](./images/main.png)
 
-<details>
-<summary>팀 생성 및 팀원 관리</summary>
-<ol>
-<li> 팀을 생성할 때 팀 이름에 대한 중복 검사를 한 후 중복된 이름이 없다면 이름, 지역, 프로필을 입력하여 등록할 수 있다.  </li>
-<li> 팀원을 추가할 때 해당 유저에게 이메일로 요청이 간다.  </li>
-<li> 리더인 팀원이 팀을 탈퇴할 경우, 가장 오래된  유저에게 리더를 넘겨주고 탈퇴한다. </li>
-</div>
-</details>
+<br>
 
-<details>
-<summary>팀 정보</summary>
-<ol>
-<li> 팀 마다 고유의 QR 코드가 존재한다. 이때 이 코드는 팀에 속한 사람만이 확인 가능하다. (QR 코드는 경기장에서 출결할 때 사용된다.)</li>
-<li> 포메이션을 drag & drop 으로 표시할 수있다.   </li>
-<li> 경기전적 탭에서 현재까지 경기 결과들을 알 수 있다.  </li>
-<li> 팀 정보에서는 팀에 속한 모든 팀원들을 알 수 있다. </li>
-</div>
-</details>
+### Signin with Social account
 
+![](./images/signin.png)
 
+<br>
+
+### My Team
+
+![](./images/myteam.png)
+
+<br>
+
+### Team Info.
+
+![](./images/teaminfo.png)
+
+<br>
+
+### Team QR Code
+
+![](./images/qr.png)
+
+<br>
+
+### Match
+
+![](./images/match.png)
+
+<br>
+
+### Upcoming Matches
+
+![](./images/upcoming.png)
 
 
 
@@ -179,6 +178,12 @@ $ yarn start
 ## :date: ​Timeline
 
 > 개발 기간: 7/20/2020 ~ 8/21/2020
+
+<br>
+
+![](./images/간트차트.png)
+
+
 
 <br>
 
