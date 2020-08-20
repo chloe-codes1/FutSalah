@@ -893,7 +893,6 @@ export default function TeamInfo(props) {
                                           horizontal: "center",
                                         }}
                                       >
-                                        <h5>{t.profileURL}</h5>
                                         <h3 className={classes.popoverHeader}>
                                           {t.name}
                                         </h3>
@@ -1135,7 +1134,7 @@ export default function TeamInfo(props) {
                                           </h3>
                                           <div className={classes.popoverBody}>
                                             <h5>{r.position}</h5>
-                                            {r.age && (
+                                            {r.age ? (
                                               <div>
                                                 나이:{" "}
                                                 {Number(date.getFullYear()) -
@@ -1143,12 +1142,18 @@ export default function TeamInfo(props) {
                                                   1}
                                                 살
                                               </div>
+                                            ) : (
+                                              <div></div>
                                             )}
-                                            {r.height && (
+                                            {r.height ? (
                                               <div>키: {r.height}cm</div>
+                                            ) : (
+                                              <div></div>
                                             )}
-                                            {r.weight && (
+                                            {r.weight ? (
                                               <div>몸무게: {r.weight}kg</div>
+                                            ) : (
+                                              <div></div>
                                             )}
                                           </div>
                                         </Popover>
