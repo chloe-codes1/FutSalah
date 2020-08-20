@@ -11,10 +11,6 @@ export default class ArriveInfo extends Component {
     this.state = {
       delay: 1000,
       result: "No result",
-
-      ishometeamarrived: false,
-
-      isawayteamarrived: false,
     };
 
     this.handleScan = this.handleScan.bind(this);
@@ -22,7 +18,7 @@ export default class ArriveInfo extends Component {
 
   handleScan(data) {
     const { homeTeamID, awayTeamID, matchhour } = this.props;
-    if (homeTeamID === Number(data) && !this.state.ishometeamarrived) {
+    if (homeTeamID === Number(data) && !this.props.isHomeTeamArrived) {
       console.log("홈팀 도착!");
       const homedateInfo = new Date();
       var homehour = String(homedateInfo.getHours());
@@ -33,9 +29,9 @@ export default class ArriveInfo extends Component {
       if (homeminute < 10) {
         homeminute = "0" + homeminute;
       }
+      this.props.setIsHomeTeamArrived(true);
       this.setState({
         hometeamarrivetime: `${homehour}시 ${homeminute}분`,
-        ishometeamarrived: true,
       });
       if (Number(homehour) >= matchhour && 0 < Number(homeminute) < 10) {
         this.props.setHomeTeamLateStatus(1);
@@ -43,7 +39,7 @@ export default class ArriveInfo extends Component {
         this.props.setHomeTeamLateStatus(2);
       }
     }
-    if (awayTeamID === Number(data) && !this.state.isawayteamarrived) {
+    if (awayTeamID === Number(data) && !this.props.isAwayTeamArrived) {
       console.log("원정팀 도착!");
       const awaydateInfo = new Date();
       var awayhour = String(awaydateInfo.getHours());
@@ -54,9 +50,9 @@ export default class ArriveInfo extends Component {
       if (awayminute < 10) {
         awayminute = "0" + awayminute;
       }
+      this.props.setIsAwayTeamArrived(true);
       this.setState({
         awayteamarrivetime: `${awayhour}시 ${awayminute}분`,
-        isawayteamarrived: true,
       });
       if (Number(awayhour) >= matchhour && 0 < Number(awayminute) < 10) {
         this.props.setAwayTeamLateStatus(1);
