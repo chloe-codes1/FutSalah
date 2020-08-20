@@ -735,7 +735,7 @@ export default function TeamInfo(props) {
                               }
                               playerPos={playerPos2}
                               setPlayerPos={setPlayerPos2}
-                              memberNum={5}
+                              memberNum={6}
                             />
                           </GridItem>
                           {Number(userinfo.userID) === teamInfo.leader && (
@@ -945,8 +945,8 @@ export default function TeamInfo(props) {
                                 <TableCell align="center" colSpan="4">
                                   <h3>
                                     <strong>
-                                      &lt;{teamInfo.wins}승 {teamInfo.draws}무{" "}
-                                      {teamInfo.defeats}패 &gt;
+                                      &lt;{teamInfo.wins}승 {teamInfo.defeats}패{" "}
+                                      {teamInfo.draws}무 &gt;
                                     </strong>
                                   </h3>
                                 </TableCell>
