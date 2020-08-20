@@ -1,9 +1,7 @@
-import { Dialog, DialogTitle, TextField } from "@material-ui/core";
+import { Dialog, DialogTitle } from "@material-ui/core";
 import React, { useState } from "react";
 
 import Button from "components/CustomButtons/Button.js";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Table from "@material-ui/core/Table";

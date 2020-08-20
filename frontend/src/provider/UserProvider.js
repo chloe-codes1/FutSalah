@@ -16,9 +16,12 @@ const reducer = (state, action) => {
     case "LOGIN_USER":
       console.log("LOGGED!");
       if (action.profileURL) {
-        if (action.profileURL.slice(0, 33) == "https://lh5.googleusercontent.com") {
+        if (
+          action.profileURL.slice(0, 33) == "https://lh5.googleusercontent.com"
+        ) {
         } else {
-          action.profileURL = process.env.REACT_APP_S3_BASE_URL + "/" + action.profileURL;
+          action.profileURL =
+            process.env.REACT_APP_S3_BASE_URL + "/" + action.profileURL;
         }
       }
       return {
@@ -69,7 +72,11 @@ const UserProvider = ({ children }) => {
     }
   }, []);
 
-  return <UserContext.Provider value={{ userinfo, userDispatch }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ userinfo, userDispatch }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export default UserProvider;

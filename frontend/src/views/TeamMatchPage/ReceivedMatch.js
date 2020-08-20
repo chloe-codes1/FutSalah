@@ -5,6 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Button from "components/CustomButtons/Button.js";
 import Loading from "views/Components/Loading/Loading";
+import sad from "assets/img/sad.png";
 
 import { Modal, Typography } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
@@ -129,8 +130,9 @@ export default function ReceivedMatch({ userinfo }) {
     <div style={{ height: "750px", overflow: "auto" }}>
       <List>
         {receivedList.length === 0 ? (
-          <div>
-            <h3 style={{ textAlign: "center" }}>등록된 매칭이 없습니다.</h3>
+          <div style={{ textAlign: "center" }}>
+            <h3>등록된 매칭이 없습니다.</h3>
+            <img src={sad} style={{ width: "25%" }} />
           </div>
         ) : (
           receivedList.map((rl) => (

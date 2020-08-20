@@ -264,6 +264,7 @@ export default function ProfilePage(props) {
                   <Tooltip title="프로파일 사진 변경하기" interactive>
                     <img
                       src={formik.values.profileURL}
+                      alt="..."
                       className={imageClasses}
                       onClick={handleDropZone}
                       style={{

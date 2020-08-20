@@ -15,12 +15,7 @@ import Parallax from "components/Parallax/Parallax.js";
 import AdminUserContext from "../../contexts/AdminUserContext";
 
 // @material-ui/core components
-import {
-  withStyles,
-  Theme,
-  createStyles,
-  makeStyles,
-} from "@material-ui/core/styles";
+import { withStyles, createStyles, makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminInfoPage.js";
 
 import {

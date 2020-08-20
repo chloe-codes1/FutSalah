@@ -23,11 +23,11 @@ const useStyles = makeStyles(styles);
 
 const buttonStyle = makeStyles(() => ({
   top: {
-    position: 'fixed',
-    right: '2vw',
-    bottom: '3vh',
-    width: '30px'
-  }
+    position: "fixed",
+    right: "2vw",
+    bottom: "3vh",
+    width: "30px",
+  },
 }));
 
 export default function Ranking() {
@@ -35,9 +35,9 @@ export default function Ranking() {
   const buttonClass = buttonStyle();
   const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
   const [champions, setChampions] = useState([]); // 1,2,3위 팀 가져오기
-  const scrollToTop = () =>{
+  const scrollToTop = () => {
     window.scrollTo(0, 0);
-  }
+  };
 
   useEffect(() => {
     // ranking 데이터 가져오기
@@ -335,9 +335,13 @@ export default function Ranking() {
         </GridList>
       </GridItem>
       <Tooltip title="상단으로 이동" interactive>
-      <Button className={buttonClass.top} onClick={scrollToTop}>
-        <img src={top} width="100%"/>
-      </Button>
+        <Button
+          className={buttonClass.top}
+          onClick={scrollToTop}
+          style={{ zIndex: 3 }}
+        >
+          <img src={top} width="100%" />
+        </Button>
       </Tooltip>
     </GridContainer>
   );

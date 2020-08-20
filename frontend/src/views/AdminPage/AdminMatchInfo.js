@@ -13,7 +13,6 @@ import GridItem from "components/Grid/GridItem.js";
 import AdminHeader from "components/Header/AdminHeader.js";
 import AdminHeaderLinks from "components/Header/AdminHeaderLinks.js";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 
 // Dialogs
 import Parallax from "components/Parallax/Parallax.js";
