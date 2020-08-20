@@ -3,6 +3,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Divider from "@material-ui/core/Divider";
 import Button from "components/CustomButtons/Button.js";
 import sad from "assets/img/sad.png";
 
@@ -66,12 +67,14 @@ export default function SentMatch({ userinfo }) {
               primary="My team"
               style={{
                 width: "10%",
+                textAlign: "center",
               }}
             />
             <ListItemText
               primary="Opponent"
               style={{
                 width: "10%",
+                textAlign: "center",
               }}
             />
             <ListItemText
@@ -87,6 +90,7 @@ export default function SentMatch({ userinfo }) {
             <Button disabled color="transparent" style={{ width: "10%" }} />
           </ListItem>
         )}
+        {sentList.length === 0 && <Divider />}
         {sentList.length === 0 ? (
           <div style={{ textAlign: "center" }}>
             <h3>신청한 매칭이 없습니다.</h3>
@@ -130,6 +134,7 @@ export default function SentMatch({ userinfo }) {
               <ListItemText
                 style={{
                   width: "10%",
+                  textAlign: "center",
                 }}
               >
                 <Link
@@ -142,6 +147,7 @@ export default function SentMatch({ userinfo }) {
               <ListItemText
                 style={{
                   width: "10%",
+                  textAlign: "center",
                 }}
               >
                 <Link

@@ -78,8 +78,15 @@ export default function ReceivedMatch({ userinfo }) {
       url: `${process.env.REACT_APP_SERVER_BASE_URL}/api/match/mymatch/${matchID}`,
     })
       .then((res) => {
-        console.log(res.data);
-        setRequestList(res.data);
+        setRequestList(
+          res.data.map((r) => {
+            if (r.profileURL) {
+              r.profileURL =
+                process.env.REACT_APP_S3_BASE_URL + "/" + r.profileURL;
+            }
+            return r;
+          })
+        );
       })
       .catch((e) => {
         console.log("error" + e);
@@ -218,7 +225,6 @@ export default function ReceivedMatch({ userinfo }) {
                 }}
                 style={{
                   width: "10%",
-                  backgroundColor: "#05b0c4",
                 }}
               >
                 삭제
