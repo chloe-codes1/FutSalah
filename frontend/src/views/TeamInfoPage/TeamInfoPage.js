@@ -5,6 +5,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import AddIcon from "@material-ui/icons/Add";
 import AddUserDialog from "components/Dialog/AddUserDialog";
+
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "components/CustomButtons/Button.js";
 // import ChatIcon from "@material-ui/icons/Chat";
@@ -39,6 +40,9 @@ import UserContext from "../../contexts/UserContext";
 import axios from "axios";
 import styles from "assets/jss/material-kit-react/views/teamInfoPage.js";
 import teamInfobg from "assets/img/teamInfobg2.jpg";
+
+// image
+import profileImg from "assets/img/user.png";
 
 // table style
 const StyledTableCell = withStyles((theme) => ({
@@ -79,6 +83,7 @@ const modalStyles = makeStyles((theme) => ({
 export default function TeamInfo(props) {
   const classes = useStyles();
   const modal = modalStyles();
+  const date = new Date();
   const { ...rest } = props;
 
   const [dropZone, setDropZone] = useState(false);
@@ -178,11 +183,9 @@ export default function TeamInfo(props) {
     })
       .then((res) => {
         res.data.map((member) => {
-          if (member.profileURL !== null) {
-            if (member.profileURL.indexOf("http") === -1) {
-              member.profileURL =
-                process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
-            }
+          if (member.profileURL && member.profileURL.indexOf("https") === -1) {
+            member.profileURL =
+              process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
           }
           return 0;
         });
@@ -212,7 +215,6 @@ export default function TeamInfo(props) {
   };
 
   // 가입 신청 목록 가져오기
-  //////////////////////////////////////
   const getRequestList = async () => {
     setLoading(true);
     await axios({
@@ -221,11 +223,9 @@ export default function TeamInfo(props) {
     })
       .then((res) => {
         res.data.map((member) => {
-          if (member.profileURL !== null) {
-            if (member.profileURL.indexOf("http") === -1) {
-              member.profileURL =
-                process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
-            }
+          if (member.profileURL && member.profileURL.indexOf("https") === -1) {
+            member.profileURL =
+              process.env.REACT_APP_S3_BASE_URL + "/" + member.profileURL;
           }
           return 0;
         });
@@ -649,6 +649,7 @@ export default function TeamInfo(props) {
                             xs={12}
                             style={{
                               margin: 0,
+                              padding: 0,
                             }}
                           >
                             <Formation
@@ -660,7 +661,7 @@ export default function TeamInfo(props) {
                               memberNum={5}
                             />
                           </GridItem>
-                          {Number(userinfo.userID) === teamInfo.leader && (
+                          {Number(userinfo.userID) === teamInfo.leader ? (
                             <>
                               <GridItem xs={7}>
                                 <FormationBench removePlayer={removePlayer1} />
@@ -695,6 +696,8 @@ export default function TeamInfo(props) {
                                 </div>
                               </GridItem>
                             </>
+                          ) : (
+                            <GridItem xs={12} />
                           )}
                         </GridContainer>
                       ),
@@ -735,7 +738,7 @@ export default function TeamInfo(props) {
                               }
                               playerPos={playerPos2}
                               setPlayerPos={setPlayerPos2}
-                              memberNum={5}
+                              memberNum={6}
                             />
                           </GridItem>
                           {Number(userinfo.userID) === teamInfo.leader && (
@@ -792,6 +795,24 @@ export default function TeamInfo(props) {
                         <div>
                           <TableContainer className={classes.table}>
                             <Table size="small">
+                              <TableHead>
+                                <TableRow
+                                  style={{
+                                    backgroundColor: "#8d99ae",
+                                    padding: "5px 0",
+                                  }}
+                                >
+                                  <TableCell
+                                    colSpan={3}
+                                    style={{
+                                      color: "white",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    팀원 목록
+                                  </TableCell>
+                                </TableRow>
+                              </TableHead>
                               <TableBody
                                 style={{
                                   width: "100%",
@@ -813,7 +834,11 @@ export default function TeamInfo(props) {
                                       >
                                         <img
                                           className={classes.memberImg}
-                                          src={t.profileURL}
+                                          src={
+                                            t.profileURL
+                                              ? t.profileURL
+                                              : profileImg
+                                          }
                                         />
                                       </Player>
                                     </TableCell>
@@ -832,7 +857,7 @@ export default function TeamInfo(props) {
                                         {teamInfo.leader === t.userID && (
                                           <StarsRoundedIcon />
                                         )}
-                                        {t.position !== ""
+                                        {t.position !== "" && t.position
                                           ? t.position
                                           : "포지션 없음"}
                                         <br />
@@ -873,9 +898,21 @@ export default function TeamInfo(props) {
                                         </h3>
                                         <div className={classes.popoverBody}>
                                           <h5>{t.position}</h5>
-                                          <div>출생연도: {t.age}</div>
-                                          <div>키: {t.height}</div>
-                                          <div>몸무게: {t.weight}</div>
+                                          {t.age && (
+                                            <div>
+                                              나이:{" "}
+                                              {Number(date.getFullYear()) -
+                                                t.age +
+                                                1}
+                                              살
+                                            </div>
+                                          )}
+                                          {t.height && (
+                                            <div>키: {t.height}cm</div>
+                                          )}
+                                          {t.weight && (
+                                            <div>몸무게: {t.weight}kg</div>
+                                          )}
                                         </div>
                                       </Popover>
                                     </TableCell>
@@ -945,40 +982,57 @@ export default function TeamInfo(props) {
                                 <TableCell align="center" colSpan="4">
                                   <h3>
                                     <strong>
-                                      &lt;{teamInfo.wins}승 {teamInfo.draws}무{" "}
-                                      {teamInfo.defeats}패 &gt;
+                                      &lt;{teamInfo.wins}승 {teamInfo.defeats}패{" "}
+                                      {teamInfo.draws}무 &gt;
                                     </strong>
                                   </h3>
+                                </TableCell>
+                              </TableRow>
+                              <TableRow
+                                style={{
+                                  backgroundColor: "#8d99ae",
+                                }}
+                              >
+                                <TableCell
+                                  colSpan={4}
+                                  style={{
+                                    padding: 0,
+                                    height: "35px",
+                                    color: "white",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  경기결과
                                 </TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
                               <TableRow>
-                                <TableCell align="center">
+                                <TableCell width="35%" align="center">
                                   <strong>HOME</strong>
                                 </TableCell>
-                                <TableCell></TableCell>
-                                <TableCell></TableCell>
-                                <TableCell align="center">
+                                <TableCell width="15%"></TableCell>
+                                <TableCell width="15%"></TableCell>
+                                <TableCell width="35%" align="center">
                                   <strong>AWAY</strong>
                                 </TableCell>
                               </TableRow>
                               {record.map((result, index) => (
                                 <TableRow key={index}>
-                                  <TableCell align="center">
+                                  <TableCell width="35%" align="center">
                                     {result.homeTeam === teamInfo.name ? (
                                       <strong>{result.homeTeam}</strong>
                                     ) : (
                                       result.homeTeam
                                     )}
                                   </TableCell>
-                                  <TableCell align="center">
+                                  <TableCell width="15%" align="center">
                                     {result.homeScore}
                                   </TableCell>
-                                  <TableCell align="center">
+                                  <TableCell width="15%" align="center">
                                     {result.awayScore}
                                   </TableCell>
-                                  <TableCell align="center">
+                                  <TableCell width="35%" align="center">
                                     {result.awayTeam === teamInfo.name ? (
                                       <strong>{result.awayTeam}</strong>
                                     ) : (
@@ -1005,11 +1059,11 @@ export default function TeamInfo(props) {
                                     <StyledTableCell width="20%" align="center">
                                       포지션
                                     </StyledTableCell>
-                                    <StyledTableCell width="20%" align="center">
+                                    <StyledTableCell width="30%" align="center">
                                       이름
                                     </StyledTableCell>
                                     <StyledTableCell
-                                      width="40%"
+                                      width="30%"
                                       colSpan="2"
                                     ></StyledTableCell>
                                   </StyledTableRow>
@@ -1024,9 +1078,9 @@ export default function TeamInfo(props) {
                                         <img
                                           className={classes.memberImg}
                                           src={
-                                            r.profileURL === null
-                                              ? teamImage
-                                              : r.profileURL
+                                            r.profileURL
+                                              ? r.profileURL
+                                              : profileImg
                                           }
                                         />
                                       </StyledTableCell>
@@ -1034,12 +1088,12 @@ export default function TeamInfo(props) {
                                         width="20%"
                                         align="center"
                                       >
-                                        {r.position !== ""
+                                        {r.position !== "" && r.position
                                           ? r.position
                                           : "없음"}
                                       </StyledTableCell>
                                       <StyledTableCell
-                                        width="20%"
+                                        width="30%"
                                         align="center"
                                       >
                                         <Button
@@ -1080,18 +1134,36 @@ export default function TeamInfo(props) {
                                           </h3>
                                           <div className={classes.popoverBody}>
                                             <h5>{r.position}</h5>
-                                            <div>출생연도: {r.age}</div>
-                                            <div>키: {r.height}</div>
-                                            <div>몸무게: {r.weight}</div>
+                                            {r.age ? (
+                                              <div>
+                                                나이:{" "}
+                                                {Number(date.getFullYear()) -
+                                                  r.age +
+                                                  1}
+                                                살
+                                              </div>
+                                            ) : (
+                                              <div></div>
+                                            )}
+                                            {r.height ? (
+                                              <div>키: {r.height}cm</div>
+                                            ) : (
+                                              <div></div>
+                                            )}
+                                            {r.weight ? (
+                                              <div>몸무게: {r.weight}kg</div>
+                                            ) : (
+                                              <div></div>
+                                            )}
                                           </div>
                                         </Popover>
                                       </StyledTableCell>
                                       <StyledTableCell
-                                        width="40%"
+                                        width="15%"
                                         align="center"
                                       >
                                         <Button
-                                          color="danger"
+                                          color="teamInfo3"
                                           style={{
                                             maxWidth: "3vw",
                                           }}
@@ -1111,9 +1183,12 @@ export default function TeamInfo(props) {
                                           <AddIcon />
                                         </Button>
                                       </StyledTableCell>
-                                      <StyledTableCell align="center">
+                                      <StyledTableCell
+                                        width="15%"
+                                        align="center"
+                                      >
                                         <Button
-                                          color="danger"
+                                          color="teamInfo3"
                                           style={{
                                             maxWidth: "3vw",
                                           }}
