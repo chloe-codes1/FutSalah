@@ -18,7 +18,6 @@ const componentsStyle = {
     paddingLeft: "15%",
     position: "relative",
     fontSize: "1.313rem",
-    // maxWidth: "500px",
     margin: "10px 0 0",
   },
   main: {

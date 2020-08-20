@@ -65,7 +65,7 @@ export default function SearchTeamPage(props) {
   const [sidoList, setSidoList] = useState(["전체"]);
   const [searchWord, setSearchWord] = useState(""); // 검색할 검색어
   const [searchGu, setSearchGu] = useState(""); // 검색할 시군구
-  const [condition, setCondition] = useState(""); // 검색할 조건
+  const [condition, setCondition] = useState("name"); // 검색할 조건
   const [teamList, setTeamList] = useState([]); // 보여줄 팀리스트
   const [innerWidth, setInnerWidth] = useState(window.innerWidth); // 창 너비
 
@@ -300,8 +300,10 @@ export default function SearchTeamPage(props) {
                     <em>시도</em>
                   </MenuItem>
                   <MenuItem value="전체">지역 전체</MenuItem>
-                  {sidoList.map((s) => (
-                    <MenuItem value={s}>{s}</MenuItem>
+                  {sidoList.map((s, idx) => (
+                    <MenuItem value={s} key={idx}>
+                      {s}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -360,16 +362,16 @@ export default function SearchTeamPage(props) {
                 cellHeight="auto"
                 cols={innerWidth < 576 ? 1 : innerWidth < 992 ? 2 : 3}
               >
-                {teamList.map((t) =>
+                {teamList.map((t, idx) =>
                   t.name === undefined ? (
                     <GridContainer
-                      key={t.id}
+                      key={idx}
                       justify="center"
                       style={{ margin: "0 auto" }}
                     ></GridContainer>
                   ) : (
                     <GridContainer
-                      key={t.id}
+                      key={idx}
                       justify="center"
                       style={{ margin: "0 auto" }}
                     >
