@@ -106,7 +106,7 @@ export default function Components(props) {
           style={{
             width: "100%",
             margin: 0,
-            paddingTop: innerWidth > 768 ? "25%" : 0,
+            paddingTop: innerWidth > 768 ? "32.25%" : 0,
           }}
         >
           <div
@@ -118,15 +118,43 @@ export default function Components(props) {
             <Ranking />
           </div>
         </GridItem>
-        <GridItem>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/xomJZ-enlwo"
-            frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+        <GridItem style={{ padding: 0 }}>
+          <GridContainer
+            style={{ paddingLeft: "5%", backgroundColor: "white" }}
+          >
+            <GridItem xs={12}>
+              <h1>Guide</h1>
+            </GridItem>
+            <GridItem xs={6}>
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/xomJZ-enlwo"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </GridItem>
+            <GridItem xs={6}>
+              <h3>Step 1.</h3>
+              <p>팀생성, 팀관리</p>
+            </GridItem>
+            <br />
+            <GridItem xs={6}>
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/MrvPqqfCXxI"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </GridItem>
+            <GridItem xs={6}>
+              <h3>Step 2.</h3>
+              <p>팀 찾기</p>
+            </GridItem>
+          </GridContainer>
         </GridItem>
       </GridContainer>
       <Footer />
