@@ -82,7 +82,7 @@ export default function Components(props) {
               </video>
               <div className={classes.brand}>
                 <h1 className={classes.title}>FutSalah</h1>
-                <h3 className={classes.subtitle}>동네축구지만 프로축구처럼</h3>
+                <h3 className={classes.subtitle}>동네축구를 프로축구처럼</h3>
               </div>
             </div>
           ) : (
