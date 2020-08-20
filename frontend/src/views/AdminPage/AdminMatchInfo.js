@@ -24,6 +24,7 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
+import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/AdminMatchInfoPage.js";
 
@@ -64,8 +65,10 @@ export default function AdminInfo(props) {
   const [matchInfo, setMatchInfo] = useState(testMatchInfo);
   // Raspberry pi에서 받을 것
   const [homeScore, setHomeScore] = useState(0);
-  console.log(homeScore);
   const [awayScore, setAwayScore] = useState(0);
+  // 바뀐 스코어
+  const [homeChangedScore, setHomeChangedScore] = useState(0);
+  const [awayChangedScore, setAwayChangedScore] = useState(0);
 
   // 이 경기장, 오늘 매치 리스트의 몇번째 경기인가?
   const initialMatchNo = Number(match.params.id);
@@ -73,6 +76,9 @@ export default function AdminInfo(props) {
   const [matchNo, setMatchNo] = useState(initialMatchNo);
   // Prev, Next 매치 존재 여부
   const [sizeOfMatch, setSizeOfMatch] = useState(0);
+  // 도착 여부 (QR 인증 여부)
+  const [isHomeTeamArrived, setIsHomeTeamArrived] = useState(false);
+  const [isAwayTeamArrived, setIsAwayTeamArrived] = useState(false);
   // 매치 시작 여부
   const [isMatchStarted, setIsMatchStarted] = useState(false);
   const [isMatchFinished, setIsMatchFinished] = useState(false);
@@ -85,6 +91,14 @@ export default function AdminInfo(props) {
   const year = dateInfo.getFullYear();
   const month = dateInfo.getMonth();
   const date = dateInfo.getDate();
+  const hour = dateInfo.getHours();
+  const minute = dateInfo.getMinutes();
+
+  const changeMinute = (minute) => {
+    if (Number(minute) < 10) {
+      minute = "0" + minute;
+    }
+  };
 
   // Match API 받아오기
   const loadMatchInfo = async (m) => {
@@ -105,19 +119,18 @@ export default function AdminInfo(props) {
     const stadiumID = window.sessionStorage.getItem("stadiumID");
     adminuser.stadiumID = stadiumID;
     loadMatchInfo(matchNo);
+    changeMinute(minute);
     console.log("새로고침!");
   }, []);
 
   var channel = pusher.subscribe("channel");
   channel.bind("event", function (data) {
     setHomeScore(data.homeScore);
-    console.log(homeScore);
   });
 
   var channel2 = pusher.subscribe("channel2");
   channel2.bind("event2", function (data) {
     setAwayScore(data.awayScore);
-    console.log(awayScore);
   });
 
   // 경기 시작 버튼 누르면 홈팀이름, 원정팀이름, 홈팀지각여부, 원정팀지각여부 보내주기
@@ -200,6 +213,7 @@ export default function AdminInfo(props) {
 
   const matchEnd = () => {
     setIsMatchFinished(true);
+
     sendMatchResult(
       matchInfo.matchID,
       homeScore,
@@ -207,6 +221,7 @@ export default function AdminInfo(props) {
       matchInfo.homeName,
       matchInfo.awayName
     );
+    history.push(`/Admin/${adminuserinfo.stadiumID}`);
   };
 
   const Stopwatch = () => (
@@ -242,19 +257,19 @@ export default function AdminInfo(props) {
   );
 
   const homeTeamScoreUp = () => {
-    setHomeScore(homeScore + 1);
+    setHomeChangedScore(homeChangedScore + 1);
   };
 
   const homeTeamScoreDown = () => {
-    setHomeScore(homeScore - 1);
+    setHomeChangedScore(homeChangedScore - 1);
   };
 
   const awayTeamScoreUp = () => {
-    setAwayScore(awayScore + 1);
+    setAwayChangedScore(awayChangedScore + 1);
   };
 
   const awayTeamScoreDown = () => {
-    setAwayScore(awayScore - 1);
+    setAwayChangedScore(awayChangedScore - 1);
   };
 
   return (
@@ -299,7 +314,7 @@ export default function AdminInfo(props) {
                 </Badge>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <IconButton></IconButton>
-                  <h1>{homeScore}</h1>
+                  <h1>{homeScore + homeChangedScore}</h1>
                   <div
                     style={{
                       display: "flex",
@@ -315,7 +330,7 @@ export default function AdminInfo(props) {
                     >
                       <ArrowDropUpIcon />
                     </IconButton>
-                    {homeScore !== 0 && (
+                    {homeScore + homeChangedScore !== 0 && (
                       <IconButton
                         style={{ color: "white", padding: "0" }}
                         aria-label="DropDownIcon"
@@ -338,7 +353,15 @@ export default function AdminInfo(props) {
                     경기종료
                   </Button>
                 )}
-                <Stopwatch />
+                <Badge
+                  badgeContent={"현재시각"}
+                  color="primary"
+                  style={{ marginTop: "35px" }}
+                >
+                  <h2 style={{ marginTop: "3px" }}>
+                    {hour}:{minute}
+                  </h2>
+                </Badge>
               </GridItem>
               <GridItem xs={5} className={classes.matchInfoContent}>
                 <Badge badgeContent={"Away"} color="secondary">
@@ -346,7 +369,7 @@ export default function AdminInfo(props) {
                 </Badge>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <IconButton></IconButton>
-                  <h1>{awayScore}</h1>
+                  <h1>{awayScore + awayChangedScore}</h1>
                   <div
                     style={{
                       display: "flex",
@@ -362,7 +385,7 @@ export default function AdminInfo(props) {
                     >
                       <ArrowDropUpIcon />
                     </IconButton>
-                    {awayScore !== 0 && (
+                    {awayScore + awayChangedScore !== 0 && (
                       <IconButton
                         style={{ color: "white", padding: "0" }}
                         aria-label="DropDownIcon"
@@ -386,6 +409,10 @@ export default function AdminInfo(props) {
                 matchhour={matchInfo.time}
                 setHomeTeamLateStatus={setHomeTeamLateStatus}
                 setAwayTeamLateStatus={setAwayTeamLateStatus}
+                isHomeTeamArrived={isHomeTeamArrived}
+                isAwayTeamArrived={isAwayTeamArrived}
+                setIsHomeTeamArrived={setIsHomeTeamArrived}
+                setIsAwayTeamArrived={setIsAwayTeamArrived}
               />
             </GridItem>
             <GridItem className={classes.bottomButtonSet}>
