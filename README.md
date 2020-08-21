@@ -12,13 +12,13 @@
 
 <br>
 
-### 🏠 [Explore FutSalah](http://i3a112.p.ssafy.io/)
+### 🏠 [Explore FutSalah](http://i3a112.p.ssafy.io/)  or  :clapper: [Checkout Live Demo](https://youtu.be/vUVlKgexNk0)
 
 <br>
 
 ## :page_with_curl: ​Description
 
-> 동네축구를 프로축구처럼
+> *동네축구를 프로축구처럼*
 
 <br>
 
