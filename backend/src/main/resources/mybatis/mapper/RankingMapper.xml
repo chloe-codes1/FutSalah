@@ -5,7 +5,7 @@
 
 <mapper namespace="ido.arduino.dao.RankingMapper">
 	<select id="getBestTeams" resultType="TeamInfoDTO">
-		SELECT*FROM team ORDER BY points, reliability DESC LIMIT 3
+		SELECT*FROM team ORDER BY points DESC LIMIT 3
 	</select>
 	
 	<select id="getBestTeamsEachLocations" parameterType="int" resultType="TeamInfoDTO">
