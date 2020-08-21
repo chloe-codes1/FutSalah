@@ -145,10 +145,9 @@ export default function Components(props) {
               ></iframe>
             </GridItem>
             <GridItem xs={6} style={{ color: "white" }}>
-              <h3>Step 1.</h3>
-              <p>팀생성, 팀관리</p>
+              <h3>Tutorial 1.</h3>
+              <p>팀 생성하기 / 팀 관리하기</p>
             </GridItem>
-            <br />
             <GridItem xs={6}>
               <iframe
                 width="560"
@@ -160,8 +159,8 @@ export default function Components(props) {
               ></iframe>
             </GridItem>
             <GridItem xs={6} style={{ color: "white" }}>
-              <h3>Step 2.</h3>
-              <p>팀 찾기</p>
+              <h3>Tutorial 2.</h3>
+              <p>팀 찾기 / 팀 가입하기</p>
             </GridItem>
             <GridItem xs={6}>
               <iframe
@@ -174,8 +173,22 @@ export default function Components(props) {
               ></iframe>
             </GridItem>
             <GridItem xs={6} style={{ color: "white" }}>
-              <h3>Step 3.</h3>
-              <p>매칭하기</p>
+              <h3>Tutorial 3.</h3>
+              <p>경기 매칭하기</p>
+            </GridItem>
+            <GridItem xs={6}>
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/oYaxHDhrCus"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </GridItem>
+            <GridItem xs={6} style={{ color: "white" }}>
+              <h3>Tutorial 4.</h3>
+              <p>구장 이용 하기</p>
             </GridItem>
           </GridContainer>
         </GridItem>
