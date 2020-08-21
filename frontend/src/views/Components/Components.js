@@ -118,9 +118,12 @@ export default function Components(props) {
             <Ranking />
           </div>
         </GridItem>
-        <GridItem style={{ padding: 0 }}>
+        <GridItem>
           <GridContainer
-            style={{ paddingLeft: "5%", backgroundColor: "#2b2d42" }}
+            style={{
+              paddingLeft: "5%",
+              backgroundColor: "#2b2d42",
+            }}
           >
             <GridItem
               xs={12}
