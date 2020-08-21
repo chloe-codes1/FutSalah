@@ -3,16 +3,17 @@
   <a href="#" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
-  <a href="https://lab.ssafy.com/s03-webmobile3-sub3/s03p13a112/blob/master/LICENSE" target="_blank">
+  <a href="https://github.com/chloe-codes1/FutSalah/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 </p>
+
 
 > SSAFY 3기 2학기 1반 12팀 - `I do Arduino` 의 프로젝트 저장소
 
 <br>
 
-### 🏠 [Explore FutSalah](http://i3a112.p.ssafy.io/)  or  :clapper: [Checkout Live Demo](https://youtu.be/vUVlKgexNk0)
+### 🏠 [Explore FutSalah](http://i3a112.p.ssafy.io/)  :clapper: [Checkout Live Demo](https://youtu.be/vUVlKgexNk0)  :bookmark_tabs: [Presentation Material](https://docs.google.com/presentation/d/1euVAeeZ1IZIU_RYpg6QJKnBM2dTsg5284xV9djb5Pio/edit?usp=sharing)
 
 <br>
 
@@ -149,7 +150,9 @@ $ yarn start
 
 <br>
 
-## 👤 Author 
+## 👤 Authors
+
+![](./images/authors.png)
 
 :information_desk_person: ​[김주현](https://github.com/chloe-codes1) - `팀장`  Backend, DevOps
 
@@ -161,7 +164,7 @@ $ yarn start
 
 💁‍♂️ [김경훈](https://github.com/oogg7754) - IoT, Frontend
 
-🙋‍♂️ [김동휘](https://github.com/wheeking) - IoT, Frontend
+🙋‍♂️ [김동휘](https://github.com/wheeking) - IoT, Backend
 
 <br>
 
@@ -239,4 +242,4 @@ $ yarn start
 ## 📝 License
 
 Copyright © 2020  I do Arduino <br />
-This project is [MIT](https://lab.ssafy.com/s03-webmobile3-sub3/s03p13a112/blob/master/LICENSE) licensed.
+This project is [MIT](https://github.com/chloe-codes1/FutSalah/blob/master/LICENSE) licensed.
