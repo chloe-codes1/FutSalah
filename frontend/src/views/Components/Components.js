@@ -134,7 +134,7 @@ export default function Components(props) {
                 <strong>Guide</strong>
               </h1>
             </GridItem>
-            <GridItem xs={6}>
+            <GridItem md={12} lg={6}>
               <iframe
                 width="560"
                 height="315"
@@ -144,11 +144,11 @@ export default function Components(props) {
                 allowfullscreen
               ></iframe>
             </GridItem>
-            <GridItem xs={6} style={{ color: "white" }}>
+            <GridItem md={12} lg={6} style={{ color: "white" }}>
               <h3>Tutorial 1.</h3>
               <p>팀 생성하기 / 팀 관리하기</p>
             </GridItem>
-            <GridItem xs={6}>
+            <GridItem md={12} lg={6}>
               <iframe
                 width="560"
                 height="315"
@@ -158,11 +158,11 @@ export default function Components(props) {
                 allowfullscreen
               ></iframe>
             </GridItem>
-            <GridItem xs={6} style={{ color: "white" }}>
+            <GridItem md={12} lg={6} style={{ color: "white" }}>
               <h3>Tutorial 2.</h3>
               <p>팀 찾기 / 팀 가입하기</p>
             </GridItem>
-            <GridItem xs={6}>
+            <GridItem md={12} lg={6}>
               <iframe
                 width="560"
                 height="315"
@@ -172,11 +172,11 @@ export default function Components(props) {
                 allowfullscreen
               ></iframe>
             </GridItem>
-            <GridItem xs={6} style={{ color: "white" }}>
+            <GridItem md={12} lg={6} style={{ color: "white" }}>
               <h3>Tutorial 3.</h3>
               <p>경기 매칭하기</p>
             </GridItem>
-            <GridItem xs={6}>
+            <GridItem md={12} lg={6}>
               <iframe
                 width="560"
                 height="315"
@@ -186,7 +186,7 @@ export default function Components(props) {
                 allowfullscreen
               ></iframe>
             </GridItem>
-            <GridItem xs={6} style={{ color: "white" }}>
+            <GridItem md={12} lg={6} style={{ color: "white" }}>
               <h3>Tutorial 4.</h3>
               <p>구장 이용 하기</p>
             </GridItem>
