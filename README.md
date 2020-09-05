@@ -58,13 +58,13 @@
 
 <br>
 
-### My Team
+### My Team page
 
 ![](./images/myteam.png)
 
 <br>
 
-### Team Info.
+### Team Info. page
 
 ![](./images/teaminfo.png)
 
@@ -86,7 +86,11 @@
 
 ![](./images/upcoming.png)
 
+<br>
 
+### Real-Time Goal Recognition
+
+![](./images/stadium.png)
 
 <br>
 
@@ -173,6 +177,8 @@ $ yarn start
 ## :bulb: ​Wiki 
 
 - [Git 협업 스타일](/docs/Git_협업_스타일.md)
+- [SpringBoot-React Application을 NGINX를 사용하여 EC2에 배포하기](https://github.com/chloe-codes1/TIL/blob/master/Server/Deployment/Deploying_a_SpringBoot-React_project_on_AWS_EC2.md)
+- [GitLab CI/CD로 배포 자동화 하기](https://github.com/chloe-codes1/TIL/blob/master/DevOps/CI-CD/Configuring_GitLab_CI-CD_with_AWS_EC2.md)
 
 <br>
 
