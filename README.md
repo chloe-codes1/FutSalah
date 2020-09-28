@@ -174,6 +174,19 @@ $ yarn start
 
 <br>
 
+## :trophy: Awards
+
+- 공통 프로젝트 우수팀 선정
+- 공통 프로젝트 UCC 우수팀 선정
+
+<img src="/Users/chloe/covert/TIL/images/IMG_0886.jpg" style="zoom: 20%;" />
+
+
+
+<br>
+
+<br>
+
 ## :bulb: ​Wiki 
 
 - [Git 협업 스타일](/docs/Git_협업_스타일.md)
