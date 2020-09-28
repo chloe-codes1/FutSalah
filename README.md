@@ -179,7 +179,7 @@ $ yarn start
 - 공통 프로젝트 우수팀 선정
 - 공통 프로젝트 UCC 우수팀 선정
 
-<img src="/Users/chloe/covert/TIL/images/IMG_0886.jpg" style="zoom: 20%;" />
+<img src="./images/award.jpg" style="zoom: 20%;" />
 
 
 
